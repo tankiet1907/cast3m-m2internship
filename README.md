@@ -71,4 +71,5 @@ All simulations are developed and tested using:
 
 ---
 
-## 5. Research Context
+## 5. Research Context  
+This work contributes to the understanding of multi-physical behavior of concrete, with particular attention to durability, long-term performance, and coupled damage processes in heterogeneous materials.This work contributes to the understanding of multi-physical behavior of concrete, with particular attention to durability, long-term performance, and coupled damage processes in heterogeneous materials.This work contributes to the understanding of multi-physical behavior of concrete, with particular attention to durability, long-term performance, and coupled damage processes in heterogeneous materials.This work contributes to the understanding of multi-physical behavior of concrete, with particular attention to durability, long-term performance, and coupled damage processes in heterogeneous materials.
