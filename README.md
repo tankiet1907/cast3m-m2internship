@@ -41,7 +41,7 @@ elastic_mechanics/
 mazars_model/  
 drying_and_shrinkage/  
 th_model/  
-thm_model/ 
+thm_model/  
 thm_final_model/
 
 
