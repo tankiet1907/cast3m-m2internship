@@ -1,0 +1,122 @@
+*
+OPTI ECHO 0;
+*
+********* SALVATAGGIO DEL CALCOLO ************************
+opti rest  'ANELLO_TH';
+rest ;
+****************************************************
+*
+*
+****************************************************************
+***************   MATERIAL DATA ********************************
+* STEAL (ELASTICO LINEARE)
+YOUN_A  = 206.e9 ;
+NU_A    = 0.2    ;
+ALFAT_A = 1.20e-5;
+* CONCRETE (ELASTICO LINEARE)
+YOUN_B   = 30.e9;
+NU_B     = 0.22;
+ALFAT_B  = 1.20e-5;
+************************************************************************
+*
+************************************************************************
+* Definizione del modello
+MODM_A   = MODE SURF_ACI 'MECANIQUE' 'ELASTIQUE';
+MODM_B   = MODE SURF_BET 'MECANIQUE' 'ELASTIQUE';
+MODM_TOT = MODM_A et MODM_B;
+************************************************************************
+************************************************************************
+*
+************************************************************************
+* Definizione del materiale
+MATM_A = MATE MODM_A 'YOUN' YOUN_A 'NU' NU_A 'ALPHA' ALFAT_A 
+'TREF'  20. 'TALP' 20.;
+MATM_B = MATE MODM_B 'YOUN' YOUN_B 'NU' NU_B 'ALPHA' ALFAT_B 
+'TREF'  20. 'TALP' 20.;;
+MATM_TOT = MATM_A et MATM_B;
+************************************************************************
+************************************************************************
+*
+************************************************************************
+* Definition des conditions aux limites
+*   - Blocages mecaniques
+************************************************************************
+CONTM1 = l12 et l23 et l34;
+CONTM2 = (COTE 3 SURF_ACI) et (COTE 3 SURF_BET);
+TRAC (CONTM1 et CONTM2);
+rig1   = BLOQ 'UY' CONTM1;
+rig2   = BLOQ 'UX' CONTM2;
+RIGTOT = rig1 et rig2;
+************************************************************************
+*
+************************************************************************
+* APPLICATION CHARGEMENTS
+*   - Thermique et mecanique
+************************************************************************
+CHAM_TH = CHAR 'T'  (TAB1 . 'TEMPS')  (TAB1 . 'TEMPERATURES') ;
+***********************************************************************
+*
+*
+*
+LTP_M = LTEMPSC;
+*---------------------------------------------------------------------*
+*VI. Resolution PASAPAS2
+*---------------------------------------------------------------------*
+TAB2                         = 'TABL' ;
+TAB2 . 'MODELE'              = MODM_TOT  ;
+TAB2 . 'CARACTERISTIQUES'    = MATM_TOT ;
+TAB2 . 'BLOCAGES_MECANIQUES' = RIGTOT ;
+TAB2 . 'CHARGEMENT'          = CHAM_TH;
+TAB2 . 'TEMPS_CALCULES'      = LTP_M  ;
+TAB2 . 'MOVA'                = 'D';
+*---------------------------------------------------------------------*
+PASAPAS TAB2 ;
+***********************************************************************
+
+
+*LIST TAB2;
+*LIST TAB2.VARIABLES_INTERNES;
+
+
+* Configurazione deformata
+DEFO0 =  'DEFO' SURF_BET TAB2.DEPLACEMENTS.0  100. 'BLAN';
+DEFO1 =  'DEFO' SURF_BET TAB2.DEPLACEMENTS.72 100. 'ROUG';
+'TRAC' (DEFO0 'ET' DEFO1) ;
+
+TRAC TAB2.CONTRAINTES.72 MODM_TOT;
+
+
+
+* EVOLUZIONE DELLO STRESS S_THETA SULLA SUPERFICIE ESTERNA (PUNTO P4)
+nfin1 = 'DIME'  TAB2.CONTRAINTES;
+*
+n4   = 0;
+*
+TEMPO  = LTP_M * (1./3600.);
+STT_P4 = PROG;
+*
+REPETER BOU_T (nfin1);
+    SMYYi   = EXCO 'SMYY' TAB2.CONTRAINTES.n4;
+    SMYYi   = CHAN CHPO SMYYi MODM_TOT;
+    STT_P4i = EXTR SMYYi 'SMYY' p4;
+    STT_P4  = STT_P4 ET (PROG STT_P4i);
+    n4 = n4 + 1;
+FIN BOU_T;
+*
+evt_STT = EVOL 'ROUG' 'MANU' 'TEMPO' TEMPO 'SMTT' STT_P4;
+dess evt_STT;
+
+
+
+
+
+
+********* SALVATAGGIO DEL CALCOLO ************************
+opti sauv 'FORMAT' 'C:\SAUVCAST\ESEMPI_TFA\ANELLO_MEC';
+sauv 'FORMAT';
+****************************************************
+
+
+
+
+

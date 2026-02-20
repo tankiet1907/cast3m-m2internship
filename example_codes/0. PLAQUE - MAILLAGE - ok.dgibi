@@ -1,0 +1,203 @@
+***********************************************************************
+*
+* Plaque perforée
+* G. Sciumè
+*
+* Formation Cast3M (I2M - 27/04/2017)
+*
+***********************************************************************
+
+OPTI ECHO 0;
+OPTI 'DIME' 2 'ELEM' 'QUA4' ;
+
+* DEFINITION DES LONGUEURS ET DENSITES DE MAILLES
+LONG     = 0.24 ;
+HAUT     = 0.10 ;
+RAYON    = 0.02 ;
+
+NLONG    = 24 ;
+NHAUT    = 4 ;
+NBASG    = 10 ;
+NBASD    = 10 ;
+NQCG     = 8 ;
+NQCD     = 8 ;
+
+
+***********************************************************************
+***********************************************************************
+* MAILLAGE METHODE 1 (OPERATEUR SURF)
+***********************************************************************
+***********************************************************************
+
+* CREATION DES POINTS D'APPUI DU MAILLAGE
+PA       = 0. 0. ;
+PB       = ((0.5 * LONG) – RAYON) 0. ; 
+PC       = (0.5 * LONG) RAYON ;
+PD       = ((0.5 * LONG) + RAYON) 0. ;
+PE       = LONG 0. ;
+PF       = LONG HAUT ; 
+PG       = 0. HAUT ;
+PCEN     = (0.5 * LONG) 0. ;
+
+TRAC (PA et PB et PC et PD et PE et PF et PG et PCEN);
+
+
+* CONSTRUCTION DES LIGNES DROITES (DROI ou D)
+LIAB     = DROI NBASG PA PB ;
+LIDE     = DROI NBASD PD PE ;
+LIEF     = D    NHAUT PE PF ;
+LIFG     = D    NLONG PF PG ;
+LIGA     = D    NHAUT PG PA ;
+
+* CONSTRUCTION DES CERCLES (CERC ou C)
+CE1      = CERC NQCG PB PCEN PC ;
+CE2      = C    NQCD PC PCEN PD ;
+
+*  CONTOUR FERME OBTENU PAR ASSEMBLAGE DE LIGNES ELEMENTAIRES
+CO = LIAB ET CE1 ET CE2 ET LIDE ET LIEF ET LIFG ET LIGA ;
+
+MAIL1 = SURF CO ;
+TRAC MAIL1 'TITR' '[1] Maillage libre de la demi plaque percee' ;
+***********************************************************************
+***********************************************************************
+
+
+
+
+***********************************************************************
+***********************************************************************
+* MAILLAGE METHODE 2 (OPERATEUR DALL)
+***********************************************************************
+***********************************************************************
+
+* CREATION DES POINTS D'APPUI DU MAILLAGE
+PA       = 0. 0. ;
+PB       = ((0.5 * LONG) – RAYON) 0. ; 
+PC       = (0.5 * LONG) RAYON ;
+PD       = ((0.5 * LONG) + RAYON) 0. ;
+PE       = LONG 0. ;
+PF       = LONG HAUT ; 
+PG       = 0. HAUT ;
+PCEN     = (0.5 * LONG) 0. ;
+TRAC (PA et PB et PC et PD et PE et PF et PG et PCEN);
+*
+XH = (0.5 * LONG) - (RAYON * (COS 45));
+YH =  RAYON * (SIN 45);
+XI = (0.5 * LONG) + (RAYON * (COS 45));
+YI =  RAYON * (SIN 45);
+PH =  XH YH;
+PI =  XI YI;
+PL =  (0.5 * LONG) HAUT ;
+TRAC (PA et PB et PC et PD et PE et PF et PG et PCEN et PH et PI et PL);
+
+* CONSTRUCTION DES LIGNES DROITES (DROI ou D)
+LAB   = DROI 16 PA PB;
+LBH   = CERC  8 PB PCEN PH;
+LHG   = DROI 16 PH PG;
+LGA   = DROI  8 PG PA;
+*
+LHC   = CERC  8 PH PCEN PC;
+LCL   = DROI 16 PC PL;
+LLG   = DROI  8 PL PG;
+*
+LCI   = CERC  8 PC PCEN PI;
+LIF   = DROI 16 PI PF;
+LFL   = DROI  8 PF PL;
+*
+LID   = CERC  8 PI PCEN PD;
+LDE   = DROI 16 PD PE;
+LEF   = DROI  8 PE PF;
+*
+* CREATION DES SURFACES
+SURF1 = DALL LAB LBH LHG LGA 'PLAN';
+SURF2 = DALL LHC LCL LLG LHG 'PLAN';
+SURF3 = DALL LCI LIF LFL LCL 'PLAN';
+SURF4 = DALL LID LDE LEF LIF 'PLAN';
+MAIL1 = SURF1 et SURF2 et SURF3 et SURF4;
+TRAC MAIL1 'TITR' '[2] Maillage regulier de la demi plaque percee' ;
+***********************************************************************
+***********************************************************************
+
+
+
+
+***********************************************************************
+***********************************************************************
+* REFINEMENT AUTOUR DU TROU
+***********************************************************************
+***********************************************************************
+DGROS    = 0.02;
+DFIN     = 0.01;
+NELEM1   = 8;
+NELEM2   = 16;
+
+LAB   = DROI (-1*NELEM2) PA PB 'DINI' DGROS 'DFIN' DFIN;
+LBH   = CERC   NELEM1  PB PCEN PH;
+LHG   = DROI (-1*NELEM2) PH PG 'DINI' DFIN 'DFIN' DGROS;
+LGA   = DROI NELEM1 PG PA;
+*
+LHC   = CERC NELEM1 PH PCEN PC;
+LCL   = DROI (-1*NELEM2) PC PL 'DINI' DFIN 'DFIN' DGROS;
+LLG   = DROI NELEM1 PL PG;
+*
+LCI   = CERC NELEM1 PC PCEN PI;
+LIF   = DROI (-1*NELEM2) PI PF 'DINI' DFIN 'DFIN' DGROS;
+LFL   = DROI NELEM1 PF PL;
+*
+LID   = CERC NELEM1 PI PCEN PD;
+LDE   = DROI (-1*NELEM2) PD PE 'DINI' DFIN 'DFIN' DGROS;
+LEF   = DROI NELEM1 PE PF;
+
+*
+* CREATION DES SURFACES
+SURF1 = DALL LAB LBH LHG LGA 'PLAN';
+SURF2 = DALL LHC LCL LLG LHG 'PLAN';
+SURF3 = DALL LCI LIF LFL LCL 'PLAN';
+SURF4 = DALL LID LDE LEF LIF 'PLAN';
+MAIL1 = SURF1 et SURF2 et SURF3 et SURF4;
+TRAC MAIL1 'TITR' '[3] Demi plaque percee avec refinement' ;
+
+
+* AMEILORATION DU MAILLAGE
+LCL   = DROI (-1*NELEM2) PC PL 'DINI' DFIN 'DFIN' (0.7 * DGROS);
+SURF2 = DALL LHC LCL LLG LHG 'PLAN';
+SURF3 = DALL LCI LIF LFL LCL 'PLAN';
+MAIL1 = SURF1 et SURF2 et SURF3 et SURF4;
+TRAC MAIL1 'TITR' '[3] Demi plaque percee avec refinement' ;
+
+***********************************************************************
+***********************************************************************
+
+
+
+
+
+***********************************************************************
+***********************************************************************
+* MAILLAGE 3D
+***********************************************************************
+***********************************************************************
+
+* PASSAGE EN DIMENSION 3
+OPTI 'DIME' 3 'ELEM' 'CU20' ;
+
+* VOLUME PAR TRANSLATION
+VOLU1 = MAIL1 VOLU 12  'TRAN' (0. 0. 0.2) ;
+TRAC CACH VOLU1;
+
+* VOLUME PAR ROTATION
+VOLU1 = MAIL1 VOLU 12 'ROTA' 90. (0. -0.1 0.) (0.1 -0.1 0.) ;
+TRAC CACH VOLU1;
+
+***********************************************************************
+***********************************************************************
+
+
+
+
+
+
+
+
+
+

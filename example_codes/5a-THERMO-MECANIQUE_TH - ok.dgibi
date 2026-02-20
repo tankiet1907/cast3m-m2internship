@@ -1,0 +1,231 @@
+OPTI ECHO 0;
+*
+*---------------------------------------------------------------------*
+* Studio di un quarto di tubo in acciaio rivestito di calcestruzzo
+* sottomesso ad un incremento interno della temperatura
+* PARTE TERMICA DELL' ANALISI
+*---------------------------------------------------------------------*
+*
+* Studio in 2D plane strain con elementi a 4 nodi
+'OPTI' 'DIME' 2 'MODE' PLAN DEFO 'ELEM' QUA4;
+*
+*
+*
+*-------- Caratteristiche dei materiali (acciaio e calcestruzzo) -----*
+* Acciao
+RHO_ACI = 7800.;
+C_ACI   = 550. ;
+K_ACI   = 43.  ;
+* Calcestruzzo
+RHO_BET = 2300.;
+C_BET   = 800. ;
+K_BET   = 2.5  ;
+* COEFFICIENTE SCAMBIO CONVETTIVO
+H_CONV   = 20.  ;
+*---------------------------------------------------------------------*
+*
+*
+*------------------- GEOMETRIA ---------------------------------------*
+r_int = 0.50;
+r_ac  = 0.70;
+r_ext = 1.00;
+*
+def1 = 0.040;
+def2 = 0.020;
+*
+Centro = 0.  0.;
+P1  = r_int  0.00 ;
+P2  = r_ac   0.00 ;
+p3  = ((r_ac + r_ext)*0.5)  0.00 ;
+P4  = r_ext  0.00 ;
+*
+l12 = DROI p1 p2 DINI def2 DFIN def2;
+l23 = DROI p2 p3 DINI def2 DFIN def1;
+l34 = DROI p3 p4 DINI def1 DFIN def2;
+l24 = l23 et l34;
+*
+SURF_ACI = (l12  ROTA 40 90  Centro) COULEUR ROUGE;
+SURF_BET = (l24  ROTA 40 90  Centro) COULEUR BLEU;
+*
+elim 0.00001 (SURF_ACI et SURF_BET);
+trac (SURF_ACI et SURF_BET);
+*
+cont_int = cote 4 surf_aci;
+cont_ext = cote 2 surf_bet;
+trac (cont_int et cont_ext);
+*---------------------------------------------------------------------*
+*
+*
+*----------------DISCRETIZZAZIONE TEMPORALE --------------------------*
+heure  = 3600.;
+jour   = 24 * heure;
+t_step = 600.;
+*
+t_finale = 0.5 * jour;
+LTEMPSC  = PROG  0. PAS  t_step  t_finale;
+*---------------------------------------------------------------------*
+*
+*
+*---------------- CONDIZIONI INIZIALI --------------------------------*
+T0    =  20. ;
+CI_T  = 'MANU' 'CHPO' (SURF_ACI ET SURF_BET) 1 'T' T0 ;
+*---------------------------------------------------------------------*
+*
+*
+*------------- DEFINIZZIONE DEL MODELLO ------------------------------*
+MOD_ACI  = 'MODE'  SURF_ACI  'THERMIQUE';
+MOD_BET  = 'MODE'  SURF_BET  'THERMIQUE';
+MODCOT   = 'MODE'  cont_ext  'THERMIQUE' 'CONVECTION';
+MOD_TOT  = MOD_ACI et MOD_BET et MODCOT;
+*---------------------------------------------------------------------*
+*
+*
+*------------- DEFINIZIONE DEL MATERIALE -----------------------------*
+MAT_ACI  = 'MATE' MOD_ACI 'RHO' RHO_ACI 'C' C_ACI 'K' K_ACI;
+MAT_BET  = 'MATE' MOD_BET 'RHO' RHO_BET 'C' C_BET 'K' K_BET;
+MATCOT   = 'MATE' MODCOT   'H'  H_CONV;
+MAT_TOT  = MAT_ACI et MAT_BET et MATCOT;
+*---------------------------------------------------------------------*
+*
+*
+*------------- CONDIZIONI AL CONTORNO --------------------------------*
+T_INT = 40.  ;
+*
+* Temperatura imposta al bordo interno
+CLIM_1 = 'BLOQ' cont_int 'T';
+CHAT1  = 'DEPI'  CLIM_1  1.;
+P_TEMPO  = 'PROG'  0.  (2 * heure) t_finale;
+P_TEMPE  = 'PROG'  T0    T_INT      T_INT;
+EVOT_int = EVOL ROUG MANU 'TEMPS' P_TEMPO 'T' P_TEMPE;
+DESS EVOT_int;
+CHAT_int = 'CHAR' 'TIMP' CHAT1 EVOT_int;
+
+* Scambio convettivo bordo esterno
+CHT_EXT  = 'MANU' 'CHPO' cont_ext 1 'T' 1.;
+P_TEMPO  = 'PROG'  0.  t_finale;
+P_TEMPE  = 'PROG'  T0  T0;
+EVT_EXT  = 'EVOL' 'MANU' 'TEMPS' P_TEMPO 'T' P_TEMPE;
+DESS EVT_EXT;
+
+CHAT_ext = 'CHAR' 'TECO' CHT_EXT  EVT_EXT ;
+
+*
+* ASSEMBLAGGIO CONDIZIONI IMPOSTE
+CLIM_TOT = CLIM_1;
+CHAT_TOT = CHAT_int 'ET' CHAT_ext;
+*---------------------------------------------------------------------*
+*
+*
+*
+*--------------- RISOLUZIONE PASSOPASSO-------------------------------*
+TAB1                         = 'TABL' ;
+TAB1 . 'MODELE'              = MOD_TOT ;
+TAB1 . 'CARACTERISTIQUES'    = MAT_TOT ;
+TAB1 . 'BLOCAGES_THERMIQUES' = CLIM_TOT ;
+TAB1 . 'CHARGEMENT'          = CHAT_TOT ;
+TAB1 . 'TEMPS_CALCULES'      = LTEMPSC ;
+*TAB1 . 'TEMPS_SAUVES'        = LT_SAUV;
+TAB1 . 'PROCEDURE_THERMIQUE' = 'LINEAIRE' ;
+TAB1 . 'RELAXATION_THETA'    = 0.52 ;
+TAB1 . 'MOVA'                = 'D' ;
+*
+TAB1 . 'TEMPERATURES'        = 'TABL' ;
+TAB1 . 'TEMPERATURES' . 0    = CI_T ;
+*
+PASAPAS TAB1 ;
+*---------------------------------------------------------------------*
+
+
+
+
+
+
+LAST     = ('DIME' TAB1.TEMPERATURES) - 1;
+MAIL_TOT = (SURF_ACI ET SURF_BET) 'COUL' BLAN;
+
+
+SCALAT = PROG T0 PAS ((T_INT - T0)/20) T_INT;
+TRAC TAB1.TEMPERATURES.0  MAIL_TOT SCALAT;
+TRAC TAB1.TEMPERATURES.18 MAIL_TOT SCALAT;
+TRAC TAB1.TEMPERATURES.36 MAIL_TOT SCALAT;
+TRAC TAB1.TEMPERATURES.54 MAIL_TOT SCALAT;
+TRAC TAB1.TEMPERATURES.72 MAIL_TOT SCALAT;
+
+
+
+
+* SPAZIO
+l_graf = l12 et L24;
+EVT_3  =  EVOL (BLEU) 'CHPO'  tab1.temperatures.18 'T'  l_graf;
+EVT_6  =  EVOL (VERT) 'CHPO'  tab1.temperatures.36 'T'  l_graf;
+EVT_9  =  EVOL (ORAN) 'CHPO'  tab1.temperatures.54 'T'  l_graf;
+EVT_12 =  EVOL (ROUG) 'CHPO'  tab1.temperatures.72 'T'  l_graf;
+*
+TAB3     = 'TABLE' ;
+TAB3 . 1 = 'MOT' 'MARQ TRID';
+TAB3 . 2 = 'MOT' 'MARQ LOSA';
+TAB3 . 3 = 'MOT' 'MARQ CARR';
+TAB3 . 4 = 'MOT' 'MARQ ROND';
+*
+TAB3 . 'TITRE'     = 'TABLE' ;
+TAB3 . 'TITRE' . 1 = 'MOT' ' 3 ORE';
+TAB3 . 'TITRE' . 2 = 'MOT' ' 6 ORE' ;
+TAB3 . 'TITRE' . 3 = 'MOT' ' 9 ORE' ;
+TAB3 . 'TITRE' . 4 = 'MOT' '12 ORE' ;
+*
+dess (EVT_3 et EVT_6 et EVT_9 et EVT_12)
+'LEGE' TAB3 'TITR' 'TEMPERATURA A DIVERSI ISTANTI DI TEMPO';
+
+
+
+
+
+* EVOLUZIONE TEMPERATURA SUPERFICIE ESTERNA (PUNTO P4)
+nfin1 = 'DIME'  tab1.temperatures;
+*
+n4   = 0;
+*
+TEMPO  = LTEMPSC * (1./3600.);
+T_P4   = PROG;
+*
+REPETER BOU_T (nfin1);
+    VAL_TP4 = EXTR tab1.temperatures.n4 'T' p4;
+    T_P4   =  T_P4     ET (PROG VAL_TP4);
+    n4 = n4 + 1;
+FIN BOU_T;
+*
+evt_P4 = EVOL 'ROUG' 'MANU' 'temps' TEMPO 'Temperature' T_P4;
+dess evt_P4;
+
+
+
+
+
+
+***** PROCEDURA PARAVIEW *************************
+ntT = dime TAB1.TEMPERATURES;
+list ntt;
+a = 0;
+
+REPETER BOU_PAR (ntT);
+  DD = TAB1.TEMPERATURES.a;
+  OPTI SORT  (chain'C:\SAUVCAST\ESEMPI_TFA\VISUAL\TH_RESU'a'.inp');
+  SORT AVS DD MAIL_TOT;
+  a = a + 1;
+FIN BOU_PAR;
+***************************************************
+
+
+
+
+
+
+********* SALVATAGGIO DEL CALCOLO ************************
+opti sauv  'ANELLO_TH';
+sauv ;
+****************************************************
+
+
+
+
+

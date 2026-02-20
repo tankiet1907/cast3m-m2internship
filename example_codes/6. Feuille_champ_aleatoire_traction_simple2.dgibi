@@ -1,0 +1,298 @@
+**********************************************************************
+*               TRACTION SUR UNE FEUILLE DE PAPIER                   *
+**********************************************************************
+*-----------------------------------------------------------
+*              Paramètres du problème                      *
+*-----------------------------------------------------------
+*    ^ ^ ^ ^ ^ ^ ^                                         *
+*    | | | | | | |                                         *
+*    -------------  Traction pilotée en déplacement        *
+*   |      L      |                                        *
+*   |             |                                        *
+*   |           w |                                        *
+*   |H      hf -==  Fissure horizontale                    *
+*   |             |                                        *
+*   |             |                                        *
+*   |             |                                        *
+*  > -------------  CL : Ux=Uy=0                           *
+*    ^ ^ ^ ^ ^ ^ ^                                         *
+************************************************************
+*
+* Options du problème : Problème plan, type d'éléments utilisés (TRI6, QUA4, QUA8), traitement en contraintes planes
+*-------------------------------------------------------------------------------------------------------------------
+OPTION DIME 2  ELEM QUA4 MODE PLAN CONT;
+*
+* Définition de la géométrie : largeur L et hauteur H (en m), épaisseur ep (en micromètre), si entaille=vrai -> longueur fissure w (en mm), largeur fissure hf (mm) 
+* -----------------------------------------------------------------------------------------------------------------------------------------------------------------
+L=0.05;             entaille=faux;
+H=0.05;             w=5;
+ep=100;             hf=0.5;
+*
+* nombre de mailles sur la largeur NelX et la hauteur NelY, raff coefficient de raffinage du maillage au voisinnage de la fissure
+NelX=60;            raff=3;
+NelY=60;
+*
+* Définition matériau : module d'Young E (GPa), coefficient de poisson nu et masse volumique rho (Kg/m^3)
+*                       si ealea=vrai -> champ aléatoire lognormal sur E : son écart type SG1 (GPa), sa longueur de corrélation b (en m), numéro du champ aléatoire choisi no
+*                       si rupt=vrai  -> modèle d'endomagement de Mazars : D = 1-(1-A)*Ktr1/eps-A*exp(-B*(eps-Ktr1)) comme loi d'évolution de la variable d'endommagement pour la traction et la compression
+* ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+E1=1.28;            ealea=vrai;           rupt=vrai;
+nu1=0.3;            SG1=0.52079;          Atra1 = 0.99;      betha1 = 1;
+rho1=600;           b=0.001;              Btra1 = 51;
+                    no=1;                 Acom1 = 0.99;
+                                          Bcom1 = 51;
+                                          Ktr1=0.036;                                        
+*
+* Modèle non-local : LC longueur interne (en m), ftn résistance à la traction (en MPa)
+* ------------------------------------------------------------------------------------
+LC=0.003;           ftn= 20E6;
+*
+* Définition de la sollicitation : pilotdep=vrai -> pilotage en déplacement (avec pasapas) : taux de déformation epsp (en min-1), temps max de simulation tmax (en sec), nombre d'étapes nbe
+*                                  sinon pilotage en force (sans pasapas): SIG (en MPa)
+* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+SIG=40;             pilotdep=vrai;
+                    epsp=0.06;         
+                    nbe= 84;
+                    tmax=21.;
+************************************************************************************************************************************************************************************************************************
+*
+*
+*
+*
+*
+*
+*
+*
+*
+*
+****************
+*   Maillage   *
+****************
+P1= 0.   (0. - (H / 2));
+P2= L    (0. - (H / 2));
+P3= L    (H / 2) ;
+P4= 0.   (H / 2) ;
+*
+*
+si (entaille);
+Pf1= L    (0. - (hf * 1E-3 / 2));
+Pf2= (L - (w * 1E-3))    (0. - (hf * 1E-3 / 2));
+Pf3= (L - (w * 1E-3))    (hf * 1E-3 / 2);
+Pf4= L    (hf * 1E-3 / 2);
+*
+*
+Nelfiss1=ENTI 'INFERIEUR' (NelY / 2 - ( NelY / 2 * hf * 1E-3 / H));
+Nelfiss2=ENTI 'INFERIEUR' ((NelX - ( NelX * w * 1E-3 / L)) / 2 * raff);
+Nelfiss3=ENTI 'INFERIEUR' ((NelY * hf * 1E-3 / H) * raff);
+*
+L12 = P1 DROIT NelX P2 ;
+L2f1 =  P2 DROIT Nelfiss1 Pf1 ;
+Lf1f2 = Pf1 DROIT Nelfiss2 Pf2 ;
+Lf2f3 = Pf2 DROIT Nelfiss3 Pf3 ;
+Lf3f4 = Pf3 DROIT Nelfiss2 Pf4 ;
+Lf43 =  Pf4 DROIT Nelfiss1 P3 ;
+L34 = P3 DROIT NelX P4 ;
+L41 = P4 DROIT NelY P1 ;
+*
+*
+Cont1 = L12 ET L2f1 ET Lf1f2 ET Lf2f3 ET Lf3f4 ET Lf43 ET L34 ET L41 ;
+Mail1 = SURF Cont1 ;
+
+sinon;
+L12 = P1 DROIT NelX P2 ;
+L23 = P2 DROIT NelY P3 ;
+L34 = P3 DROIT NelX P4 ;
+L41 = P4 DROIT NelY P1 ;
+*
+Cont1 = L12 ET L23 ET L34 ET L41 ;
+Mail1 = SURF Cont1 ;
+finsi;
+*
+*
+* Tracé à l'écran du maillage Mail1
+* ---------------------------------
+TRAC Mail1 ;
+*
+*
+* Définition du modèle et du matériau
+* -----------------------------------
+*
+si (rupt);
+
+  si (ealea);
+  E12 = E1;
+  SG12 = SG1;
+  ae= SG12 / E12;
+  aae=(1 + (ae * ae))**(0.5);
+  Eg = LOG (E12 / aae);
+  S1 = LOG (1 + (ae * ae));
+  S2 = S1 **(0.5);
+  mo1 = MODE Mail1 mecanique elastique endommagement mazars ;
+  
+  REPETER BLOTO no ;
+  
+  CH00=ALEA mo1 'BANDES_TOURNANTES' EXPO 'SIGMA' S2
+  'MOYENNE' Eg 'LAMBDA' b;
+  
+  fin bloto;
+  
+  CHA= 1E9 * (exp CH00); 
+  sinon ;
+  mo1 = MODE Mail1 mecanique elastique ;
+  CHA=E1 * 1E9;
+  finsi;
+  
+  ma1=mate mo1 'YOUN' CHA 'NU' nu1 'RHO' rho1
+  'ATRA' Atra1 'ACOM' Acom1 'BTRA' Btra1 'BCOM' Bcom1
+  'KTR0' Ktr1 'BETA' betha1 'DIM3' ep;
+
+sinon;
+
+  si (ealea);
+  E12 = E1;
+  SG12 = SG1;
+  ae= SG12 / E12;
+  aae=(1 + (ae * ae))**(0.5);
+  Eg = LOG (E12 / aae);
+  S1 = LOG (1 + (ae * ae));
+  S2 = S1 **(0.5);
+  mo1 = MODE Mail1 mecanique elastique ;
+  
+  REPETER BLOTO no ;
+  
+  CH00=ALEA mo1 'BANDES_TOURNANTES' EXPO 'SIGMA' S2
+  'MOYENNE' Eg 'LAMBDA' b;
+  
+  fin bloto;
+  
+  CHA= 1E9 * (exp CH00); 
+  sinon ;
+  mo1 = MODE Mail1 mecanique elastique ;
+  CHA=E1 * 1E9;
+  finsi;
+  
+  ma1 = MATE mo1 'YOUN' CHA 'NU' nu1 'RHO' rho1;
+
+finsi;
+*
+*
+trac CHA mo1 Cont1;
+*
+*
+* Conditions aux limites
+* ----------------------
+CL1 = BLOQUE UY L12 ;
+CL2 = BLOQUE UX L12 ;
+CL4 = BLOQUE UX L34 ;
+
+si (pilotdep);
+CL3 = BLOQUE UY L34 ;
+CL = CL1 et CL2 et CL3 et CL4;
+sinon;
+CL = CL1 et CL2 et CL4;
+finsi;
+*
+* Chargement
+* ----------
+*
+si (pilotdep);
+chp0= DEPI CL3 1.;
+depmax=tmax * epsp / 60 * H;
+tp=tmax / nbe;
+
+L_TEMPS= PROG 0. 'PAS' tp tmax;
+D_TEMPS= PROG 0. 'PAS' (tp * epsp / 60 * H) depmax ;
+EVOL_D= EVOL MANU 'temps' L_TEMPS 'f(t)' D_TEMPS;
+CHAR_T= CHAR chp0 EVOL_D 'DIMP';
+TEMPSCAL= PROG 0. 'PAS' tp tmax;
+
+sinon;
+effortN = L * ep / 1E6 * SIG * 1E6;
+ff = ((NelX + 1.)/ NelX) * effortN;
+f1 = 0. ff;
+CHARG1 = FORC f1 L34 ;
+finsi;
+*
+*
+* Construction des matrices élémentaires
+* --------------------------------------
+Ri1= RIGI mo1 ma1 ;
+Rigt1 = Ri1 ET CL ;
+*
+*
+********************
+*    Résolution    *
+********************
+*
+si (pilotdep);
+* Méthode de calcul PASAPAS
+*--------------------------
+TAB1=TABLE;
+TAB1.'MODELE'=mo1;
+TAB1.'CARACTERISTIQUES'=ma1;
+TAB1.'CHARGEMENT'=CHAR_T;
+TAB1.'BLOCAGES_MECANIQUES'=CL;
+tab1.'TEMPS_CALCULES'=TEMPSCAL;
+
+TAB1.'MOVA'= 'MOT' 'D   ';
+
+TAB1.'NON_LOCAL'= 'MOT' 'SB' ;
+tab1.'LCAR' = LC;
+TAB1.'LVIAM'= 'MOTS' 'EPTI' ;
+tab1.'NLOC_SB_FT' = ftn;
+tab1.'NLOC_SB_MODL' = mo1;
+tab1.'CONN' = CONN tab1.NLOC_SB_MODL LC 'NORMAL';
+
+*tab1.'PLASTIQUE' = vrai;
+*tab1.'MOVA' = 'D';
+*tab1.'MAXITERATION' = 20;
+*tab1.'PRECISION' = 1.e-4;
+*tab1.'CONVERGENCE_FORCEE' = vrai;
+*tab1.'MAXSOUSPAS' = 200;
+*tab1.'DELTAITER' = 5;
+
+PASAPAS TAB1;
+*
+sinon;
+Depl1=RESO Rigt1 char1;
+finsi;
+*
+*
+SAUV TAB1;
+********************
+*  Post-traitement *
+********************
+*
+*
+si (pilotdep);
+DEF1=defo TAB1.deplacements.nbe Mail1;
+grad1= grad mo1 tab1.deplacements.nbe;
+*
+* Affichage de la déformée
+*-------------------------
+trac def1;
+*
+*
+
+
+*
+* Affichage des déformations
+*---------------------------
+trac grad1 mo1 Cont1;
+*
+* Affichage des variables internes (D)
+*-------------------------------------
+trac tab1.variables_internes.nbe mo1 Cont1 (prog 0. pas 0.05 1.);
+*
+* Animation
+*----------
+anim =  @CARTOON Tab1 Mail1;
+
+sinon;
+*affichage de la contrainte normale sigmaxx
+SIG1 = SIGM mo1 ma1 Depl1 ;
+DEF1 = DEFO Depl1 mail1;
+TRAC 'TITR' 'Champ de contraintes' SIG1 mo1 ;
+*TRAC def1;
+finsi;
+

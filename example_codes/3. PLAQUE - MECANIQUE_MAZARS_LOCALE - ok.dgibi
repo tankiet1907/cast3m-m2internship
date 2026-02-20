@@ -1,0 +1,234 @@
+***********************************************************************
+*
+* Plaque perforée
+* Modelisation mecanique modele de Mazars
+* G. Sciumè
+*
+* Formation Cast3M (I2M - 27/04/2017)
+*
+***********************************************************************
+
+
+OPTI ECHO 0;
+
+
+
+
+*______________________________________________________________________
+* Calcul de la longeur equivalente de l'EF
+* - mod1 : MODELE
+*----------------------------------------------------------------------
+DEBPROC @LONGEF mod1*'MMODEL' ;
+
+val1='EXTR' mod1 'ELEM' 'TRI3' 'QUA4' 'TRI6' 'QUA8' 
+          'CUB8' 'CU20' 'PRI6' 'PR15' 'PYR5' 'PY13' 'TET4' 'TE10';
+CHAM1='MANU' 'CHML' val1 'SCAL' 1. 'TYPE' 'DEFORMATIONS' 'STRESSES';
+CHAM2='INTG' CHAM1 MOD1 'ELEM' 'SCAL';
+CHAM3= CHAN 'COMP' CHAM2 'XLEF';
+lef   = CHAM3**(1./(VALE DIME)) ;
+
+FINPROC lef;
+*______________________________________________________________________
+
+
+
+
+* PARAMETRES MECANIQUES (MAZARS MODEL)
+eyou1 =  30.e9;
+nu1   =  0.2;
+ft1   =  3.e6;
+kt01  =  ft1/eyou1;
+Gft   =  120.  ;
+*
+
+
+
+REGU = VRAI;
+MESH = 3;
+
+SI (MESH 'EGA' 1);
+DGROS    = 0.04;  DFIN     = 0.01;
+NELEM1   = 4;     NELEM2   = 6;
+FINS;
+
+SI (MESH 'EGA' 2);
+DGROS    = 0.02;  DFIN     = 0.005;
+NELEM1   = 8;     NELEM2   = 12;
+FINS;
+
+SI (MESH 'EGA' 3);
+DGROS    = 0.01;  DFIN     = 0.0025;
+NELEM1   = 16;     NELEM2   = 24;
+FINS;
+
+
+
+* OPTIONS GENERALES ET TYPE D'ELEMENTS GEOMETRIQUES
+OPTI 'DIME' 2 'MODE' PLAN CONT 'ELEM' 'QUA4' ;
+
+
+
+*---------------------------------------------------------------------*
+* I. MAILLAGE
+*---------------------------------------------------------------------*
+
+* DEFINITION DES LONGUEURS ET DENSITES DE MAILLES
+LONG     = 0.24 ;
+HAUT     = 0.10;
+RAYON    = 0.02;
+IMP1     = 0.001;
+
+* CREATION DES POINTS D'APPUI DU MAILLAGE
+PA       = 0. 0. ;
+PB       = ((0.5 * LONG) – RAYON) 0. ; 
+PC       = ((0.5 * LONG) - IMP1) RAYON ;
+PD       = ((0.5 * LONG) + RAYON) 0. ;
+PE       = LONG 0. ;
+PF       = LONG HAUT ; 
+PG       = 0. HAUT ;
+PCEN     = (0.5 * LONG) 0. ;
+TRAC (PA et PB et PC et PD et PE et PF et PG et PCEN);
+
+XH = (0.5 * LONG) - (RAYON * (COS 45));
+YH =  RAYON * (SIN 45);
+XI = (0.5 * LONG) + (RAYON * (COS 45));
+YI =  RAYON * (SIN 45);
+PH =  XH YH;
+PI =  XI YI;
+PL =  ((0.5 * LONG) - IMP1) HAUT ;
+TRAC (PA et PB et PC et PD et PE et PF et PG et PCEN et PH et PI et PL);
+
+
+* CREATION DES LIGNES
+LAB   = DROI (-1*NELEM2) PA PB 'DINI' DGROS 'DFIN' DFIN;
+LBH   = CERC   NELEM1  PB PCEN PH;
+LHG   = DROI (-1*NELEM2) PH PG 'DINI' DFIN 'DFIN' DGROS;
+LGA   = DROI NELEM1 PG PA;
+*
+LHC   = CERC NELEM1 PH PCEN PC;
+LCL   = DROI (-1*NELEM2) PC PL 'DINI' DFIN 'DFIN' (0.7 * DGROS);
+LLG   = DROI NELEM1 PL PG;
+*
+LCI   = CERC NELEM1 PC PCEN PI;
+LIF   = DROI (-1*NELEM2) PI PF 'DINI' DFIN 'DFIN' DGROS;
+LFL   = DROI NELEM1 PF PL;
+*
+LID   = CERC NELEM1 PI PCEN PD;
+LDE   = DROI (-1*NELEM2) PD PE 'DINI' DFIN 'DFIN' DGROS;
+LEF   = DROI NELEM1 PE PF;
+*
+* CREATION DES SURFACES
+SURF1 = DALL LAB LBH LHG LGA 'PLAN';
+SURF2 = DALL LHC LCL LLG LHG 'PLAN';
+SURF3 = DALL LCI LIF LFL LCL 'PLAN';
+SURF4 = DALL LID LDE LEF LIF 'PLAN';
+
+MAIL1 = SURF1 et SURF2 et SURF3 et SURF4;
+ELIM 1.E-6 MAIL1;
+TRAC MAIL1;
+
+L_SUP  = LLG et LFL;
+L_CERC = LBH ET LHC ET LCI ET LID;
+
+*---------------------------------------------------------------------*
+
+
+
+
+*---------------------------------------------------------------------*
+* II. MODELE ET MATERIAU
+*---------------------------------------------------------------------*
+MODM   = MODE MAIL1 MECANIQUE ELASTIQUE ISOTROPE ENDOMMAGEMENT MAZARS;   
+*
+SI REGU;
+  xlcar1 = @LONGEF MODM;
+  xlcar1 = ('CHAN' 'NOEUD' MODM xlcar1) 'NOMC' 'SCAL';
+SINO;
+  xlcar1 = MANU 'CHML' MODM 'SCAL' 0.01;
+FINS;
+
+NUM1    = ft1 * xlcar1;
+GF_CHAM = MANU 'CHML' MODM 'SCAL'  Gft;
+DEN1  = GF_CHAM - (((ft1**2.)/(2.*eyou1))*xlcar1);
+BTMOD = NUM1 * (DEN1**-1); 
+TRAC BTMOD MODM;
+*
+MATM = MATE MODM 'YOUN' eyou1 'NU' nu1  'RHO' 2.3E+03 'BETA' 1.06
+'ATRA' -0.2 'BTRA' BTMOD 'KTR0' kt01 'ACOM' 1.2 'BCOM' 1500.;
+*---------------------------------------------------------------------*
+
+
+
+*---------------------------------------------------------------------*
+* III. CONDITIONS LIMITES
+*---------------------------------------------------------------------*
+CL1 = BLOQ 'UY' (LAB et LDE);
+CL2 = BLOQ 'UX' LGA;
+CL3 = BLOQ 'UX' LEF;
+CL_TOT = CL1 et CL2 et CL3;
+*---------------------------------------------------------------------*
+
+
+
+*---------------------------------------------------------------------*
+* IV. DEPLACEMENT IMPOSE
+*---------------------------------------------------------------------*
+temps1  = 60.;
+dt1     = 1. ;
+ltempc1 = PROG 0. pas dt1 temps1;
+
+delta1 = 0.0001;
+nstep   = ENTI (temps1 / dt1); list nstep;
+step_h  = delta1 / nstep;
+*
+fo1    = DEPI  CL3 1.;
+lis1   = PROG  0. 'PAS'  step_h  delta1;
+evol1  = EVOL 'MANU' ltempc1 lis1;
+CHAM_M = CHAR 'DIMP' evol1 fo1;
+DESS evol1;
+*---------------------------------------------------------------------*
+
+
+*---------------------------------------------------------------------*
+* V. Resolution PASAPAS
+*---------------------------------------------------------------------*
+TAB2                         = 'TABL' ;
+TAB2 . 'MODELE'              = MODM ;
+TAB2 . 'CARACTERISTIQUES'    = MATM ;
+TAB2 . 'BLOCAGES_MECANIQUES' = CL_TOT;
+TAB2 . 'PROCESSEURS'         = 'MONO_PROCESSEUR';
+TAB2 . 'MOVA'                = 'D';
+TAB2 . 'TEMPS_CALCULES'      = ltempc1;
+TAB2 . 'CHARGEMENT'          = CHAM_M ;
+*---------------------------------------------------------------------*
+PASAPAS TAB2 ;
+*---------------------------------------------------------------------*
+
+
+
+
+last   =  ((DIME tab2.deplacements) - 1);
+SCALAd = PROG 0. PAS 0.05 1.;
+TRAC ('EXCO' 'D' TAB2.VARIABLES_INTERNES.last) MODM SCALAD;
+
+def_T0 =  DEFO mail1  tab2.deplacements.0    1   GRIS;
+def_T1 =  DEFO mail1  tab2.deplacements.last 100 ROUG;
+trac (def_T0 et def_T1);
+
+
+
+evol1 = EVOL 'MANU' ltempc1 lis1;
+ev3   = @GLOBAL tab2 CL3 evol1 FX;
+dess ev3;
+
+
+
+
+
+
+
+@EXCEL1 ev3 FORCE_DEPLA_MESH1;
+
+
+
+
