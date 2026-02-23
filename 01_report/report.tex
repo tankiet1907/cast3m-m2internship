@@ -1,0 +1,80 @@
+\documentclass[12pt,a4paper]{report}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[left=2.5cm,right=2.5cm,top=2cm,bottom=2cm]{geometry}
+\usepackage{graphicx}
+\usepackage{setspace}
+
+\begin{document}
+
+\begin{titlepage}
+    % Tạo khung viền kép (Double border)
+    \setlength{\fboxsep}{10pt} % Khoảng cách từ viền đến nội dung
+    \setlength{\fboxrule}{1.5pt} % Độ dày viền
+    
+    \makeatletter
+    \noindent\framebox[\textwidth][c]{%
+    \begin{minipage}[c][0.92\textheight][t]{0.9\textwidth}
+        \centering
+        \vspace{1cm}
+        
+        {\large \textbf{UNIVERSITÉ GRENOBLE ALPES}}
+        
+        \vspace{1.5cm}
+        
+        % Chèn Logo - Điều chỉnh chiều cao (height) cho phù hợp
+        \begin{figure}[h]
+            \centering
+            \begin{minipage}{0.45\textwidth}
+                \centering
+                \includegraphics[height=2.5cm]{uga_phitem_logo.png} % Thay tên file logo UGA
+            \end{minipage}
+            \hfill
+            \begin{minipage}{0.45\textwidth}
+                \centering
+                \includegraphics[height=2.5cm]{3sr_logo.png} % Thay tên file logo 3SR
+            \end{minipage}
+        \end{figure}
+
+        \vspace{2cm}
+
+        % Tên đề tài
+        {\Large \textbf{Numerical and experimental study of the thermo-hydro-mechanical behavior of concrete under severe accident conditions using a poro-mechanical approach}}
+
+        \vspace{1.5cm}
+
+        % Tên tác giả
+        {\Large Tan Kiet HONG}
+
+        \vspace{2.5cm}
+
+        % Thông tin chương trình học
+        {\small
+        This thesis is submitted in partial fulfillment of the requirements for the Master's degree in the International Program ``Geomechanics, Civil Engineering and Risks''.\\
+        \vspace{0.5cm}
+        The work was carried out during the Master 2 internship at 3SR Laboratory.
+        }
+
+        \vspace{2cm}
+
+        % Người hướng dẫn
+        \begin{flushleft}
+            {\large \textbf{Supervisors:}} \\
+            \vspace{0.5cm}
+            {\large Prof. Julien BAROTH, Université Grenoble Alpes} \\
+            \vspace{0.3cm}
+            {\large Prof. Stefano DAL PONT, Université Grenoble Alpes}
+        \end{flushleft}
+
+        \vfill
+
+        % Địa điểm và thời gian
+        {\large \textit{Grenoble, June 2026}}
+        \vspace{1cm}
+        
+    \end{minipage}
+    }
+    \makeatother
+\end{titlepage}
+
+\end{document}
