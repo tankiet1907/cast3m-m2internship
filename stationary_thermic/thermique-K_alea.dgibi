@@ -1,3 +1,29 @@
+*==============================================================================
+*AUTHOR:  Tan Kiet HONG
+*DATE:    2026-02-23
+*DESCRIPTION: This is a simple example of a stationary thermic problem with random thermal conductivity k
+
+*GEOMETRY: A rectangular cantilever beam of length 3 m and height 0.5 m.
+*BOUNDARY CONDITIONS:
+* - Imposed temperature of 200 °C on the bottom edge (LBAS).
+* - Imposed heat flux of 100 W/m² on the right edge (LDROITE).
+* - Convection with a coefficient of 100 W/m²K on the top edge (LHAUT) and ambient temperature of 25 °C.
+* - The left edge (LGAUCHE) is thermally insulated (no heat flux and has no imposed temperature) and fixed in space (no mechanical displacement).
+
+*INPUTS:
+* - MEAN VALUE OF K: KMOYENNE = 1.
+* - STANDARD DEVIATION OF K: KSIGMA = 0.5
+* - CORRELATION LENGTH OF THE RANDOM FIELD k: LC = 0.5
+* - CONVECTION COEFFICIENT: HCONVEC = 100.
+* - AMBIENT TEMPERATURE: TLIBRE = 25.
+* - IMPOSED TEMPERATURE: TIMPOSE = 200.
+* - IMPOSED HEAT FLUX: FLUXIMPOSE = 100.
+
+*OUTPUTS:
+* - RANDOM FIELD FOR THERMAL CONDUCTIVITY K
+* - TEMPERATURE FIELD T
+*==============================================================================
+
 *OPTIONS
 OPTI ECHO 0;
 OPTI 'DIME' 2 'ELEM' QUA4;
