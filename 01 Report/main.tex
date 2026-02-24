@@ -10,21 +10,60 @@
 \documentclass[12pt,twoside]{report}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
-\usepackage[left=2.5cm,right=2.5cm,top=2cm,bottom=2cm]{geometry}
 \usepackage{graphicx}
 \usepackage{setspace}
+
+
+% Bibliograyphy
 \usepackage[backend=biber,style=authoryear]{biblatex}
 \addbibresource{zotero_library.bib}
 
-
-% Formatting settings
+% Margin and Format settings
+\usepackage[left=2.5cm,right=2.5cm,top=3cm,bottom=2cm]{geometry}
 \setlength{\parindent}{0pt}     % Indentation of the first line of each paragraph
 \setlength{\parskip}{10pt}      % Spacing between paragraphs
 \setstretch{1.15}               % Line spacing
 
+% ==============================
+% Page number on header
+\usepackage{fancyhdr}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0pt}
+\fancyhf{}
+\fancyhead[LE,RO]{\thepage}
+\fancyhead[LO]{\nouppercase{\rightmark}}
+\fancyhead[RE]{\nouppercase{\leftmark}}
+
+% Roman pages: no header line, no chapter name
+\fancypagestyle{romanstyle}{%
+  \fancyhf{}%
+  \fancyhead[LE,RO]{\thepage}%
+  \renewcommand{\headrulewidth}{0pt}%
+  \renewcommand{\footrulewidth}{0pt}%
+}
+
+% Arabic pages: keep header line
+\fancypagestyle{arabicstyle}{%
+  \fancyhf{}%
+  \fancyhead[LE,RO]{\thepage}%
+  \fancyhead[LO]{\nouppercase{\rightmark}}%
+  \fancyhead[RE]{\nouppercase{\leftmark}}%
+  \renewcommand{\headrulewidth}{0.4pt}%
+  \renewcommand{\footrulewidth}{0pt}%
+}
+
+% First page of the chapter
+\pagestyle{arabicstyle}
+\fancypagestyle{plain}{%
+  \fancyhf{}%
+  \fancyhead[LE,RO]{\thepage}%
+  \renewcommand{\headrulewidth}{0pt}%
+  \renewcommand{\footrulewidth}{0pt}%
+}
+% ==============================
 
 % ==============================
-% START OF DOUBLE NAVY FRAME COMMAND
+% Double navy frame on title page
 % ADDED: DOUBLE NAVY FRAME PACKAGES
 \usepackage{xcolor}
 \usepackage{tikz}
@@ -51,7 +90,6 @@ rectangle
 \end{tikzpicture}
 }
 }
-% END OF DOUBLE NAVY FRAME COMMAND
 % ==============================
 
 \begin{document}
@@ -63,7 +101,7 @@ rectangle
 \begin{center}
     \begin{minipage}[c][0.92\textheight][t]{0.9\textwidth}
         \centering
-        \vspace{1cm}
+        \vspace{0.4cm}
         
         {\large \textbf{UNIVERSITÉ GRENOBLE ALPES}}
         
@@ -132,6 +170,7 @@ rectangle
 
 \cleardoublepage
 \pagenumbering{roman}
+\pagestyle{romanstyle}
 
 % ==============================
 % Acknowledgment
@@ -139,8 +178,7 @@ rectangle
 \chapter*{Acknowledgment}
 \addcontentsline{toc}{chapter}{Acknowledgment}
 
-I would like to express my sincere gratitude to my amazing supervisors,
-Prof. Julien BAROTH and Prof. Stefano DAL PONT, for their guidance and valuable advise throughout this work.
+I would like to express my sincere gratitude to my amazing supervisors, Prof. Julien BAROTH and Prof. Stefano DAL PONT, for their guidance and valuable advice throughout this work.
 
 I also thank the 3SR Laboratory for providing an excellent research environment and for the support I received during my internship.
 
@@ -158,13 +196,14 @@ This thesis investigates the thermo-hydro-mechanical behavior of concrete
 under severe accident conditions using a poro-mechanical approach.
 
 The study combines numerical modeling and experimental validation
-to better understand the coupled phenomena involved.
+to better understand the coupled physics involved.
 
 
 % ==============================
 % Table of Contents
 
 \cleardoublepage
+\renewcommand{\contentsname}{Table of Contents}
 \tableofcontents
 
 % ==============================
@@ -172,70 +211,121 @@ to better understand the coupled phenomena involved.
 
 \cleardoublepage
 \pagenumbering{arabic}
+\pagestyle{arabicstyle}
 
 \chapter{Introduction}
 
-\section{Scientific context}
-\section{Objectives of the internship}
-\section{Motivation and structure of the thesis}
-\section{3SR Laboratory}
-\section{Computational tools}
+\section{Context and problem statement}
+
+\subsection{High-temperature concrete behaviour in nuclear containment structures} 
+Main contextes:
+\begin{itemize}
+    \item Concrete in nuclear containment structures is exposed to extreme temperatures during severe accidents.
+    \item Rapid heating leads to strong thermal stresses, dehydration, cracking and possible spalling govern structural integrity.
+\end{itemize}
+
+\subsection{Problem statement}
+Main problems:
+\begin{itemize}
+  \item Complex multi-physics coupling under high temperature.
+  \item Temperature- and damage-dependent evolution of transport properties with cracking and stiffness degradation altering the permeability and pore pressure.
+  \item Reliable prediction requires a consistent thermo-hydro-mechanical (THM) framework.
+\end{itemize}
+
+\subsection{Limitations of existing THM models}
+Main limitations of existing THM models:
+\begin{itemize}
+    \item Lack of fully coupled interactions between the damage state and transport properties. 
+    \item Lack of consistent regularization for strain localization.
+    \item Limited probabilistic assessment of parameter uncertainty and sensitivity.
+\end{itemize}
+
+
+\section{Objectives and scope of the thesis}
+
+Main objectives of the thesis:
+\begin{itemize}
+    \item Understanding and Developing a THM model
+    \item Temperature- and damage-dependent evolution of stiffness and transport properties.
+    \item Numerical implementation and numerical validation.
+    \item Probabilistic sensitivity analysis: Evaluating parameter uncertainty and identifying the dominant physical parameters.
+\end{itemize}
+
+The scope of this work is limited to:
+\begin{itemize}
+    \item Thermal boundaries limited by severe accident conditions.
+    \item Continuum-scale THM modelling by Cast3M.
+    \item Damage modelling including temperature-dependent stiffness and transport properties.
+    \item Probabilistic sensitivity analysis at the material parameter level.
+\end{itemize}
+
+\section{Research enviroment and Computational tools}
+
+\subsection{3SR Laboratory}
+The host institution providing the scientific environment, experimental data, and expertise in structural mechanics and risk analysis.
+
+\subsection{Finite element solver - Cast3M}
+Cast3M (or Castem) is an open-source finite-element code developed at CEA, which is used to implement advanced constitutive laws and custom multiphysics formulations.  
+
+Compared with COMSOL Multiphysics, Cast3m typically offers greater transparency and control for implementing tightly coupled THM while COMSOL offers a user-friendly GUI for many built-in multiphysics interfaces.
+
+\subsection{Probabilistic analysis tool - Persalys}
+Persalys is the computational tool dedicated to managing parameter uncertainty in material properties.
+
+It is used to perform the probabilistic sensitivity analysis, generate random sampling (e.g., Monte Carlo simulations), and rank the dominant THM parameters.
 
 
 % ==============================
-% Chapter 2: Literature review
+% Chapter 2: Theoretical and Numerical framework - Concrete behavior at high temperature
 
 \cleardoublepage
-\chapter{State of the art}
+\chapter{Theoretical and Numerical framework}
 
-\section{High-temperature behaviour of concrete}
-\subsection{Thermal degradation and damage}
-\subsection{Moisture transport, pore pressure and spalling}
-\section{Evolution of transport properties}
-\subsection{Permeability and porosity changes}
-\subsection{Temperature-dependent material parameters}
-\section{THM and poromechanical modelling approaches}
-\subsection{Governing equations and coupling strategies}
-\subsection{Constitutive modelling and calibration}
-\section{Synthesis and research gaps}
+\section{Thermal behavior}
+\subsection{Conduction, convection and radiation}
+\subsection{Heat transfer}
 
-% ==============================
-% Chapter 3: Theoretical framework
+\section{Hydro-thermal behavior}
+\subsection{Moisture transport}
+\subsection{Drying, shrinkage and pore pressure}
 
-\cleardoublepage
-\chapter{Governing equations and theoretical framework}
+\section{Mechanical behavior}
+\subsection{Elastic model}
+\subsection{Mazars damage model}
 
-\section{Heat transfer}
-\subsection{Heat equation and thermal properties}
-\subsection{Thermal boundary conditions under severe accident conditions}
+\section{THM coupling}
 
-\section{Hydro-mechanical processes}
-\subsection{Moisture transport and degree of saturation}
+\section{Damage-dependent property evolution}
+\subsection{Young's modulus degradation}
 \subsection{Permeability evolution}
-
-\section{Thermo-hydro-mechanical coupling}
-\subsection{TH coupling mechanisms}
-\subsection{THM coupling and poro-mechanical formulation}
+\subsection{Thermal conductivity and heat capacity evolution}
 
 
 % ==============================
-% Chapter 4: Numerical framework and Implementation
-
+% Chapter 3: Numerical implementation in Cast3M
 
 \cleardoublepage
-\chapter{Numerical framework and Implementation}
+\chapter{Numerical implementation}
 
-\section{Overview of the CAST3M finite element code}
 \section{Modeling strategy and assumptions}
-\section{Numerical parameters and mesh considerations}
-\section{Boundary conditions and loading scenarios}
-\section{Implementation of the heat transfer model in CAST3M}
-\section{Implementation of hydro-mechanical and THM coupling}
+
+\section{Geometry, materials, boundary conditions and loadings}
+
+\section{Implementation of the thermal model}
+\subsection{Stationary}
+\subsection{Transient}
+
+\section{Implementation of the hydro-mechanical model}
+\subsection{Drying}
+\subsection{Shrinkage}
+
+\section{Implementation of the TH and THM coupled models}
+
+\section{Numerical results}
 
 
 % ==============================
-% Chapter 5: Model validation and Experimental data
-
+% Chapter 4: Model validation and Experimental data
 
 \cleardoublepage
 \chapter{Model validation}
@@ -250,30 +340,53 @@ to better understand the coupled phenomena involved.
 \subsection{Discussions on model performance}
 
 
-
 % ==============================
-% Chapter 6: Probabilistic sensitivity analysis
+% Chapter 5: Probabilistic sensitivity analysis
 
 
 \cleardoublepage
 \chapter{Probabilistic sensitivity analysis}
 
-\section{Motivation and probabilistic framework}
-\section{Methodology and sensitivity indicators}
-\section{Influence of uncertain parameters on the THM response}
-\section{Ranking of dominant physical mechanisms}
-\section{Implications for THM modeling of concrete}
+\section{Sources of uncertainty and concrete heterogeneity}
+Main points:
+\begin{itemize}
+  \item Concrete is not uniform, so its properties vary from place to place.
+  \item Material parameters (e.g., stiffness and permeability) are uncertain.
+  \item Measurements and model assumptions also add uncertainty.
+\end{itemize}
+
+\section{Probabilistic framework and implementation}
+Main points:
+\begin{itemize}
+    \item Treat uncertain material parameters as random variables.
+    \item Generate many random samples.
+    \item Run the THM model for each sample.
+    \item Collect the outputs and analyze variability and sensitivity.
+\end{itemize}
+
+\section{Sensitivity analysis methodology}
+Main points:
+\begin{itemize}
+    \item Sensitivity indicators: Young modulus...
+    \item Change one input parameter at a time (or groups of parameters).
+    \item Measure how much the outputs change.
+    \item Rank the parameters from most to least influential.
+\end{itemize}
+
+\section{Identification of dominant parameters}
 
 
 % ==============================
-% Chapter 7: Conclusions and Perspectives
+% Chapter 6: Conclusions and Perspectives
 
 
 \cleardoublepage
 \chapter{Conclusions and Perspectives}
 
 \section{Main findings}
-\section{Limitations and possible improvements}
+
+\section{Model limitations and possible improvements}
+
 \section{Perspectives for future research}
 
 
@@ -282,16 +395,14 @@ to better understand the coupled phenomena involved.
 
 
 \cleardoublepage
-\chapter*{List of Symbols}
-\addcontentsline{toc}{chapter}{List of Symbols}
+\chapter*{Nomenclature}
+\addcontentsline{toc}{chapter}{Nomenclature}
 
 \newpage
-\chapter*{List of Figures}
 \addcontentsline{toc}{chapter}{List of Figures}
 \listoffigures
 
 \newpage
-\chapter*{List of Tables}
 \addcontentsline{toc}{chapter}{List of Tables}
 \listoftables
 
