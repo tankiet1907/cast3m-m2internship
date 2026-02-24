@@ -5,15 +5,40 @@
 \usepackage{graphicx}
 \usepackage{setspace}
 
+%% === START OF DOUBLE NAVY FRAME COMMAND
+%% <<< ADDED: DOUBLE NAVY FRAME PACKAGES
+\usepackage{xcolor}
+\usepackage{tikz}
+\usepackage{eso-pic}
+
+%% <<< ADDED: NAVY COLOR + DOUBLE FRAME COMMAND
+\definecolor{navyframe}{RGB}{20,40,100}
+
+\newcommand{\DoubleNavyFrame}{
+\AddToShipoutPictureBG{
+\begin{tikzpicture}[remember picture,overlay]
+
+% Outer thick border
+\draw[line width=3.5pt, color=navyframe]
+([xshift=1.7cm,yshift=-1.7cm]current page.north west)
+rectangle
+([xshift=-1.7cm,yshift=1.7cm]current page.south east);
+
+% Inner thin border
+\draw[line width=1.5pt, color=navyframe]
+([xshift=1.5cm,yshift=-1.5cm]current page.north west)
+rectangle
+([xshift=-1.5cm,yshift=1.5cm]current page.south east);
+
+\end{tikzpicture}
+}
+}
+%% === END OF DOUBLE NAVY FRAME COMMAND
+
 \begin{document}
 
 \begin{titlepage}
-    % Tạo khung viền kép (Double border)
-    \setlength{\fboxsep}{10pt} % Khoảng cách từ viền đến nội dung
-    \setlength{\fboxrule}{1.5pt} % Độ dày viền
-    
-    \makeatletter
-    \noindent\framebox[\textwidth][c]{%
+\DoubleNavyFrame
     \begin{minipage}[c][0.92\textheight][t]{0.9\textwidth}
         \centering
         \vspace{1cm}
@@ -22,7 +47,7 @@
         
         \vspace{1.5cm}
         
-        % Chèn Logo - Điều chỉnh chiều cao (height) cho phù hợp
+        % Logos and size adjustment
         \begin{figure}[h]
             \centering
             \begin{minipage}{0.45\textwidth}
@@ -38,17 +63,17 @@
 
         \vspace{2cm}
 
-        % Tên đề tài
+        % Thesis title
         {\Large \textbf{Numerical and experimental study of the thermo-hydro-mechanical behavior of concrete under severe accident conditions using a poro-mechanical approach}}
 
         \vspace{1.5cm}
 
-        % Tên tác giả
+        % Author's name
         {\Large Tan Kiet HONG}
 
         \vspace{2.5cm}
 
-        % Thông tin chương trình học
+        % Institutional information
         {\small
         This thesis is submitted in partial fulfillment of the requirements for the Master's degree in the International Program ``Geomechanics, Civil Engineering and Risks''.\\
         \vspace{0.5cm}
@@ -57,7 +82,7 @@
 
         \vspace{2cm}
 
-        % Người hướng dẫn
+        % Supervisors
         \begin{flushleft}
             {\large \textbf{Supervisors:}} \\
             \vspace{0.5cm}
@@ -68,7 +93,7 @@
 
         \vfill
 
-        % Địa điểm và thời gian
+        % location and date
         {\large \textit{Grenoble, June 2026}}
         \vspace{1cm}
         
