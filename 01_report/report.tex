@@ -1,21 +1,31 @@
-\documentclass[12pt,a4paper]{report}
+% ==============================
+% Preamble
+% Package imports, and settings
+\documentclass[twoside]{report}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage[left=2.5cm,right=2.5cm,top=2cm,bottom=2cm]{geometry}
 \usepackage{graphicx}
 \usepackage{setspace}
 
-%% === START OF DOUBLE NAVY FRAME COMMAND
-%% <<< ADDED: DOUBLE NAVY FRAME PACKAGES
+
+% Formatting settings
+\setlength{\parindent}{0pt}     % Indentation of the first line of each paragraph
+\setlength{\parskip}{10pt}      % Spacing between paragraphs
+\setstretch{1.15}               % Line spacing
+
+
+% ==============================
+% START OF DOUBLE NAVY FRAME COMMAND
+% ADDED: DOUBLE NAVY FRAME PACKAGES
 \usepackage{xcolor}
 \usepackage{tikz}
 \usepackage{eso-pic}
 
-%% <<< ADDED: NAVY COLOR + DOUBLE FRAME COMMAND
+% ADDED: NAVY COLOR + DOUBLE FRAME COMMAND
 \definecolor{navyframe}{RGB}{20,40,100}
-
 \newcommand{\DoubleNavyFrame}{
-\AddToShipoutPictureBG{
+\AddToShipoutPictureBG*{
 \begin{tikzpicture}[remember picture,overlay]
 
 % Outer thick border
@@ -33,12 +43,16 @@ rectangle
 \end{tikzpicture}
 }
 }
-%% === END OF DOUBLE NAVY FRAME COMMAND
+% END OF DOUBLE NAVY FRAME COMMAND
+% ==============================
 
 \begin{document}
 
+% ==============================
+% Title page with double navy frame
 \begin{titlepage}
 \DoubleNavyFrame
+\begin{center}
     \begin{minipage}[c][0.92\textheight][t]{0.9\textwidth}
         \centering
         \vspace{1cm}
@@ -52,12 +66,12 @@ rectangle
             \centering
             \begin{minipage}{0.45\textwidth}
                 \centering
-                \includegraphics[height=2.5cm]{uga_phitem_logo.png} % Thay tên file logo UGA
+                \includegraphics[height=2.5cm]{uga_phitem_logo.png} % file logo UGA
             \end{minipage}
             \hfill
             \begin{minipage}{0.45\textwidth}
                 \centering
-                \includegraphics[height=2.5cm]{3sr_logo.png} % Thay tên file logo 3SR
+                \includegraphics[height=2.5cm]{3sr_logo.png} % logo 3SR
             \end{minipage}
         \end{figure}
 
@@ -98,8 +112,61 @@ rectangle
         \vspace{1cm}
         
     \end{minipage}
-    }
-    \makeatother
+\end{center}   
 \end{titlepage}
 
+
+% End of title page with double navy frame
+% ==============================
+% Blank page after title page
+
+\thispagestyle{empty}
+\mbox{}
+
+\cleardoublepage
+\pagenumbering{roman}
+
+% ==============================
+% Acknowledgment
+
+\chapter*{Acknowledgment}
+\addcontentsline{toc}{chapter}{Acknowledgment}
+
+I would like to express my sincere gratitude to my supervisors,
+Prof. Julien BAROTH and Prof. Stefano DAL PONT,
+for their guidance and valuable discussions throughout this work.
+
+I also thank the 3SR Laboratory for providing an excellent research environment.
+
+
+% ==============================
+% Abstract
+
+\newpage
+\chapter*{Abstract}
+\addcontentsline{toc}{chapter}{Abstract}
+
+This thesis investigates the thermo-hydro-mechanical behavior of concrete
+under severe accident conditions using a poro-mechanical approach.
+The study combines numerical modeling and experimental validation
+to better understand the coupled phenomena involved.
+
+
+% ==============================
+% Table of Contents
+
+\cleardoublepage
+\tableofcontents
+
+% ==============================
+
+\pagenumbering{arabic}
+
+% ==============================
+% Chapter 1: Introduction
+
+\cleardoublepage
+\chapter{Introduction}
+
+% ==============================
 \end{document}
