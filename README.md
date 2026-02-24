@@ -1,7 +1,7 @@
 # Thermo–Hydro–Mechanical Modelling of Concrete  
 ## M2 Internship Research Project  
 
-This repository contains the research work developed during my Master 2 internship, implemented and validated using `Cast3M 2024`.
+This repository contains the research work developed during my Master 2 internship, implemented and validated using `Cast3M 2025`.
 
 ---
 
@@ -53,7 +53,7 @@ Each directory contains Cast3M scripts and numerical studies corresponding to a 
 
 All simulations are developed and tested using:
 
-`Cast3M 2024`
+`Cast3M 2025`
 
 ---
 
@@ -63,13 +63,3 @@ This work contributes to the understanding of multi-physical behavior of concret
 
 ---
 
-## 4. Software Environment
-
-All simulations are developed and tested using:
-
-`Cast3M 2024`
-
----
-
-## 5. Research Context  
-This work contributes to the understanding of multi-physical behavior of concrete, with particular attention to durability, long-term performance, and coupled damage processes in heterogeneous materials.This work contributes to the understanding of multi-physical behavior of concrete, with particular attention to durability, long-term performance, and coupled damage processes in heterogeneous materials.This work contributes to the understanding of multi-physical behavior of concrete, with particular attention to durability, long-term performance, and coupled damage processes in heterogeneous materials.This work contributes to the understanding of multi-physical behavior of concrete, with particular attention to durability, long-term performance, and coupled damage processes in heterogeneous materials.
