@@ -7,12 +7,14 @@
 % ==============================
 % Preamble
 % Package imports, and settings
-\documentclass[twoside]{report}
+\documentclass[12pt,twoside]{report}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage[left=2.5cm,right=2.5cm,top=2cm,bottom=2cm]{geometry}
 \usepackage{graphicx}
 \usepackage{setspace}
+\usepackage[backend=biber,style=authoryear]{biblatex}
+\addbibresource{zotero_library.bib}
 
 
 % Formatting settings
@@ -41,7 +43,7 @@ rectangle
 ([xshift=-1.7cm,yshift=1.7cm]current page.south east);
 
 % Inner thin border
-\draw[line width=1.5pt, color=navyframe]
+\draw[line width=1.75pt, color=navyframe]
 ([xshift=1.5cm,yshift=-1.5cm]current page.north west)
 rectangle
 ([xshift=-1.5cm,yshift=1.5cm]current page.south east);
@@ -68,20 +70,19 @@ rectangle
         \vspace{1.5cm}
         
         % Logos and size adjustment
-        \begin{figure}[h]
-            \centering
+        \begin{center}
             \begin{minipage}{0.45\textwidth}
                 \centering
-                \includegraphics[height=2.5cm]{uga_phitem_logo.png} % file logo UGA
+                \includegraphics[height=2.5cm]{logo_uga_phitem.png} % logo UGA
             \end{minipage}
             \hfill
             \begin{minipage}{0.45\textwidth}
                 \centering
-                \includegraphics[height=2.5cm]{3sr_logo.png} % logo 3SR
+                \includegraphics[height=2.5cm]{logo_3sr.png} % logo 3SR
             \end{minipage}
-        \end{figure}
+        \end{center}
 
-        \vspace{2cm}
+        \vspace{1.5cm}
 
         % Thesis title
         {\Large \textbf{Numerical and experimental study of the thermo-hydro-mechanical behavior of concrete under severe accident conditions using a poro-mechanical approach}}
@@ -91,27 +92,27 @@ rectangle
         % Author's name
         {\Large Tan Kiet HONG}
 
-        \vspace{2.5cm}
+        \vspace{1.5cm}
 
         % Institutional information
         {\small
         This thesis is submitted in partial fulfillment of the requirements for the Master's degree in the International Program ``Geomechanics, Civil Engineering and Risks''.\\
-        \vspace{0.5cm}
+        \vspace{0.25cm}
         The work was carried out during the Master 2 internship at 3SR Laboratory.
         }
 
-        \vspace{2cm}
+        \vspace{1.5cm}
 
         % Supervisors
         \begin{flushleft}
             {\large \textbf{Supervisors:}} \\
             \vspace{0.5cm}
             {\large Prof. Julien BAROTH, Université Grenoble Alpes} \\
-            \vspace{0.3cm}
+            \vspace{0.5cm}
             {\large Prof. Stefano DAL PONT, Université Grenoble Alpes}
         \end{flushleft}
 
-        \vfill
+        \vspace{1cm}
 
         % location and date
         {\large \textit{Grenoble, June 2026}}
@@ -138,11 +139,12 @@ rectangle
 \chapter*{Acknowledgment}
 \addcontentsline{toc}{chapter}{Acknowledgment}
 
-I would like to express my sincere gratitude to my supervisors,
-Prof. Julien BAROTH and Prof. Stefano DAL PONT,
-for their guidance and valuable discussions throughout this work.
+I would like to express my sincere gratitude to my amazing supervisors,
+Prof. Julien BAROTH and Prof. Stefano DAL PONT, for their guidance and valuable advise throughout this work.
 
-I also thank the 3SR Laboratory for providing an excellent research environment.
+I also thank the 3SR Laboratory for providing an excellent research environment and for the support I received during my internship.
+
+Finally, I would like to thank my family for their constant encouragement, patience, and support throughout my studies and the completion of this thesis.
 
 
 % ==============================
@@ -154,6 +156,7 @@ I also thank the 3SR Laboratory for providing an excellent research environment.
 
 This thesis investigates the thermo-hydro-mechanical behavior of concrete
 under severe accident conditions using a poro-mechanical approach.
+
 The study combines numerical modeling and experimental validation
 to better understand the coupled phenomena involved.
 
@@ -165,40 +168,44 @@ to better understand the coupled phenomena involved.
 \tableofcontents
 
 % ==============================
-
-\pagenumbering{arabic}
-
-% ==============================
 % Chapter 1: Introduction
 
 \cleardoublepage
+\pagenumbering{arabic}
+
 \chapter{Introduction}
 
-\section{Scientific and industrial context}
+\section{Scientific context}
 \section{Objectives of the internship}
+\section{Motivation and structure of the thesis}
 \section{3SR Laboratory}
-\section{Scope and structure of the report}
+\section{Computational tools}
 
 
 % ==============================
 % Chapter 2: Literature review
 
 \cleardoublepage
-\chapter{Literature review}
+\chapter{State of the art}
 
-\section{Thermo-hydro-mechanical behavior of concrete at high temperature}
-\section{Dehydration, cracking and spalling mechanisms}
-\section{Evolution of transport properties and permeability}
-\section{Existing THM and poro-mechanical models}
-\section{Limitations of current approaches and identified research gaps}
+\section{High-temperature behaviour of concrete}
+\subsection{Thermal degradation and damage}
+\subsection{Moisture transport, pore pressure and spalling}
+\section{Evolution of transport properties}
+\subsection{Permeability and porosity changes}
+\subsection{Temperature-dependent material parameters}
+\section{THM and poromechanical modelling approaches}
+\subsection{Governing equations and coupling strategies}
+\subsection{Constitutive modelling and calibration}
+\section{Synthesis and research gaps}
 
 % ==============================
 % Chapter 3: Theoretical framework
 
 \cleardoublepage
-\chapter{Theoretical framework}
+\chapter{Governing equations and theoretical framework}
 
-\section{Heat transfer in concrete}
+\section{Heat transfer}
 \subsection{Heat equation and thermal properties}
 \subsection{Thermal boundary conditions under severe accident conditions}
 
@@ -231,19 +238,17 @@ to better understand the coupled phenomena involved.
 
 
 \cleardoublepage
-\chapter{Model validation and Experimental data}
+\chapter{Model validation}
 
 \section{Experimental data}
-\subsection{Description of experimental tests}
-\subsection{Test specimens and material properties}
-\subsection{Thermal and hydraulic loading conditions}
-\subsection{Measured quantities and data processing}
+\subsection{Experimental tests and material properties}
+\subsection{Thermal, hydraulic and mechanic loadings}
+\subsection{Measured data}
 
-\section{Validation strategy}
-\section{Numerical setup for validation}
-\section{Comparison between numerical and experimental results}
-\section{Discussion on model performance}
-\section{Limitations of the proposed approach}
+\section{Validation}
+\subsection{Comparison between numerical and experimental results}
+\subsection{Discussions on model performance}
+
 
 
 % ==============================
@@ -267,8 +272,7 @@ to better understand the coupled phenomena involved.
 \cleardoublepage
 \chapter{Conclusions and Perspectives}
 
-\section{Summary of main findings}
-\section{Contributions of the internship}
+\section{Main findings}
 \section{Limitations and possible improvements}
 \section{Perspectives for future research}
 
@@ -294,6 +298,7 @@ to better understand the coupled phenomena involved.
 \newpage
 \chapter*{Bibliography}
 \addcontentsline{toc}{chapter}{Bibliography}
+\printbibliography
 % ==============================
 
 \end{document}
