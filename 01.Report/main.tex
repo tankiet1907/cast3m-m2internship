@@ -35,6 +35,23 @@
 \newcommand{\review}[1]{\hl{[REVIEW] #1}}
 
 % ==============================
+% Grouped Nomenclature
+\usepackage[intoc]{nomencl}
+\usepackage{etoolbox}
+\makenomenclature
+
+% Group titles
+\renewcommand{\nomgroup}[1]{%
+  \item[\bfseries
+  \ifstrequal{#1}{T}{Thermal symbols}{%
+  \ifstrequal{#1}{H}{Hydraulic symbols}{%
+  \ifstrequal{#1}{M}{Mechanical symbols}{%
+  \ifstrequal{#1}{F}{Finite Element notation}{}}}}]
+}
+
+\renewcommand{\nomlabel}[1]{#1 \hfill}
+
+% ==============================
 % Page number on header
 \usepackage{fancyhdr}
 \renewcommand{\headrulewidth}{0.4pt}
@@ -102,6 +119,39 @@ rectangle
 % ==============================
 
 \begin{document}
+
+% Thermal symbols
+\nomenclature[T]{$T$}{Temperature [K]}
+\nomenclature[T]{$q''$}{Heat flux [W\,m$^{-2}$]}
+\nomenclature[T]{$\lambda$}{Thermal conductivity [W\,m$^{-1}$\,K$^{-1}$]}
+\nomenclature[T]{$c_p$}{Specific heat capacity [J\,kg$^{-1}$\,K$^{-1}$]}
+\nomenclature[T]{$\rho$}{Mass density [kg\,m$^{-3}$]}
+\nomenclature[T]{$h$}{Convective heat transfer coefficient [W\,m$^{-2}$\,K$^{-1}$]}
+\nomenclature[T]{$\sigma$}{Stefan--Boltzmann constant [W\,m$^{-2}$\,K$^{-4}$]}
+\nomenclature[T]{$\varepsilon$}{Emissivity [-]}
+
+% Hydraulic symbols
+\nomenclature[H]{$p$}{Pore pressure [Pa]}
+\nomenclature[H]{$k$}{Intrinsic permeability [m$^2$]}
+\nomenclature[H]{$S$}{Degree of saturation [-]}
+
+% Mechanical symbols
+\nomenclature[M]{$\boldsymbol{\varepsilon}$}{Total strain tensor [-]}
+\nomenclature[M]{$\boldsymbol{\varepsilon}_e$}{Elastic strain tensor [-]}
+\nomenclature[M]{$\boldsymbol{\varepsilon}_{th}$}{Thermal strain [-]}
+\nomenclature[M]{$\boldsymbol{\sigma}$}{Cauchy stress tensor [Pa]}
+\nomenclature[M]{$E$}{Young's modulus [Pa]}
+\nomenclature[M]{$f_t$}{Tensile strength [Pa]}
+\nomenclature[M]{$D$}{Damage variable [-]}
+\nomenclature[M]{$G_f$}{Fracture energy [J\,m$^{-2}$]}
+\nomenclature[M]{$L_e$}{Characteristic element length [m]}
+
+% Finite Element notation
+\nomenclature[F]{$[K]$}{Global stiffness matrix}
+\nomenclature[F]{$[C]$}{Capacity matrix}
+\nomenclature[F]{$\{F\}$}{Nodal force vector}
+\nomenclature[F]{$\{U\}$}{Nodal displacement vector}
+\nomenclature[F]{$\{R\}$}{Residual vector}
 
 % ==============================
 % Title page with double navy frame
@@ -211,7 +261,7 @@ to better understand the coupled physics involved.
 % Table of Contents
 
 \cleardoublepage
-\renewcommand{\contentsname}{Table of Contents}
+%\renewcommand{\contentsname}{Table of Contents}
 \tableofcontents
 
 % ==============================
@@ -834,8 +884,7 @@ This is placeholder text for layout testing. This is placeholder text for layout
 
 
 \cleardoublepage
-\chapter*{Nomenclature}
-\addcontentsline{toc}{chapter}{Nomenclature}
+\printnomenclature
 
 \clearpage
 \addcontentsline{toc}{chapter}{List of Figures}
