@@ -7,16 +7,21 @@
 % ==============================
 % Preamble
 % Package imports, and settings
-\documentclass[a4paper,10pt,twoside]{report}     % Page size, font, document type
+\documentclass[a4paper,12pt,twoside]{report}     % Page size, font, document type
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage{graphicx}
 \usepackage{setspace}
 \usepackage{amsmath}
 
-% Bibliograyphy
+% Bibliograpphy and hyperref settings
 \usepackage[backend=biber,style=numeric]{biblatex}
 \addbibresource{zotero_library.bib}
+
+\usepackage[colorlinks=true,
+            linkcolor=black,            % TOC, \ref, section links
+            citecolor=blue,             % \cite links
+            urlcolor=blue]{hyperref}    % URL links
 
 % Margin and Format settings
 \usepackage[left=2.5cm,right=2.5cm,top=3cm,bottom=2cm]{geometry}    % Page margin
