@@ -14,7 +14,14 @@
 \usepackage{setspace}
 \usepackage{amsmath}
 
-% Bibliograpphy and Hyperref settings
+% Margin and Format settings
+\usepackage[left=2.5cm,right=2.5cm,top=3cm,bottom=2cm]{geometry}    % Page margin
+\setlength{\parindent}{0pt}     % Indentation of the first line of each paragraph
+\setlength{\parskip}{10pt}      % Spacing between paragraphs
+\setstretch{1.15}               % Line spacing
+
+% ==============================
+% Bibliograpphy, citing and Hyperref settings
 \usepackage[backend=biber,style=numeric]{biblatex}
 \addbibresource{zotero-m2internship.bib}
 
@@ -23,32 +30,40 @@
             citecolor=blue,             % \cite links
             urlcolor=blue]{hyperref}    % URL links
 
-% Margin and Format settings
-\usepackage[left=2.5cm,right=2.5cm,top=3cm,bottom=2cm]{geometry}    % Page margin
-\setlength{\parindent}{0pt}     % Indentation of the first line of each paragraph
-\setlength{\parskip}{10pt}      % Spacing between paragraphs
-\setstretch{1.15}               % Line spacing
-
-% Highlight style for later review (line-breakable)
+% ==============================
+% Highlight style command for later review (line-breakable)
 \usepackage{soul}
 \sethlcolor{yellow}
 \newcommand{\review}[1]{\hl{[REVIEW] #1}}
 
 % ==============================
-% Grouped Nomenclature
+% Custom commands for mathematical notations (Nomenclature)
+% Grouped Nomenclature Settings
 \usepackage[intoc]{nomencl}
 \usepackage{etoolbox}
 \makenomenclature
 
-% Group titles
+% Increase line spacing between entries
+\setlength{\nomitemsep}{0.5em} 
+
+% Define Group Titles and Formatting
 \renewcommand{\nomgroup}[1]{%
-  \item[\bfseries
+  \item[\vspace{0.5em}\bfseries
   \ifstrequal{#1}{T}{Thermal symbols}{%
   \ifstrequal{#1}{H}{Hydraulic symbols}{%
   \ifstrequal{#1}{M}{Mechanical symbols}{%
   \ifstrequal{#1}{F}{Finite Element notation}{}}}}]
 }
 
+% Command to align units in brackets [ ] fixed to the right margin
+\newcommand{\nomunit}[1]{%
+    \renewcommand{\nomentryend}{%
+        \hspace*{\fill}\makebox[3cm][l]{%   Change [r] to [l] for left alignment
+            \ifstrempty{#1}{}{[#1]}%
+        }%
+    }%
+}
+% Align symbols to the left
 \renewcommand{\nomlabel}[1]{#1 \hfill}
 
 % ==============================
@@ -119,39 +134,6 @@ rectangle
 % ==============================
 
 \begin{document}
-
-% Thermal symbols
-\nomenclature[T]{$T$}{Temperature [K]}
-\nomenclature[T]{$q''$}{Heat flux [W\,m$^{-2}$]}
-\nomenclature[T]{$\lambda$}{Thermal conductivity [W\,m$^{-1}$\,K$^{-1}$]}
-\nomenclature[T]{$c_p$}{Specific heat capacity [J\,kg$^{-1}$\,K$^{-1}$]}
-\nomenclature[T]{$\rho$}{Mass density [kg\,m$^{-3}$]}
-\nomenclature[T]{$h$}{Convective heat transfer coefficient [W\,m$^{-2}$\,K$^{-1}$]}
-\nomenclature[T]{$\sigma$}{Stefan--Boltzmann constant [W\,m$^{-2}$\,K$^{-4}$]}
-\nomenclature[T]{$\varepsilon$}{Emissivity [-]}
-
-% Hydraulic symbols
-\nomenclature[H]{$p$}{Pore pressure [Pa]}
-\nomenclature[H]{$k$}{Intrinsic permeability [m$^2$]}
-\nomenclature[H]{$S$}{Degree of saturation [-]}
-
-% Mechanical symbols
-\nomenclature[M]{$\boldsymbol{\varepsilon}$}{Total strain tensor [-]}
-\nomenclature[M]{$\boldsymbol{\varepsilon}_e$}{Elastic strain tensor [-]}
-\nomenclature[M]{$\boldsymbol{\varepsilon}_{th}$}{Thermal strain [-]}
-\nomenclature[M]{$\boldsymbol{\sigma}$}{Cauchy stress tensor [Pa]}
-\nomenclature[M]{$E$}{Young's modulus [Pa]}
-\nomenclature[M]{$f_t$}{Tensile strength [Pa]}
-\nomenclature[M]{$D$}{Damage variable [-]}
-\nomenclature[M]{$G_f$}{Fracture energy [J\,m$^{-2}$]}
-\nomenclature[M]{$L_e$}{Characteristic element length [m]}
-
-% Finite Element notation
-\nomenclature[F]{$[K]$}{Global stiffness matrix}
-\nomenclature[F]{$[C]$}{Capacity matrix}
-\nomenclature[F]{$\{F\}$}{Nodal force vector}
-\nomenclature[F]{$\{U\}$}{Nodal displacement vector}
-\nomenclature[F]{$\{R\}$}{Residual vector}
 
 % ==============================
 % Title page with double navy frame
@@ -256,6 +238,43 @@ under severe accident conditions using a poro-mechanical approach.
 The study combines numerical modeling and experimental validation
 to better understand the coupled physics involved.
 
+% ==============================
+% Nomenclature
+\clearpage
+\printnomenclature
+
+% Thermal symbols
+\nomenclature[T]{$T$}{Temperature \nomunit{K}}
+\nomenclature[T]{$q''$}{Heat flux \nomunit{W$\cdot$m$^{-2}$}}
+\nomenclature[T]{$\lambda$}{Thermal conductivity \nomunit{W$\cdot$m$^{-1}$$\cdot$K$^{-1}$}}
+\nomenclature[T]{$c_p$}{Specific heat capacity \nomunit{J$\cdot$kg$^{-1}$$\cdot$K$^{-1}$}}
+\nomenclature[T]{$\rho$}{Mass density \nomunit{kg$\cdot$m$^{-3}$}}
+\nomenclature[T]{$h$}{Convective heat transfer coefficient \nomunit{W$\cdot$m$^{-2}$$\cdot$K$^{-1}$}}
+\nomenclature[T]{$\sigma$}{Stefan--Boltzmann constant \nomunit{W$\cdot$m$^{-2}$$\cdot$K$^{-4}$}}
+\nomenclature[T]{$\varepsilon$}{Emissivity \nomunit{-}}
+
+% Hydraulic symbols
+%\nomenclature[H]{$p$}{Pore pressure \nomunit{Pa}}
+%\nomenclature[H]{$k$}{Intrinsic permeability \nomunit{m$^2$}}
+%\nomenclature[H]{$S$}{Degree of saturation \nomunit{-}}
+
+% Mechanical symbols
+\nomenclature[M]{$\boldsymbol{\varepsilon}$}{Total strain tensor \nomunit{-}}
+\nomenclature[M]{$\boldsymbol{\varepsilon}_e$}{Elastic strain tensor \nomunit{-}}
+\nomenclature[M]{$\boldsymbol{\varepsilon}_{th}$}{Thermal strain \nomunit{-}}
+\nomenclature[M]{$\boldsymbol{\sigma}$}{Cauchy stress tensor \nomunit{Pa}}
+\nomenclature[M]{$E$}{Young's modulus \nomunit{Pa}}
+\nomenclature[M]{$f_t$}{Tensile strength \nomunit{Pa}}
+\nomenclature[M]{$D$}{Damage variable \nomunit{-}}
+\nomenclature[M]{$G_f$}{Fracture energy \nomunit{J$\cdot$m$^{-2}$}}
+\nomenclature[M]{$L_e$}{Characteristic element length \nomunit{m}}
+
+% Finite Element notation
+\nomenclature[F]{$[K]$}{Global stiffness matrix \nomunit{}}
+\nomenclature[F]{$[C]$}{Capacity matrix \nomunit{}}
+\nomenclature[F]{$\{F\}$}{Nodal force vector \nomunit{}}
+\nomenclature[F]{$\{U\}$}{Nodal displacement vector \nomunit{}}
+\nomenclature[F]{$\{R\}$}{Residual vector \nomunit{}}
 
 % ==============================
 % Table of Contents
@@ -880,23 +899,26 @@ This is placeholder text for layout testing. This is placeholder text for layout
 
 
 % ==============================
-% list of symbols, figures, tables, bibliography, etc.
+% List of figures, tables, bibliography, etc.
 
-
+% List of Figures
 \cleardoublepage
-\printnomenclature
-
-\clearpage
-\addcontentsline{toc}{chapter}{List of Figures}
+\phantomsection
+\addcontentsline{toc}{chapter}{\listfigurename}
 \listoffigures
 
+% ==============================
+% List of Tables
 \clearpage
-\addcontentsline{toc}{chapter}{List of Tables}
+\phantomsection
+\addcontentsline{toc}{chapter}{\listtablename}
 \listoftables
 
+% ==============================
+% Bibliography
 \clearpage
-\addcontentsline{toc}{chapter}{Bibliography}
-\printbibliography
+\phantomsection
+\printbibliography[heading=bibintoc, title={Bibliography}]
 
 % ==============================
 
