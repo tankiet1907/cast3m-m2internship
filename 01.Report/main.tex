@@ -1,27 +1,30 @@
 % ==============================
-% Description of the report:
+% #region Description of the report:
 % This report presents the results of a Master 2 internship conducted at the 3SR Laboratory, Université Grenoble Alpes. The internship focused on the numerical and experimental study of the thermo-hydro-mechanical (THM) behavior of concrete under severe accident conditions using a poro-mechanical approach.
 
 % The author, Tan Kiet HONG, conducted this research under the supervision of Prof. Julien BAROTH and Prof. Stefano DAL PONT.
+% #endregion
 
 % ==============================
 % Preamble
-% Package imports, and settings
+% #region Package imports, and settings
 \documentclass[a4paper,12pt,twoside]{report}     % Page size, font, document type
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage{graphicx}
 \usepackage{setspace}
 \usepackage{amsmath}
+% #endregion
 
-% Margin and Format settings
+% #region Margin and Format settings
 \usepackage[left=2.5cm,right=2.5cm,top=3cm,bottom=2cm]{geometry}    % Page margin
 \setlength{\parindent}{0pt}     % Indentation of the first line of each paragraph
 \setlength{\parskip}{10pt}      % Spacing between paragraphs
 \setstretch{1.15}               % Line spacing
+% #endregion
 
 % ==============================
-% Bibliograpphy, citing and Hyperref settings
+% #region Bibliograpphy, citing and Hyperref settings
 \usepackage[backend=biber,style=numeric]{biblatex}
 \addbibresource{zotero-m2internship.bib}
 
@@ -29,15 +32,17 @@
             linkcolor=black,            % TOC, \ref, section links
             citecolor=blue,             % \cite links
             urlcolor=blue]{hyperref}    % URL links
+% #endregion
 
 % ==============================
-% Highlight style command for later review (line-breakable)
+% #region Highlight style command for later review (line-breakable)
 \usepackage{soul}
 \sethlcolor{yellow}
 \newcommand{\review}[1]{\hl{[REVIEW] #1}}
+% #endregion
 
 % ==============================
-% Custom commands for mathematical notations (Nomenclature)
+% #region Custom commands for mathematical notations (Nomenclature)
 % Grouped Nomenclature Settings
 \usepackage[intoc]{nomencl}
 \usepackage{etoolbox}
@@ -65,9 +70,10 @@
 }
 % Align symbols to the left
 \renewcommand{\nomlabel}[1]{#1 \hfill}
+% #endregion
 
 % ==============================
-% Page number on header
+% #region Page number on header style
 \usepackage{fancyhdr}
 \renewcommand{\headrulewidth}{0.4pt}
 \renewcommand{\footrulewidth}{0pt}
@@ -102,9 +108,10 @@
   \renewcommand{\headrulewidth}{0pt}%
   \renewcommand{\footrulewidth}{0pt}%
 }
+% #endregion
 
 % ==============================
-% Double navy frame on title page
+% #region Double navy frame on title page
 % ADDED: DOUBLE NAVY FRAME PACKAGES
 \usepackage{xcolor}
 \usepackage{tikz}
@@ -131,12 +138,13 @@ rectangle
 \end{tikzpicture}
 }
 }
-% ==============================
+% #endregion
+
 
 \begin{document}
 
 % ==============================
-% Title page with double navy frame
+% #region Title page with double navy frame
 \begin{titlepage}
 \DoubleNavyFrame
 \begin{center}
@@ -202,18 +210,20 @@ rectangle
 \end{titlepage}
 
 
-% End of title page with double navy frame
+% #endregion
+
 % ==============================
-% Blank page after title page
+% #region Blank page and roman page numbering for the front matter
 
 \thispagestyle{empty}
 
 \cleardoublepage
 \pagenumbering{roman}
 \pagestyle{romanstyle}
+% #endregion
 
 % ==============================
-% Acknowledgment
+% #region Acknowledgment
 
 \chapter*{Acknowledgment}
 \addcontentsline{toc}{chapter}{Acknowledgment}
@@ -224,9 +234,10 @@ I also thank the 3SR Laboratory for providing an excellent research environment 
 
 Finally, I would like to thank my family for their constant encouragement, patience, and support throughout my studies and the completion of this thesis.
 
+% #endregion
 
 % ==============================
-% Abstract
+% #region Abstract
 
 \clearpage
 \chapter*{Abstract}
@@ -238,8 +249,10 @@ under severe accident conditions using a poro-mechanical approach.
 The study combines numerical modeling and experimental validation
 to better understand the coupled physics involved.
 
+% #endregion
+
 % ==============================
-% Nomenclature
+% #region Nomenclature
 \clearpage
 \printnomenclature
 
@@ -276,15 +289,19 @@ to better understand the coupled physics involved.
 \nomenclature[F]{$\{U\}$}{Nodal displacement vector \nomunit{}}
 \nomenclature[F]{$\{R\}$}{Residual vector \nomunit{}}
 
+% #endregion
+
 % ==============================
-% Table of Contents
+% #region Table of Contents
 
 \cleardoublepage
-%\renewcommand{\contentsname}{Table of Contents}
+%\renewcommand{\contentsname}{Table of Contents} % Optional: Change "Contents" to "Table of Contents"
 \tableofcontents
 
+% #endregion
+
 % ==============================
-% Chapter 1: Introduction
+% #region Chapter 1: Introduction
 
 \cleardoublepage
 \pagenumbering{arabic}
@@ -353,8 +370,10 @@ Persalys is the computational tool dedicated to managing parameter uncertainty i
 
 It is used to perform the probabilistic sensitivity analysis, generate random sampling (e.g., Monte Carlo simulations), and rank the dominant THM parameters.
 
+% #endregion
+
 % ==============================
-% Chapter 2: Theoretical and Numerical framework - Concrete behavior at high temperature
+% #region Chapter 2: Theoretical and Numerical framework - Concrete behavior at high temperature
 
 \cleardoublepage
 \chapter{Theoretical and Numerical framework}
@@ -627,8 +646,10 @@ This is placeholder text for layout testing. This is placeholder text for layout
 \subsection{Thermal conductivity and heat capacity evolution}
 This is placeholder text for layout testing. This is placeholder text for layout testing. This is placeholder text for layout testing. This is placeholder text for layout testing. This is placeholder text for layout testing. This is placeholder text for layout testing. This is placeholder text for layout testing. This is placeholder text for layout testing. This is placeholder text for layout testing.
 
+% #endregion
+
 % ==============================
-% Chapter 3: Numerical implementation in Cast3M
+% #region Chapter 3: Numerical implementation in Cast3M
 
 \cleardoublepage
 \chapter{Numerical implementation}
@@ -671,8 +692,10 @@ This is placeholder text for layout testing. This is placeholder text for layout
 \section{Numerical results}
 This is placeholder text for layout testing. This is placeholder text for layout testing. This is placeholder text for layout testing. This is placeholder text for layout testing. This is placeholder text for layout testing. This is placeholder text for layout testing. This is placeholder text for layout testing. This is placeholder text for layout testing. This is placeholder text for layout testing.
 
+% #endregion
+
 % ==============================
-% Chapter 4: Model validation and Experimental data
+% #region Chapter 4: Model validation and Experimental data
 
 \cleardoublepage
 \chapter{Model validation}
@@ -691,10 +714,10 @@ This is placeholder text for layout testing. This is placeholder text for layout
 \subsection{Discussions on model performance}
 This is placeholder text for layout testing. This is placeholder text for layout testing. This is placeholder text for layout testing. This is placeholder text for layout testing. This is placeholder text for layout testing. This is placeholder text for layout testing. This is placeholder text for layout testing. This is placeholder text for layout testing. This is placeholder text for layout testing.
 
+% #endregion
 
 % ==============================
-% Chapter 5: Probabilistic sensitivity analysis
-
+% #region Chapter 5: Probabilistic sensitivity analysis
 
 \cleardoublepage
 \chapter{Probabilistic sensitivity analysis}
@@ -878,9 +901,10 @@ Main ideas:
 \section{Identification of dominant parameters}
 This is placeholder text for layout testing. This is placeholder text for layout testing. This is placeholder text for layout testing. This is placeholder text for layout testing. This is placeholder text for layout testing. This is placeholder text for layout testing. This is placeholder text for layout testing. This is placeholder text for layout testing. This is placeholder text for layout testing.
 
-% ==============================
-% Chapter 6: Conclusions and Perspectives
+% #endregion
 
+% ==============================
+% #region Chapter 6: Conclusions and Perspectives
 
 \cleardoublepage
 \chapter{Conclusions and Perspectives}
@@ -894,9 +918,10 @@ This is placeholder text for layout testing. This is placeholder text for layout
 \section{Perspectives for future research}
 This is placeholder text for layout testing. This is placeholder text for layout testing. This is placeholder text for layout testing. This is placeholder text for layout testing. This is placeholder text for layout testing. This is placeholder text for layout testing. This is placeholder text for layout testing. This is placeholder text for layout testing. This is placeholder text for layout testing.
 
+% #endregion
 
 % ==============================
-% List of figures, tables, bibliography, etc.
+% #region List of figures, tables, bibliography
 
 % List of Figures
 \cleardoublepage
@@ -916,6 +941,8 @@ This is placeholder text for layout testing. This is placeholder text for layout
 \clearpage
 \phantomsection
 \printbibliography[heading=bibintoc, title={Bibliography}]
+
+% #endregion
 
 % ==============================
 

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2026.2.25)  25 FEB 2026 20:19
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2026.2.25)  25 FEB 2026 21:39
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -533,7 +533,7 @@ Package tocbasic Info: omitting babel extension for `nls'
 \@nomenclaturefile=\write4
 \openout4 = `main.nlo'.
 
-Package nomencl Info: Writing nomenclature file main.nlo on input line 44.
+Package nomencl Info: Writing nomenclature file main.nlo on input line 49.
  (/usr/share/texlive/texmf-dist/tex/latex/fancyhdr/fancyhdr.sty
 Package: fancyhdr 2022/11/09 v4.1 Extensive control of page headers and footers
 \f@nch@headwidth=\skip79
@@ -748,24 +748,24 @@ Package: eso-pic 2023/05/03 v3.0c eso-pic (RN)
  (./main.aux)
 \openout1 = `main.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 136.
-LaTeX Font Info:    ... okay on input line 136.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 136.
-LaTeX Font Info:    ... okay on input line 136.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 136.
-LaTeX Font Info:    ... okay on input line 136.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 136.
-LaTeX Font Info:    ... okay on input line 136.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 136.
-LaTeX Font Info:    ... okay on input line 136.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 136.
-LaTeX Font Info:    ... okay on input line 136.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 136.
-LaTeX Font Info:    ... okay on input line 136.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 136.
-LaTeX Font Info:    ... okay on input line 136.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 136.
-LaTeX Font Info:    ... okay on input line 136.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 144.
+LaTeX Font Info:    ... okay on input line 144.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 144.
+LaTeX Font Info:    ... okay on input line 144.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 144.
+LaTeX Font Info:    ... okay on input line 144.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 144.
+LaTeX Font Info:    ... okay on input line 144.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 144.
+LaTeX Font Info:    ... okay on input line 144.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 144.
+LaTeX Font Info:    ... okay on input line 144.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 144.
+LaTeX Font Info:    ... okay on input line 144.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 144.
+LaTeX Font Info:    ... okay on input line 144.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 144.
+LaTeX Font Info:    ... okay on input line 144.
  (/usr/share/texlive/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
 \scratchcounter=\count444
@@ -836,9 +836,9 @@ Package biblatex Warning: File 'main.bbl' is wrong format version - expected 3.2
 
 Package biblatex Info: ... file 'main.bbl' found.
 (./main.bbl)
-Package biblatex Info: Reference section=0 on input line 136.
-Package biblatex Info: Reference segment=0 on input line 136.
-Package hyperref Info: Link coloring ON on input line 136.
+Package biblatex Info: Reference section=0 on input line 144.
+Package biblatex Info: Reference segment=0 on input line 144.
+Package hyperref Info: Link coloring ON on input line 144.
  (./main.out) (./main.out)
 \@outlinefile=\write6
 \openout6 = `main.out'.
@@ -846,12 +846,12 @@ Package hyperref Info: Link coloring ON on input line 136.
 <logo_uga_phitem.png, id=284, 337.26pt x 150.5625pt>
 File: logo_uga_phitem.png Graphic file (type png)
 <use logo_uga_phitem.png>
-Package pdftex.def Info: logo_uga_phitem.png  used on input line 155.
+Package pdftex.def Info: logo_uga_phitem.png  used on input line 163.
 (pdftex.def)             Requested size: 159.34074pt x 71.13188pt.
 <logo_3sr.png, id=285, 647.41875pt x 353.32pt>
 File: logo_3sr.png Graphic file (type png)
 <use logo_3sr.png>
-Package pdftex.def Info: logo_3sr.png  used on input line 160.
+Package pdftex.def Info: logo_3sr.png  used on input line 168.
 (pdftex.def)             Requested size: 130.34091pt x 71.13188pt.
  [1
 
@@ -942,7 +942,7 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 [8]
 Chapter 1.
 
-LaTeX Warning: Citation 'dauti2018' on page 1 undefined on input line 296.
+LaTeX Warning: Citation 'dauti2018' on page 1 undefined on input line 313.
 
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
@@ -955,7 +955,7 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 pdfTeX warning (ext4): destination with the same identifier (name{page.1}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.317     \item L
+l.334     \item L
                  ack of fully coupled interactions between the damage state ... [1
 
 
@@ -971,7 +971,7 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 pdfTeX warning (ext4): destination with the same identifier (name{page.2}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.349 C
+l.366 C
        ompared with COMSOL Multiphysics, Cast3m typically offers greater tra... [2]
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
@@ -993,7 +993,7 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 ]
 Chapter 2.
 
-LaTeX Warning: Citation 'bergman2017' on page 5 undefined on input line 366.
+LaTeX Warning: Citation 'bergman2017' on page 5 undefined on input line 385.
 
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
@@ -1014,7 +1014,7 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 
 [6]
 
-LaTeX Warning: Citation 'dipaola2023' on page 7 undefined on input line 411.
+LaTeX Warning: Citation 'dipaola2023' on page 7 undefined on input line 430.
 
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
@@ -1032,7 +1032,7 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-2.49998pt}.
 
 [8]
-Overfull \hbox (18.09155pt too wide) in paragraph at lines 485--486
+Overfull \hbox (18.09155pt too wide) in paragraph at lines 504--505
 []\T1/cmr/m/n/12 To ac-cu-rately ac-count for the multi-physics in-ter-ac-tions within the Thermo-Hydro-Mechanical
  []
 
@@ -1044,12 +1044,12 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-2.49998pt}.
 
 [9]
-LaTeX Font Info:    Trying to load font information for T1+cmtt on input line 511.
+LaTeX Font Info:    Trying to load font information for T1+cmtt on input line 530.
  (/usr/share/texlive/texmf-dist/tex/latex/base/t1cmtt.fd
 File: t1cmtt.fd 2023/04/13 v2.5m Standard LaTeX font definitions
 )
 
-LaTeX Warning: Citation 'hamon2013' on page 10 undefined on input line 516.
+LaTeX Warning: Citation 'hamon2013' on page 10 undefined on input line 535.
 
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
@@ -1114,12 +1114,12 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 ]
 Chapter 3.
 
-Overfull \hbox (5.42705pt too wide) in paragraph at lines 641--641
+Overfull \hbox (5.42705pt too wide) in paragraph at lines 662--662
 []\T1/cmr/bx/n/17.28 Geometry, ma-te-rial prop-er-ties, bound-ary con-di-tions
  []
 
 
-LaTeX Warning: Citation 'liu2001' on page 17 undefined on input line 648.
+LaTeX Warning: Citation 'liu2001' on page 17 undefined on input line 669.
 
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
@@ -1181,7 +1181,7 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 [22]
 Chapter 5.
 
-LaTeX Warning: Citation 'baroth2011' on page 23 undefined on input line 701.
+LaTeX Warning: Citation 'baroth2011' on page 23 undefined on input line 724.
 
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
@@ -1305,7 +1305,7 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 
 ]
 
-LaTeX Warning: Empty bibliography on input line 918.
+LaTeX Warning: Empty bibliography on input line 943.
 
 (./main.aux)
  ***********
