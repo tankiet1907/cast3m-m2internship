@@ -7,23 +7,27 @@
 % ==============================
 % Preamble
 % Package imports, and settings
-\documentclass[a4paper,12pt,twoside]{report}
+\documentclass[a4paper,10pt,twoside]{report}     % Page size, font, document type
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage{graphicx}
 \usepackage{setspace}
 \usepackage{amsmath}
 
-
 % Bibliograyphy
 \usepackage[backend=biber,style=numeric]{biblatex}
 \addbibresource{zotero_library.bib}
 
 % Margin and Format settings
-\usepackage[left=2.5cm,right=2.5cm,top=3cm,bottom=2cm]{geometry}
+\usepackage[left=2.5cm,right=2.5cm,top=3cm,bottom=2cm]{geometry}    % Page margin
 \setlength{\parindent}{0pt}     % Indentation of the first line of each paragraph
 \setlength{\parskip}{10pt}      % Spacing between paragraphs
 \setstretch{1.15}               % Line spacing
+
+% Highlight style for later review (line-breakable)
+\usepackage{soul}
+\sethlcolor{yellow}
+\newcommand{\review}[1]{\hl{[REVIEW] #1}}
 
 % ==============================
 % Page number on header
@@ -61,7 +65,6 @@
   \renewcommand{\headrulewidth}{0pt}%
   \renewcommand{\footrulewidth}{0pt}%
 }
-% ==============================
 
 % ==============================
 % Double navy frame on title page
@@ -216,6 +219,7 @@ to better understand the coupled physics involved.
 \chapter{Introduction}
 
 \section{Context and problem statement}
+Concrete containment structures under severe-accident thermal loading present coupled thermo-hydro-mechanical challenges \cite{dauti_combined_2018}.
 
 \subsection{High-temperature concrete behaviour in nuclear containment structures} 
 Main contextes:
@@ -231,6 +235,7 @@ Main problems:
   \item Temperature- and damage-dependent evolution of transport properties with cracking and stiffness degradation altering the permeability and pore pressure.
   \item Reliable prediction requires a consistent thermo-hydro-mechanical (THM) framework.
 \end{itemize}
+
 
 \subsection{Limitations of existing THM models}
 Main limitations of existing THM models:
@@ -482,7 +487,7 @@ The coefficients $\alpha_t$ and $\alpha_c$ depend on the principal stress state,
 
 
 
-\subsubsection*{Non-linear equilibrium and Imbalance vector ($\mathbf{R}$)}
+\subsubsection{Non-linear equilibrium and Imbalance vector ($\mathbf{R}$)}
 Due to the damage evolution, the stress-strain relationship becomes non-linear. The mechanical equilibrium cannot be solved in a single step like the elastic model. By introducing the non-linear complementary stress $\boldsymbol{\sigma}_{nl}$, the equilibrium is rewritten as:
 \begin{equation}
     [\mathbf{K}]\{\mathbf{U}\} = \{\mathbf{F}\}_{ext} - \int_V \mathbf{B}^T \boldsymbol{\sigma}_{nl} dV
@@ -494,14 +499,50 @@ To solve this, the \texttt{PASAPAS} non-linear procedure evaluates the deviation
 \end{equation}
 At each iteration $i$, the algorithm solves the system using the initial elastic stiffness matrix: $[\mathbf{K}]\{\delta\mathbf{U}\}^{i+1} = \{\mathbf{R}\}^i$. The displacements and internal variables (like $D$) are continuously updated until the norm of the imbalance vector becomes negligible ($\|\mathbf{R}\| < \epsilon \mathbf{F}_{ref}$).
 
-\subsubsection*{Mesh dependency and regularization}
-A major drawback of local softening models is the pathological mesh dependency. Mathematically, softening causes a loss of ellipticity in the differential equations, leading to strain localization in a band whose width depends on the finite element size. This results in physically unacceptable ruptures with zero energy dissipation upon mesh refinement.
+\subsubsection{Mesh dependency and fracture energy regularization}
+A major drawback of local softening models is the pathological mesh dependency. Mathematically, softening causes a loss of ellipticity in the differential equations, leading to strain localization in a band whose width depends entirely on the finite element size. This results in physically unacceptable ruptures with zero energy dissipation upon mesh refinement.
 
-To overcome this issue without resorting to complex non-local formulations, a regularization technique based on Hillerborg's specific fracture energy ($G_f$) is utilized. In the Cast3M implementation, the characteristic length of each finite element, $L_e$, is computed (e.g., using the \texttt{@LONGEF} procedure). The tensile softening parameter $B_t$ is then dynamically modified element-by-element to preserve objective energy dissipation:
+To overcome this issue without resorting to complex non-local formulations, a regularization technique based on Hillerborg's specific fracture energy ($G_f$) is utilized. Physically, the fracture energy $G_f$ represents the energy required to propagate a discrete crack per unit \textit{area} (expressed in $\text{J/m}^2$). However, in the continuum damage mechanics framework of the Finite Element Method, cracking is modeled as a smeared softening phenomenon occurring over the \textit{volume} of the 3D finite element. 
+
+To reconcile the areal energy dissipation of a real crack with the volumetric dissipation of the continuum element, a characteristic length of the finite element, $L_e$, is introduced. In the Cast3M implementation (using the \texttt{@LONGEF} procedure), this equivalent length is evaluated based on the element's geometry, calculated as $L_e = V^{1/D}$ where $D$ is the spatial dimension. 
+
+The total fracture energy $G_f$ dissipated by a finite element of size $L_e$ is the product of $L_e$ and the total area under the uniaxial stress-strain ($\sigma-\varepsilon$) softening curve (which represents the volumetric dissipated energy density $g_f = G_f / L_e$). This total energy is strictly partitioned into two components: the reversible elastic strain energy stored up to the peak stress, and the energy dissipated strictly during the non-linear damage softening phase:
 \begin{equation}
-    B_t^{mod} = \frac{f_t \cdot L_e}{G_f - \frac{f_t^2}{2E_0} L_e}
+    G_f = G_{elastic} + G_{softening}
 \end{equation}
-where $f_t$ is the tensile strength and $E_0$ is the initial Young's modulus. This energetic regularization guarantees that the macroscopic THM response remains independent of the selected spatial discretization.
+
+\textbf{1. Evaluation of the elastic energy ($G_{elastic}$):} \\
+The elastic energy density up to the onset of damage (when the stress reaches the tensile strength $f_t$ at the initial strain threshold $\varepsilon_{d0} = f_t/E_0$) corresponds to the area of the elastic triangle under the curve:
+\begin{equation}
+    g_{elastic} = \frac{1}{2} f_t \varepsilon_{d0} = \frac{f_t^2}{2E_0}
+\end{equation}
+Multiplying by the characteristic length yields the areal elastic energy: $G_{elastic} = \frac{f_t^2}{2E_0} L_e$. Consequently, the remaining energy strictly available for the damage softening phase is calculated as:
+\begin{equation}
+    G_{softening} = G_f - \frac{f_t^2}{2E_0} L_e
+\end{equation}
+
+\textbf{2. Analytical evaluation of $G_{softening}$ and the softening parameter $B_t$:} \\
+In the original Mazars formulation, the evolution of damage in pure tension is governed by an exponential law. Assuming a purely brittle failure in tension ($A_t \approx 1$), the post-peak stress-strain relationship can be simplified to:
+\begin{equation}
+    \sigma(\varepsilon) \approx f_t \exp\left[ -B_t (\varepsilon - \varepsilon_{d0}) \right]
+\end{equation}
+The volumetric softening energy density ($g_{softening}$) is the integral of this stress-strain curve from the peak strain $\varepsilon_{d0}$ to infinity:
+\begin{equation}
+    g_{softening} = \int_{\varepsilon_{d0}}^{\infty} f_t \exp\left[ -B_t (\varepsilon - \varepsilon_{d0}) \right] d\varepsilon = \frac{f_t}{B_t}
+\end{equation}
+By converting this volumetric density into areal energy via the characteristic length $L_e$, we establish the fundamental relationship between the fracture energy and the Mazars tensile parameter:
+\begin{equation}
+    G_{softening} = g_{softening} \cdot L_e = \frac{f_t \cdot L_e}{B_t}
+\end{equation}
+
+\textbf{3. Dynamic regularization of $B_t$ ($B_t^{mod}$):} \\
+To ensure that each finite element dissipates exactly the objective intrinsic energy $G_f$ regardless of its size $L_e$, the parameter $B_t$ must be dynamically recalculated. By equating the integral of the Mazars softening curve to the available softening energy, we deduce the modified parameter $B_t^{mod}$:
+\begin{equation}
+    B_t^{mod} = \frac{f_t \cdot L_e}{G_{softening}} = \frac{f_t \cdot L_e}{G_f - \frac{f_t^2}{2E_0} L_e}
+\end{equation}
+
+In the finite element code Cast3M, this explicit regularization is implemented element-by-element, where the numerator ($f_t \cdot L_e$) and denominator ($G_{softening}$) are defined as \texttt{NUM1} and \texttt{DEN1}, respectively. This energetic adjustment guarantees that the macroscopic crack propagation and global energy dissipation remain completely objective and independent of the selected spatial discretization.
+
 
 
 \section{THM coupling}
@@ -527,7 +568,13 @@ This is placeholder text for layout testing. This is placeholder text for layout
 This is placeholder text for layout testing. This is placeholder text for layout testing. This is placeholder text for layout testing. This is placeholder text for layout testing. This is placeholder text for layout testing. This is placeholder text for layout testing. This is placeholder text for layout testing. This is placeholder text for layout testing. This is placeholder text for layout testing.
 
 \section{Geometry, material properties, boundary conditions and loadings}
-This is placeholder text for layout testing. This is placeholder text for layout testing. This is placeholder text for layout testing. This is placeholder text for layout testing. This is placeholder text for layout testing. This is placeholder text for layout testing. This is placeholder text for layout testing. This is placeholder text for layout testing. This is placeholder text for layout testing.
+
+\subsection{Geometry}
+
+\subsection{Boundary conditions and loadings}
+
+\subsection{Material properties}
+High-strength concrete with $f_{c,28} = 77$ MPa is adopted, and 18 key parameters are selected for sensitivity analysis \cite{liu_stochastic_2001}.
 
 \section{Implementation of the thermal model}
 \subsection{Stationary}
@@ -535,7 +582,7 @@ This is placeholder text for layout testing. This is placeholder text for layout
 \subsection{Transient}
 This is placeholder text for layout testing. This is placeholder text for layout testing. This is placeholder text for layout testing. This is placeholder text for layout testing. This is placeholder text for layout testing. This is placeholder text for layout testing. This is placeholder text for layout testing. This is placeholder text for layout testing. This is placeholder text for layout testing.
 
-\section{Implementation of the hydro-mechanical model}
+\section{Implementation of the hydric model}
 \subsection{Drying}
 This is placeholder text for layout testing. This is placeholder text for layout testing. This is placeholder text for layout testing. This is placeholder text for layout testing. This is placeholder text for layout testing. This is placeholder text for layout testing. This is placeholder text for layout testing. This is placeholder text for layout testing. This is placeholder text for layout testing.
 \subsection{Shrinkage}
@@ -580,6 +627,7 @@ This is placeholder text for layout testing. This is placeholder text for layout
 
 \cleardoublepage
 \chapter{Probabilistic sensitivity analysis}
+This chapter follows the foundational framework of Baroth This chapter follows the foundational framework of Baroth \cite{baroth_introduction_2011}.
 
 \section{Sources of uncertainty and concrete heterogeneity}
 Main ideas:
@@ -649,7 +697,7 @@ From statistical properties, we can establish a system of two equations relating
 
 To find the input parameters $\mu_G$ and $\sigma_G$ for the random number generation algorithm, we need to solve the above system of equations.
 
-\textbf{Step 1: Solving for $\sigma_G^2$} \\
+\textbf{1. Solving for $\sigma_G^2$} \\
 By squaring the first equation, we get:
 \[
 \mu_E^2 = \exp(2\mu_G + \sigma_G^2)
@@ -667,7 +715,7 @@ Taking the natural logarithm of both sides gives the variance of the Gaussian di
 \sigma_G^2 = \ln\left(1 + \frac{\sigma_E^2}{\mu_E^2}\right)
 \]
 
-\textbf{Step 2: Solving for $\mu_G$} \\
+\textbf{2. Solving for $\mu_G$} \\
 Using the first equation and isolating $\exp(\mu_G)$, we have:
 \[
 \mu_E = \exp(\mu_G) \cdot \exp\left(\dfrac{\sigma_G^2}{2}\right)

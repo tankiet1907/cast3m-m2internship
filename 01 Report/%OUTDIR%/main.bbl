@@ -1,5 +1,5 @@
 % $ biblatex auxiliary file $
-% $ biblatex bbl format version 3.2 $
+% $ biblatex bbl format version 3.3 $
 % Do not modify the above lines!
 %
 % This is an auxiliary file used by the 'biblatex' package.
@@ -18,8 +18,49 @@
 
 
 \refsection{0}
-  \datalist[entry]{nty/global//global/global}
-    \entry{bergman_introduction_2017}{incollection}{}
+  \datalist[entry]{nty/global//global/global/global}
+    \entry{baroth_introduction_2011}{incollection}{}{}
+      \name{author}{3}{}{%
+        {{hash=a8bebb79cbb87e04ad72cf0f8e7ff1af}{%
+           family={Baroth},
+           familyi={B\bibinitperiod},
+           given={Julien},
+           giveni={J\bibinitperiod}}}%
+        {{hash=d15ef65cd0ff7a85fa9207ed02a5e4b7}{%
+           family={Denys},
+           familyi={D\bibinitperiod},
+           given={Breysse},
+           giveni={B\bibinitperiod}}}%
+        {{hash=11e65708bf471489a5c47da0fdcafa3a}{%
+           family={Schoefs},
+           familyi={S\bibinitperiod},
+           given={Franck},
+           giveni={F\bibinitperiod}}}%
+      }
+      \strng{namehash}{5d213cf760f717bf2e1d5fea8ecc1cc6}
+      \strng{fullhash}{5d213cf760f717bf2e1d5fea8ecc1cc6}
+      \strng{fullhashraw}{5d213cf760f717bf2e1d5fea8ecc1cc6}
+      \strng{bibnamehash}{5d213cf760f717bf2e1d5fea8ecc1cc6}
+      \strng{authorbibnamehash}{5d213cf760f717bf2e1d5fea8ecc1cc6}
+      \strng{authornamehash}{5d213cf760f717bf2e1d5fea8ecc1cc6}
+      \strng{authorfullhash}{5d213cf760f717bf2e1d5fea8ecc1cc6}
+      \strng{authorfullhashraw}{5d213cf760f717bf2e1d5fea8ecc1cc6}
+      \field{sortinit}{B}
+      \field{sortinithash}{d7095fff47cda75ca2589920aae98399}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{Construction {Reliability} - {Safety}, {Variability} and {Sustainability}}
+      \field{isbn}{978-1-84821-230-5}
+      \field{month}{1}
+      \field{title}{Introduction}
+      \field{year}{2011}
+      \field{pages}{xvii\bibrangedash xxxiii}
+      \range{pages}{17}
+      \verb{doi}
+      \verb 10.1002/9781118601099
+      \endverb
+    \endentry
+    \entry{bergman_introduction_2017}{incollection}{}{}
       \name{author}{2}{}{%
         {{hash=51aa5e9e880456c2144bd86f05e91631}{%
            family={Bergman},
@@ -37,10 +78,12 @@
       }
       \strng{namehash}{4ae83e4c306f46195d2dfa5eb90cb9bf}
       \strng{fullhash}{4ae83e4c306f46195d2dfa5eb90cb9bf}
+      \strng{fullhashraw}{4ae83e4c306f46195d2dfa5eb90cb9bf}
       \strng{bibnamehash}{4ae83e4c306f46195d2dfa5eb90cb9bf}
       \strng{authorbibnamehash}{4ae83e4c306f46195d2dfa5eb90cb9bf}
       \strng{authornamehash}{4ae83e4c306f46195d2dfa5eb90cb9bf}
       \strng{authorfullhash}{4ae83e4c306f46195d2dfa5eb90cb9bf}
+      \strng{authorfullhashraw}{4ae83e4c306f46195d2dfa5eb90cb9bf}
       \field{sortinit}{B}
       \field{sortinithash}{d7095fff47cda75ca2589920aae98399}
       \field{labelnamesource}{author}
@@ -53,7 +96,43 @@
       \field{pages}{1\bibrangedash 45}
       \range{pages}{45}
     \endentry
-    \entry{di_paola_starting_2023}{report}{}
+    \entry{dauti_combined_2018}{thesis}{}{}
+      \name{author}{1}{}{%
+        {{hash=d992015dbe48113dfa0f7d65a9fecc07}{%
+           family={Dauti},
+           familyi={D\bibinitperiod},
+           given={Dorjan},
+           giveni={D\bibinitperiod}}}%
+      }
+      \list{institution}{1}{%
+        {Université Grenoble Alpes}%
+      }
+      \strng{namehash}{d992015dbe48113dfa0f7d65a9fecc07}
+      \strng{fullhash}{d992015dbe48113dfa0f7d65a9fecc07}
+      \strng{fullhashraw}{d992015dbe48113dfa0f7d65a9fecc07}
+      \strng{bibnamehash}{d992015dbe48113dfa0f7d65a9fecc07}
+      \strng{authorbibnamehash}{d992015dbe48113dfa0f7d65a9fecc07}
+      \strng{authornamehash}{d992015dbe48113dfa0f7d65a9fecc07}
+      \strng{authorfullhash}{d992015dbe48113dfa0f7d65a9fecc07}
+      \strng{authorfullhashraw}{d992015dbe48113dfa0f7d65a9fecc07}
+      \field{sortinit}{D}
+      \field{sortinithash}{6f385f66841fb5e82009dc833c761848}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{month}{9}
+      \field{note}{Issue: 2018GREAI062}
+      \field{title}{A combined experimental and numerical approach to spalling of high-performance concrete due to fire}
+      \field{type}{Theses}
+      \field{year}{2018}
+      \verb{urlraw}
+      \verb https://theses.hal.science/tel-01950731
+      \endverb
+      \verb{url}
+      \verb https://theses.hal.science/tel-01950731
+      \endverb
+      \keyw{Fire spalling,Haute température,High temperature,Mesoscale modeling,Modèle Thermo-Hydro-Mecanique,Modélisation mésoscopique,Neutron tomography,Thermo-Hydro-Mechanical model,Tomographie neutron,Écaillage}
+    \endentry
+    \entry{di_paola_starting_2023}{report}{}{}
       \name{author}{1}{}{%
         {{hash=a736134b159e5629f38889680d407e63}{%
            family={Di\bibnamedelima Paola},
@@ -66,10 +145,12 @@
       }
       \strng{namehash}{a736134b159e5629f38889680d407e63}
       \strng{fullhash}{a736134b159e5629f38889680d407e63}
+      \strng{fullhashraw}{a736134b159e5629f38889680d407e63}
       \strng{bibnamehash}{a736134b159e5629f38889680d407e63}
       \strng{authorbibnamehash}{a736134b159e5629f38889680d407e63}
       \strng{authornamehash}{a736134b159e5629f38889680d407e63}
       \strng{authorfullhash}{a736134b159e5629f38889680d407e63}
+      \strng{authorfullhashraw}{a736134b159e5629f38889680d407e63}
       \field{sortinit}{D}
       \field{sortinithash}{6f385f66841fb5e82009dc833c761848}
       \field{labelnamesource}{author}
@@ -85,7 +166,7 @@
       \verb https://www-cast3m.cea.fr/index.php?xml=maj2011
       \endverb
     \endentry
-    \entry{hamon_model_2013}{report}{}
+    \entry{hamon_model_2013}{report}{}{}
       \name{author}{1}{}{%
         {{hash=38ba0b5d6763a6dbffbfbef1fdf85300}{%
            family={Hamon},
@@ -98,10 +179,12 @@
       }
       \strng{namehash}{38ba0b5d6763a6dbffbfbef1fdf85300}
       \strng{fullhash}{38ba0b5d6763a6dbffbfbef1fdf85300}
+      \strng{fullhashraw}{38ba0b5d6763a6dbffbfbef1fdf85300}
       \strng{bibnamehash}{38ba0b5d6763a6dbffbfbef1fdf85300}
       \strng{authorbibnamehash}{38ba0b5d6763a6dbffbfbef1fdf85300}
       \strng{authornamehash}{38ba0b5d6763a6dbffbfbef1fdf85300}
       \strng{authorfullhash}{38ba0b5d6763a6dbffbfbef1fdf85300}
+      \strng{authorfullhashraw}{38ba0b5d6763a6dbffbfbef1fdf85300}
       \field{sortinit}{H}
       \field{sortinithash}{23a3aa7c24e56cfa16945d55545109b5}
       \field{labelnamesource}{author}
@@ -111,6 +194,47 @@
       \field{title}{Model of damage of {MAZARS}}
       \field{type}{techreport}
       \field{year}{2013}
+    \endentry
+    \entry{liu_stochastic_2001}{article}{}{}
+      \name{author}{3}{}{%
+        {{hash=c98b8df825976ea7cb8362592da21cc7}{%
+           family={Liu},
+           familyi={L\bibinitperiod},
+           given={Ning},
+           giveni={N\bibinitperiod}}}%
+        {{hash=1ea9938fcf457149a57010bc4a52557c}{%
+           family={Hu},
+           familyi={H\bibinitperiod},
+           given={Bin},
+           giveni={B\bibinitperiod}}}%
+        {{hash=e4fa00695e0fa936c7894d2b925cac77}{%
+           family={Yu},
+           familyi={Y\bibinitperiod},
+           given={Zhi-Wen},
+           giveni={Z\bibinithyphendelim W\bibinitperiod}}}%
+      }
+      \strng{namehash}{4b53889ab99701d8ec0e97dbf1ea82cc}
+      \strng{fullhash}{4b53889ab99701d8ec0e97dbf1ea82cc}
+      \strng{fullhashraw}{4b53889ab99701d8ec0e97dbf1ea82cc}
+      \strng{bibnamehash}{4b53889ab99701d8ec0e97dbf1ea82cc}
+      \strng{authorbibnamehash}{4b53889ab99701d8ec0e97dbf1ea82cc}
+      \strng{authornamehash}{4b53889ab99701d8ec0e97dbf1ea82cc}
+      \strng{authorfullhash}{4b53889ab99701d8ec0e97dbf1ea82cc}
+      \strng{authorfullhashraw}{4b53889ab99701d8ec0e97dbf1ea82cc}
+      \field{sortinit}{L}
+      \field{sortinithash}{7c47d417cecb1f4bd38d1825c427a61a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{International Journal of Solids and Structures}
+      \field{month}{9}
+      \field{title}{Stochastic finite element method for random temperature in concrete structures}
+      \field{volume}{38}
+      \field{year}{2001}
+      \field{pages}{6965\bibrangedash 6983}
+      \range{pages}{19}
+      \verb{doi}
+      \verb 10.1016/S0020-7683(00)00414-5
+      \endverb
     \endentry
   \enddatalist
 \endrefsection
