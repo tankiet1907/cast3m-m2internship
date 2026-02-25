@@ -79,6 +79,7 @@
 \contentsline {section}{\numberline {6.1}Main findings}{31}{section.6.1}%
 \contentsline {section}{\numberline {6.2}Model limitations and possible improvements}{31}{section.6.2}%
 \contentsline {section}{\numberline {6.3}Perspectives for future research}{31}{section.6.3}%
-\contentsline {chapter}{List of Figures}{33}{section.6.3}%
-\contentsline {chapter}{List of Tables}{34}{chapter*.19}%
-\contentsline {chapter}{Bibliography}{35}{chapter*.20}%
+\contentsline {chapter}{\nonumberline Nomenclature}{33}{chapter*.19}%
+\contentsline {chapter}{List of Figures}{35}{chapter*.19}%
+\contentsline {chapter}{List of Tables}{36}{chapter*.20}%
+\contentsline {chapter}{Bibliography}{37}{chapter*.21}%

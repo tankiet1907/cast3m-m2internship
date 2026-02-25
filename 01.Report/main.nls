@@ -1,0 +1,33 @@
+
+\begin{thenomenclature} 
+\nomgroup{F}
+  \item [{$[C]$}]\begingroup Capacity matrix\nomeqref {0}\nompageref{1}
+  \item [{$[K]$}]\begingroup Global stiffness matrix\nomeqref {0}\nompageref{1}
+  \item [{$\{F\}$}]\begingroup Nodal force vector\nomeqref {0}\nompageref{1}
+  \item [{$\{R\}$}]\begingroup Residual vector\nomeqref {0}\nompageref{1}
+  \item [{$\{U\}$}]\begingroup Nodal displacement vector\nomeqref {0}\nompageref{1}
+\nomgroup{H}
+  \item [{$k$}]\begingroup Intrinsic permeability [m$^2$]\nomeqref {0}\nompageref{1}
+  \item [{$p$}]\begingroup Pore pressure [Pa]\nomeqref {0}\nompageref{1}
+  \item [{$S$}]\begingroup Degree of saturation [-]\nomeqref {0}\nompageref{1}
+\nomgroup{M}
+  \item [{$\boldsymbol{\sigma}$}]\begingroup Cauchy stress tensor [Pa]\nomeqref {0}\nompageref{1}
+  \item [{$\boldsymbol{\varepsilon}$}]\begingroup Total strain tensor [-]\nomeqref {0}\nompageref{1}
+  \item [{$\boldsymbol{\varepsilon}_e$}]\begingroup Elastic strain tensor [-]\nomeqref {0}\nompageref{1}
+  \item [{$\boldsymbol{\varepsilon}_{th}$}]\begingroup Thermal strain [-]\nomeqref {0}\nompageref{1}
+  \item [{$D$}]\begingroup Damage variable [-]\nomeqref {0}\nompageref{1}
+  \item [{$E$}]\begingroup Young's modulus [Pa]\nomeqref {0}\nompageref{1}
+  \item [{$f_t$}]\begingroup Tensile strength [Pa]\nomeqref {0}\nompageref{1}
+  \item [{$G_f$}]\begingroup Fracture energy [J\,m$^{-2}$]\nomeqref {0}\nompageref{1}
+  \item [{$L_e$}]\begingroup Characteristic element length [m]\nomeqref {0}\nompageref{1}
+\nomgroup{T}
+  \item [{$\lambda$}]\begingroup Thermal conductivity [W\,m$^{-1}$\,K$^{-1}$]\nomeqref {0}\nompageref{1}
+  \item [{$\rho$}]\begingroup Mass density [kg\,m$^{-3}$]\nomeqref {0}\nompageref{1}
+  \item [{$\sigma$}]\begingroup Stefan--Boltzmann constant [W\,m$^{-2}$\,K$^{-4}$]\nomeqref {0}\nompageref{1}
+  \item [{$\varepsilon$}]\begingroup Emissivity [-]\nomeqref {0}\nompageref{1}
+  \item [{$c_p$}]\begingroup Specific heat capacity [J\,kg$^{-1}$\,K$^{-1}$]\nomeqref {0}\nompageref{1}
+  \item [{$h$}]\begingroup Convective heat transfer coefficient [W\,m$^{-2}$\,K$^{-1}$]\nomeqref {0}\nompageref{1}
+  \item [{$q''$}]\begingroup Heat flux [W\,m$^{-2}$]\nomeqref {0}\nompageref{1}
+  \item [{$T$}]\begingroup Temperature [K]\nomeqref {0}\nompageref{1}
+
+\end{thenomenclature}
