@@ -82,4 +82,3 @@
 \contentsline {section}{\numberline {6.3}Perspectives for future research}{31}{section.6.3}%
 \contentsline {chapter}{List of Figures}{33}{section*.20}%
 \contentsline {chapter}{List of Tables}{34}{section*.22}%
-\contentsline {chapter}{Bibliography}{35}{chapter*.25}%
