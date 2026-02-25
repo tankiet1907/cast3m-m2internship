@@ -1,0 +1,147 @@
+***********************************************************************
+*
+* Plaque perforée
+* Modelisation thermique stationnaire
+* G. Sciumè
+*
+* Formation Cast3M (I2M - 27/04/2017)
+*
+***********************************************************************
+
+
+OPTI ECHO 0;
+
+
+
+***********************************************************************
+* 1) Choix de la géométrie et du maillage 
+***********************************************************************
+OPTI 'DIME' 2 'ELEM' 'QUA8' ;
+
+* DEFINITION DES LONGUEURS ET DENSITES DE MAILLES
+LONG     = 0.24 ;
+HAUT     = 0.10 ;
+RAYON    = 0.02 ;
+
+NLONG    = 24 ;
+NHAUT    = 4 ;
+NBASG    = 10 ;
+NBASD    = 10 ;
+NQCG     = 8 ;
+NQCD     = 8 ;
+
+DGROS    = 0.02;
+DFIN     = 0.01;
+NELEM1   = 8;
+NELEM2   = 16;
+
+* CREATION DES POINTS D'APPUI DU MAILLAGE
+PA       = 0. 0. ;
+PB       = ((0.5 * LONG) – RAYON) 0. ; 
+PC       = (0.5 * LONG) RAYON ;
+PD       = ((0.5 * LONG) + RAYON) 0. ;
+PE       = LONG 0. ;
+PF       = LONG HAUT ; 
+PG       = 0. HAUT ;
+PCEN     = (0.5 * LONG) 0. ;
+TRAC (PA et PB et PC et PD et PE et PF et PG et PCEN);
+*
+XH = (0.5 * LONG) - (RAYON * (COS 45));
+YH =  RAYON * (SIN 45);
+XI = (0.5 * LONG) + (RAYON * (COS 45));
+YI =  RAYON * (SIN 45);
+PH =  XH YH;
+PI =  XI YI;
+PL =  (0.5 * LONG) HAUT ;
+TRAC (PA et PB et PC et PD et PE et PF et PG et PCEN et PH et PI et PL);
+
+LAB   = DROI (-1*NELEM2) PA PB 'DINI' DGROS 'DFIN' DFIN;
+LBH   = CERC   NELEM1  PB PCEN PH;
+LHG   = DROI (-1*NELEM2) PH PG 'DINI' DFIN 'DFIN' DGROS;
+LGA   = DROI NELEM1 PG PA;
+*
+LHC   = CERC NELEM1 PH PCEN PC;
+LCL   = DROI (-1*NELEM2) PC PL 'DINI' DFIN 'DFIN' (0.7 * DGROS);
+LLG   = DROI NELEM1 PL PG;
+*
+LCI   = CERC NELEM1 PC PCEN PI;
+LIF   = DROI (-1*NELEM2) PI PF 'DINI' DFIN 'DFIN' DGROS;
+LFL   = DROI NELEM1 PF PL;
+*
+LID   = CERC NELEM1 PI PCEN PD;
+LDE   = DROI (-1*NELEM2) PD PE 'DINI' DFIN 'DFIN' DGROS;
+LEF   = DROI NELEM1 PE PF;
+
+* CREATION DES SURFACES
+SURF1 = DALL LAB LBH LHG LGA 'PLAN';
+SURF2 = DALL LHC LCL LLG LHG 'PLAN';
+SURF3 = DALL LCI LIF LFL LCL 'PLAN';
+SURF4 = DALL LID LDE LEF LIF 'PLAN';
+MAIL1 = SURF1 et SURF2 et SURF3 et SURF4;
+TRAC MAIL1 ;
+
+* DEFINITION DES LIGNES POUR L'APPLICATION DES CONDITIONS LIMITES
+L_SUP  = LLG et LFL;
+L_CERC = LBH ET LHC ET LCI ET LID;
+TRAC (L_SUP eT L_CERC);
+***********************************************************************
+
+
+
+
+***********************************************************************
+* 2) Définition du modèle mathématique 
+***********************************************************************
+
+* DEFINITION DU MODELE
+MOD1 = MODE MAIL1  THERMIQUE ISOTROPE ;
+MOD2 = MODE L_SUP THERMIQUE CONVECTION ;
+
+*DONNEES DES CARACTERISTIQUES DU MATERIAU
+MAT1  = MATE MOD1 'K' 1. ;
+MAT2  = MATE MOD2 'H' 10. ;
+***********************************************************************
+
+
+
+
+***********************************************************************
+* 3) Résolution du problème discrétisé
+***********************************************************************
+
+* CREATION DES MATRICES DE CONDUCTIVITE 
+CND1 = COND MOD1 MAT1 ;
+CND2 = COND MOD2 MAT2 ;
+
+* TEMPERATURES IMPOSEES: BLOQUE + DEPI 
+BB1 = BLOQ L_CERC 'T' ;
+EE1 = DEPI BB1 100. ;
+
+* FLUX EQUIVALENTS A LA CONDITION DECONVECTION
+CNV1 = CONVECTION MOD2 MAT2 'T' 20. ;
+
+* ASSEMBLAGE DES TERMES DE CONDUCTIVITE 
+CCCC = CND1 ET CND2 ET BB1 ;
+
+* ASSEMBLAGE DES TERMES DE FLUX EQUIVALENTS
+FFFF = EE1 ET CNV1 ;
+
+* RESOLUTION DU SYSTEM
+CHTER1 = RESO CCCC FFFF ;
+***********************************************************************
+
+
+***********************************************************************
+* 4) Analyse et post-traitement des résultats
+***********************************************************************
+
+* VISUALISATION DU CHAMP DE TEMPERATURE
+TMAX   = MAXI (CHTER1 'ENLE' 'LX');
+TMIN   = MINI (CHTER1 'ENLE' 'LX');
+SCALA1 = PROG TMIN PAS ((TMAX - TMIN)/8) TMAX;
+TRAC CHTER1 MAIL1 SCALA1;
+***********************************************************************
+
+
+EVOL1 = EVOL 'ROUG' 'CHPO'  CHTER1  'T'  LCL;
+DESS EVOL1;

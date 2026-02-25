@@ -1,0 +1,22 @@
+[0] Config.pm:308> INFO - This is Biber 2.20
+[0] Config.pm:311> INFO - Logfile is 'main.blg'
+[117] biber-MSWIN64:340> INFO - === 
+[153] Biber.pm:420> INFO - Reading 'main.bcf'
+[276] Biber.pm:994> INFO - Found 6 citekeys in bib section 0
+[291] Biber.pm:4463> INFO - Processing section 0
+[304] Biber.pm:4654> INFO - Looking for bibtex file 'zotero_library.bib' for section 0
+[404] bibtex.pm:1713> INFO - LaTeX decoding ...
+[432] bibtex.pm:1519> INFO - Found BibTeX data source 'zotero_library.bib'
+[441] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'normalization = NFD' with 'normalization = prenormalized'
+[441] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'variable = shifted' with 'variable = non-ignorable'
+[502] Biber.pm:4283> INFO - Sorting list 'nty/global//global/global/global' of type 'entry' with template 'nty' and locale 'en-US'
+[503] Biber.pm:4289> INFO - No sort tailoring available for locale 'en-US'
+[504] bbl.pm:676> INFO - Writing 'main.bbl' with encoding 'UTF-8'
+[504] bbl.pm:779> INFO - Output to main.bbl
+[505] Biber.pm:131> WARN - I didn't find a database entry for 'dauti_combined_2018' (section 0)
+[505] Biber.pm:131> WARN - I didn't find a database entry for 'bergman_introduction_2017' (section 0)
+[505] Biber.pm:131> WARN - I didn't find a database entry for 'di_paola_starting_2023' (section 0)
+[505] Biber.pm:131> WARN - I didn't find a database entry for 'hamon_model_2013' (section 0)
+[506] Biber.pm:131> WARN - I didn't find a database entry for 'liu_stochastic_2001' (section 0)
+[506] Biber.pm:131> WARN - I didn't find a database entry for 'baroth_introduction_2011' (section 0)
+[506] Biber.pm:133> INFO - WARNINGS: 6
