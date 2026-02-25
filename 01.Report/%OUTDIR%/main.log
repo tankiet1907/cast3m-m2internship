@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=pdflatex 2026.2.25)  25 FEB 2026 14:47
+This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=pdflatex 2026.2.25)  25 FEB 2026 14:59
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -764,36 +764,7 @@ Package biblatex Info: Automatic encoding selection.
 
 Package biblatex Info: Trying to load bibliographic data...
 Package biblatex Info: ... file 'main.bbl' found.
- (%OUTDIR%/main.bbl
-
-Package biblatex Warning: The following entry could not be found
-(biblatex)                in the database:
-(biblatex)                baroth_introduction_2011
-(biblatex)                Please verify the spelling and rerun
-(biblatex)                LaTeX afterwards.
-
-
-Package biblatex Warning: The following entry could not be found
-(biblatex)                in the database:
-(biblatex)                di_paola_starting_2023
-(biblatex)                Please verify the spelling and rerun
-(biblatex)                LaTeX afterwards.
-
-
-Package biblatex Warning: The following entry could not be found
-(biblatex)                in the database:
-(biblatex)                hamon_model_2013
-(biblatex)                Please verify the spelling and rerun
-(biblatex)                LaTeX afterwards.
-
-
-Package biblatex Warning: The following entry could not be found
-(biblatex)                in the database:
-(biblatex)                liu_stochastic_2001
-(biblatex)                Please verify the spelling and rerun
-(biblatex)                LaTeX afterwards.
-
-)
+ (%OUTDIR%/main.bbl)
 Package biblatex Info: Reference section=0 on input line 104.
 Package biblatex Info: Reference segment=0 on input line 104.
 Package hyperref Info: Link coloring ON on input line 104.
@@ -999,15 +970,6 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 
 [6]
 
-LaTeX Warning: Citation 'di_paola_starting_2023' on page 7 undefined on input line 343.
-
-
-Overfull \hbox (18.64984pt too wide) in paragraph at lines 343--344
-\T1/cmr/m/n/12 Based on the prin-ci-ple of en-ergy con-ser-va-tion and Fourier's law [[]],
- []
-
-
-
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
 (fancyhdr)                Make it at least 14.49998pt, for example:
@@ -1039,10 +1001,6 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-2.49998pt}.
 
 [9]
-
-LaTeX Warning: Citation 'hamon_model_2013' on page 10 undefined on input line 448.
-
-
 
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
@@ -1118,9 +1076,6 @@ Overfull \hbox (5.42705pt too wide) in paragraph at lines 575--575
  []
 
 
-LaTeX Warning: Citation 'liu_stochastic_2001' on page 17 undefined on input line 582.
-
-
 
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
@@ -1187,9 +1142,6 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 
 [22]
 Chapter 5.
-
-LaTeX Warning: Citation 'baroth_introduction_2011' on page 23 undefined on input line 635.
-
 
 
 
@@ -1357,18 +1309,18 @@ Package logreq Info: Writing requests to 'main.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 28741 strings out of 473190
- 540731 string characters out of 5719979
- 1347009 words of memory out of 5000000
- 51399 multiletter control sequences out of 15000+600000
+ 28759 strings out of 473190
+ 541359 string characters out of 5719979
+ 1347057 words of memory out of 5000000
+ 51413 multiletter control sequences out of 15000+600000
  576498 words of font info for 74 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 84i,13n,87p,1028b,1212s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 84i,13n,87p,1028b,1318s stack positions out of 10000i,1000n,20000p,200000b,200000s
 <c:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmmib10.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/cm-super/sfbx1200.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/cm-super/sfbx1440.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/cm-super/sfbx1728.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/cm-super/sfbx2488.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/cm-super/sfcc1200.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/cm-super/sfrm1095.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/cm-super/sfrm1200.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/cm-super/sfrm1440.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/cm-super/sfrm1728.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/cm-super/sfti1200.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/cm-super/sfti1440.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/cm-super/sftt1200.pfb>
-Output written on %OUTDIR%/main.pdf (44 pages, 437534 bytes).
+Output written on %OUTDIR%/main.pdf (44 pages, 457813 bytes).
 PDF statistics:
- 775 PDF objects out of 1000 (max. 8388607)
- 671 compressed objects within 7 object streams
- 173 named destinations out of 1000 (max. 500000)
+ 787 PDF objects out of 1000 (max. 8388607)
+ 683 compressed objects within 7 object streams
+ 177 named destinations out of 1000 (max. 500000)
  583 words of extra memory for PDF output out of 10000 (max. 10000000)
 

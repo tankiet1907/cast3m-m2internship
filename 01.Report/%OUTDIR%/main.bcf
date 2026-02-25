@@ -2369,15 +2369,15 @@
   <!-- CITATION DATA -->
   <!-- SECTION 0 -->
   <bcf:bibdata section="0">
-    <bcf:datasource type="file" datatype="bibtex" glob="false">zotero_m2internship.bib</bcf:datasource>
+    <bcf:datasource type="file" datatype="bibtex" glob="false">zotero-m2internship.bib</bcf:datasource>
   </bcf:bibdata>
   <bcf:section number="0">
-    <bcf:citekey order="1" intorder="1">Dauti2018</bcf:citekey>
-    <bcf:citekey order="2" intorder="1">Bergman2017</bcf:citekey>
-    <bcf:citekey order="3" intorder="1">di_paola_starting_2023</bcf:citekey>
-    <bcf:citekey order="4" intorder="1">hamon_model_2013</bcf:citekey>
-    <bcf:citekey order="5" intorder="1">liu_stochastic_2001</bcf:citekey>
-    <bcf:citekey order="6" intorder="1">baroth_introduction_2011</bcf:citekey>
+    <bcf:citekey order="1" intorder="1">dauti2018</bcf:citekey>
+    <bcf:citekey order="2" intorder="1">bergman2017</bcf:citekey>
+    <bcf:citekey order="3" intorder="1">dipaola2023</bcf:citekey>
+    <bcf:citekey order="4" intorder="1">hamon2013</bcf:citekey>
+    <bcf:citekey order="5" intorder="1">liu2001</bcf:citekey>
+    <bcf:citekey order="6" intorder="1">baroth2011</bcf:citekey>
   </bcf:section>
   <!-- SORTING TEMPLATES -->
   <bcf:sortingtemplate name="nty">

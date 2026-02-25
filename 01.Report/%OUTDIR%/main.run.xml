@@ -79,7 +79,7 @@
       <file>main.bcf</file>
     </requires>
     <requires type="editable">
-      <file>zotero_m2internship.bib</file>
+      <file>zotero-m2internship.bib</file>
     </requires>
   </external>
 </requests>
