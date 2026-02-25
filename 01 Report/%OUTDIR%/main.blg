@@ -1,0 +1,15 @@
+[1] Config.pm:307> INFO - This is Biber 2.19
+[1] Config.pm:310> INFO - Logfile is '%OUTDIR%/main.blg'
+[91] biber:340> INFO - === Wed Feb 25, 2026, 08:14:30
+[106] Biber.pm:419> INFO - Reading '%OUTDIR%/main.bcf'
+[164] Biber.pm:979> INFO - Found 3 citekeys in bib section 0
+[177] Biber.pm:4419> INFO - Processing section 0
+[188] Biber.pm:4610> INFO - Looking for bibtex file 'zotero_library.bib' for section 0
+[189] bibtex.pm:1713> INFO - LaTeX decoding ...
+[198] bibtex.pm:1519> INFO - Found BibTeX data source 'zotero_library.bib'
+[255] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'normalization = NFD' with 'normalization = prenormalized'
+[255] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'variable = shifted' with 'variable = non-ignorable'
+[255] Biber.pm:4239> INFO - Sorting list 'nty/global//global/global' of type 'entry' with template 'nty' and locale 'en-US'
+[255] Biber.pm:4245> INFO - No sort tailoring available for locale 'en-US'
+[264] bbl.pm:660> INFO - Writing '%OUTDIR%/main.bbl' with encoding 'UTF-8'
+[267] bbl.pm:763> INFO - Output to %OUTDIR%/main.bbl

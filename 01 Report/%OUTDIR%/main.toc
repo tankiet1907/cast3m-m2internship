@@ -1,0 +1,80 @@
+\contentsline {chapter}{Acknowledgment}{i}{}%
+\contentsline {chapter}{Abstract}{ii}{}%
+\contentsline {chapter}{\numberline {1}Introduction}{1}{}%
+\contentsline {section}{\numberline {1.1}Context and problem statement}{1}{}%
+\contentsline {subsection}{\numberline {1.1.1}High-temperature concrete behaviour in nuclear containment structures}{1}{}%
+\contentsline {subsection}{\numberline {1.1.2}Problem statement}{1}{}%
+\contentsline {subsection}{\numberline {1.1.3}Limitations of existing THM models}{2}{}%
+\contentsline {section}{\numberline {1.2}Objectives and scope of the thesis}{2}{}%
+\contentsline {section}{\numberline {1.3}Research enviroment and Computational tools}{2}{}%
+\contentsline {subsection}{\numberline {1.3.1}3SR Laboratory}{2}{}%
+\contentsline {subsection}{\numberline {1.3.2}Finite element code - Cast3M}{3}{}%
+\contentsline {subsection}{\numberline {1.3.3}Probabilistic analysis tool - Persalys}{3}{}%
+\contentsline {chapter}{\numberline {2}Theoretical and Numerical framework}{5}{}%
+\contentsline {section}{\numberline {2.1}Thermal behavior}{5}{}%
+\contentsline {subsection}{\numberline {2.1.1}Conduction, convection and radiation}{5}{}%
+\contentsline {subsubsection}{Conduction}{5}{}%
+\contentsline {subsubsection}{Convection}{6}{}%
+\contentsline {subsubsection}{Radiation}{6}{}%
+\contentsline {subsection}{\numberline {2.1.2}Heat transfer}{7}{}%
+\contentsline {subsubsection}{Heat Equation}{7}{}%
+\contentsline {subsubsection}{Discretization}{8}{}%
+\contentsline {section}{\numberline {2.2}Hydric behavior}{8}{}%
+\contentsline {subsection}{\numberline {2.2.1}Moisture transport}{8}{}%
+\contentsline {subsection}{\numberline {2.2.2}Drying, shrinkage and pore pressure}{9}{}%
+\contentsline {section}{\numberline {2.3}Mechanical behavior}{9}{}%
+\contentsline {subsection}{\numberline {2.3.1}Elastic model}{9}{}%
+\contentsline {subsubsection}{Kinematics and total strain decomposition}{9}{}%
+\contentsline {subsubsection}{Linear finite element formulation}{10}{}%
+\contentsline {subsection}{\numberline {2.3.2}Mazars damage model}{10}{}%
+\contentsline {subsubsection}{Damage parameter and equivalent strain}{10}{}%
+\contentsline {subsubsection}{Damage evolution laws for tension and compression}{11}{}%
+\contentsline {section}{\numberline {2.4}THM coupling}{13}{}%
+\contentsline {section}{\numberline {2.5}Damage-dependent property evolution}{13}{}%
+\contentsline {subsection}{\numberline {2.5.1}Young's modulus degradation}{13}{}%
+\contentsline {subsection}{\numberline {2.5.2}Permeability evolution}{13}{}%
+\contentsline {subsection}{\numberline {2.5.3}Thermal conductivity and heat capacity evolution}{14}{}%
+\contentsline {chapter}{\numberline {3}Numerical implementation}{15}{}%
+\contentsline {section}{\numberline {3.1}Modeling strategy and assumptions}{15}{}%
+\contentsline {section}{\numberline {3.2}Geometry, material properties, boundary conditions and loadings}{15}{}%
+\contentsline {section}{\numberline {3.3}Implementation of the thermal model}{16}{}%
+\contentsline {subsection}{\numberline {3.3.1}Stationary}{16}{}%
+\contentsline {subsection}{\numberline {3.3.2}Transient}{16}{}%
+\contentsline {section}{\numberline {3.4}Implementation of the hydro-mechanical model}{16}{}%
+\contentsline {subsection}{\numberline {3.4.1}Drying}{16}{}%
+\contentsline {subsection}{\numberline {3.4.2}Shrinkage}{16}{}%
+\contentsline {section}{\numberline {3.5}Implementation of the mechanical model}{17}{}%
+\contentsline {subsection}{\numberline {3.5.1}Elastic}{17}{}%
+\contentsline {subsection}{\numberline {3.5.2}Mazars}{17}{}%
+\contentsline {section}{\numberline {3.6}Implementation of the TH and THM coupled models}{17}{}%
+\contentsline {section}{\numberline {3.7}Numerical results}{17}{}%
+\contentsline {chapter}{\numberline {4}Model validation}{19}{}%
+\contentsline {section}{\numberline {4.1}Experimental data}{19}{}%
+\contentsline {subsection}{\numberline {4.1.1}Experimental tests and material properties}{19}{}%
+\contentsline {subsection}{\numberline {4.1.2}Thermal, hydraulic and mechanic loadings}{19}{}%
+\contentsline {subsection}{\numberline {4.1.3}Measured data}{19}{}%
+\contentsline {section}{\numberline {4.2}Validation}{20}{}%
+\contentsline {subsection}{\numberline {4.2.1}Comparison between numerical and experimental results}{20}{}%
+\contentsline {subsection}{\numberline {4.2.2}Discussions on model performance}{20}{}%
+\contentsline {chapter}{\numberline {5}Probabilistic sensitivity analysis}{21}{}%
+\contentsline {section}{\numberline {5.1}Sources of uncertainty and concrete heterogeneity}{21}{}%
+\contentsline {subsection}{\numberline {5.1.1}Motivation for probabilistic assessment}{21}{}%
+\contentsline {subsection}{\numberline {5.1.2}Classification of uncertainties}{22}{}%
+\contentsline {subsection}{\numberline {5.1.3}Concrete heterogeneity and material variability}{22}{}%
+\contentsline {section}{\numberline {5.2}Probabilistic framework and implementation}{23}{}%
+\contentsline {subsection}{\numberline {5.2.1}Implementation: Lognormal - Gaussian transformation}{23}{}%
+\contentsline {subsubsection}{Summary of calculation steps in the numerical algorithm}{24}{}%
+\contentsline {subsubsection}{Spatial correlation length ($\lambda $)}{25}{}%
+\contentsline {subsection}{\numberline {5.2.2}Iterative Framework and Monte Carlo Simulations}{26}{}%
+\contentsline {subsubsection}{Simulation loop and dynamic material updating}{26}{}%
+\contentsline {subsubsection}{Data extraction and exportation strategy}{27}{}%
+\contentsline {section}{\numberline {5.3}Sensitivity analysis methodology}{27}{}%
+\contentsline {section}{\numberline {5.4}Identification of dominant parameters}{27}{}%
+\contentsline {chapter}{\numberline {6}Conclusions and Perspectives}{29}{}%
+\contentsline {section}{\numberline {6.1}Main findings}{29}{}%
+\contentsline {section}{\numberline {6.2}Model limitations and possible improvements}{29}{}%
+\contentsline {section}{\numberline {6.3}Perspectives for future research}{29}{}%
+\contentsline {chapter}{Nomenclature}{31}{}%
+\contentsline {chapter}{List of Figures}{32}{}%
+\contentsline {chapter}{List of Tables}{33}{}%
+\contentsline {chapter}{Bibliography}{34}{}%
