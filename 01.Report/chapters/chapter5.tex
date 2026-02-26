@@ -67,9 +67,10 @@ Main ideas:
 
 \subsection{Implementation: Lognormal - Gaussian transformation}
 
-\review{This section requires additional references to support the statements presented.}
-
 In practical finite element implementations using the Cast3M software, material parameters like the Young's modulus ($E$) are often assigned a lognormal random field to ensure the generated stiffness values remain strictly positive. However, the built-in random field operator (\texttt{ALEA}) generates Gaussian (normal) distributions, necessitating a mathematical transformation.
+
+\begin{reviewblock}
+\review{This section requires additional references to support the statements presented.}
 
 Assuming the actual mean of the material's Young's modulus is $\mu_E$ and its standard deviation is $\sigma_E$. The fundamental relationship between these two variables is expressed through the exponential transformation:
 \[
@@ -85,6 +86,7 @@ From statistical properties, we can establish a system of two equations relating
 \end{equation}
 
 To find the input parameters $\mu_G$ and $\sigma_G$ for the random number generation algorithm, we need to solve the above system of equations.
+\end{reviewblock}
 
 \subsubsection{1. Solving for $\sigma_G^2$}
 By squaring the first equation, we get:
