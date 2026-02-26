@@ -1,30 +1,47 @@
-{"latex-workshop.latex.tools": [
+{
+  "latex-workshop.latex.tools": [
     {
-        "name": "pdflatex",
-        "command": "pdflatex",
-        "args": ["-synctex=1", "-interaction=nonstopmode", "-file-line-error", "%DOC%"]
+      "name": "pdflatex",
+      "command": "pdflatex",
+      "args": [
+        "-synctex=1",
+        "-interaction=nonstopmode",
+        "-file-line-error",
+        "%DOC%"
+      ]
     },
     {
-        "name": "makeindex",
-        "command": "makeindex",
-        "args": [
-            "%DOCFILE%.nlo",
-            "-s",
-            "nomencl.ist",
-            "-o",
-            "%DOCFILE%.nls"
-        ]
+      "name": "biber",
+      "command": "biber",
+      "args": [
+        "%DOCFILE%"
+      ]
     },
     {
-        "name": "bibtex",
-        "command": "bibtex",
-        "args": ["%DOCFILE%"]
+      "name": "makeindex",
+      "command": "makeindex",
+      "args": [
+        "%DOCFILE%.nlo",
+        "-s",
+        "nomencl.ist",
+        "-o",
+        "%DOCFILE%.nls"
+      ]
     }
-],
-"latex-workshop.latex.recipes": [
+  ],
+
+  "latex-workshop.latex.recipes": [
     {
-        "name": "pdflatex -> makeindex -> pdflatex",
-        "tools": ["pdflatex", "makeindex", "pdflatex"]
+      "name": "pdflatex → biber → makeindex → pdflatex ×2",
+      "tools": [
+        "pdflatex",
+        "biber",
+        "makeindex",
+        "pdflatex",
+        "pdflatex"
+      ]
     }
-]
+  ],
+
+  "latex-workshop.latex.recipe.default": "pdflatex → biber → makeindex → pdflatex ×2"
 }

@@ -1,5 +1,5 @@
 % $ biblatex auxiliary file $
-% $ biblatex bbl format version 3.3 $
+% $ biblatex bbl format version 3.2 $
 % Do not modify the above lines!
 %
 % This is an auxiliary file used by the 'biblatex' package.
@@ -18,8 +18,8 @@
 
 
 \refsection{0}
-  \datalist[entry]{nty/global//global/global/global}
-    \entry{baroth2011}{incollection}{}{}
+  \datalist[entry]{nty/global//global/global}
+    \entry{baroth2011}{incollection}{}
       \name{author}{3}{}{%
         {{hash=a8bebb79cbb87e04ad72cf0f8e7ff1af}{%
            family={Baroth},
@@ -39,12 +39,10 @@
       }
       \strng{namehash}{5d213cf760f717bf2e1d5fea8ecc1cc6}
       \strng{fullhash}{5d213cf760f717bf2e1d5fea8ecc1cc6}
-      \strng{fullhashraw}{5d213cf760f717bf2e1d5fea8ecc1cc6}
       \strng{bibnamehash}{5d213cf760f717bf2e1d5fea8ecc1cc6}
       \strng{authorbibnamehash}{5d213cf760f717bf2e1d5fea8ecc1cc6}
       \strng{authornamehash}{5d213cf760f717bf2e1d5fea8ecc1cc6}
       \strng{authorfullhash}{5d213cf760f717bf2e1d5fea8ecc1cc6}
-      \strng{authorfullhashraw}{5d213cf760f717bf2e1d5fea8ecc1cc6}
       \field{sortinit}{B}
       \field{sortinithash}{d7095fff47cda75ca2589920aae98399}
       \field{labelnamesource}{author}
@@ -64,7 +62,7 @@
       \verb C:\Users\thong\Zotero\storage\2ICLRYZQ\Baroth et al. - 2011 - Construction Reliability - Safety, Variability and Sustainability.pdf
       \endverb
     \endentry
-    \entry{bergman2017}{incollection}{}{}
+    \entry{bergman2017}{incollection}{}
       \name{author}{2}{}{%
         {{hash=51aa5e9e880456c2144bd86f05e91631}{%
            family={Bergman},
@@ -82,12 +80,10 @@
       }
       \strng{namehash}{4ae83e4c306f46195d2dfa5eb90cb9bf}
       \strng{fullhash}{4ae83e4c306f46195d2dfa5eb90cb9bf}
-      \strng{fullhashraw}{4ae83e4c306f46195d2dfa5eb90cb9bf}
       \strng{bibnamehash}{4ae83e4c306f46195d2dfa5eb90cb9bf}
       \strng{authorbibnamehash}{4ae83e4c306f46195d2dfa5eb90cb9bf}
       \strng{authornamehash}{4ae83e4c306f46195d2dfa5eb90cb9bf}
       \strng{authorfullhash}{4ae83e4c306f46195d2dfa5eb90cb9bf}
-      \strng{authorfullhashraw}{4ae83e4c306f46195d2dfa5eb90cb9bf}
       \field{sortinit}{B}
       \field{sortinithash}{d7095fff47cda75ca2589920aae98399}
       \field{labelnamesource}{author}
@@ -104,7 +100,7 @@
       \verb C:\Users\thong\Zotero\storage\JEEHEQGK\Bergman and Lavine - 2017 - Introduction.pdf
       \endverb
     \endentry
-    \entry{dauti2018}{thesis}{}{}
+    \entry{dauti2018}{thesis}{}
       \name{author}{1}{}{%
         {{hash=d992015dbe48113dfa0f7d65a9fecc07}{%
            family={Dauti},
@@ -117,12 +113,10 @@
       }
       \strng{namehash}{d992015dbe48113dfa0f7d65a9fecc07}
       \strng{fullhash}{d992015dbe48113dfa0f7d65a9fecc07}
-      \strng{fullhashraw}{d992015dbe48113dfa0f7d65a9fecc07}
       \strng{bibnamehash}{d992015dbe48113dfa0f7d65a9fecc07}
       \strng{authorbibnamehash}{d992015dbe48113dfa0f7d65a9fecc07}
       \strng{authornamehash}{d992015dbe48113dfa0f7d65a9fecc07}
       \strng{authorfullhash}{d992015dbe48113dfa0f7d65a9fecc07}
-      \strng{authorfullhashraw}{d992015dbe48113dfa0f7d65a9fecc07}
       \field{sortinit}{D}
       \field{sortinithash}{6f385f66841fb5e82009dc833c761848}
       \field{labelnamesource}{author}
@@ -138,7 +132,7 @@
       \endverb
       \keyw{Ecaillage,Fire spalling,Haute temperature,High temperature,Mesoscale modeling,Modele Thermo-Hydro-Mecanique,Modelisation mesoscopique,Neutron tomography,Thermo-Hydro-Mechanical model,Tomographie neutron}
     \endentry
-    \entry{dipaola2023}{report}{}{}
+    \entry{dipaola2023}{report}{}
       \name{author}{1}{}{%
         {{hash=a736134b159e5629f38889680d407e63}{%
            family={Di\bibnamedelima Paola},
@@ -151,12 +145,10 @@
       }
       \strng{namehash}{a736134b159e5629f38889680d407e63}
       \strng{fullhash}{a736134b159e5629f38889680d407e63}
-      \strng{fullhashraw}{a736134b159e5629f38889680d407e63}
       \strng{bibnamehash}{a736134b159e5629f38889680d407e63}
       \strng{authorbibnamehash}{a736134b159e5629f38889680d407e63}
       \strng{authornamehash}{a736134b159e5629f38889680d407e63}
       \strng{authorfullhash}{a736134b159e5629f38889680d407e63}
-      \strng{authorfullhashraw}{a736134b159e5629f38889680d407e63}
       \field{sortinit}{D}
       \field{sortinithash}{6f385f66841fb5e82009dc833c761848}
       \field{labelnamesource}{author}
@@ -176,7 +168,7 @@
       \verb https://www-cast3m.cea.fr/index.php?xml=maj2011
       \endverb
     \endentry
-    \entry{hamon2013}{report}{}{}
+    \entry{hamon2013}{report}{}
       \name{author}{1}{}{%
         {{hash=38ba0b5d6763a6dbffbfbef1fdf85300}{%
            family={Hamon},
@@ -189,12 +181,10 @@
       }
       \strng{namehash}{38ba0b5d6763a6dbffbfbef1fdf85300}
       \strng{fullhash}{38ba0b5d6763a6dbffbfbef1fdf85300}
-      \strng{fullhashraw}{38ba0b5d6763a6dbffbfbef1fdf85300}
       \strng{bibnamehash}{38ba0b5d6763a6dbffbfbef1fdf85300}
       \strng{authorbibnamehash}{38ba0b5d6763a6dbffbfbef1fdf85300}
       \strng{authornamehash}{38ba0b5d6763a6dbffbfbef1fdf85300}
       \strng{authorfullhash}{38ba0b5d6763a6dbffbfbef1fdf85300}
-      \strng{authorfullhashraw}{38ba0b5d6763a6dbffbfbef1fdf85300}
       \field{sortinit}{H}
       \field{sortinithash}{23a3aa7c24e56cfa16945d55545109b5}
       \field{labelnamesource}{author}
@@ -209,7 +199,7 @@
       \verb C:\Users\thong\Zotero\storage\GRDNYWFY\Hamon - 2013 - Model of damage of MAZARS.pdf
       \endverb
     \endentry
-    \entry{liu2001}{article}{}{}
+    \entry{liu2001}{article}{}
       \name{author}{3}{}{%
         {{hash=c98b8df825976ea7cb8362592da21cc7}{%
            family={Liu},
@@ -229,12 +219,10 @@
       }
       \strng{namehash}{4b53889ab99701d8ec0e97dbf1ea82cc}
       \strng{fullhash}{4b53889ab99701d8ec0e97dbf1ea82cc}
-      \strng{fullhashraw}{4b53889ab99701d8ec0e97dbf1ea82cc}
       \strng{bibnamehash}{4b53889ab99701d8ec0e97dbf1ea82cc}
       \strng{authorbibnamehash}{4b53889ab99701d8ec0e97dbf1ea82cc}
       \strng{authornamehash}{4b53889ab99701d8ec0e97dbf1ea82cc}
       \strng{authorfullhash}{4b53889ab99701d8ec0e97dbf1ea82cc}
-      \strng{authorfullhashraw}{4b53889ab99701d8ec0e97dbf1ea82cc}
       \field{sortinit}{L}
       \field{sortinithash}{7c47d417cecb1f4bd38d1825c427a61a}
       \field{labelnamesource}{author}
