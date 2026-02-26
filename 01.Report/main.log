@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=pdflatex 2026.2.25)  26 FEB 2026 15:14
+This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=pdflatex 2026.2.25)  26 FEB 2026 15:46
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -1068,20 +1068,16 @@ Chapter 5.
 
 [26]
 
-[27]
+[27])
 
 [28]
-
-[29])
-
-[30]
 \openout2 = `chapters/chapter6.aux'.
 
  (./chapters/chapter6.tex
 Chapter 6.
 )
 
-[31
+[29
 
 
 
@@ -1089,7 +1085,7 @@ Chapter 6.
 
 ]
 
-[32
+[30
 
 
 
@@ -1099,7 +1095,7 @@ Chapter 6.
 
 
 
-[33
+[31
 
 ] (./main.lot)
 \tf@lot=\write9
@@ -1107,12 +1103,12 @@ Chapter 6.
 
 
 
-[34
+[32
 
 
 ]
 
-[35
+[33
 
 
 ] (./main.aux (./chapters/chapter1.aux) (./chapters/chapter2.aux) (./chapters/chapter3.aux) (./chapters/chapter4.aux) (./chapters/chapter5.aux) (./chapters/chapter6.aux))
@@ -1121,24 +1117,24 @@ LaTeX2e <2024-11-01> patch level 2
 L3 programming layer <2025-01-18>
  ***********
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: BCF2E45216121BBEF9D49C56B5924903;13778.
+(rerunfilecheck)             Checksum: E422C60FDACE9813D6228B6F090ABEA0;13778.
 Package logreq Info: Writing requests to 'main.run.xml'.
 \openout1 = `main.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 33790 strings out of 473190
- 662819 string characters out of 5719979
- 1514956 words of memory out of 5000000
- 56319 multiletter control sequences out of 15000+600000
+ 33791 strings out of 473190
+ 662903 string characters out of 5719979
+ 1514954 words of memory out of 5000000
+ 56323 multiletter control sequences out of 15000+600000
  576498 words of font info for 74 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 115i,13n,110p,1052b,1401s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 115i,13n,110p,1024b,1401s stack positions out of 10000i,1000n,20000p,200000b,200000s
 <c:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmmib10.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/cm-super/sfbx1200.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/cm-super/sfbx1440.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/cm-super/sfbx1728.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/cm-super/sfbx2488.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/cm-super/sfcc1200.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/cm-super/sfrm1095.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/cm-super/sfrm1200.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/cm-super/sfrm1440.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/cm-super/sfrm1728.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/cm-super/sfti1200.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/cm-super/sfti1440.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/cm-super/sftt1200.pfb>
-Output written on main.pdf (45 pages, 465960 bytes).
+Output written on main.pdf (43 pages, 460004 bytes).
 PDF statistics:
- 798 PDF objects out of 1000 (max. 8388607)
- 693 compressed objects within 7 object streams
- 183 named destinations out of 1000 (max. 500000)
+ 787 PDF objects out of 1000 (max. 8388607)
+ 684 compressed objects within 7 object streams
+ 180 named destinations out of 1000 (max. 500000)
  583 words of extra memory for PDF output out of 10000 (max. 10000000)
 

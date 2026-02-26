@@ -3,9 +3,8 @@
 
 \review{This chapter is currently a draft version and will undergo further review and revision.}
 
-This chapter follows the foundational framework of the book \cite{baroth2011}.
-
 \section{Sources of uncertainty and concrete heterogeneity}
+This section follows the foundational framework presented in \cite{baroth2011}.
 
 \begin{reviewblock}
 Main ideas:
@@ -20,16 +19,21 @@ Main ideas:
 
 In civil engineering, a structure or mechanical system is considered safe when it remains fit for duty for the duration of its service life, without causing damage to itself or its environment. Traditionally, deterministic models have been used to evaluate structural safety. However, the inevitable gap between a real physical system and a simplified numerical model, along with the unforeseeable nature of future loads and environmental conditions, inherently leads to uncertainty. 
 
+\begin{draftblock}
 To properly manage these risks and optimize the total lifecycle cost, modern engineering codes—such as the Eurocodes—rely heavily on probabilistic and statistical tools. The primary motivation for probabilistic assessment lies in its ability to explicitly quantify the safety of a structure through its probability of failure ($P_f$) and, conversely, its overall reliability ($R = 1 - P_f$). By adopting a probabilistic format, it becomes much easier to introduce random variables into mechanical behavior models, propagate them through structural analyses, and eventually make objective decisions based on both the probability of an event and the gravity of its consequences.
+\end{draftblock}
 
 \subsection{Classification of uncertainties}
 
 Predicting the exact lifetime or mechanical response of a construction project is impossible without accounting for multiple sources of uncertainty. According to reliability theory, these uncertainties can be broadly classified into two main categories: Aleatoric and Epistemic.
+
+\begin{draftblock}
 \begin{itemize}
     \item \textbf{Aleatoric (inherent or natural) uncertainties:} These uncertainties arise from the natural randomness of the environment and the spatial or temporal variability of material properties. Because they represent the inherent physical variation in nature, aleatoric uncertainties cannot be reduced or eliminated; they can only be accurately quantified (through data acquisition) and taken into account during the design process.
     
     \item \textbf{Epistemic (knowledge-based) uncertainties:} These stem from a lack of complete knowledge or insufficient data. They include \textit{model uncertainties} (the discrepancy between empirical or theoretical mathematical models and actual physical processes) and \textit{statistical uncertainties} (arising from limited data sampling or poor data collection methods). Furthermore, observation errors heavily contribute to epistemic uncertainty. These errors include measurement inaccuracies (caused by operators or poorly calibrated devices), representativity issues (e.g., deducing stress or rigidity indirectly from strain measurements), and time discrepancies (e.g., changes in material properties between the time of measurement and actual casting). Unlike aleatoric uncertainties, epistemic uncertainties can be effectively reduced by improving physical models, increasing training, and gathering more accurate data.
 \end{itemize}
+\end{draftblock}
 
 \subsection{Concrete heterogeneity and material variability}
 
@@ -45,7 +49,9 @@ A critical source of aleatoric uncertainty in civil engineering is the inherent 
     \end{enumerate}
 \end{itemize}
 
+\begin{draftblock}
 Because these material parameters are fundamentally variable, evaluating the true safety and performance of a structure requires geotechnical and structural predictions to abandon purely deterministic values. Instead, they must rely on random variables and stochastic fields to accurately model this spatial heterogeneity.
+\end{draftblock}   
 
 \section{Probabilistic framework and implementation}
 
@@ -60,6 +66,8 @@ Main ideas:
 \end{reviewblock}
 
 \subsection{Implementation: Lognormal - Gaussian transformation}
+
+\review{This section requires additional references to support the statements presented.}
 
 In practical finite element implementations using the Cast3M software, material parameters like the Young's modulus ($E$) are often assigned a lognormal random field to ensure the generated stiffness values remain strictly positive. However, the built-in random field operator (\texttt{ALEA}) generates Gaussian (normal) distributions, necessitating a mathematical transformation.
 
@@ -78,7 +86,7 @@ From statistical properties, we can establish a system of two equations relating
 
 To find the input parameters $\mu_G$ and $\sigma_G$ for the random number generation algorithm, we need to solve the above system of equations.
 
-\textbf{1. Solving for $\sigma_G^2$} \\
+\subsubsection{1. Solving for $\sigma_G^2$}
 By squaring the first equation, we get:
 \[
 \mu_E^2 = \exp(2\mu_G + \sigma_G^2)
@@ -96,7 +104,7 @@ Taking the natural logarithm of both sides gives the variance of the Gaussian di
 \sigma_G^2 = \ln\left(1 + \frac{\sigma_E^2}{\mu_E^2}\right)
 \]
 
-\textbf{2. Solving for $\mu_G$} \\
+\subsubsection{2. Solving for $\mu_G$}
 Using the first equation and isolating $\exp(\mu_G)$, we have:
 \[
 \mu_E = \exp(\mu_G) \cdot \exp\left(\dfrac{\sigma_G^2}{2}\right)
@@ -138,27 +146,43 @@ Based on the exact solutions derived above, the implementation follows these seq
 
 \subsubsection{Spatial correlation length ($\lambda$)}
 
-A fundamental parameter in the generation of random fields is the spatial correlation length, often denoted as $\lambda$ (or $b$). While the mean and standard deviation define the statistical distribution of the values at any given single point, the correlation length dictates the spatial structure and the degree of spatial dependence between neighboring points.
+\review{This section requires additional references to support the statements presented.}
 
-Physically, in a heterogeneous material like concrete, the macroscopic properties (such as Young's modulus or permeability) at two closely located spatial points are not entirely independent. They are correlated due to the presence of meso-scale structures, such as aggregates and the cement paste matrix. The correlation length $\lambda$ mathematically represents the distance over which these macroscopic properties remain statistically correlated. 
+A fundamental parameter in the generation of random fields is the spatial correlation length, often denoted as $\lambda$ (or $b$). 
+
+\begin{draftblock}
+While the mean and standard deviation define the statistical distribution of the values at any given single point, the correlation length dictates the spatial structure and the degree of spatial dependence between neighboring points.
+
+Physically, in a heterogeneous material like concrete, the macroscopic properties (such as Young's modulus or permeability) at two closely located spatial points are not entirely independent. They are correlated due to the presence of meso-scale structures, such as aggregates and the cement paste matrix. The correlation length $\lambda$ mathematically represents the distance over which these macroscopic properties remain statistically correlated.
+\end{draftblock}
 
 Depending on the assigned value of $\lambda$:
 \begin{itemize}
-    \item A very small correlation length ($\lambda \rightarrow 0$) implies that the material properties fluctuate rapidly and erratically over short distances, approaching a completely uncorrelated "white noise" spatial distribution.
-    \item A large correlation length ($\lambda \rightarrow \infty$) implies a slow spatial variation, moving towards a uniformly homogeneous material where the property is identical across the entire macro-scale structure.
+    \item A very small correlation length ($\lambda \rightarrow 0$) implies that the material properties fluctuate rapidly and erratically over short distances\draft{, approaching a completely uncorrelated "white noise" spatial distribution.}
+    \item A large correlation length ($\lambda \rightarrow \infty$) implies a slow spatial variation, moving towards a uniformly homogeneous material\draft{ where the property is identical across the entire macro-scale structure.}
 \end{itemize}
 
-In the context of this study, the choice of the correlation length is closely related to the maximum aggregate size of the concrete mixture. In the finite element implementation using the Cast3M code, this spatial correlation is explicitly introduced into the generation of the log-normal field via the \texttt{ALEA} operator using the \texttt{'LAMBDA'} keyword. For instance, an exponential covariance function with a specific correlation length $b$ is generated using the Turning Bands Method (\texttt{'BANDES\_TOURNANTES'} algorithm). 
+\begin{reviewblock}
+In the context of this study, the choice of the correlation length is closely related to the maximum aggregate size of the concrete mixture. 
+\end{reviewblock}
 
-The accurate selection of this parameter is crucial, as it directly governs the tortuosity of the damage patterns and influences the localization of cracks during the high-temperature spalling process.
+\begin{draftblock}
+In the finite element implementation using the Cast3M code, this spatial correlation is explicitly introduced into the generation of the log-normal field via the \texttt{ALEA} operator using the \texttt{'LAMBDA'} keyword. For instance, an exponential covariance function with a specific correlation length $b$ is generated using the Turning Bands Method (\texttt{'BANDES\_TOURNANTES'} algorithm). 
+\end{draftblock}
+
+\draft{The accurate selection of this parameter is crucial, as it directly governs the tortuosity of the damage patterns and influences the localization of cracks during the high-temperature spalling process.}
 
 \subsection{Iterative Framework and Monte Carlo Simulations}
 
 After successfully implementing the log-normal random fields to represent the concrete's spatial heterogeneity, the next step in the probabilistic assessment is to perform multiple independent realizations. This is achieved through a Monte Carlo simulation framework.
 
-Given the inherent complexity and computational cost of the non-linear Thermo-Hydro-Mechanical (THM) model, solving the problem for hundreds of iterations requires a robust automated procedure. In the finite element code Cast3M, this iterative process is seamlessly governed by the \texttt{REPETER} operator.
+\draft{Given the inherent complexity and computational cost of the non-linear Thermo-Hydro-Mechanical (THM) model, solving the problem for hundreds of iterations requires a robust automated procedure. }In the finite element code Cast3M, this iterative process is seamlessly governed by the \texttt{REPETER} operator.
 
 \subsubsection{Simulation loop and dynamic material updating}
+
+\review{This section is currently under development and will be refined as the study progresses.}
+\begin{draftblock}
+
 For a predefined number of simulations $N_{simu}$, the global algorithm performs the following sequential steps within each loop:
 
 \begin{enumerate}
@@ -166,8 +190,12 @@ For a predefined number of simulations $N_{simu}$, the global algorithm performs
     \item \textbf{Material Updating:} The macroscopic properties of the finite element model are updated. The newly generated random field is projected onto the mesh to form the updated material stiffness matrix using the \texttt{MATE} operator.
     \item \textbf{Non-linear Resolution:} The \texttt{PASAPAS} procedure is invoked to solve the multi-physics THM problem from $t=0$ to the final time $t_{fin}$, utilizing the updated heterogeneous material properties.
 \end{enumerate}
+\end{draftblock}
 
 \subsubsection{Data extraction and exportation strategy}
+
+\review{This section is currently under development and will be refined as the study progresses.}
+\begin{draftblock}
 Storing the complete output database (which includes nodal displacements, stress tensors, and internal damage variables for every time step) for hundreds of simulations would result in an unmanageable amount of data and exceed memory limits. Therefore, a selective data extraction strategy is implemented.
 
 Instead of saving the entire mesh history, a specific "Quantity of Interest" (QoI) is dynamically extracted at the end of each calculation loop. Depending on the targeted sensitivity analysis for the spalling risk, the QoI could be the maximum equivalent plastic strain, the peak pore pressure, or the maximum macroscopic damage variable $D$. 
@@ -175,8 +203,11 @@ Instead of saving the entire mesh history, a specific "Quantity of Interest" (Qo
 In the Cast3M script, this is executed using the \texttt{EXCO} (to extract the specific component, e.g., the internal variable \texttt{'V1'} for damage) and \texttt{MAXI} operators to find the extreme value over the spatial domain. Finally, the extracted scalar values are continuously appended to an external structured text file (CSV format) using the \texttt{SORT 'CHAI'} command. 
 
 This exported dataset containing the input realizations and the corresponding QoI outputs serves as the direct input for the external probabilistic software (e.g., Persalys) to compute the probability density functions and rank the dominant parameters via Sobol indices.
+\end{draftblock}
 
 \section{Sensitivity analysis methodology}
+
+\begin{reviewblock}
 Main ideas:
 \begin{itemize}
     \item Sensitivity indicators: Young modulus...
@@ -184,6 +215,7 @@ Main ideas:
     \item Measure how much the outputs change.
     \item Rank the parameters from most to least influential.
 \end{itemize}
+\end{reviewblock}
 
 \section{Identification of dominant parameters}
 This section is currently under development and will be refined as the study progresses.
