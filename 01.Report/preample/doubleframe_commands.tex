@@ -1,0 +1,26 @@
+% ADDED: DOUBLE NAVY FRAME PACKAGES
+\usepackage{xcolor}
+\usepackage{tikz}
+\usepackage{eso-pic}
+
+% ADDED: NAVY COLOR + DOUBLE FRAME COMMAND
+\definecolor{navyframe}{RGB}{20,40,100}
+\newcommand{\DoubleNavyFrame}{
+\AddToShipoutPictureBG*{
+\begin{tikzpicture}[remember picture,overlay]
+
+% Outer thick border
+\draw[line width=3.5pt, color=navyframe]
+([xshift=1.7cm,yshift=-1.7cm]current page.north west)
+rectangle
+([xshift=-1.7cm,yshift=1.7cm]current page.south east);
+
+% Inner thin border
+\draw[line width=1.75pt, color=navyframe]
+([xshift=1.5cm,yshift=-1.5cm]current page.north west)
+rectangle
+([xshift=-1.5cm,yshift=1.5cm]current page.south east);
+
+\end{tikzpicture}
+}
+}

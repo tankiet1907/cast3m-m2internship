@@ -1,0 +1,55 @@
+\usepackage{fancyhdr}
+\setlength{\headheight}{14.5pt}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0pt}
+\fancyhf{}
+\fancyhead[LE,RO]{\thepage}
+\fancyhead[LO]{\nouppercase{\rightmark}}
+\fancyhead[RE]{\nouppercase{\leftmark}}
+
+% Roman pages: no header line, no chapter name
+\fancypagestyle{romanstyle}{%
+  \fancyhf{}%
+  \fancyhead[LE,RO]{\thepage}%
+  \renewcommand{\headrulewidth}{0pt}%
+  \renewcommand{\footrulewidth}{0pt}%
+}
+
+% Arabic pages: keep header line
+\fancypagestyle{arabicstyle}{%
+  \fancyhf{}%
+  \fancyhead[LE,RO]{\thepage}%
+  \fancyhead[LO]{\nouppercase{\rightmark}}%
+  \fancyhead[RE]{\nouppercase{\leftmark}}%
+  \renewcommand{\headrulewidth}{0.4pt}%
+  \renewcommand{\footrulewidth}{0pt}%
+}
+
+% First page of the chapter
+\pagestyle{arabicstyle}
+\fancypagestyle{plain}{%
+  \fancyhf{}%
+  \fancyhead[LE,RO]{\thepage}%
+  \renewcommand{\headrulewidth}{0pt}%
+  \renewcommand{\footrulewidth}{0pt}%
+}
+% ===============================
+% Front/Main/Back definitions
+% ===============================
+
+\newcommand{\frontmatter}{%
+  \cleardoublepage
+  \pagenumbering{roman}
+  \pagestyle{romanstyle}
+}
+
+\newcommand{\mainmatter}{%
+  \cleardoublepage
+  \pagenumbering{arabic}
+  \pagestyle{arabicstyle}
+}
+
+\newcommand{\backmatter}{%
+  \cleardoublepage
+  \pagestyle{arabicstyle}
+}

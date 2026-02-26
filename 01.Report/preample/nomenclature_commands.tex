@@ -1,0 +1,27 @@
+% Grouped Nomenclature Settings
+\usepackage[intoc]{nomencl}
+\usepackage{etoolbox}
+\makenomenclature
+
+% Increase line spacing between entries
+\setlength{\nomitemsep}{0.5em} 
+
+% Define Group Titles and Formatting
+\renewcommand{\nomgroup}[1]{%
+  \item[\vspace{0.5em}\bfseries
+  \ifstrequal{#1}{T}{Thermal symbols}{%
+  \ifstrequal{#1}{H}{Hydraulic symbols}{%
+  \ifstrequal{#1}{M}{Mechanical symbols}{%
+  \ifstrequal{#1}{F}{Finite Element notation}{}}}}]
+}
+
+% Command to align units in brackets [ ] fixed to the right margin
+\newcommand{\nomunit}[1]{%
+    \renewcommand{\nomentryend}{%
+        \hspace*{\fill}\makebox[3cm][l]{%   Change [r] to [l] for left alignment
+            \ifstrempty{#1}{}{[#1]}%
+        }%
+    }%
+}
+% Align symbols to the left
+\renewcommand{\nomlabel}[1]{#1 \hfill}

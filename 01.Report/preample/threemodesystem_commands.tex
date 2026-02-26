@@ -1,0 +1,88 @@
+% PACKAGES
+% ======================================================
+\usepackage{xcolor}
+\usepackage{soul}
+\usepackage{environ}
+\usepackage{etoolbox}
+\usepackage{tcolorbox}
+
+% ======================================================
+% INTERNAL SWITCHES
+% ======================================================
+\newif\ifdraftmode
+\newif\ifreviewmode
+
+\ifdefstring{\thesismode}{DRAFT}{%
+  \draftmodetrue
+  \reviewmodetrue
+}{%
+  \ifdefstring{\thesismode}{REVIEW}{%
+    \draftmodefalse
+    \reviewmodetrue
+  }{%
+    \draftmodefalse
+    \reviewmodefalse
+  }
+}
+
+% ======================================================
+% REVIEW SETTINGS
+% ======================================================
+
+\sethlcolor{yellow}
+
+% Inline review
+\newcommand{\review}[1]{%
+  \ifreviewmode
+    \hl{\textbf{[REVIEW]} #1}
+  \fi
+}
+
+% Block-level review
+\NewEnviron{reviewblock}{%
+  \ifreviewmode
+    \begin{tcolorbox}[
+      colback=yellow!20,
+      colframe=yellow!60!black,
+      boxrule=0.8pt,
+      arc=2pt,
+      left=6pt,
+      right=6pt,
+      top=6pt,
+      bottom=6pt
+    ]
+    \textbf{[REVIEW]}\\[4pt]
+    \BODY
+    \end{tcolorbox}
+  \fi
+}
+
+% ======================================================
+% DRAFT SETTINGS
+% ======================================================
+
+% Inline draft
+\newcommand{\draft}[1]{%
+  \ifdraftmode
+    {\color{purple!80!black}\textbf{[DRAFT]} #1}
+  \fi
+}
+
+% Block-level draft
+\NewEnviron{draftblock}{%
+  \ifdraftmode
+    \begin{tcolorbox}[
+      colback=purple!1,
+      colframe=purple!20!black,
+      boxrule=0.1pt,
+      arc=2pt,
+      left=6pt,
+      right=6pt,
+      top=6pt,
+      bottom=6pt
+    ]
+    \textbf{[DRAFT]}\\[4pt]
+    \BODY
+    \end{tcolorbox}
+  \fi
+}

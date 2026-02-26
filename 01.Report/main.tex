@@ -1,22 +1,21 @@
 % ==============================================================================
-% #region Description and metadata of the report:
+% Description of the report:
+% This report presents the results of a Master 2 internship conducted at the 3SR Laboratory, Université Grenoble Alpes. The internship focused on the numerical and experimental study of the thermo-hydro-mechanical (THM) behavior of concrete under severe accident conditions using a poro-mechanical approach.
+% The author, Tan Kiet HONG, conducted this research under the supervision of Prof. Julien BAROTH and Prof. Stefano DAL PONT.
+
+% #region Metadata of the report:
 \title{Numerical and experimental study of the thermo-hydro-mechanical behavior of concrete under severe accident conditions using a poro-mechanical approach}
-
 \author{Tan Kiet HONG}
-
 \date{Grenoble, June 2026}
 
 % ---- Custom fields ----
 \makeatletter
-
 \newcommand{\institution}[1]{\def\@institution{#1}}
 \newcommand{\supervisors}[1]{\def\@supervisors{#1}}
 \newcommand{\institutioninfo}[1]{\def\@institutioninfo{#1}}
-
 \def\@institution{}
 \def\@supervisors{}
 \def\@institutioninfo{}
-
 \makeatother
 
 % ---- Fill data ----
@@ -29,15 +28,9 @@ Prof. Stefano DAL PONT, Université Grenoble Alpes
 
 \institutioninfo{
 This thesis is submitted in partial fulfillment of the requirements for the Master's degree in the International Program ``Geomechanics, Civil Engineering and Risks''.
-
 \vspace{0.4cm}
-
 The work was carried out during the Master 2 internship at 3SR Laboratory.
 }
-
-% This report presents the results of a Master 2 internship conducted at the 3SR Laboratory, Université Grenoble Alpes. The internship focused on the numerical and experimental study of the thermo-hydro-mechanical (THM) behavior of concrete under severe accident conditions using a poro-mechanical approach.
-
-% The author, Tan Kiet HONG, conducted this research under the supervision of Prof. Julien BAROTH and Prof. Stefano DAL PONT.
 % #endregion
 
 % ==============================================================================
@@ -59,230 +52,33 @@ The work was carried out during the Master 2 internship at 3SR Laboratory.
 % #endregion
 
 % #region Bibliograpphy, citing; hyperref and cleveref packages
-
 % Bibliography management with BibLaTeX and Biber
 \usepackage[backend=biber,style=numeric]{biblatex}
 \addbibresource{bibliography/zotero-m2internship.bib}
 
 % Hyperref settings for colored links and consistent cross-referencing
 \usepackage[colorlinks=true,            % false: boxed links; true: colored links
-            linkcolor=black,            %\ref, \cref, section links (TOC is excluded by the patchcmd below)
+            linkcolor=black,             %\ref, \cref, TOC
             citecolor=blue,             % \cite citation links
             urlcolor=blue]{hyperref}    % \url, \href URL links
 
-% Patch the section links in the Table of Contents to be black instead of blue
-\usepackage{etoolbox}
-\makeatletter
-\patchcmd{\l@section}
-  {\hyper@linkstart{link}{#1}}
-  {\begingroup\hypersetup{linkcolor=black}\hyper@linkstart{link}{#1}}
-  {}{}
-\makeatother
-
 % Cleveref settings for consistent cross-referencing
 \usepackage[capitalise,nameinlink,noabbrev]{cleveref}
-
 % #endregion
 
-% ==============================================================================
-% #region Nomenclature commands for mathematical notations (list of symbols and units)
-% Grouped Nomenclature Settings
-\usepackage[intoc]{nomencl}
-\usepackage{etoolbox}
-\makenomenclature
-
-% Increase line spacing between entries
-\setlength{\nomitemsep}{0.5em} 
-
-% Define Group Titles and Formatting
-\renewcommand{\nomgroup}[1]{%
-  \item[\vspace{0.5em}\bfseries
-  \ifstrequal{#1}{T}{Thermal symbols}{%
-  \ifstrequal{#1}{H}{Hydraulic symbols}{%
-  \ifstrequal{#1}{M}{Mechanical symbols}{%
-  \ifstrequal{#1}{F}{Finite Element notation}{}}}}]
-}
-
-% Command to align units in brackets [ ] fixed to the right margin
-\newcommand{\nomunit}[1]{%
-    \renewcommand{\nomentryend}{%
-        \hspace*{\fill}\makebox[3cm][l]{%   Change [r] to [l] for left alignment
-            \ifstrempty{#1}{}{[#1]}%
-        }%
-    }%
-}
-% Align symbols to the left
-\renewcommand{\nomlabel}[1]{#1 \hfill}
-% #endregion
-
-% ==============================================================================
-% #region Front, Main, Back matter styles for Report document class and page numbering
-\usepackage{fancyhdr}
-\setlength{\headheight}{14.5pt}
-\renewcommand{\headrulewidth}{0.4pt}
-\renewcommand{\footrulewidth}{0pt}
-\fancyhf{}
-\fancyhead[LE,RO]{\thepage}
-\fancyhead[LO]{\nouppercase{\rightmark}}
-\fancyhead[RE]{\nouppercase{\leftmark}}
-
-% Roman pages: no header line, no chapter name
-\fancypagestyle{romanstyle}{%
-  \fancyhf{}%
-  \fancyhead[LE,RO]{\thepage}%
-  \renewcommand{\headrulewidth}{0pt}%
-  \renewcommand{\footrulewidth}{0pt}%
-}
-
-% Arabic pages: keep header line
-\fancypagestyle{arabicstyle}{%
-  \fancyhf{}%
-  \fancyhead[LE,RO]{\thepage}%
-  \fancyhead[LO]{\nouppercase{\rightmark}}%
-  \fancyhead[RE]{\nouppercase{\leftmark}}%
-  \renewcommand{\headrulewidth}{0.4pt}%
-  \renewcommand{\footrulewidth}{0pt}%
-}
-
-% First page of the chapter
-\pagestyle{arabicstyle}
-\fancypagestyle{plain}{%
-  \fancyhf{}%
-  \fancyhead[LE,RO]{\thepage}%
-  \renewcommand{\headrulewidth}{0pt}%
-  \renewcommand{\footrulewidth}{0pt}%
-}
-% ===============================
-% Front/Main/Back definitions
-% ===============================
-
-\newcommand{\frontmatter}{%
-  \cleardoublepage
-  \pagenumbering{roman}
-  \pagestyle{romanstyle}
-}
-
-\newcommand{\mainmatter}{%
-  \cleardoublepage
-  \pagenumbering{arabic}
-  \pagestyle{arabicstyle}
-}
-
-\newcommand{\backmatter}{%
-  \cleardoublepage
-  \pagestyle{arabicstyle}
-}
-% #endregion
-
-% ==============================================================================
-% #region Double navy frame on title page
-% ADDED: DOUBLE NAVY FRAME PACKAGES
-\usepackage{xcolor}
-\usepackage{tikz}
-\usepackage{eso-pic}
-
-% ADDED: NAVY COLOR + DOUBLE FRAME COMMAND
-\definecolor{navyframe}{RGB}{20,40,100}
-\newcommand{\DoubleNavyFrame}{
-\AddToShipoutPictureBG*{
-\begin{tikzpicture}[remember picture,overlay]
-
-% Outer thick border
-\draw[line width=3.5pt, color=navyframe]
-([xshift=1.7cm,yshift=-1.7cm]current page.north west)
-rectangle
-([xshift=-1.7cm,yshift=1.7cm]current page.south east);
-
-% Inner thin border
-\draw[line width=1.75pt, color=navyframe]
-([xshift=1.5cm,yshift=-1.5cm]current page.north west)
-rectangle
-([xshift=-1.5cm,yshift=1.5cm]current page.south east);
-
-\end{tikzpicture}
-}
-}
-% #endregion
-
-% ==============================================================================
-% #region THREE-MODE SYSTEM: DRAFT / REVIEW / FINAL
-% ======================================================
-% PACKAGES
-% ======================================================
-\usepackage{xcolor}
-\usepackage{soul}
-\usepackage{environ}
-\usepackage{etoolbox}
-
-% ======================================================
-% INTERNAL SWITCHES (DO NOT MODIFY)
-% ======================================================
-\newif\ifdraftmode
-\newif\ifreviewmode
-
-\ifdefstring{\thesismode}{DRAFT}{%
-  \draftmodetrue
-  \reviewmodetrue
-}{%
-  \ifdefstring{\thesismode}{REVIEW}{%
-    \draftmodefalse
-    \reviewmodetrue
-  }{%
-    \draftmodefalse
-    \reviewmodefalse
-  }
-}
-
-% ======================================================
-% REVIEW SETTINGS
-% ======================================================
-
-\sethlcolor{yellow}
-
-% Inline review
-\newcommand{\review}[1]{%
-  \ifreviewmode
-    \hl{[REVIEW] #1}
-  \fi
-}
-
-% Block-level review (supports equations, paragraphs)
-\NewEnviron{reviewblock}{%
-  \ifreviewmode
-    \begingroup
-    \sethlcolor{yellow}
-    \hl{\BODY}
-    \endgroup
-  \fi
-}
-
-% ======================================================
-% DRAFT SETTINGS
-% ======================================================
-
-% Inline draft
-\newcommand{\draft}[1]{%
-  \ifdraftmode
-    {\color{blue!70!black}#1}
-  \fi
-}
-
-% Block-level draft (supports large environments)
-\NewEnviron{draftblock}{%
-  \ifdraftmode
-    \begingroup
-    \color{blue!70!black}
-    \BODY
-    \endgroup
-  \fi
-}
-
-% #endregion
-
-% ------------------------------------------------------
-% SELECT MODE HERE: DRAFT / REVIEW / FINAL
-% ------------------------------------------------------
+% #region Custom commands and settings for the report
+% Nomenclature commands and settings for mathematical notations
+\input{preample/nomenclature_commands.tex}
+% Front, Main, Back matter styles for Report document class and page numbering
+\input{preample/matterstyles_commands.tex}
+% Double frame command
+\input{preample/doubleframe_commands.tex}
+% Three-mode system: DRAFT / REVIEW / FINAL
+% ------------------------------------------------------------------------------
+% SELECT MODE HERE
 \newcommand{\thesismode}{DRAFT}  % DRAFT / REVIEW / FINAL
+\input{preample/threemodesystem_commands.tex}
+% #endregion
 
 % ==============================================================================
 
@@ -347,14 +143,12 @@ rectangle
 \addcontentsline{toc}{chapter}{\listfigurename}
 \listoffigures
 
-% ==============================
 % List of Tables
 \clearpage
 \phantomsection
 \addcontentsline{toc}{chapter}{\listtablename}
 \listoftables
 
-% ==============================
 % Bibliography
 \clearpage
 \phantomsection
