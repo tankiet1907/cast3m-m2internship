@@ -230,7 +230,7 @@ At each iteration $i$, the algorithm solves the system using the initial elastic
 
 \subsubsection{Mesh dependency and fracture energy regularization}
 
-A major drawback of local softening models is the pathological mesh dependency. \draft{Mathematically, softening causes a loss of ellipticity in the differential equations, leading to strain localization in a band whose width depends entirely on the finite element size. This results in physically unacceptable ruptures with zero energy dissipation upon mesh refinement.}
+A major drawback of local softening models is the pathological mesh dependency. Mathematically, softening causes a loss of ellipticity in the differential equations, leading to strain localization in a band whose width depends entirely on the finite element size. \draft{This results in physically unacceptable ruptures with zero energy dissipation upon mesh refinement.}
 
 \begin{reviewblock}
 \review{This section requires additional references to support the statements presented.}
@@ -266,6 +266,7 @@ Multiplying by the characteristic length yields the areal elastic energy: $G_{el
 
 \begin{reviewblock}
 \review{This section requires additional references to support the statements presented.}
+
 In the original Mazars formulation, the evolution of damage in pure tension is governed by an exponential law. Assuming a purely brittle failure in tension ($A_t \approx 1$), the post-peak stress-strain relationship can be simplified to:
 \begin{equation}
     \sigma(\varepsilon) \approx f_t \exp\left[ -B_t (\varepsilon - \varepsilon_{d0}) \right]
@@ -287,7 +288,7 @@ To ensure that each finite element dissipates exactly the objective intrinsic en
     B_t^{mod} = \frac{f_t \cdot L_e}{G_{softening}} = \frac{f_t \cdot L_e}{G_f - \frac{f_t^2}{2E_0} L_e}
 \end{equation}
 
-In the finite element code Cast3M, this explicit regularization is implemented element-by-element, where the numerator ($f_t \cdot L_e$) and denominator ($G_{softening}$) are defined as \texttt{NUM1} and \texttt{DEN1}, respectively. This energetic adjustment guarantees that the macroscopic crack propagation and global energy dissipation remain completely objective and independent of the selected spatial discretization.
+\draft{In the finite element code Cast3M, this explicit regularization is implemented element-by-element, where the numerator ($f_t \cdot L_e$) and denominator ($G_{softening}$) are defined as \texttt{NUM1} and \texttt{DEN1}, respectively.} This energetic adjustment guarantees that the macroscopic crack propagation and global energy dissipation remain completely objective and independent of the selected spatial discretization.
 
 \section{THM coupling}
 This section is currently under development and will be refined as the study progresses.
