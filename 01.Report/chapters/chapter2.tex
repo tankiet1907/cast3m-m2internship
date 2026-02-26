@@ -153,7 +153,7 @@ The physical meaning of each component is defined as follows:
 \begin{reviewblock}
 \review{Further references are needed to strengthen the scientific basis of this section.}
 
-In the context of the Finite Element Method (FEM), the continuous equilibrium equation ($\text{div} \boldsymbol{\sigma} + \mathbf{f} = \mathbf{0}$) is transformed into a discrete weak formulation. The continuous displacement field $\mathbf{u}$ is approximated by the nodal displacements $\mathbf{U}$ using the matrix of shape functions $\mathbf{N}$, and the linear strains are obtained via the derivative matrix $\mathbf{B}$ \draft{such that $\boldsymbol{\varepsilon}_{lin} = \mathbf{B}\mathbf{U}$.}
+\draft{In the context of the Finite Element Method (FEM), the continuous equilibrium equation ($\text{div} \boldsymbol{\sigma} + \mathbf{f} = \mathbf{0}$) is transformed into a discrete weak formulation. The continuous displacement field $\mathbf{u}$ is approximated by the nodal displacements $\mathbf{U}$ using the matrix of shape functions $\mathbf{N}$, and the linear strains are obtained via the derivative matrix $\mathbf{B}$ \draft{such that $\boldsymbol{\varepsilon}_{lin} = \mathbf{B}\mathbf{U}$.}}
 
 Applying the principle of virtual work, the global linear system takes the well-known fundamental form:
 \begin{equation}
@@ -216,7 +216,7 @@ The coefficients $\alpha_t$ and $\alpha_c$ depend on the principal stress state,
 \begin{reviewblock}
 \review{Further references are needed to strengthen the scientific basis of this section.}
 
-Due to the damage evolution, the stress-strain relationship becomes non-linear. The mechanical equilibrium cannot be solved in a single step like the elastic model. By introducing the non-linear complementary stress $\boldsymbol{\sigma}_{nl}$, the equilibrium is rewritten as:
+Due to the damage evolution, the stress-strain relationship becomes non-linear. The mechanical equilibrium \draft{cannot be solved in a single step like the elastic model. By introducing the non-linear complementary stress $\boldsymbol{\sigma}_{nl}$, the equilibrium} is rewritten as:
 \begin{equation}
     [\mathbf{K}]\{\mathbf{U}\} = \{\mathbf{F}\}_{ext} - \int_V \mathbf{B}^T \boldsymbol{\sigma}_{nl} dV
 \end{equation}
