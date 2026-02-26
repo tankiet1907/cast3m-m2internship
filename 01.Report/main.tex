@@ -36,12 +36,13 @@ The work was carried out during the Master 2 internship at 3SR Laboratory.
 % ==============================================================================
 % Preamble
 % #region Document class (Paper size and font) and General package imports
-\documentclass[a4paper,12pt,twoside]{report}                        % Page size, font, document type
+\documentclass[a4paper,12pt,twoside]{report}         % Page size, font, document type
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage{graphicx}
 \usepackage{setspace}
 \usepackage{amsmath}
+
 % #endregion
 
 % #region Margin and Format settings
@@ -49,6 +50,9 @@ The work was carried out during the Master 2 internship at 3SR Laboratory.
 \setlength{\parindent}{0pt}     % Indentation of the first line of each paragraph
 \setlength{\parskip}{10pt}      % Spacing between paragraphs
 \setstretch{1.15}               % Line spacing
+\raggedbottom                   % Allows pages to have variable height instead of forcing equal vertical spacing, reducing excessive white space.
+\allowdisplaybreaks             % Permits page breaks within multi-line displayed equations (e.g., align environments).
+
 % #endregion
 
 % #region Bibliograpphy, citing; hyperref and cleveref packages
@@ -76,7 +80,7 @@ The work was carried out during the Master 2 internship at 3SR Laboratory.
 % Three-mode system: DRAFT / REVIEW / FINAL
 % ------------------------------------------------------------------------------
 % SELECT MODE HERE
-\newcommand{\thesismode}{DRAFT}  % DRAFT / REVIEW / FINAL
+\newcommand{\thesismode}{REVIEW}  % DRAFT / REVIEW / FINAL
 \input{preample/threemodesystem_commands.tex}
 % #endregion
 

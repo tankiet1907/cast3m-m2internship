@@ -1,16 +1,17 @@
 \cleardoublepage
 \chapter{Theoretical and Numerical framework}
 
+\review{This chapter is currently a draft version and will undergo further review and revision.}
 
 \section{Thermal behavior}
 
 \subsection{Conduction, convection and radiation}
-Heat transfer is the transport of thermal energy driven by a temperature difference. The following definitions of heat-transfer modes are summarized from standard references \cite{bergman2017}.
+Heat transfer is the transport of thermal energy driven by a temperature difference. The following definitions of heat transfer modes are summarized from standard references \cite{bergman2017}.
 
 \subsubsection{Conduction}
-Conduction may be viewed as the transfer of energy from the more energetic to the less energetic particles of a substance due to interactions between the particles.
+Conduction is the transfer of energy from the more energetic to the less energetic particles of a substance \draft{due to interactions between the particles.}
 \begin{itemize}
-    \item \textbf{Physical Mechanism:} In a gas, conduction is associated with the net transfer of energy by random molecular motion, often referred to as a diffusion of energy. In a solid, conduction may be attributed to atomic activity in the form of lattice vibrations, and in a conductor, it is also due to the translational motion of the free electrons.
+    \item \textbf{Physical Mechanism:} \draft{In a gas, conduction is associated with the net transfer of energy by random molecular motion, often referred to as a diffusion of energy. In a solid, conduction may be attributed to atomic activity in the form of lattice vibrations, and in a conductor, it is also due to the translational motion of the free electrons.}
     \item \textbf{Rate Equation (Fourier's Law):} For a one-dimensional plane wall having a temperature distribution $T(x)$, the rate equation is expressed as Fourier's law:
     \begin{equation}
         q''_x = -k \frac{dT}{dx}
@@ -19,11 +20,11 @@ Conduction may be viewed as the transfer of energy from the more energetic to th
 \end{itemize}
 
 \subsubsection{Convection}
-The convection heat transfer mode is comprised of two mechanisms: energy transfer due to random molecular motion (diffusion) and energy transfer by the bulk, or macroscopic, motion of the fluid.
+The convection heat transfer mode is \draft{comprised of two mechanisms: energy transfer due to random molecular motion (diffusion) and energy transfer by the bulk, or macroscopic, motion of the fluid.}
 \begin{itemize}
-    \item \textbf{Physical Mechanism:} Convection heat transfer occurs between a fluid in motion and a bounding surface when the two are at different temperatures, which leads to the development of a hydrodynamic (velocity) boundary layer and a thermal boundary layer. 
-    \item \textbf{Classification:} Convection is classified as forced convection when the flow is caused by external means (like a fan or pump), or free (natural) convection when the flow is induced by buoyancy forces due to density differences. There are also convection processes accompanied by latent heat exchange, such as boiling and condensation [6].
-    \item \textbf{Rate Equation (Newton's Law of Cooling):} Regardless of the nature of the convection process, the appropriate rate equation is [7]:
+    \item \textbf{Physical Mechanism:} Convection heat transfer occurs between a fluid in motion and a bounding surface when the two are at different temperatures \draft{, which leads to the development of a hydrodynamic (velocity) boundary layer and a thermal boundary layer.}
+    \draft{\item \textbf{Classification:} Convection is classified as forced convection when the flow is caused by external means (like a fan or pump), or free (natural) convection when the flow is induced by buoyancy forces due to density differences. There are also convection processes accompanied by latent heat exchange, such as boiling and condensation.}
+    \item \textbf{Rate Equation (Newton's Law of Cooling):} Regardless of the nature of the convection process, the appropriate rate equation is:
     \begin{equation}
         q'' = h (T_s - T_\infty)
     \end{equation}
@@ -33,18 +34,18 @@ The convection heat transfer mode is comprised of two mechanisms: energy transfe
 \subsubsection{Radiation}
 Thermal radiation is energy emitted by matter that is at a nonzero temperature, and unlike conduction and convection, it does not require the presence of a material medium.
 \begin{itemize}
-    \item \textbf{Physical Mechanism:} The energy of the radiation field is transported by electromagnetic waves (or photons) and may be attributed to changes in the electron configurations of the constituent atoms or molecules.
-    \item \textbf{Emissive Power:} The upper limit to the emissive power (rate of energy released per unit area) is prescribed by the Stefan-Boltzmann law for an ideal radiator or blackbody:
+    \item \textbf{Physical Mechanism:} The energy of the radiation field is transported by electromagnetic waves (or photons) \draft{and may be attributed to changes in the electron configurations of the constituent atoms or molecules.}
+    \item \textbf{Emissive Power (Stefan-Boltzmann law):} The upper limit to the emissive power (rate of energy released per unit area) for an ideal radiator or blackbody is given:
     \begin{equation}
         E_b = \sigma T_s^4
     \end{equation}
     The heat flux emitted by a real surface is given by $E = \varepsilon \sigma T_s^4$, where $\sigma$ is the Stefan-Boltzmann constant and $\varepsilon$ is the emissivity.
-    \item \textbf{Irradiation and Absorption:} The rate at which radiation is incident on a unit area of the surface from its surroundings is called irradiation, $G$. The rate at which radiant energy is absorbed is given by $G_{abs} = \alpha G$, where $\alpha$ is the absorptivity.
-    \item \textbf{Net Radiation Exchange:} For a gray surface ($\alpha = \varepsilon$) at $T_s$ completely surrounded by a much larger isothermal surface at $T_{sur}$, the net rate of radiation heat transfer per unit area is:
+    \draft{\item \textbf{Irradiation and Absorption:} The rate at which radiation is incident on a unit area of the surface from its surroundings is called irradiation, $G$. The rate at which radiant energy is absorbed is given by $G_{abs} = \alpha G$, where $\alpha$ is the absorptivity.}
+    \item \textbf{Net Radiation Exchange:} For a gray surface \draft{($\alpha = \varepsilon$)}at $T_s$ completely surrounded by a much larger isothermal surface at $T_{sur}$, the net rate of radiation heat transfer per unit area is:
     \begin{equation}
         q''_{rad} = \varepsilon \sigma (T_s^4 - T_{sur}^4)
     \end{equation}
-    For many applications, this can also be expressed using a linearized radiation heat transfer coefficient $h_r$ as $q_{rad} = h_r A (T_s - T_{sur})$.
+    \draft{For many applications, this can also be expressed using a linearized radiation heat transfer coefficient $h_r$ as $q_{rad} = h_r A (T_s - T_{sur})$.}
 \end{itemize}
 
 \subsection{Heat transfer}
@@ -66,8 +67,8 @@ Where:
 
 To solve this equation, appropriate boundary conditions must be specified:
 \begin{itemize}
-    \item \textbf{Prescribed temperatures (Dirichlet condition):} The temperature is specified as $T = T_{imp}$ on the boundary surface $\partial V^T$.
-    \item \textbf{Prescribed surface heat flux (Neumann / Mixed condition):} The total heat flux due to conduction, convection, and radiation on the boundary surface $\partial V^\varphi$ is given by:
+    \item \textbf{Prescribed temperatures \draft{(Dirichlet condition)}:} The temperature is specified as $T = T_{imp}$ on the boundary surface $\partial V^T$.
+    \item \textbf{Prescribed surface heat flux \draft{(Neumann / Mixed condition)}:} The total heat flux due to conduction, convection, and radiation on the boundary surface $\partial V^\varphi$ is given by:
 
     \begin{equation}
         \vec{n} \cdot (\lambda \overrightarrow{\text{grad}}(T)) = \varphi_{imp} + h(T_f - T) + \varepsilon \sigma (T_\infty^4 - T^4)
@@ -76,7 +77,7 @@ To solve this equation, appropriate boundary conditions must be specified:
 \end{itemize}
 
 \subsubsection{Discretization}
-In many practical cases, analytical solutions to the heat equation are impossible to obtain due to complex geometries or boundary conditions. Instead, the problem is approximated using numerical methods, such as the Finite Element (FE) method. 
+\draft{In many practical cases, analytical solutions to the heat equation are impossible to obtain due to complex geometries or boundary conditions. Instead, the problem is approximated using numerical methods, such as the Finite Element (FE) method.}
 
 Using the FE discretization, the temperature and temperature gradient in the spatial domain are expressed in matrix form as:
 \begin{equation}
@@ -90,37 +91,46 @@ From the weak formulation of the heat equation combined with the spatial discret
 Where the matrices are defined as follows:
 \begin{itemize}
     \item \textbf{Capacity matrix:} 
+    \begin{equation}
+    [C] = \int_V \rho c_p [N]^T [N] dV \quad (J/K)
+    \end{equation}
 
-    $[C] = \int_V \rho c_p [N]^T [N] dV \quad (J/K)$
     \item \textbf{Conductivity matrix:} 
+    \begin{equation}
+    [K] = \int_V [B]^T [\lambda] [B] dV + \int_{\partial V^\varphi} h [N]^T [N] dS \quad (W/K)
+    \end{equation}
 
-    $[K] = \int_V [B]^T [\lambda] [B] dV + \int_{\partial V^\varphi} h [N]^T [N] dS \quad (W/K)$
     \item \textbf{Equivalent nodal flux vectors:} 
-
-    $\{F\} = \int_V [N]^T q dV + \int_{\partial V^\varphi} [N]^T \left( \varphi_{imp} + hT_f + \varepsilon\sigma(T_\infty^4 - T^4) \right) dS \quad (W)$
+    \begin{equation}
+    \{F\} = \int_V [N]^T q dV + \int_{\partial V^\varphi} [N]^T \left( \varphi_{imp} + hT_f + \varepsilon\sigma(T_\infty^4 - T^4) \right) dS \quad (W)
+    \end{equation}
 \end{itemize}
 
-For steady-state thermal analysis, the temperature is time-independent ($\{\dot{T}\} = 0$). Thus, the system simplifies into a linear algebraic equation (assuming constant material properties and neglecting radiation):
+For steady-state thermal analysis, the temperature is time-independent ($\{\dot{T}\} = 0$)\draft{. Thus, the system simplifies into a linear algebraic equation} (assuming constant material properties and neglecting radiation):
 \begin{equation}
     [K]\{T\} = \{F\}
 \end{equation}
 By solving this linear system, we can determine the unknown temperatures $\{T\}$ at the nodes across the entire global mesh.
 
 \section{Hydric behavior}
+
 \subsection{Moisture transport}
-This is placeholder text for layout testing. This is placeholder text for layout testing. This is placeholder text for layout testing. This is placeholder text for layout testing. This is placeholder text for layout testing. This is placeholder text for layout testing. This is placeholder text for layout testing. This is placeholder text for layout testing. This is placeholder text for layout testing.
+This section is currently under development and will be refined as the study progresses.
+
 \subsection{Drying, shrinkage and pore pressure}
-This is placeholder text for layout testing. This is placeholder text for layout testing. This is placeholder text for layout testing. This is placeholder text for layout testing. This is placeholder text for layout testing. This is placeholder text for layout testing. This is placeholder text for layout testing. This is placeholder text for layout testing. This is placeholder text for layout testing.
+This section is currently under development and will be refined as the study progresses.
 
 \section{Mechanical behavior}
 
+\begin{reviewblock}
 The mechanical response of concrete under high-temperature conditions is characterized by an initial linear elastic phase, followed by severe stiffness degradation due to the formation of micro-cracks. In this numerical framework, the behavior is modeled by coupling a linear elastic constitutive law with a continuum damage mechanics approach.
+\end{reviewblock}
 
 \subsection{Elastic model}
 
 \subsubsection{Kinematics and total strain decomposition}
 
-To accurately account for the multi-physics interactions within the THM framework, the total strain tensor $\boldsymbol{\varepsilon}$ is additively decomposed into four distinct components:
+To accurately account for the multi-physics interactions within the THM framework, the total strain tensor $\boldsymbol{\varepsilon}$ is decomposed into four distinct components:
 \begin{equation}
     \boldsymbol{\varepsilon} = \boldsymbol{\varepsilon}_e + \boldsymbol{\varepsilon}_{th} + \boldsymbol{\varepsilon}_{rd} + \boldsymbol{\varepsilon}_{re}
     \label{eq:strain_decomposition}
@@ -140,32 +150,37 @@ The physical meaning of each component is defined as follows:
 
 \subsubsection{Linear finite element formulation}
 
-In the context of the Finite Element Method (FEM), the continuous equilibrium equation ($\text{div} \boldsymbol{\sigma} + \mathbf{f} = \mathbf{0}$) is transformed into a discrete weak formulation. The continuous displacement field $\mathbf{u}$ is approximated by the nodal displacements $\mathbf{U}$ using the matrix of shape functions $\mathbf{N}$, and the linear strains are obtained via the derivative matrix $\mathbf{B}$ such that $\boldsymbol{\varepsilon}_{lin} = \mathbf{B}\mathbf{U}$.
+\begin{reviewblock}
+\review{Further references are needed to strengthen the scientific basis of this section.}
+
+In the context of the Finite Element Method (FEM), the continuous equilibrium equation ($\text{div} \boldsymbol{\sigma} + \mathbf{f} = \mathbf{0}$) is transformed into a discrete weak formulation. The continuous displacement field $\mathbf{u}$ is approximated by the nodal displacements $\mathbf{U}$ using the matrix of shape functions $\mathbf{N}$, and the linear strains are obtained via the derivative matrix $\mathbf{B}$ \draft{such that $\boldsymbol{\varepsilon}_{lin} = \mathbf{B}\mathbf{U}$.}
 
 Applying the principle of virtual work, the global linear system takes the well-known fundamental form:
 \begin{equation}
     [\mathbf{K}]\{\mathbf{U}\} = \{\mathbf{F}\}
 \end{equation}
-where $[\mathbf{K}] = \int_V \mathbf{B}^T \mathbf{C} \mathbf{B} dV$ is the global elastic stiffness matrix, and $\{\mathbf{F}\}$ is the vector of equivalent nodal forces, which accumulates the prescribed surface forces $\{\mathbf{F}\}^S$, reaction forces $\{\mathbf{F}\}^R$, volume forces $\{\mathbf{F}\}^V$, and thermal pseudo-forces. In Cast3M, this linear system is directly assembled and solved using the \texttt{RIGI} and \texttt{RESO} operators.
-
+where $[\mathbf{K}] = \int_V \mathbf{B}^T \mathbf{C} \mathbf{B} dV$ is the global elastic stiffness matrix, and $\{\mathbf{F}\}$ is the vector of equivalent nodal forces\draft{, which accumulates the prescribed surface forces $\{\mathbf{F}\}^S$, reaction forces $\{\mathbf{F}\}^R$, volume forces $\{\mathbf{F}\}^V$, and thermal pseudo-forces.} In Cast3M, this linear system is directly assembled and solved using the \texttt{RIGI} and \texttt{RESO} operators.
+\end{reviewblock}
 
 \subsection{Mazars damage model}
 
 Concrete cracks when tensile strains become too large. In this work, this behaviour is represented with the Mazars damage model \cite{hamon2013}. 
 
 \subsubsection{Damage parameter and equivalent strain}
-The model introduces a single scalar internal variable, $D$, ranging from $0$ (intact material) to $1$ (fully broken material). The apparent macroscopic stress is reduced according to the effective stress concept:
+The model introduces a \draft{single scalar} internal variable $D$, damage parater, ranging from $0$ (intact material) to $1$ (fully broken material). The apparent macroscopic stress is reduced according to the effective stress concept:
 \begin{equation}
     \boldsymbol{\sigma} = (1 - D) \mathbf{C} : \boldsymbol{\varepsilon}_e
 \end{equation}
 
+\begin{reviewblock}
 Because concrete cracking is primarily governed by tensile extensions, Mazars introduced an \textit{equivalent strain} ($\varepsilon_{eq}$) to translate any 3D multiaxial strain state into a scalar uniaxial indicator. In the case of a thermo-mechanical loading, it is important to note that only the elastic strain tensor $\boldsymbol{\varepsilon}_e$ contributes to the evolution of damage. The equivalent strain is calculated solely from the positive principal elastic strains $\varepsilon_i$:
 \begin{equation}
     \varepsilon_{eq} = \sqrt{ \langle \boldsymbol{\varepsilon}_e \rangle_+ : \langle \boldsymbol{\varepsilon}_e \rangle_+} = \sqrt{ \sum_{i=1}^{3} \langle \varepsilon_i \rangle_+^2 }
 \end{equation}
 where the Macaulay brackets $\langle x \rangle_+$ denote the positive part of $x$ (i.e., $\langle x \rangle_+ = x$ if $x \ge 0$, and $0$ if $x < 0$). 
+\end{reviewblock}
 
-Damage initiates when the equivalent strain exceeds the initial damage threshold, denoted as $\varepsilon_{d0}$. A simple estimate relates this threshold to the tensile strength $f_t$ and Young's modulus $E$:
+Damage initiates when the equivalent strain exceeds the initial damage threshold, denoted as $\varepsilon_{d0}$.
 \begin{equation}
     \varepsilon_{d0} = \frac{f_t}{E}.
 \end{equation}
@@ -179,9 +194,8 @@ Damage initiates when the equivalent strain exceeds the initial damage threshold
 \end{equation}
 \noindent In this simplified interpretation, $f_t$ denotes the uniaxial tensile strength of the concrete and $E$ is Young's modulus.
 
-
 \subsubsection{Damage evolution laws for tension and compression}
-Concrete exhibits highly asymmetric behavior, characterized by brittle failure in tension and strain-hardening followed by softening in compression. To accurately represent this, the total damage $D$ is formulated as a combination of two independent damage variables: $D_t$ for tension and $D_c$ for compression. 
+\draft{Concrete exhibits highly asymmetric behavior, characterized by brittle failure in tension and strain-hardening followed by softening in compression.} To accurately represent concrete behavior, the total damage $D$ is formulated as a combination of two independent damage variables: $D_t$ for tension and $D_c$ for compression. 
 
 When the damage threshold is exceeded ($\varepsilon_{eq} > \varepsilon_{d0}$), the evolution of these two modes is explicitly governed by exponential laws:
 \begin{align}
@@ -199,6 +213,9 @@ The coefficients $\alpha_t$ and $\alpha_c$ depend on the principal stress state,
 
 
 \subsubsection{Non-linear equilibrium and Imbalance vector ($\mathbf{R}$)}
+\begin{reviewblock}
+\review{Further references are needed to strengthen the scientific basis of this section.}
+
 Due to the damage evolution, the stress-strain relationship becomes non-linear. The mechanical equilibrium cannot be solved in a single step like the elastic model. By introducing the non-linear complementary stress $\boldsymbol{\sigma}_{nl}$, the equilibrium is rewritten as:
 \begin{equation}
     [\mathbf{K}]\{\mathbf{U}\} = \{\mathbf{F}\}_{ext} - \int_V \mathbf{B}^T \boldsymbol{\sigma}_{nl} dV
@@ -209,9 +226,14 @@ To solve this, the \texttt{PASAPAS} non-linear procedure evaluates the deviation
     \{\mathbf{R}\} = \{\mathbf{F}\}_{ext} - \int_V \mathbf{B}^T \boldsymbol{\sigma} dV
 \end{equation}
 At each iteration $i$, the algorithm solves the system using the initial elastic stiffness matrix: $[\mathbf{K}]\{\delta\mathbf{U}\}^{i+1} = \{\mathbf{R}\}^i$. The displacements and internal variables (like $D$) are continuously updated until the norm of the imbalance vector becomes negligible ($\|\mathbf{R}\| < \epsilon \mathbf{F}_{ref}$).
+\end{reviewblock}
 
 \subsubsection{Mesh dependency and fracture energy regularization}
-A major drawback of local softening models is the pathological mesh dependency. Mathematically, softening causes a loss of ellipticity in the differential equations, leading to strain localization in a band whose width depends entirely on the finite element size. This results in physically unacceptable ruptures with zero energy dissipation upon mesh refinement.
+
+A major drawback of local softening models is the pathological mesh dependency. \draft{Mathematically, softening causes a loss of ellipticity in the differential equations, leading to strain localization in a band whose width depends entirely on the finite element size. This results in physically unacceptable ruptures with zero energy dissipation upon mesh refinement.}
+
+\begin{reviewblock}
+\review{This section requires additional references to support the statements presented.}
 
 To overcome this issue without resorting to complex non-local formulations, a regularization technique based on Hillerborg's specific fracture energy ($G_f$) is utilized. Physically, the fracture energy $G_f$ represents the energy required to propagate a discrete crack per unit \textit{area} (expressed in $\text{J/m}^2$). However, in the continuum damage mechanics framework of the Finite Element Method, cracking is modeled as a smeared softening phenomenon occurring over the \textit{volume} of the 3D finite element. 
 
@@ -221,18 +243,29 @@ The total fracture energy $G_f$ dissipated by a finite element of size $L_e$ is 
 \begin{equation}
     G_f = G_{elastic} + G_{softening}
 \end{equation}
+    
+\end{reviewblock}
 
 \textbf{1. Evaluation of the elastic energy ($G_{elastic}$):} \\
+
+\begin{reviewblock}
+\review{This section requires additional references to support the statements presented.}
+
 The elastic energy density up to the onset of damage (when the stress reaches the tensile strength $f_t$ at the initial strain threshold $\varepsilon_{d0} = f_t/E_0$) corresponds to the area of the elastic triangle under the curve:
 \begin{equation}
     g_{elastic} = \frac{1}{2} f_t \varepsilon_{d0} = \frac{f_t^2}{2E_0}
 \end{equation}
+\end{reviewblock}
+
 Multiplying by the characteristic length yields the areal elastic energy: $G_{elastic} = \frac{f_t^2}{2E_0} L_e$. Consequently, the remaining energy strictly available for the damage softening phase is calculated as:
 \begin{equation}
     G_{softening} = G_f - \frac{f_t^2}{2E_0} L_e
 \end{equation}
 
 \textbf{2. Analytical evaluation of $G_{softening}$ and the softening parameter $B_t$:} \\
+
+\begin{reviewblock}
+\review{This section requires additional references to support the statements presented.}
 In the original Mazars formulation, the evolution of damage in pure tension is governed by an exponential law. Assuming a purely brittle failure in tension ($A_t \approx 1$), the post-peak stress-strain relationship can be simplified to:
 \begin{equation}
     \sigma(\varepsilon) \approx f_t \exp\left[ -B_t (\varepsilon - \varepsilon_{d0}) \right]
@@ -241,6 +274,8 @@ The volumetric softening energy density ($g_{softening}$) is the integral of thi
 \begin{equation}
     g_{softening} = \int_{\varepsilon_{d0}}^{\infty} f_t \exp\left[ -B_t (\varepsilon - \varepsilon_{d0}) \right] d\varepsilon = \frac{f_t}{B_t}
 \end{equation}
+\end{reviewblock}
+
 By converting this volumetric density into areal energy via the characteristic length $L_e$, we establish the fundamental relationship between the fracture energy and the Mazars tensile parameter:
 \begin{equation}
     G_{softening} = g_{softening} \cdot L_e = \frac{f_t \cdot L_e}{B_t}
@@ -255,13 +290,16 @@ To ensure that each finite element dissipates exactly the objective intrinsic en
 In the finite element code Cast3M, this explicit regularization is implemented element-by-element, where the numerator ($f_t \cdot L_e$) and denominator ($G_{softening}$) are defined as \texttt{NUM1} and \texttt{DEN1}, respectively. This energetic adjustment guarantees that the macroscopic crack propagation and global energy dissipation remain completely objective and independent of the selected spatial discretization.
 
 \section{THM coupling}
-This is placeholder text for layout testing. This is placeholder text for layout testing. This is placeholder text for layout testing. This is placeholder text for layout testing. This is placeholder text for layout testing. This is placeholder text for layout testing. This is placeholder text for layout testing. This is placeholder text for layout testing. This is placeholder text for layout testing.
+This section is currently under development and will be refined as the study progresses.
 
 \section{Damage-dependent property evolution}
+
 \subsection{Young's modulus degradation}
-This is placeholder text for layout testing. This is placeholder text for layout testing. This is placeholder text for layout testing. This is placeholder text for layout testing. This is placeholder text for layout testing. This is placeholder text for layout testing. This is placeholder text for layout testing. This is placeholder text for layout testing. This is placeholder text for layout testing.
+This section is currently under development and will be refined as the study progresses.
+
 \subsection{Permeability evolution}
-This is placeholder text for layout testing. This is placeholder text for layout testing. This is placeholder text for layout testing. This is placeholder text for layout testing. This is placeholder text for layout testing. This is placeholder text for layout testing. This is placeholder text for layout testing. This is placeholder text for layout testing. This is placeholder text for layout testing.
+This section is currently under development and will be refined as the study progresses.
+
 \subsection{Thermal conductivity and heat capacity evolution}
-This is placeholder text for layout testing. This is placeholder text for layout testing. This is placeholder text for layout testing. This is placeholder text for layout testing. This is placeholder text for layout testing. This is placeholder text for layout testing. This is placeholder text for layout testing. This is placeholder text for layout testing. This is placeholder text for layout testing.
+This section is currently under development and will be refined as the study progresses.
 

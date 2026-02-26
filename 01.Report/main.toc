@@ -4,7 +4,7 @@
 \contentsline {chapter}{\numberline {1}Introduction}{1}{chapter.1}%
 \contentsline {section}{\numberline {1.1}Context and problem statement}{1}{section.1.1}%
 \contentsline {subsection}{\numberline {1.1.1}High-temperature concrete behaviour in nuclear containment structures}{1}{subsection.1.1.1}%
-\contentsline {subsection}{\numberline {1.1.2}Problem statement}{2}{subsection.1.1.2}%
+\contentsline {subsection}{\numberline {1.1.2}Problem statement}{1}{subsection.1.1.2}%
 \contentsline {subsection}{\numberline {1.1.3}Limitations of existing THM models}{2}{subsection.1.1.3}%
 \contentsline {section}{\numberline {1.2}Objectives and scope of the thesis}{2}{section.1.2}%
 \contentsline {section}{\numberline {1.3}Research enviroment and Computational tools}{3}{section.1.3}%
@@ -17,24 +17,24 @@
 \contentsline {subsubsection}{Conduction}{5}{section*.5}%
 \contentsline {subsubsection}{Convection}{6}{section*.6}%
 \contentsline {subsubsection}{Radiation}{6}{section*.7}%
-\contentsline {subsection}{\numberline {2.1.2}Heat transfer}{7}{subsection.2.1.2}%
-\contentsline {subsubsection}{Heat Equation}{7}{section*.8}%
-\contentsline {subsubsection}{Discretization}{8}{section*.9}%
+\contentsline {subsection}{\numberline {2.1.2}Heat transfer}{6}{subsection.2.1.2}%
+\contentsline {subsubsection}{Heat Equation}{6}{section*.8}%
+\contentsline {subsubsection}{Discretization}{7}{section*.9}%
 \contentsline {section}{\numberline {2.2}Hydric behavior}{8}{section.2.2}%
 \contentsline {subsection}{\numberline {2.2.1}Moisture transport}{8}{subsection.2.2.1}%
-\contentsline {subsection}{\numberline {2.2.2}Drying, shrinkage and pore pressure}{9}{subsection.2.2.2}%
-\contentsline {section}{\numberline {2.3}Mechanical behavior}{9}{section.2.3}%
+\contentsline {subsection}{\numberline {2.2.2}Drying, shrinkage and pore pressure}{8}{subsection.2.2.2}%
+\contentsline {section}{\numberline {2.3}Mechanical behavior}{8}{section.2.3}%
 \contentsline {subsection}{\numberline {2.3.1}Elastic model}{9}{subsection.2.3.1}%
 \contentsline {subsubsection}{Kinematics and total strain decomposition}{9}{section*.10}%
-\contentsline {subsubsection}{Linear finite element formulation}{10}{section*.11}%
+\contentsline {subsubsection}{Linear finite element formulation}{9}{section*.11}%
 \contentsline {subsection}{\numberline {2.3.2}Mazars damage model}{10}{subsection.2.3.2}%
 \contentsline {subsubsection}{Damage parameter and equivalent strain}{10}{section*.12}%
 \contentsline {subsubsection}{Damage evolution laws for tension and compression}{11}{section*.13}%
 \contentsline {subsubsection}{Non-linear equilibrium and Imbalance vector ($\mathbf {R}$)}{12}{section*.14}%
 \contentsline {subsubsection}{Mesh dependency and fracture energy regularization}{12}{section*.15}%
 \contentsline {section}{\numberline {2.4}THM coupling}{14}{section.2.4}%
-\contentsline {section}{\numberline {2.5}Damage-dependent property evolution}{14}{section.2.5}%
-\contentsline {subsection}{\numberline {2.5.1}Young's modulus degradation}{14}{subsection.2.5.1}%
+\contentsline {section}{\numberline {2.5}Damage-dependent property evolution}{15}{section.2.5}%
+\contentsline {subsection}{\numberline {2.5.1}Young's modulus degradation}{15}{subsection.2.5.1}%
 \contentsline {subsection}{\numberline {2.5.2}Permeability evolution}{15}{subsection.2.5.2}%
 \contentsline {subsection}{\numberline {2.5.3}Thermal conductivity and heat capacity evolution}{15}{subsection.2.5.3}%
 \contentsline {chapter}{\numberline {3}Numerical implementation}{17}{chapter.3}%
@@ -42,16 +42,16 @@
 \contentsline {section}{\numberline {3.2}Input data and model parameters}{17}{section.3.2}%
 \contentsline {subsection}{\numberline {3.2.1}Geometry}{17}{subsection.3.2.1}%
 \contentsline {subsection}{\numberline {3.2.2}Material properties}{17}{subsection.3.2.2}%
-\contentsline {subsection}{\numberline {3.2.3}Boundary conditions and loadings}{18}{subsection.3.2.3}%
+\contentsline {subsection}{\numberline {3.2.3}Boundary conditions and loadings}{17}{subsection.3.2.3}%
 \contentsline {section}{\numberline {3.3}Implementation of the thermal model}{18}{section.3.3}%
 \contentsline {subsection}{\numberline {3.3.1}Stationary}{18}{subsection.3.3.1}%
 \contentsline {subsection}{\numberline {3.3.2}Transient}{18}{subsection.3.3.2}%
 \contentsline {section}{\numberline {3.4}Implementation of the hydric model}{18}{section.3.4}%
 \contentsline {subsection}{\numberline {3.4.1}Drying}{18}{subsection.3.4.1}%
 \contentsline {subsection}{\numberline {3.4.2}Shrinkage}{18}{subsection.3.4.2}%
-\contentsline {section}{\numberline {3.5}Implementation of the mechanical model}{19}{section.3.5}%
-\contentsline {subsection}{\numberline {3.5.1}Elastic}{19}{subsection.3.5.1}%
-\contentsline {subsection}{\numberline {3.5.2}Mazars}{19}{subsection.3.5.2}%
+\contentsline {section}{\numberline {3.5}Implementation of the mechanical model}{18}{section.3.5}%
+\contentsline {subsection}{\numberline {3.5.1}Elastic}{18}{subsection.3.5.1}%
+\contentsline {subsection}{\numberline {3.5.2}Mazars}{18}{subsection.3.5.2}%
 \contentsline {section}{\numberline {3.6}Implementation of the TH and THM coupled models}{19}{section.3.6}%
 \contentsline {section}{\numberline {3.7}Numerical results}{19}{section.3.7}%
 \contentsline {chapter}{\numberline {4}Model validation}{21}{chapter.4}%
@@ -59,8 +59,8 @@
 \contentsline {subsection}{\numberline {4.1.1}Experimental tests and material properties}{21}{subsection.4.1.1}%
 \contentsline {subsection}{\numberline {4.1.2}Thermal, hydraulic and mechanic loadings}{21}{subsection.4.1.2}%
 \contentsline {subsection}{\numberline {4.1.3}Measured data}{21}{subsection.4.1.3}%
-\contentsline {section}{\numberline {4.2}Validation}{22}{section.4.2}%
-\contentsline {subsection}{\numberline {4.2.1}Comparison between numerical and experimental results}{22}{subsection.4.2.1}%
+\contentsline {section}{\numberline {4.2}Validation}{21}{section.4.2}%
+\contentsline {subsection}{\numberline {4.2.1}Comparison between numerical and experimental results}{21}{subsection.4.2.1}%
 \contentsline {subsection}{\numberline {4.2.2}Discussions on model performance}{22}{subsection.4.2.2}%
 \contentsline {chapter}{\numberline {5}Probabilistic sensitivity analysis}{23}{chapter.5}%
 \contentsline {section}{\numberline {5.1}Sources of uncertainty and concrete heterogeneity}{23}{section.5.1}%

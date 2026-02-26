@@ -6,11 +6,15 @@
   \item [{$\{F\}$}]\begingroup Nodal force vector \nomunit{}\nomeqref {0}\nompageref{ii}
   \item [{$\{R\}$}]\begingroup Residual vector \nomunit{}\nomeqref {0}\nompageref{ii}
   \item [{$\{U\}$}]\begingroup Nodal displacement vector \nomunit{}\nomeqref {0}\nompageref{ii}
+\nomgroup{H}
+  \item [{$\boldsymbol{\varepsilon}_{rd}$}]\begingroup Desiccation shrinkage strain related to drying \nomunit{-}\nomeqref {0}\nompageref{ii}
+  \item [{$\boldsymbol{\varepsilon}_{re}$}]\begingroup Endogenous shrinkage strain related to hydration \nomunit{-}\nomeqref {0}\nompageref{ii}
 \nomgroup{M}
   \item [{$\boldsymbol{\sigma}$}]\begingroup Cauchy stress tensor \nomunit{Pa}\nomeqref {0}\nompageref{ii}
   \item [{$\boldsymbol{\varepsilon}$}]\begingroup Total strain tensor \nomunit{-}\nomeqref {0}\nompageref{ii}
   \item [{$\boldsymbol{\varepsilon}_e$}]\begingroup Elastic strain tensor \nomunit{-}\nomeqref {0}\nompageref{ii}
   \item [{$\boldsymbol{\varepsilon}_{th}$}]\begingroup Thermal strain \nomunit{-}\nomeqref {0}\nompageref{ii}
+  \item [{$\mathbf{C}$}]\begingroup Fourth-order isotropic elasticity tensor defined by $E$ and $\nu$ \nomunit{-}\nomeqref {0}\nompageref{ii}
   \item [{$D$}]\begingroup Damage variable \nomunit{-}\nomeqref {0}\nompageref{ii}
   \item [{$E$}]\begingroup Young's modulus \nomunit{Pa}\nomeqref {0}\nompageref{ii}
   \item [{$f_t$}]\begingroup Tensile strength \nomunit{Pa}\nomeqref {0}\nompageref{ii}
