@@ -3,15 +3,18 @@
 
 \review{This chapter is currently a draft version and will undergo further review and revision.}
 
-This chapter follows the foundational framework of Baroth This chapter follows the foundational framework of Baroth \cite{baroth2011}.
+This chapter follows the foundational framework of the book \cite{baroth2011}.
 
 \section{Sources of uncertainty and concrete heterogeneity}
+
+\begin{reviewblock}
 Main ideas:
 \begin{itemize}
   \item Concrete is not uniform, so its properties vary from place to place.
   \item Material parameters (e.g., stiffness and permeability) are uncertain.
   \item Measurements and model assumptions also add uncertainty.
 \end{itemize}
+\end{reviewblock}
 
 \subsection{Motivation for probabilistic assessment}
 
@@ -45,6 +48,8 @@ A critical source of aleatoric uncertainty in civil engineering is the inherent 
 Because these material parameters are fundamentally variable, evaluating the true safety and performance of a structure requires geotechnical and structural predictions to abandon purely deterministic values. Instead, they must rely on random variables and stochastic fields to accurately model this spatial heterogeneity.
 
 \section{Probabilistic framework and implementation}
+
+\begin{reviewblock}
 Main ideas:
 \begin{itemize}
     \item Treat uncertain material parameters as random variables.
@@ -52,6 +57,7 @@ Main ideas:
     \item Run the THM model for each sample.
     \item Collect the outputs and analyze variability and sensitivity.
 \end{itemize}
+\end{reviewblock}
 
 \subsection{Implementation: Lognormal - Gaussian transformation}
 
