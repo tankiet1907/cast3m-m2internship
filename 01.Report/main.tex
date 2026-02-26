@@ -1,11 +1,46 @@
-% =======================================================================================
-% #region Description of the report:
+% ==============================================================================
+% #region Description and metadata of the report:
+\title{Numerical and experimental study of the thermo-hydro-mechanical behavior of concrete under severe accident conditions using a poro-mechanical approach}
+
+\author{Tan Kiet HONG}
+
+\date{Grenoble, June 2026}
+
+% ---- Custom fields ----
+\makeatletter
+
+\newcommand{\institution}[1]{\def\@institution{#1}}
+\newcommand{\supervisors}[1]{\def\@supervisors{#1}}
+\newcommand{\institutioninfo}[1]{\def\@institutioninfo{#1}}
+
+\def\@institution{}
+\def\@supervisors{}
+\def\@institutioninfo{}
+
+\makeatother
+
+% ---- Fill data ----
+\institution{UNIVERSITÉ GRENOBLE ALPES}
+
+\supervisors{
+Prof. Julien BAROTH, Université Grenoble Alpes\\[0.4cm]
+Prof. Stefano DAL PONT, Université Grenoble Alpes
+}
+
+\institutioninfo{
+This thesis is submitted in partial fulfillment of the requirements for the Master's degree in the International Program ``Geomechanics, Civil Engineering and Risks''.
+
+\vspace{0.4cm}
+
+The work was carried out during the Master 2 internship at 3SR Laboratory.
+}
+
 % This report presents the results of a Master 2 internship conducted at the 3SR Laboratory, Université Grenoble Alpes. The internship focused on the numerical and experimental study of the thermo-hydro-mechanical (THM) behavior of concrete under severe accident conditions using a poro-mechanical approach.
 
 % The author, Tan Kiet HONG, conducted this research under the supervision of Prof. Julien BAROTH and Prof. Stefano DAL PONT.
 % #endregion
 
-% =======================================================================================
+% ==============================================================================
 % Preamble
 % #region Document class (Paper size and font) and General package imports
 \documentclass[a4paper,12pt,twoside]{report}                        % Page size, font, document type
@@ -23,7 +58,7 @@
 \setstretch{1.15}               % Line spacing
 % #endregion
 
-% =======================================================================================
+% ==============================================================================
 % #region Bibliograpphy, citing; hyperref and cleveref packages
 
 % Bibliography management with BibLaTeX and Biber
@@ -50,14 +85,7 @@
 
 % #endregion
 
-% =======================================================================================
-% #region Highlight style command for later review (line-breakable)
-\usepackage{soul}
-\sethlcolor{yellow}
-\newcommand{\review}[1]{\hl{[REVIEW] #1}}
-% #endregion
-
-% =======================================================================================
+% ==============================================================================
 % #region Nomenclature commands for mathematical notations (list of symbols and units)
 % Grouped Nomenclature Settings
 \usepackage[intoc]{nomencl}
@@ -88,8 +116,8 @@
 \renewcommand{\nomlabel}[1]{#1 \hfill}
 % #endregion
 
-% =======================================================================================
-% #region Page number on header style
+% ==============================================================================
+% #region Front, Main, Back matter styles for Report document class and page numbering
 \usepackage{fancyhdr}
 \setlength{\headheight}{14.5pt}
 \renewcommand{\headrulewidth}{0.4pt}
@@ -125,9 +153,29 @@
   \renewcommand{\headrulewidth}{0pt}%
   \renewcommand{\footrulewidth}{0pt}%
 }
+% ===============================
+% Front/Main/Back definitions
+% ===============================
+
+\newcommand{\frontmatter}{%
+  \cleardoublepage
+  \pagenumbering{roman}
+  \pagestyle{romanstyle}
+}
+
+\newcommand{\mainmatter}{%
+  \cleardoublepage
+  \pagenumbering{arabic}
+  \pagestyle{arabicstyle}
+}
+
+\newcommand{\backmatter}{%
+  \cleardoublepage
+  \pagestyle{arabicstyle}
+}
 % #endregion
 
-% =======================================================================================
+% ==============================================================================
 % #region Double navy frame on title page
 % ADDED: DOUBLE NAVY FRAME PACKAGES
 \usepackage{xcolor}
@@ -157,90 +205,171 @@ rectangle
 }
 % #endregion
 
-% =======================================================================================
+% ==============================================================================
+% #region THREE-MODE SYSTEM: DRAFT / REVIEW / FINAL
+% ======================================================
+% PACKAGES
+% ======================================================
+\usepackage{xcolor}
+\usepackage{soul}
+\usepackage{environ}
+\usepackage{etoolbox}
+
+% ======================================================
+% INTERNAL SWITCHES (DO NOT MODIFY)
+% ======================================================
+\newif\ifdraftmode
+\newif\ifreviewmode
+
+\ifdefstring{\thesismode}{DRAFT}{%
+  \draftmodetrue
+  \reviewmodetrue
+}{%
+  \ifdefstring{\thesismode}{REVIEW}{%
+    \draftmodefalse
+    \reviewmodetrue
+  }{%
+    \draftmodefalse
+    \reviewmodefalse
+  }
+}
+
+% ======================================================
+% REVIEW SETTINGS
+% ======================================================
+
+\sethlcolor{yellow}
+
+% Inline review
+\newcommand{\review}[1]{%
+  \ifreviewmode
+    \hl{[REVIEW] #1}
+  \fi
+}
+
+% Block-level review (supports equations, paragraphs)
+\NewEnviron{reviewblock}{%
+  \ifreviewmode
+    \begingroup
+    \sethlcolor{yellow}
+    \hl{\BODY}
+    \endgroup
+  \fi
+}
+
+% ======================================================
+% DRAFT SETTINGS
+% ======================================================
+
+% Inline draft
+\newcommand{\draft}[1]{%
+  \ifdraftmode
+    {\color{blue!70!black}#1}
+  \fi
+}
+
+% Block-level draft (supports large environments)
+\NewEnviron{draftblock}{%
+  \ifdraftmode
+    \begingroup
+    \color{blue!70!black}
+    \BODY
+    \endgroup
+  \fi
+}
+
+% #endregion
+
+% ------------------------------------------------------
+% SELECT MODE HERE: DRAFT / REVIEW / FINAL
+% ------------------------------------------------------
+\newcommand{\thesismode}{DRAFT}  % DRAFT / REVIEW / FINAL
+
+% ==============================================================================
 
 \begin{document}
 
-% =======================================================================================
+% ==============================================================================
 % #region Title page with double navy frame
 \begin{titlepage}
 \DoubleNavyFrame
+
 \begin{center}
-    \begin{minipage}[c][0.92\textheight][t]{0.9\textwidth}
-        \centering
-        \vspace{0.5cm}
-        
-        {\large \textbf{UNIVERSITÉ GRENOBLE ALPES}}
-        
-        \vspace{1.7cm}
-        
-        % Logos and size adjustment
-        \begin{center}
-            \begin{minipage}{0.45\textwidth}
-                \centering
-                \includegraphics[height=2.5cm]{logo_uga_phitem.png} % logo UGA
-            \end{minipage}
-            \hfill
-            \begin{minipage}{0.45\textwidth}
-                \centering
-                \includegraphics[height=2.5cm]{logo_3sr.png} % logo 3SR
-            \end{minipage}
-        \end{center}
+\begin{minipage}[c][0.92\textheight][t]{0.9\textwidth}
+\centering
 
-        \vspace{1.7cm}
+\vspace{0.5cm}
 
-        % Thesis title
-        {\Large \textbf{Numerical and experimental study of the thermo-hydro-mechanical behavior of concrete under severe accident conditions using a poro-mechanical approach}}
+\makeatletter
+{\Large \bfseries \@institution \par}
+\vspace{1.5cm}
 
-        \vspace{1.5cm}
+% =========================
+% Logos
+% =========================
+\begin{minipage}{0.45\textwidth}
+    \centering
+    \includegraphics[height=2.5cm]{logo_uga_phitem.png}
+\end{minipage}
+\hfill
+\begin{minipage}{0.45\textwidth}
+    \centering
+    \includegraphics[height=2.5cm]{logo_3sr.png}
+\end{minipage}
 
-        % Author's name
-        {\Large Tan Kiet HONG}
+\vspace{1.5cm}
 
-        \vspace{1.5cm}
+% =========================
+% Title
+% =========================
+{\Large \bfseries \@title \par}
+\vspace{1.5cm}
 
-        % Institutional information
-        {\small
-        This thesis is submitted in partial fulfillment of the requirements for the Master's degree in the International Program ``Geomechanics, Civil Engineering and Risks''.\\
-        \vspace{0.25cm}
-        The work was carried out during the Master 2 internship at 3SR Laboratory.
-        }
+% =========================
+% Author
+% =========================
+{\Large \@author \par}
+\vspace{1.5cm}
 
-        \vspace{1.5cm}
+% =========================
+% Institutional information
+% =========================
+{\small \@institutioninfo \par}
+\vspace{1.5cm}
 
-        % Supervisors
-        \begin{flushleft}
-            {\large \textbf{Supervisors:}} \\
-            \vspace{0.5cm}
-            {\large Prof. Julien BAROTH, Université Grenoble Alpes} \\
-            \vspace{0.5cm}
-            {\large Prof. Stefano DAL PONT, Université Grenoble Alpes}
-        \end{flushleft}
+% =========================
+% Supervisors
+% =========================
+\begin{flushleft}
+{\large \textbf{Supervisors}}
 
-        \vspace{1.5cm}
+\vspace{0.5cm}
 
-        % location and date
-        {\large \textit{Grenoble, June 2026}}
-        \vspace{1.5cm}
-        
-    \end{minipage}
-\end{center}   
+{\large \@supervisors}
+\end{flushleft}
+
+\vspace{1.5cm}
+
+% =========================
+% Date
+% =========================
+{\large \textit{\@date}}
+\vspace{1.5cm}
+
+\makeatother
+
+\end{minipage}
+\end{center}
 \end{titlepage}
 
 
 % #endregion
 
-% =======================================================================================
-% #region Blank page (and roman page numbering)
+\thispagestyle{empty} % Blank page after title page w/out page number
 
-\thispagestyle{empty}
+\frontmatter
 
-\cleardoublepage
-\pagenumbering{roman}
-\pagestyle{romanstyle}
-% #endregion
-
-% =======================================================================================
+% ==============================================================================
 % #region Acknowledgment
 
 \chapter*{Acknowledgment}
@@ -254,7 +383,7 @@ Finally, I would like to thank my family for their constant encouragement, patie
 
 % #endregion
 
-% =======================================================================================
+% ==============================================================================
 % #region Abstract
 
 \clearpage
@@ -269,7 +398,7 @@ to better understand the coupled physics involved.
 
 % #endregion
 
-% =======================================================================================
+% ==============================================================================
 % #region Nomenclature
 \clearpage
 \printnomenclature
@@ -309,7 +438,7 @@ to better understand the coupled physics involved.
 
 % #endregion
 
-% =======================================================================================
+% ==============================================================================
 % #region Table of Contents
 
 \cleardoublepage
@@ -318,13 +447,10 @@ to better understand the coupled physics involved.
 
 % #endregion
 
-% =======================================================================================
+\mainmatter
+
+% ==============================================================================
 % #region Chapter 1: Introduction (and arabic page numbering)
-
-\cleardoublepage
-\pagenumbering{arabic}
-\pagestyle{arabicstyle}
-
 \chapter{Introduction}
 
 \section{Context and problem statement}
@@ -390,7 +516,7 @@ It is used to perform the probabilistic sensitivity analysis, generate random sa
 
 % #endregion
 
-% =======================================================================================
+% ==============================================================================
 % #region Chapter 2: Theoretical and Numerical framework - Concrete behavior at high temperature
 
 \cleardoublepage
@@ -662,7 +788,7 @@ This is placeholder text for layout testing. This is placeholder text for layout
 
 % #endregion
 
-% =======================================================================================
+% ==============================================================================
 % #region Chapter 3: Numerical implementation in Cast3M
 
 \cleardoublepage
@@ -708,7 +834,7 @@ This is placeholder text for layout testing. This is placeholder text for layout
 
 % #endregion
 
-% =======================================================================================
+% ==============================================================================
 % #region Chapter 4: Model validation and Experimental data
 
 \cleardoublepage
@@ -730,7 +856,7 @@ This is placeholder text for layout testing. This is placeholder text for layout
 
 % #endregion
 
-% =======================================================================================
+% ==============================================================================
 % #region Chapter 5: Probabilistic sensitivity analysis
 
 \cleardoublepage
@@ -917,7 +1043,7 @@ This is placeholder text for layout testing. This is placeholder text for layout
 
 % #endregion
 
-% =======================================================================================
+% ==============================================================================
 % #region Chapter 6: Conclusions and Perspectives
 
 \cleardoublepage
@@ -934,11 +1060,13 @@ This is placeholder text for layout testing. This is placeholder text for layout
 
 % #endregion
 
-% =======================================================================================
+% ==============================================================================
+
+\backmatter
+
 % #region List of figures, tables, bibliography
 
 % List of Figures
-\cleardoublepage
 \phantomsection
 \addcontentsline{toc}{chapter}{\listfigurename}
 \listoffigures
@@ -958,6 +1086,6 @@ This is placeholder text for layout testing. This is placeholder text for layout
 
 % #endregion
 
-% =======================================================================================
+% ==============================================================================
 
 \end{document}
