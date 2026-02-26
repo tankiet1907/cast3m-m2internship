@@ -1,22 +1,22 @@
-\nomenclatureentry{T$T$@[{$T$}]\begingroup Temperature \nomunit{K}\nomeqref {0}|nompageref}{iv}
-\nomenclatureentry{T$q''$@[{$q''$}]\begingroup Heat flux \nomunit{W$\cdot$m$^{-2}$}\nomeqref {0}|nompageref}{iv}
-\nomenclatureentry{T$\lambda$@[{$\lambda$}]\begingroup Thermal conductivity \nomunit{W$\cdot$m$^{-1}$$\cdot$K$^{-1}$}\nomeqref {0}|nompageref}{iv}
-\nomenclatureentry{T$c_p$@[{$c_p$}]\begingroup Specific heat capacity \nomunit{J$\cdot$kg$^{-1}$$\cdot$K$^{-1}$}\nomeqref {0}|nompageref}{iv}
-\nomenclatureentry{T$\rho$@[{$\rho$}]\begingroup Mass density \nomunit{kg$\cdot$m$^{-3}$}\nomeqref {0}|nompageref}{iv}
-\nomenclatureentry{T$h$@[{$h$}]\begingroup Convective heat transfer coefficient \nomunit{W$\cdot$m$^{-2}$$\cdot$K$^{-1}$}\nomeqref {0}|nompageref}{iv}
-\nomenclatureentry{T$\sigma$@[{$\sigma$}]\begingroup Stefan--Boltzmann constant \nomunit{W$\cdot$m$^{-2}$$\cdot$K$^{-4}$}\nomeqref {0}|nompageref}{iv}
-\nomenclatureentry{T$\varepsilon$@[{$\varepsilon$}]\begingroup Emissivity \nomunit{-}\nomeqref {0}|nompageref}{iv}
-\nomenclatureentry{M$\boldsymbol{\varepsilon}$@[{$\boldsymbol{\varepsilon}$}]\begingroup Total strain tensor \nomunit{-}\nomeqref {0}|nompageref}{iv}
-\nomenclatureentry{M$\boldsymbol{\varepsilon}_e$@[{$\boldsymbol{\varepsilon}_e$}]\begingroup Elastic strain tensor \nomunit{-}\nomeqref {0}|nompageref}{iv}
-\nomenclatureentry{M$\boldsymbol{\varepsilon}_{th}$@[{$\boldsymbol{\varepsilon}_{th}$}]\begingroup Thermal strain \nomunit{-}\nomeqref {0}|nompageref}{iv}
-\nomenclatureentry{M$\boldsymbol{\sigma}$@[{$\boldsymbol{\sigma}$}]\begingroup Cauchy stress tensor \nomunit{Pa}\nomeqref {0}|nompageref}{iv}
-\nomenclatureentry{M$E$@[{$E$}]\begingroup Young's modulus \nomunit{Pa}\nomeqref {0}|nompageref}{iv}
-\nomenclatureentry{M$f_t$@[{$f_t$}]\begingroup Tensile strength \nomunit{Pa}\nomeqref {0}|nompageref}{iv}
-\nomenclatureentry{M$D$@[{$D$}]\begingroup Damage variable \nomunit{-}\nomeqref {0}|nompageref}{iv}
-\nomenclatureentry{M$G_f$@[{$G_f$}]\begingroup Fracture energy \nomunit{J$\cdot$m$^{-2}$}\nomeqref {0}|nompageref}{iv}
-\nomenclatureentry{M$L_e$@[{$L_e$}]\begingroup Characteristic element length \nomunit{m}\nomeqref {0}|nompageref}{iv}
-\nomenclatureentry{F$[K]$@[{$[K]$}]\begingroup Global stiffness matrix \nomunit{}\nomeqref {0}|nompageref}{iv}
-\nomenclatureentry{F$[C]$@[{$[C]$}]\begingroup Capacity matrix \nomunit{}\nomeqref {0}|nompageref}{iv}
-\nomenclatureentry{F$\{F\}$@[{$\{F\}$}]\begingroup Nodal force vector \nomunit{}\nomeqref {0}|nompageref}{iv}
-\nomenclatureentry{F$\{U\}$@[{$\{U\}$}]\begingroup Nodal displacement vector \nomunit{}\nomeqref {0}|nompageref}{iv}
-\nomenclatureentry{F$\{R\}$@[{$\{R\}$}]\begingroup Residual vector \nomunit{}\nomeqref {0}|nompageref}{iv}
+\nomenclatureentry{T$T$@[{$T$}]\begingroup Temperature \nomunit{K}\nomeqref {0}|nompageref}{ii}
+\nomenclatureentry{T$q''$@[{$q''$}]\begingroup Heat flux \nomunit{W$\cdot$m$^{-2}$}\nomeqref {0}|nompageref}{ii}
+\nomenclatureentry{T$\lambda$@[{$\lambda$}]\begingroup Thermal conductivity \nomunit{W$\cdot$m$^{-1}$$\cdot$K$^{-1}$}\nomeqref {0}|nompageref}{ii}
+\nomenclatureentry{T$c_p$@[{$c_p$}]\begingroup Specific heat capacity \nomunit{J$\cdot$kg$^{-1}$$\cdot$K$^{-1}$}\nomeqref {0}|nompageref}{ii}
+\nomenclatureentry{T$\rho$@[{$\rho$}]\begingroup Mass density \nomunit{kg$\cdot$m$^{-3}$}\nomeqref {0}|nompageref}{ii}
+\nomenclatureentry{T$h$@[{$h$}]\begingroup Convective heat transfer coefficient \nomunit{W$\cdot$m$^{-2}$$\cdot$K$^{-1}$}\nomeqref {0}|nompageref}{ii}
+\nomenclatureentry{T$\sigma$@[{$\sigma$}]\begingroup Stefan--Boltzmann constant \nomunit{W$\cdot$m$^{-2}$$\cdot$K$^{-4}$}\nomeqref {0}|nompageref}{ii}
+\nomenclatureentry{T$\varepsilon$@[{$\varepsilon$}]\begingroup Emissivity \nomunit{-}\nomeqref {0}|nompageref}{ii}
+\nomenclatureentry{M$\boldsymbol{\varepsilon}$@[{$\boldsymbol{\varepsilon}$}]\begingroup Total strain tensor \nomunit{-}\nomeqref {0}|nompageref}{ii}
+\nomenclatureentry{M$\boldsymbol{\varepsilon}_e$@[{$\boldsymbol{\varepsilon}_e$}]\begingroup Elastic strain tensor \nomunit{-}\nomeqref {0}|nompageref}{ii}
+\nomenclatureentry{M$\boldsymbol{\varepsilon}_{th}$@[{$\boldsymbol{\varepsilon}_{th}$}]\begingroup Thermal strain \nomunit{-}\nomeqref {0}|nompageref}{ii}
+\nomenclatureentry{M$\boldsymbol{\sigma}$@[{$\boldsymbol{\sigma}$}]\begingroup Cauchy stress tensor \nomunit{Pa}\nomeqref {0}|nompageref}{ii}
+\nomenclatureentry{M$E$@[{$E$}]\begingroup Young's modulus \nomunit{Pa}\nomeqref {0}|nompageref}{ii}
+\nomenclatureentry{M$f_t$@[{$f_t$}]\begingroup Tensile strength \nomunit{Pa}\nomeqref {0}|nompageref}{ii}
+\nomenclatureentry{M$D$@[{$D$}]\begingroup Damage variable \nomunit{-}\nomeqref {0}|nompageref}{ii}
+\nomenclatureentry{M$G_f$@[{$G_f$}]\begingroup Fracture energy \nomunit{J$\cdot$m$^{-2}$}\nomeqref {0}|nompageref}{ii}
+\nomenclatureentry{M$L_e$@[{$L_e$}]\begingroup Characteristic element length \nomunit{m}\nomeqref {0}|nompageref}{ii}
+\nomenclatureentry{F$[K]$@[{$[K]$}]\begingroup Global stiffness matrix \nomunit{}\nomeqref {0}|nompageref}{ii}
+\nomenclatureentry{F$[C]$@[{$[C]$}]\begingroup Capacity matrix \nomunit{}\nomeqref {0}|nompageref}{ii}
+\nomenclatureentry{F$\{F\}$@[{$\{F\}$}]\begingroup Nodal force vector \nomunit{}\nomeqref {0}|nompageref}{ii}
+\nomenclatureentry{F$\{U\}$@[{$\{U\}$}]\begingroup Nodal displacement vector \nomunit{}\nomeqref {0}|nompageref}{ii}
+\nomenclatureentry{F$\{R\}$@[{$\{R\}$}]\begingroup Residual vector \nomunit{}\nomeqref {0}|nompageref}{ii}

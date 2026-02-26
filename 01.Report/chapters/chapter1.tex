@@ -1,0 +1,63 @@
+%\cleardoublepage %already included in mainmatter 
+\chapter{Introduction}
+
+\section{Context and problem statement}
+Concrete containment structures under severe-accident thermal loading present coupled thermo-hydro-mechanical challenges \cite{dauti2018}.
+
+\subsection{High-temperature concrete behaviour in nuclear containment structures} 
+Main contextes:
+\begin{itemize}
+    \item Concrete in nuclear containment structures is exposed to extreme temperatures during severe accidents.
+    \item Rapid heating leads to strong thermal stresses, dehydration, cracking and possible spalling govern structural integrity.
+\end{itemize}
+
+\subsection{Problem statement}
+Main problems:
+\begin{itemize}
+  \item Complex multi-physics coupling under high temperature.
+  \item Temperature- and damage-dependent evolution of transport properties with cracking and stiffness degradation altering the permeability and pore pressure.
+  \item Reliable prediction requires a consistent thermo-hydro-mechanical (THM) framework.
+\end{itemize}
+
+
+\subsection{Limitations of existing THM models}
+Main limitations of existing THM models:
+\begin{itemize}
+    \item Lack of fully coupled interactions between the damage state and transport properties. 
+    \item Lack of consistent regularization for strain localization.
+    \item Limited probabilistic assessment of parameter uncertainty and sensitivity.
+\end{itemize}
+
+
+\section{Objectives and scope of the thesis}
+
+Main objectives of the thesis:
+\begin{itemize}
+    \item Understanding and Developing a THM model
+    \item Temperature- and damage-dependent evolution of stiffness and transport properties.
+    \item Numerical implementation and numerical validation.
+    \item Probabilistic sensitivity analysis: Evaluating parameter uncertainty and identifying the dominant physical parameters.
+\end{itemize}
+
+The scope of this work is limited to:
+\begin{itemize}
+    \item Thermal boundaries limited by severe accident conditions.
+    \item Continuum-scale THM modelling by Cast3M.
+    \item Damage modelling including temperature-dependent stiffness and transport properties.
+    \item Probabilistic sensitivity analysis at the material parameter level.
+\end{itemize}
+
+\section{Research enviroment and Computational tools}
+
+\subsection{3SR Laboratory}
+The host institution providing the scientific environment, experimental data, and expertise in structural mechanics and risk analysis.
+
+\subsection{Finite element code - Cast3M}
+Cast3M (or Castem) is an open-source finite-element code developed at CEA, which is used to implement advanced constitutive laws and custom multiphysics formulations.  
+
+Compared with COMSOL Multiphysics, Cast3m typically offers greater transparency and control for implementing tightly coupled THM while COMSOL offers a user-friendly GUI for many built-in multiphysics interfaces.
+
+\subsection{Probabilistic analysis tool - Persalys}
+Persalys is the computational tool dedicated to managing parameter uncertainty in material properties.
+
+It is used to perform the probabilistic sensitivity analysis, generate random sampling (e.g., Monte Carlo simulations), and rank the dominant THM parameters.

@@ -1,29 +1,29 @@
 
 \begin{thenomenclature} 
 \nomgroup{F}
-  \item [{$[C]$}]\begingroup Capacity matrix \nomunit{}\nomeqref {0}\nompageref{iv}
-  \item [{$[K]$}]\begingroup Global stiffness matrix \nomunit{}\nomeqref {0}\nompageref{iv}
-  \item [{$\{F\}$}]\begingroup Nodal force vector \nomunit{}\nomeqref {0}\nompageref{iv}
-  \item [{$\{R\}$}]\begingroup Residual vector \nomunit{}\nomeqref {0}\nompageref{iv}
-  \item [{$\{U\}$}]\begingroup Nodal displacement vector \nomunit{}\nomeqref {0}\nompageref{iv}
+  \item [{$[C]$}]\begingroup Capacity matrix \nomunit{}\nomeqref {0}\nompageref{ii}
+  \item [{$[K]$}]\begingroup Global stiffness matrix \nomunit{}\nomeqref {0}\nompageref{ii}
+  \item [{$\{F\}$}]\begingroup Nodal force vector \nomunit{}\nomeqref {0}\nompageref{ii}
+  \item [{$\{R\}$}]\begingroup Residual vector \nomunit{}\nomeqref {0}\nompageref{ii}
+  \item [{$\{U\}$}]\begingroup Nodal displacement vector \nomunit{}\nomeqref {0}\nompageref{ii}
 \nomgroup{M}
-  \item [{$\boldsymbol{\sigma}$}]\begingroup Cauchy stress tensor \nomunit{Pa}\nomeqref {0}\nompageref{iv}
-  \item [{$\boldsymbol{\varepsilon}$}]\begingroup Total strain tensor \nomunit{-}\nomeqref {0}\nompageref{iv}
-  \item [{$\boldsymbol{\varepsilon}_e$}]\begingroup Elastic strain tensor \nomunit{-}\nomeqref {0}\nompageref{iv}
-  \item [{$\boldsymbol{\varepsilon}_{th}$}]\begingroup Thermal strain \nomunit{-}\nomeqref {0}\nompageref{iv}
-  \item [{$D$}]\begingroup Damage variable \nomunit{-}\nomeqref {0}\nompageref{iv}
-  \item [{$E$}]\begingroup Young's modulus \nomunit{Pa}\nomeqref {0}\nompageref{iv}
-  \item [{$f_t$}]\begingroup Tensile strength \nomunit{Pa}\nomeqref {0}\nompageref{iv}
-  \item [{$G_f$}]\begingroup Fracture energy \nomunit{J$\cdot$m$^{-2}$}\nomeqref {0}\nompageref{iv}
-  \item [{$L_e$}]\begingroup Characteristic element length \nomunit{m}\nomeqref {0}\nompageref{iv}
+  \item [{$\boldsymbol{\sigma}$}]\begingroup Cauchy stress tensor \nomunit{Pa}\nomeqref {0}\nompageref{ii}
+  \item [{$\boldsymbol{\varepsilon}$}]\begingroup Total strain tensor \nomunit{-}\nomeqref {0}\nompageref{ii}
+  \item [{$\boldsymbol{\varepsilon}_e$}]\begingroup Elastic strain tensor \nomunit{-}\nomeqref {0}\nompageref{ii}
+  \item [{$\boldsymbol{\varepsilon}_{th}$}]\begingroup Thermal strain \nomunit{-}\nomeqref {0}\nompageref{ii}
+  \item [{$D$}]\begingroup Damage variable \nomunit{-}\nomeqref {0}\nompageref{ii}
+  \item [{$E$}]\begingroup Young's modulus \nomunit{Pa}\nomeqref {0}\nompageref{ii}
+  \item [{$f_t$}]\begingroup Tensile strength \nomunit{Pa}\nomeqref {0}\nompageref{ii}
+  \item [{$G_f$}]\begingroup Fracture energy \nomunit{J$\cdot$m$^{-2}$}\nomeqref {0}\nompageref{ii}
+  \item [{$L_e$}]\begingroup Characteristic element length \nomunit{m}\nomeqref {0}\nompageref{ii}
 \nomgroup{T}
-  \item [{$\lambda$}]\begingroup Thermal conductivity \nomunit{W$\cdot$m$^{-1}$$\cdot$K$^{-1}$}\nomeqref {0}\nompageref{iv}
-  \item [{$\rho$}]\begingroup Mass density \nomunit{kg$\cdot$m$^{-3}$}\nomeqref {0}\nompageref{iv}
-  \item [{$\sigma$}]\begingroup Stefan--Boltzmann constant \nomunit{W$\cdot$m$^{-2}$$\cdot$K$^{-4}$}\nomeqref {0}\nompageref{iv}
-  \item [{$\varepsilon$}]\begingroup Emissivity \nomunit{-}\nomeqref {0}\nompageref{iv}
-  \item [{$c_p$}]\begingroup Specific heat capacity \nomunit{J$\cdot$kg$^{-1}$$\cdot$K$^{-1}$}\nomeqref {0}\nompageref{iv}
-  \item [{$h$}]\begingroup Convective heat transfer coefficient \nomunit{W$\cdot$m$^{-2}$$\cdot$K$^{-1}$}\nomeqref {0}\nompageref{iv}
-  \item [{$q''$}]\begingroup Heat flux \nomunit{W$\cdot$m$^{-2}$}\nomeqref {0}\nompageref{iv}
-  \item [{$T$}]\begingroup Temperature \nomunit{K}\nomeqref {0}\nompageref{iv}
+  \item [{$\lambda$}]\begingroup Thermal conductivity \nomunit{W$\cdot$m$^{-1}$$\cdot$K$^{-1}$}\nomeqref {0}\nompageref{ii}
+  \item [{$\rho$}]\begingroup Mass density \nomunit{kg$\cdot$m$^{-3}$}\nomeqref {0}\nompageref{ii}
+  \item [{$\sigma$}]\begingroup Stefan--Boltzmann constant \nomunit{W$\cdot$m$^{-2}$$\cdot$K$^{-4}$}\nomeqref {0}\nompageref{ii}
+  \item [{$\varepsilon$}]\begingroup Emissivity \nomunit{-}\nomeqref {0}\nompageref{ii}
+  \item [{$c_p$}]\begingroup Specific heat capacity \nomunit{J$\cdot$kg$^{-1}$$\cdot$K$^{-1}$}\nomeqref {0}\nompageref{ii}
+  \item [{$h$}]\begingroup Convective heat transfer coefficient \nomunit{W$\cdot$m$^{-2}$$\cdot$K$^{-1}$}\nomeqref {0}\nompageref{ii}
+  \item [{$q''$}]\begingroup Heat flux \nomunit{W$\cdot$m$^{-2}$}\nomeqref {0}\nompageref{ii}
+  \item [{$T$}]\begingroup Temperature \nomunit{K}\nomeqref {0}\nompageref{ii}
 
 \end{thenomenclature}
