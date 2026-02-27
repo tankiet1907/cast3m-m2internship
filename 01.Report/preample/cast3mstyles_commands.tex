@@ -1,0 +1,67 @@
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{tcolorbox}
+\tcbuselibrary{breakable, listings}
+
+% --- Professional Cast3M Color Palette ---
+\definecolor{cast_op}{RGB}{0, 70, 170}      % Blue: Operators/Keywords
+\definecolor{cast_str}{RGB}{160, 60, 0}     % Brown: 'Strings'
+\definecolor{cast_com}{RGB}{0, 120, 0}      % Green: Comments (*)
+\definecolor{cast_num}{RGB}{0, 0, 0}        % Black: Numbers & Variables
+\definecolor{cast_sym}{RGB}{200, 0, 0}      % Red: Symbols (= > * +)
+\definecolor{cast_func}{RGB}{0, 150, 150}   % Teal: Math Functions (SIN, COS)
+\definecolor{cast_bg}{RGB}{248, 248, 248}   % Light Gray Background
+\definecolor{cast_lineno}{RGB}{150, 150, 150} % Light Gray: Line numbers
+
+% --- Cast3M Language Definition ---
+\lstdefinelanguage{Cast3M}{
+    morekeywords={OPTI,DIME,MODE,ELEM,TRID,CUB8,DEBP,FINP,REPETER,SI,SINON,FINSI,
+                  POUR,FINPOUR,ALEA,BANDES_TOURNANTES,LAMBDA,RIGI,RESO,PASAPAS,
+                  MATE,EXCO,MAXI,SORT,ELAS,CARB,SIGM,EPSI,@LONGEF,LIER,BLOQ,
+                  DEPI,EVOL,DESS,PROG,VRAI,FAUX,FIN,MOYE,DROI,MAIL,TRAC,DALL,ET},
+    sensitive=true,
+    morecomment=[l]{*},       % Comments start with *
+    morestring=[b]',          % Strings inside ' '
+    % Math functions group
+    morekeywords=[2]{SIN,COS,TAN,EXP,LOG,ABS,SQRT},
+}
+
+% --- Boxed Environment (cast3m) ---
+\newtcblisting{cast3m}{
+    listing only,
+    breakable,
+    colback=cast_bg,
+    colframe=gray!30,
+    boxrule=0.5pt,
+    arc=2pt,
+    left=18pt,       % Space for line numbers
+    right=5pt,
+    top=5pt,
+    bottom=5pt,
+    listing options={
+        language=Cast3M,
+        basicstyle=\ttfamily\small\color{black}, % Variables/Numbers default to black
+        breaklines=true,
+        % Highlighting Styles
+        commentstyle=\color{cast_com}\itshape,
+        keywordstyle=\color{cast_op}\bfseries,
+        stringstyle=\color{cast_str},
+        % Units and Operators mapping
+        keywordstyle={[2]\color{cast_func}\bfseries}, 
+        % Line Number Settings
+        numbers=left,
+        numberstyle=\tiny\color{cast_lineno},
+        numbersep=12pt,
+        % Special Symbols Coloring
+        literate={=}{{\textcolor{cast_sym}{=}}}1 
+                 {>}{{\textcolor{cast_sym}{>}}}1 
+                 {<}{{\textcolor{cast_sym}{<}}}1 
+                 {+}{{\textcolor{cast_sym}{+}}}1 
+                 {-}{{\textcolor{cast_sym}{-}}}1 
+                 {;}{{\textcolor{cast_sym}{;}}}1,
+        showstringspaces=false,
+        columns=fullflexible,
+        keepspaces=true,
+        xleftmargin=10pt, % Indent code from the frame edge
+    }
+}

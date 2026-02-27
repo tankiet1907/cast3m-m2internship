@@ -245,7 +245,7 @@ The total fracture energy $G_f$ dissipated by a finite element of size $L_e$ is 
     
 \end{reviewblock}
 
-\textbf{1. Evaluation of the elastic energy ($G_{elastic}$):} \\
+\textbf{1. Evaluation of the elastic energy ($G_{elastic}$):}
 
 \begin{reviewblock}
 \review{This section requires additional references to support the statements presented.}
@@ -261,7 +261,7 @@ Multiplying by the characteristic length yields the areal elastic energy: $G_{el
     G_{softening} = G_f - \frac{f_t^2}{2E_0} L_e
 \end{equation}
 
-\textbf{2. Analytical evaluation of $G_{softening}$ and the softening parameter $B_t$:} \\
+\textbf{2. Analytical evaluation of $G_{softening}$ and the softening parameter $B_t$:}
 
 \begin{reviewblock}
 \review{This section requires additional references to support the statements presented.}
@@ -309,6 +309,13 @@ This section is currently under development and will be refined as the study pro
 \subsection{Permeability evolution}
 This section is currently under development and will be refined as the study progresses.
 
-\subsection{Thermal conductivity and heat capacity evolution}
-This section is currently under development and will be refined as the study progresses.
+\subsection{Thermal properties evolution}
 
+\begin{reviewblock}
+It is worth noting that thermal properties such as the thermal conductivity ($\lambda$), the heat capacity ($c_p$), and the thermal expansion coefficient ($\alpha$) are assumed to depend mainly on temperature and moisture content. Their influence on the pore pressure evolution is relatively limited.
+
+According to a global sensitivity analysis \cite{liu2001}, variations in thermal parameters account for only about 7\% of the total variance in pore pressure predictions. In contrast, the pore pressure development is highly sensitive to hygral parameters, particularly intrinsic permeability and dehydration laws, which together explain approximately 80\% of the total variance.
+
+Therefore, although temperature-dependent $\lambda$, $c_p$, and $\alpha$ can be easily implemented in the finite element formulation (e.g., using temperature-dependent \texttt{EVOL} objects in Cast3M), their precise calibration is not critical. Accurate identification of permeability and dehydration parameters is significantly more important for reliable pore pressure prediction and spalling assessment.
+
+\end{reviewblock}

@@ -13,6 +13,39 @@ This section is currently under development and will be refined as the study pro
 \subsection{Geometry}
 This section is currently under development and will be refined as the study progresses.
 
+\begin{cast3m}
+OPTI ECHO 0;
+OPTI 'DIME' 2 'ELEM' 'QUA4' ;    
+
+* 1) GEOMETRY AND MESH DEFINITION
+
+*GEOMETRY DEFINITION
+LONG    = 3.;
+HAUT    = 0.5;
+
+*NUMBER OF MESH SEGMENT
+NLONG   = 35;
+NHAUT   = 5;
+
+*POINTS CREATION
+PA      = 0. 0.;
+PB      = LONG 0.;
+PC      = LONG HAUT;
+PD      = 0. HAUT;
+TRAC (PA ET PB ET PC ET PD);
+
+*MESH LINES CREATION
+LAB     = DROI NLONG PA PB;
+LBC     = DROI NHAUT PB PC;
+LCD     = DROI NLONG PC PD;
+LDA     = DROI NHAUT PD PA;
+
+*MESH SURFACE CREATION
+MAIL1   = DALL LAB LBC LCD LDA;
+TRAC MAIL1;
+\end{cast3m}
+
+
 \subsection{Material properties}
 \begin{reviewblock}
 High-strength concrete with $f_{c,28} = 77$ MPa is adopted, and 18 key parameters are selected for sensitivity analysis \cite{liu2001}.

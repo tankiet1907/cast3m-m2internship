@@ -2,28 +2,32 @@
 % Review mode: yellow highlights and boxes (include reviews only)
 % Final mode: clean, no highlights or boxes (exclude drafts and reviews)
 
+% ======================================================
 % PACKAGES
 % ======================================================
+
 \usepackage{xcolor}
 \usepackage{soul}
 \usepackage{environ}
 \usepackage{etoolbox}
 \usepackage{tcolorbox}
+\tcbuselibrary{breakable}
 
 % ======================================================
 % INTERNAL SWITCHES
 % ======================================================
+
 \newif\ifdraftmode
 \newif\ifreviewmode
 
-\ifdefstring{\thesismode}{DRAFT}{%
+\ifdefstring{\thesismode}{DRAFT}{
   \draftmodetrue
   \reviewmodetrue
-}{%
-  \ifdefstring{\thesismode}{REVIEW}{%
+}{
+  \ifdefstring{\thesismode}{REVIEW}{
     \draftmodefalse
     \reviewmodetrue
-  }{%
+  }{
     \draftmodefalse
     \reviewmodefalse
   }
@@ -42,10 +46,11 @@
   \fi
 }
 
-% Block-level review
-\NewEnviron{reviewblock}{%
+% Breakable review block
+\NewEnviron{reviewblock}{
   \ifreviewmode
     \begin{tcolorbox}[
+      breakable,
       colback=yellow!20,
       colframe=yellow!60!black,
       boxrule=0.8pt,
@@ -58,6 +63,8 @@
     \textbf{[REVIEW]}\\[4pt]
     \BODY
     \end{tcolorbox}
+  \else
+    \BODY
   \fi
 }
 
@@ -72,13 +79,14 @@
   \fi
 }
 
-% Block-level draft
-\NewEnviron{draftblock}{%
+% Breakable draft block
+\NewEnviron{draftblock}{
   \ifdraftmode
     \begin{tcolorbox}[
-      colback=purple!1,
-      colframe=purple!20!black,
-      boxrule=0.1pt,
+      breakable,
+      colback=purple!3,
+      colframe=purple!30!black,
+      boxrule=0.3pt,
       arc=2pt,
       left=6pt,
       right=6pt,
@@ -88,5 +96,7 @@
     \textbf{[DRAFT]}\\[4pt]
     \BODY
     \end{tcolorbox}
+  \else
+    \BODY
   \fi
 }
