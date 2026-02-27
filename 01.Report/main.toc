@@ -3,7 +3,7 @@
 \contentsline {chapter}{\nonumberline Nomenclature}{iii}{chapter*.3}%
 \contentsline {chapter}{\numberline {1}Introduction}{1}{chapter.1}%
 \contentsline {section}{\numberline {1.1}Context and problem statement}{1}{section.1.1}%
-\contentsline {subsection}{\numberline {1.1.1}High-temperature concrete behaviour in nuclear containment structures}{1}{subsection.1.1.1}%
+\contentsline {subsection}{\numberline {1.1.1}Concrete behaviour under high temperature}{1}{subsection.1.1.1}%
 \contentsline {subsection}{\numberline {1.1.2}Problem statement}{1}{subsection.1.1.2}%
 \contentsline {subsection}{\numberline {1.1.3}Limitations of existing THM models}{2}{subsection.1.1.3}%
 \contentsline {section}{\numberline {1.2}Objectives and scope of the thesis}{2}{section.1.2}%
@@ -32,35 +32,42 @@
 \contentsline {subsubsection}{Damage evolution laws for tension and compression}{11}{section*.13}%
 \contentsline {subsubsection}{Non-linear equilibrium and Imbalance vector ($\mathbf {R}$)}{12}{section*.14}%
 \contentsline {subsubsection}{Mesh dependency and fracture energy regularization}{12}{section*.15}%
-\contentsline {section}{\numberline {2.4}THM coupling}{14}{section.2.4}%
-\contentsline {section}{\numberline {2.5}Damage-dependent property evolution}{15}{section.2.5}%
+\contentsline {section}{\numberline {2.4}Thermo-Hydro-Mechanical (THM) coupling}{14}{section.2.4}%
+\contentsline {subsection}{\numberline {2.4.1}Thermo-Hydric (TH) coupling mechanisms}{14}{subsection.2.4.1}%
+\contentsline {subsection}{\numberline {2.4.2}Thermo-Mechanical (TM) coupling mechanisms}{15}{subsection.2.4.2}%
+\contentsline {subsection}{\numberline {2.4.3}Full Thermo-Hydro-Mechanical (THM) governing formulation}{15}{subsection.2.4.3}%
+\contentsline {section}{\numberline {2.5}Damage-dependent property evolution (THM-D)}{15}{section.2.5}%
 \contentsline {subsection}{\numberline {2.5.1}Young's modulus degradation}{15}{subsection.2.5.1}%
 \contentsline {subsection}{\numberline {2.5.2}Permeability evolution}{15}{subsection.2.5.2}%
 \contentsline {subsection}{\numberline {2.5.3}Thermal conductivity and heat capacity evolution}{15}{subsection.2.5.3}%
 \contentsline {chapter}{\numberline {3}Numerical implementation}{17}{chapter.3}%
-\contentsline {section}{\numberline {3.1}Modeling strategy and assumptions}{17}{section.3.1}%
-\contentsline {section}{\numberline {3.2}Input data and model parameters}{17}{section.3.2}%
-\contentsline {subsection}{\numberline {3.2.1}Geometry}{17}{subsection.3.2.1}%
-\contentsline {subsection}{\numberline {3.2.2}Material properties}{17}{subsection.3.2.2}%
-\contentsline {subsection}{\numberline {3.2.3}Boundary conditions and loadings}{17}{subsection.3.2.3}%
-\contentsline {section}{\numberline {3.3}Implementation of the thermal model}{18}{section.3.3}%
-\contentsline {subsection}{\numberline {3.3.1}Stationary}{18}{subsection.3.3.1}%
-\contentsline {subsection}{\numberline {3.3.2}Transient}{18}{subsection.3.3.2}%
-\contentsline {section}{\numberline {3.4}Implementation of the hydric model}{18}{section.3.4}%
-\contentsline {subsection}{\numberline {3.4.1}Drying}{18}{subsection.3.4.1}%
-\contentsline {subsection}{\numberline {3.4.2}Shrinkage}{18}{subsection.3.4.2}%
-\contentsline {section}{\numberline {3.5}Implementation of the mechanical model}{18}{section.3.5}%
-\contentsline {subsection}{\numberline {3.5.1}Elastic}{18}{subsection.3.5.1}%
-\contentsline {subsection}{\numberline {3.5.2}Mazars}{18}{subsection.3.5.2}%
-\contentsline {section}{\numberline {3.6}Implementation of the TH and THM coupled models}{19}{section.3.6}%
+\contentsline {section}{\numberline {3.1}Modeling strategy and model parameters}{17}{section.3.1}%
+\contentsline {subsection}{\numberline {3.1.1}Modeling strategy}{17}{subsection.3.1.1}%
+\contentsline {subsection}{\numberline {3.1.2}Geometry}{17}{subsection.3.1.2}%
+\contentsline {subsection}{\numberline {3.1.3}Material properties}{17}{subsection.3.1.3}%
+\contentsline {subsection}{\numberline {3.1.4}Boundary conditions and loadings}{18}{subsection.3.1.4}%
+\contentsline {section}{\numberline {3.2}Implementation of the thermal model}{18}{section.3.2}%
+\contentsline {subsection}{\numberline {3.2.1}Stationary linear thermal analysis}{18}{subsection.3.2.1}%
+\contentsline {subsection}{\numberline {3.2.2}Transient linear and non-linear thermal analysis}{18}{subsection.3.2.2}%
+\contentsline {section}{\numberline {3.3}Implementation of the hydric model}{18}{section.3.3}%
+\contentsline {subsection}{\numberline {3.3.1}Drying}{18}{subsection.3.3.1}%
+\contentsline {subsection}{\numberline {3.3.2}Shrinkage}{18}{subsection.3.3.2}%
+\contentsline {section}{\numberline {3.4}Implementation of the mechanical model}{18}{section.3.4}%
+\contentsline {subsection}{\numberline {3.4.1}Elastic linear mechanical model}{18}{subsection.3.4.1}%
+\contentsline {subsection}{\numberline {3.4.2}Mazars model}{18}{subsection.3.4.2}%
+\contentsline {section}{\numberline {3.5}Implementation of the THM coupled model}{19}{section.3.5}%
+\contentsline {subsection}{\numberline {3.5.1}TH coupling strategy}{19}{subsection.3.5.1}%
+\contentsline {subsection}{\numberline {3.5.2}TM coupling strategy}{19}{subsection.3.5.2}%
+\contentsline {subsection}{\numberline {3.5.3}THM coupling strategy}{19}{subsection.3.5.3}%
+\contentsline {section}{\numberline {3.6}Integration into THM-D Coupled model}{19}{section.3.6}%
 \contentsline {section}{\numberline {3.7}Numerical results}{19}{section.3.7}%
-\contentsline {chapter}{\numberline {4}Model validation}{21}{chapter.4}%
+\contentsline {chapter}{\numberline {4}Experimental data and Model validation}{21}{chapter.4}%
 \contentsline {section}{\numberline {4.1}Experimental data}{21}{section.4.1}%
 \contentsline {subsection}{\numberline {4.1.1}Experimental tests and material properties}{21}{subsection.4.1.1}%
 \contentsline {subsection}{\numberline {4.1.2}Thermal, hydraulic and mechanic loadings}{21}{subsection.4.1.2}%
 \contentsline {subsection}{\numberline {4.1.3}Measured data}{21}{subsection.4.1.3}%
-\contentsline {section}{\numberline {4.2}Validation}{21}{section.4.2}%
-\contentsline {subsection}{\numberline {4.2.1}Comparison between numerical and experimental results}{21}{subsection.4.2.1}%
+\contentsline {section}{\numberline {4.2}Validation}{22}{section.4.2}%
+\contentsline {subsection}{\numberline {4.2.1}Comparison between numerical and experimental results}{22}{subsection.4.2.1}%
 \contentsline {subsection}{\numberline {4.2.2}Discussions on model performance}{22}{subsection.4.2.2}%
 \contentsline {chapter}{\numberline {5}Probabilistic sensitivity analysis}{23}{chapter.5}%
 \contentsline {section}{\numberline {5.1}Sources of uncertainty and concrete heterogeneity}{23}{section.5.1}%
