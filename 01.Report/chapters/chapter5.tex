@@ -65,7 +65,47 @@ Main ideas:
 \end{itemize}
 \end{reviewblock}
 
-\subsection{Implementation: Lognormal - Gaussian transformation}
+\subsection{Spatial variability and Random Field theory}
+
+\review{This section is currently under development and will be refined as the study progresses.}
+
+\subsubsection{Random fields}
+
+Spatial variability of material properties can be described using random field theory, in which a parameter is modeled as a stochastic function defined over the spatial domain. In this representation, the value of the property varies from point to point according to a prescribed probability distribution and spatial correlation structure. Random fields therefore provide a convenient framework to represent the heterogeneous nature of materials such as concrete.
+
+\subsubsection{Discretized random field}
+
+For numerical simulations, the continuous random field must be discretized in order to be implemented within a finite element model. This discretization assigns random values of the considered property to the elements or integration points of the mesh. In this way, the spatial variability of the material parameters can be incorporated directly into the computational model.
+
+\subsubsection{Spatial correlation length ($\lambda$)}
+
+\review{This section requires additional references to support the statements presented.}
+
+A fundamental parameter in the generation of random fields is the spatial correlation length, often denoted as $\lambda$ (or $b$). 
+
+\begin{draftblock}
+While the mean and standard deviation define the statistical distribution of the values at any given single point, the correlation length dictates the spatial structure and the degree of spatial dependence between neighboring points.
+
+Physically, in a heterogeneous material like concrete, the macroscopic properties (such as Young's modulus or permeability) at two closely located spatial points are not entirely independent. They are correlated due to the presence of meso-scale structures, such as aggregates and the cement paste matrix. The correlation length $\lambda$ mathematically represents the distance over which these macroscopic properties remain statistically correlated.
+\end{draftblock}
+
+Depending on the assigned value of $\lambda$:
+\begin{itemize}
+    \item A very small correlation length ($\lambda \rightarrow 0$) implies that the material properties fluctuate rapidly and erratically over short distances\draft{, approaching a completely uncorrelated "white noise" spatial distribution.}
+    \item A large correlation length ($\lambda \rightarrow \infty$) implies a slow spatial variation, moving towards a uniformly homogeneous material\draft{ where the property is identical across the entire macro-scale structure.}
+\end{itemize}
+
+\begin{reviewblock}
+In the context of this study, the choice of the correlation length is closely related to the maximum aggregate size of the concrete mixture. 
+\end{reviewblock}
+
+\begin{draftblock}
+In the finite element implementation using the Cast3M code, this spatial correlation is explicitly introduced into the generation of the log-normal field via the \texttt{ALEA} operator using the \texttt{'LAMBDA'} keyword. For instance, an exponential covariance function with a specific correlation length $b$ is generated using the Turning Bands Method (\texttt{'BANDES\_TOURNANTES'} algorithm). 
+\end{draftblock}
+
+\draft{The accurate selection of this parameter is crucial, as it directly governs the tortuosity of the damage patterns and influences the localization of cracks during the high-temperature spalling process.}
+
+\subsection{Transformation of Lognormal to Gaussian distributionn}
 
 In practical finite element implementations using the Cast3M software, material parameters like the Young's modulus ($E$) are often assigned a lognormal random field to ensure the generated stiffness values remain strictly positive. However, the built-in random field operator (\texttt{ALEA}) generates Gaussian (normal) distributions, necessitating a mathematical transformation.
 
@@ -146,35 +186,10 @@ Based on the exact solutions derived above, the implementation follows these seq
     \]
 \end{enumerate}
 
-\subsubsection{Spatial correlation length ($\lambda$)}
+\subsection{Integration of spatial variability into the THM model}
+This section is currently under development and will be refined as the study progresses.
 
-\review{This section requires additional references to support the statements presented.}
-
-A fundamental parameter in the generation of random fields is the spatial correlation length, often denoted as $\lambda$ (or $b$). 
-
-\begin{draftblock}
-While the mean and standard deviation define the statistical distribution of the values at any given single point, the correlation length dictates the spatial structure and the degree of spatial dependence between neighboring points.
-
-Physically, in a heterogeneous material like concrete, the macroscopic properties (such as Young's modulus or permeability) at two closely located spatial points are not entirely independent. They are correlated due to the presence of meso-scale structures, such as aggregates and the cement paste matrix. The correlation length $\lambda$ mathematically represents the distance over which these macroscopic properties remain statistically correlated.
-\end{draftblock}
-
-Depending on the assigned value of $\lambda$:
-\begin{itemize}
-    \item A very small correlation length ($\lambda \rightarrow 0$) implies that the material properties fluctuate rapidly and erratically over short distances\draft{, approaching a completely uncorrelated "white noise" spatial distribution.}
-    \item A large correlation length ($\lambda \rightarrow \infty$) implies a slow spatial variation, moving towards a uniformly homogeneous material\draft{ where the property is identical across the entire macro-scale structure.}
-\end{itemize}
-
-\begin{reviewblock}
-In the context of this study, the choice of the correlation length is closely related to the maximum aggregate size of the concrete mixture. 
-\end{reviewblock}
-
-\begin{draftblock}
-In the finite element implementation using the Cast3M code, this spatial correlation is explicitly introduced into the generation of the log-normal field via the \texttt{ALEA} operator using the \texttt{'LAMBDA'} keyword. For instance, an exponential covariance function with a specific correlation length $b$ is generated using the Turning Bands Method (\texttt{'BANDES\_TOURNANTES'} algorithm). 
-\end{draftblock}
-
-\draft{The accurate selection of this parameter is crucial, as it directly governs the tortuosity of the damage patterns and influences the localization of cracks during the high-temperature spalling process.}
-
-\subsection{Iterative Framework and Monte Carlo Simulations}
+\subsection{Monte Carlo simulation framework}
 
 After successfully implementing the log-normal random fields to represent the concrete's spatial heterogeneity, the next step in the probabilistic assessment is to perform multiple independent realizations. This is achieved through a Monte Carlo simulation framework.
 
@@ -197,7 +212,7 @@ For a predefined number of simulations $N_{simu}$, the global algorithm performs
 
 \subsubsection{Data extraction and exportation strategy}
 
-This section is currently under development and will be refined as the study progresses.
+This section is currently under development and will be refined as the study progresses
 
 \begin{draftblock}
 Storing the complete output database (which includes nodal displacements, stress tensors, and internal damage variables for every time step) for hundreds of simulations would result in an unmanageable amount of data and exceed memory limits. Therefore, a selective data extraction strategy is implemented.
@@ -220,6 +235,18 @@ Main ideas:
     \item Rank the parameters from most to least influential.
 \end{itemize}
 \end{reviewblock}
+
+\subsection{Characterization of input parameters}
+
+This section is currently under development and will be refined as the study progresses.
+
+Characterize the chosen input parameters in terms of domain variations and coefficient of variation. 
+
+\subsection{Sensitivity indicators and ranking methods}
+
+This section is currently under development and will be refined as the study progresses.
+
+Pearson correlation, Sobol indices (if variance-based), or Sensitivity derivatives (OAT - One-At-a-Time)
 
 \section{Identification of dominant parameters}
 This section is currently under development and will be refined as the study progresses.
