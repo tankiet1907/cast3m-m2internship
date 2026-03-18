@@ -1,1 +1,125 @@
  *============================================================================== 
+ *AUTHOR:  Tan Kiet HONG 
+ *DATE:    2026-02-23 
+ *DESCRIPTION: This is a simple example of a stationary thermic problem with random thermal conductivity k 
+   
+ *GEOMETRY: A rectangular cantilever beam of length 3 m and height 0.5 m. 
+ *BOUNDARY CONDITIONS: 
+ * - Imposed temperature of 200 °C on the bottom edge (LBAS). 
+ * - Imposed heat flux of 100 W/m² on the right edge (LDROITE). 
+ * - Convection with a coefficient of 100 W/m²K on the top edge (LHAUT) and ambient temperature of 25 °C. 
+ * - The left edge (LGAUCHE) is thermally insulated (no heat flux and has no imposed temperature) and fixed in space (no mechanical displacement). 
+   
+ *INPUTS: 
+ * - MEAN VALUE OF K: KMOYENNE = 1. 
+ * - STANDARD DEVIATION OF K: KSIGMA = 0.5 
+ * - CORRELATION LENGTH OF THE RANDOM FIELD k: LC = 0.5 
+ * - CONVECTION COEFFICIENT: HCONVEC = 100. 
+ * - AMBIENT TEMPERATURE: TLIBRE = 25. 
+ * - IMPOSED TEMPERATURE: TIMPOSE = 200. 
+ * - IMPOSED HEAT FLUX: FLUXIMPOSE = 100. 
+   
+ *OUTPUTS: 
+ * - RANDOM FIELD FOR THERMAL CONDUCTIVITY K 
+ * - TEMPERATURE FIELD T 
+ *============================================================================== 
+   
+ *OPTIONS 
+ OPTI ECHO 0; 
+ OPTI 'DIME' 2 'ELEM' QUA4; 
+   
+ * 1) GEOMETRY AND MESH DEFINITION 
+   
+ *GEOMETRY DEFINITION 
+ LONG    = 3.; 
+ HAUT    = 0.5; 
+   
+ *NUMBER OF MESH SEGMENT 
+ NLONG   = 35; 
+ NHAUT   = 5; 
+   
+ *POINTS CREATION 
+ PA      = 0. 0.; 
+ PB      = LONG 0.; 
+ PC      = LONG HAUT; 
+ PD      = 0. HAUT; 
+ *TRAC (PA ET PB ET PC ET PD); 
+   
+ *MESH LINES CREATION 
+ LAB     = DROI NLONG PA PB; 
+ LBC     = DROI NHAUT PB PC; 
+ LCD     = DROI NLONG PC PD; 
+ LDA     = DROI NHAUT PD PA; 
+   
+ *MESH SURFACE CREATION 
+ MAIL1   = DALL LAB LBC LCD LDA; 
+ *TRAC MAIL1; 
+   
+ * 2) PHYSICAL PROBLEM DEFINITION 
+   
+ *LINE DEFINITION FOR APPLYING BOUNDARY CONDITIONS 
+ LHAUT    = LCD; 
+ LBAS     = LAB; 
+ LDROITE  = LBC; 
+ LGAUCHE  = LDA; 
+   
+ *MATHEMATIC PROBLEM DEFINITION 
+ MOD1     = MODE MAIL1 THERMIQUE ISOTROPE; 
+ MOD2     = MODE LHAUT THERMIQUE CONVECTION; 
+   
+ *============================================================================== 
+ * RANDOM LOGNORMAL FIELD FOR THERMAL CONDUCTIVITY k 
+ * CORRELATION LENGTH - SMOOTHING PARAMETER FOR THE RANDOM FIELD 
+ LC       = 100; 
+   
+ * MEAN AND STANDARD DEVIATION OF THE LOGNORMAL DISTRIBUTION (k) 
+ KMOYENNE = 1.; 
+ KSIGMA   = 0.5; 
+ * COEFFICIENT OF VARIATION OF THE LOGNORMAL DISTRIBUTION (k) 
+ KCV       = KSIGMA / KMOYENNE; 
+   
+ * STANDARD DEVIATION OF THE GAUSSIAN DISTRIBUTION (G) 
+ GVAR     = LOG (1. + KCV**2); 
+ GSIGMA   = GVAR ** (0.5); 
+ * MEAN OF THE GAUSSIAN DISTRIBUTION (G) 
+ GMOYENNE = LOG (KMOYENNE) - 0.5 * GVAR; 
+   
+   
+ * CREATE THE RANDOM FIELD WITH GUASSIAN DISTRIBUTION 
+ GFIELD   = ALEA MOD1 'BANDES_TOURNANTES' EXPO 'SIGMA' GSIGMA 'MOYENNE' GMOYENNE 'LAMBDA' LC; 
+ * TRANFORM RANDOM GUASSIAN FIELD (G) TO RANDOM LOGNORMAL FIELD (K) 
+ KFIELD   = EXP GFIELD; 
+ TRAC KFIELD MOD1 MAIL1 'TITR' 'Random field for thermal conductivity k'; 
+ *============================================================================== 
+   
+ *MATERIAL PROPERTY DEFINITION (CONSTANT VALUES) 
+ HCONVEC  = 100.; 
+ TLIBRE   = 25.; 
+ TIMPOSE  = 200.; 
+ FLUXIMPOSE = 100.; 
+   
+ MAT1     = MATE MOD1 'K' KFIELD; 
+ MAT2     = MATE MOD2 'H' HCONVEC; 
+   
+ * 3) RESOLUTION 
+   
+ *THERMAL BOUNDARY CONDITIONS DEFINITION 
+ *CONDUCTIVITY MATRIX K ASSEMBLY = KCOND (CND1) + KCONVEC (CND2) 
+ CND1     = COND MOD1 MAT1; 
+ CND2     = COND MOD2 MAT2; 
+   
+ *LOAD VECTOR F ASSEMBLY = FIMPOSE (TIMPOSE ON LBAS + FLUXIMPOSE ON LDROITE) + FCONVEC (CNV1); 
+ *IMPOSED TEMPERATURE 
+ BB1     = BLOQ LBAS 'T'; 
+ FLT1    = DEPI BB1 TIMPOSE; 
+ *IMPOSED HEAT FLUX 
+ FLT2    = FLUX MOD1 LDROITE FLUXIMPOSE; 
+ *CONVECTION LOAD VECTOR 
+ CNV1    = CONVECTION MOD2 MAT2 'T' TLIBRE; 
+   
+ *RESOLUTION OF THE SYSTEM T 
+ KKKK    = CND1 ET CND2 ET BB1; 
+ FFFF    = FLT1 ET FLT2 ET CNV1; 
+ TTTT    = RESO KKKK FFFF; 
+ TRAC TTTT MAIL1; 
+ castem25 c:\Users\thong\Documents\cast3m-m2internship\02.[T]_stationary_thermic\thermique-K(T)T=F.dgibi 

@@ -1,10 +1,11 @@
 *==============================================================================
 *AUTHOR:  Tan Kiet HONG
-*DATE:    2026-03-18
+*DATE:    2026-02-20
 *DESCRIPTION: This is a simple example of a stationary thermic problem 
 
 *GEOMETRY: A rectangular cantilever beam of length 3 m and height 0.5 m.
 *BOUNDARY CONDITIONS:
+* - Imposed temperature of 200 °C on the bottom edge (LBAS).
 * - Imposed heat flux of 100 W/m² on the right edge (LDROITE).
 * - Convection with a coefficient of 100 W/m²K on the top edge (LHAUT) and ambient temperature of 25 °C.
 * - The left edge (LGAUCHE) is thermally insulated (no heat flux and has no imposed temperature) and fixed in space (no mechanical displacement).
@@ -13,6 +14,7 @@
 * - KTHERMAL CONDUCTIVITY: KCONDUC = 1.
 * - CONVECTION COEFFICIENT: HCONVEC = 100.
 * - AMBIENT TEMPERATURE: TLIBRE = 25.
+* - IMPOSED TEMPERATURE: TIMPOSE = 200.
 * - IMPOSED HEAT FLUX: FLUXIMPOSE = 100.
 
 *OUTPUTS:
@@ -70,12 +72,16 @@ MOD2     = MODE LHAUT THERMIQUE CONVECTION;
 KCONDUC  = 1.;
 HCONVEC  = 100.;
 TLIBRE   = 25.;
+TIMPOSE  = 200.;
 FLUXIMPOSE = 100.;
 
 MAT1     = MATE MOD1 'K' KCONDUC;
 MAT2     = MATE MOD2 'H' HCONVEC;
 
 * 3) RESOLUTION
+
+*MECHANICAL BOUNDARY CONDITIONS DEFINITION
+*CL1 = BLOQ 'UX' LGAUCHE;
 
 *THERMAL BOUNDARY CONDITIONS DEFINITION
 *SOLVING KT=F
@@ -84,15 +90,17 @@ CND1     = COND MOD1 MAT1;
 CND2     = COND MOD2 MAT2;
 
 *LOAD VECTOR F ASSEMBLY = FIMPOSE (TIMPOSE ON LBAS + FLUXIMPOSE ON LDROITE) + FCONVEC (CNV1);
-
+*IMPOSED TEMPERATURE
+BB1     = BLOQ LBAS 'T';
+FLT1    = DEPI BB1 TIMPOSE;
 *IMPOSED HEAT FLUX
 FLT2    = FLUX MOD1 LDROITE FLUXIMPOSE;
 *CONVECTION LOAD VECTOR
 CNV1    = CONVECTION MOD2 MAT2 'T' TLIBRE;
 
 *RESOLUTION OF THE SYSTEM T
-KKKK    = CND1 ET CND2;
+KKKK    = CND1 ET CND2 ET BB1;
 *BECAUSE OF F MATRIX CONTAIN BB1 (FLT1), THE SYSTEM MATRIX K IS MODIFIED BY THE ADDITION OF THE MATRIX BB1
-FFFF    = FLT2 ET CNV1;
+FFFF    = FLT1 ET FLT2 ET CNV1;
 TTTT    = RESO KKKK FFFF;
 TRAC TTTT MAIL1;
