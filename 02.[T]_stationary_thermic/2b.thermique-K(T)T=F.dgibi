@@ -15,7 +15,8 @@
 *   KD(T)=KD0(1+A_K (T-T0))
 *   WITH KD0=2, A_K=0.005, T0=20
 
-*   SL = 
+*   SL = = 0.2; PHI = 0.18; RHO_L = 1000.; RHO_S = 2500.;
+
 
 * - CONVECTION COEFFICIENT: HCONVEC = 100.
 * - AMBIENT TEMPERATURE: TLIBRE = 25.
@@ -80,6 +81,7 @@ FLUXIMPOSE = 100.;
 
 *--- CONDUCTIVITY K(T) CALCULATION ---
 * Formula: K(T) = KD(T) * [1 + 4 * (SL * PHI * RHO_L) / ((1 - PHI) * RHO_S)]
+* KD(T)=KD0(1+A_K (T-T0))
 * Range: T = 0 to 100 with a step of 1
 
 * Step-by-step calculation of the liquid phase multiplier (FEAU) 
