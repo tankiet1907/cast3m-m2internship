@@ -10,7 +10,7 @@
 * - The left edge (LGAUCHE) is thermally insulated (no heat flux and has no imposed temperature) and fixed in space (no mechanical displacement).
 
 *INPUTS:
-* - KTHERMAL CONDUCTIVITY: KCONDUC = 1.
+* - KTHERMAL CONDUCTIVITY: KCONDUC = 2.
 * - CONVECTION COEFFICIENT: HCONVEC = 100.
 * - AMBIENT TEMPERATURE: TLIBRE = 25.
 * - IMPOSED HEAT FLUX: FLUXIMPOSE = 100.
@@ -32,10 +32,6 @@ HAUT    = 0.5;
 *NUMBER OF MESH SEGMENT
 NLONG   = 35;
 NHAUT   = 5;
-
-*MESH SIZE
-*DINI   = 0.01;
-*DFIN   = 0.05;
 
 *POINTS CREATION
 PA      = 0. 0.;
@@ -67,7 +63,7 @@ MOD1     = MODE MAIL1 THERMIQUE ISOTROPE;
 MOD2     = MODE LHAUT THERMIQUE CONVECTION;
 
 *MATERIAL PROPERTY DEFINITION
-KCONDUC  = 1.;
+KCONDUC  = 2.;
 HCONVEC  = 100.;
 TLIBRE   = 25.;
 FLUXIMPOSE = 100.;

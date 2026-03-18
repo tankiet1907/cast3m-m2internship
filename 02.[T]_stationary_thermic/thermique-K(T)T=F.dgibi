@@ -10,8 +10,13 @@
 * - The left edge (LGAUCHE) is thermally insulated (no heat flux and has no imposed temperature) and fixed in space (no mechanical displacement).
 
 *INPUTS:
-* - KTHERMAL CONDUCTIVITY: K(T)=K0*10**(A_T*(T-T0))
-*   WITH K0=, A_T=0.005, T0=20.
+* - KTHERMAL CONDUCTIVITY K: 
+*   K = KD*(1+4*(SL*PHI*RHO_L)/((1-PHI)*RHO_S))
+*   KD(T)=KD0(1+A_K (T-T0))
+*   WITH KD0=2, A_K=0.005, T0=20
+
+*   SL = 
+
 * - CONVECTION COEFFICIENT: HCONVEC = 100.
 * - AMBIENT TEMPERATURE: TLIBRE = 25.
 * - IMPOSED HEAT FLUX: FLUXIMPOSE = 100.
@@ -60,35 +65,52 @@ LDROITE  = LBC;
 LGAUCHE  = LDA;
 
 *MATERIAL PROPERTY DEFINITION
-K0       = 0.344;
-A_T      = 0.005;
-T0       = 20.;
+KD0     = 2.;
+A_K     = 0.005;
+T0      = 20.;
+
+SL      = 0.2;
+PHI     = 0.18;
+RHO_L   = 1000.;
+RHO_S   = 2500.;
 
 HCONVEC  = 100.;
 TLIBRE   = 25.;
 FLUXIMPOSE = 100.;
 
-RHO_CP = 1; 
-*Rho*Cp (fictitious, for transient, small value => converges quickly)
+*--- CONDUCTIVITY K(T) CALCULATION ---
+* Formula: K(T) = KD(T) * [1 + 4 * (SL * PHI * RHO_L) / ((1 - PHI) * RHO_S)]
+* Range: T = 0 to 100 with a step of 1
 
-*CONDUCTIVITY K(T)  = K0*10**(A_T*(T-T0)) AS EVOL TABLE (T=0 to 300 with step of 1)
-tXT = PROG;
+* Step-by-step calculation of the liquid phase multiplier (FEAU) 
+* to ensure mathematical operator priority in Cast3M
+temps1    = SL * PHI * RHO_L;
+temps2  = (1. - PHI) * RHO_S;
+temps3   = temps1 / temps2;
+FEAU    = 1. + (4. * temps3);
+
+*--- Create Temperature and Conductivity Lists ---
+tXT = PROG 0. PAS 1. 100.;
 tYK = PROG;
-tT  = 0.;
 
-REPETER BOUCLE 301;
-  tKT = K0 * (10. ** (A_T * (tT - T0)));
-  tXT = tXT ET (PROG tT);
-  tYK = tYK ET (PROG tKT);
-  tT  = tT + 1.;
+REPE BOUCLE (DIME tXT);
+* Extract the temperature value at index i
+  tT_i = EXTR tXT &BOUCLE;
+
+* Calculate KD at temperature tT_i 
+* (Note: Parentheses ensure (tT_i - T0) is calculated first)
+  tKD_i = KD0 * (1. + (A_K * (tT_i - T0)));
+  
+* Calculate Total Conductivity K
+  tKT_i = tKD_i * FEAU;
+  
+* Append the result to the conductivity list
+  tYK = tYK ET (PROG tKT_i);
 FIN BOUCLE;
 
 K_EVOL = EVOL MANU 'T' tXT 'K' tYK;
+LIST K_EVOL;
 DESS K_EVOL;
-
-* CAPACITY C(T) - constant (fictitious for pseudo-transient)
-C_EVOL = EVOL MANU 'T' (PROG 0. 300.) 'C' (PROG RHO_CP RHO_CP);
-DESS C_EVOL;
 
 *MODEL DEFINITION
 MOD1     = MODE MAIL1 THERMIQUE ISOTROPE;
