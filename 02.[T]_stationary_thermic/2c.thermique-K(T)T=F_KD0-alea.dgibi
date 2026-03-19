@@ -1,7 +1,9 @@
 *==============================================================================
 *AUTHOR:  Tan Kiet HONG
 *DATE:    2026-03-18
-*DESCRIPTION: This is a sample nonlinear stationary thermic problem K(T)T=F. 
+*DESCRIPTION: This is a sample of a nonlinear stationary thermic problem K(T)T=F developed from code 2b, with a random field of KD0. 
+
+*To build the condutivity matrix K(x,y,T) that depend on space and the state variable T, the code using a multi-zone approach, which is to extract KD0 then K(x,y) of i element and combine with the evolution of K(T) to create a K(x,y,T)_i (or MATE_i) then assemble the global matrix K from K_i (MATE_total).
 
 *GEOMETRY: A rectangular cantilever beam of length 3 m and height 0.5 m.
 *BOUNDARY CONDITIONS:
@@ -15,7 +17,7 @@
 *   KD(T)=KD0(1+A_K (T-T0))
 *   WITH KD0=2, A_K=0.005, T0=20
 
-*   SL = = 0.2; PHI = 0.18; RHO_L = 1000.; RHO_S = 2500.;
+*   SL = 0.2; PHI = 0.18; RHO_L = 1000.; RHO_S = 2500.;
 
 * - CONVECTION COEFFICIENT: HCONVEC = 100.
 * - AMBIENT TEMPERATURE: TLIBRE = 25.
@@ -29,6 +31,7 @@
 OPTI ECHO 0;
 OPTI 'DIME' 2 'ELEM' QUA4;
 
+*==============================================================================
 * 1) GEOMETRY AND MESH DEFINITION
 
 *GEOMETRY DEFINITION
@@ -56,6 +59,7 @@ LDA     = DROI NHAUT PD PA;
 MAIL1   = DALL LAB LBC LCD LDA;
 *TRAC MAIL1;
 
+*==============================================================================
 * 2) PHYSICAL PROBLEM DEFINITION
 
 *LINE DEFINITION FOR APPLYING BOUNDARY CONDITIONS
@@ -67,7 +71,6 @@ LGAUCHE  = LDA;
 *MODEL DEFINITION
 MOD1     = MODE MAIL1 THERMIQUE ISOTROPE;
 MOD2     = MODE LHAUT THERMIQUE CONVECTION;
-MOD_TOT  = MOD1 ET MOD2;
 
 *MATERIAL PROPERTY DEFINITION
 A_K     = 0.005;
@@ -82,7 +85,8 @@ HCONVEC  = 100.;
 TLIBRE   = 25.;
 FLUXIMPOSE = 100.;
 
-*RANDOM LOGNORMAL FIELD FOR KD0
+*==============================================================================
+* 2A) RANDOM LOGNORMAL FIELD FOR KD0
 *    Mean(KD0) = 2, Std(KD0) = 0.5
 LC       = 0.5;
 KD0MOYENNE = 2.;
@@ -98,114 +102,141 @@ GFIELD   = ALEA MOD1 'BANDES_TOURNANTES' EXPO 'SIGMA' GSIGMA 'MOYENNE' GMOYENNE 
 KD0FIELD = EXP GFIELD;
 TRAC KD0FIELD MOD1 MAIL1 'TITR' 'Random field KD0';
 
-*--- CONDUCTIVITY K(T) CALCULATION ---
+*==============================================================================
+* 2B) CONDUCTIVITY K(x,y,T) CALCULATION
 * Formula: K(T) = KD(T) * [1 + 4 * (SL * PHI * RHO_L) / ((1 - PHI) * RHO_S)]
 * KD(T)=KD0(1+A_K (T-T0))
 * Range: T = 0 to 100 with a step of 1
 
-* 2) ĐỊNH NGHĨA BIỂU ĐỒ HỆ SỐ NHÂN (CHỈ CHỨA PHẦN BIẾN THIÊN NHIỆT ĐỘ)
-*==============================================================================
-* Tính FEAU (Hệ số pha lỏng - hằng số)
-NUMER = SL * PHI * RHO_L ;
-DENOM = (1. - PHI) * RHO_S ;
-VAL_FEAU = 1. + (4. * (NUMER / DENOM)) ;
+* Step-by-step calculation of the liquid phase multiplier (FEAU) to ensure mathematical operator priority in Cast3M
+* FEAU = [1 + 4 * (SL * PHI * RHO_L) / ((1 - PHI) * RHO_S)]
+temps1    = SL * PHI * RHO_L;
+temps2  = (1. - PHI) * RHO_S;
+FEAU    = 1. + (4. * temps1 / temps2);
 
 *==============================================================================
-* MULTI-ZONE: MỖI ELEMENT CÓ EVOL RIÊNG
-*==============================================================================
-* Convert MCHAML -> CHPOINT
+* MULTI-ZONE APPROACH
+* Purpose: Create element-wise thermal models with spatially varying
+*          conductivity K(x,y,T) = KD0(x,y) * (1 + A_K*(T-T0)) * FEAU
+*          Each element gets its own K(T) curve (EVOL) with unique KD0 value
+*          from the random field, enabling spatial heterogeneity
+
+* Convert random field from element-based (MCHAML) to node-based (CHPOINT) so we can extract scalar values at individual nodes
 KD0_CHPO = CHAN 'CHPO' MOD1 KD0FIELD;
 MESS 'KD0 min =' (MINI KD0_CHPO) ' max =' (MAXI KD0_CHPO);
 
+* Get total number of elements in the mesh
 NBELEM = NBEL MAIL1;
 MESS 'Number of elements:' NBELEM;
 
-* Danh sách nhiệt độ
+* Temperature list for building K(T) curves (0° to 150°, step 1°)
 tXT  = PROG 0. PAS 1. 150.;
 NTXT = DIME tXT;
 
-* --- Element 1 ---
+*==============================================================================
+* ELEMENT 1: Initialize MOD_CUMUL and MAT_CUMUL
+* Treated separately because Cast3M cannot create empty MODEL/MATERIAL object
 MAIL_i = ELEM MAIL1 1;
 MOD_i  = MODE MAIL_i THERMIQUE ISOTROPE;
+* Extract KD0 value at first node of this element from the random field
 PT_i   = MAIL_i POIN 1;
 KD0_i  = EXTR KD0_CHPO 'SCAL' PT_i;
 
-* Xây PROG bằng cách tính giá trị đầu tiên trước vòng lặp
+* Build K(T) curve for element 1:  K(T) = KD0_i * (1 + A_K*(T-T0)) * FEAU
+* First temperature point (T=0°C) computed outside loop
+* because Cast3M cannot create an empty PROG list
 tTi   = EXTR tXT 1;
 fT    = 1. + (A_K * (tTi - 20.));
 SI (fT < 0.01); fT = 0.01; FINSI;
-tKi   = KD0_i * fT * VAL_FEAU;
+tKi   = KD0_i * fT * FEAU;
 tYK_i = PROG tKi;
 
-* Nối thêm từ index 2
+* Append remaining temperature points (T=1°C to 150°C) to K(T) curve
 SI (NTXT > 1);
   REPE BK (NTXT - 1);
     ind   = &BK + 1;
     tTi   = EXTR tXT ind;
     fT    = 1. + (A_K * (tTi - 20.));
     SI (fT < 0.01); fT = 0.01; FINSI;
-    tKi   = KD0_i * fT * VAL_FEAU;
+    tKi   = KD0_i * fT * FEAU;
     tYK_i = tYK_i ET (PROG tKi);
   FIN BK;
 FINSI;
 
+* Create K vs T evolution curve and assign to element 1 material
 KEVOL_i = EVOL MANU 'T' tXT 'K' tYK_i;
 MAT_i   = MATE MOD_i 'K' KEVOL_i;
 
+* Initialize accumulators with element 1
+* (subsequent elements will be appended with ET operator)
 MOD_CUMUL = MOD_i;
 MAT_CUMUL = MAT_i;
 
-* --- Elements 2 → N ---
+*==============================================================================
+* ElEMENT 2 to N
+* Same logic as element 1, but results are appended to accumulators
+
 SI (NBELEM > 1);
   REPE BELEM (NBELEM - 1);
     ii     = &BELEM + 1;
+* Extract element ii mesh and create its individual thermal model
     MAIL_i = ELEM MAIL1 ii;
     MOD_i  = MODE MAIL_i THERMIQUE ISOTROPE;
+* Get KD0 value for element ii from the random field
     PT_i   = MAIL_i POIN 1;
     KD0_i  = EXTR KD0_CHPO 'SCAL' PT_i;
 
+* Build K(T) curve for element ii: K(T) = KD0_i * (1 + A_K*(T-20)) * FEAU
+* First temperature point (T=0°C) — initialize PROG list
     tTi   = EXTR tXT 1;
     fT    = 1. + (A_K * (tTi - 20.));
     SI (fT < 0.01); fT = 0.01; FINSI;
-    tKi   = KD0_i * fT * VAL_FEAU;
+    tKi   = KD0_i * fT * FEAU;
     tYK_i = PROG tKi;
 
+* Append remaining temperature points (T=1°C to 150°C)
     SI (NTXT > 1);
       REPE BK2 (NTXT - 1);
         ind   = &BK2 + 1;
         tTi   = EXTR tXT ind;
         fT    = 1. + (A_K * (tTi - 20.));
         SI (fT < 0.01); fT = 0.01; FINSI;
-        tKi   = KD0_i * fT * VAL_FEAU;
+        tKi   = KD0_i * fT * FEAU;
         tYK_i = tYK_i ET (PROG tKi);
       FIN BK2;
     FINSI;
 
+* Create K vs T evolution curve and assign to element ii material
     KEVOL_i = EVOL MANU 'T' tXT 'K' tYK_i;
     MAT_i   = MATE MOD_i 'K' KEVOL_i;
 
+* Accumulate: append element ii model and material to global objects
     MOD_CUMUL = MOD_CUMUL ET MOD_i;
     MAT_CUMUL = MAT_CUMUL ET MAT_i;
   FIN BELEM;
 FINSI;
 
 *==============================================================================
-* ADD CONVECTION + ASSEMBLE
-*==============================================================================
+* MATERIAL DEFINITION
+* MOD_CUMUL and MAT_CUMUL to replace MOD1 and MAT1
+*   PASAPAS will automatically look up the correct EVOL for each element during nonlinear iterations
+
 MAT2    = MATE MOD2 'H' HCONVEC;
 MOD_TOT = MOD_CUMUL ET MOD2;
 MAT_TOT = MAT_CUMUL ET MAT2;
 
-
-*TIME DISCRETIZATION (pseudo-transient to reach steady-state)
-*TIME FINAL 1000 with time step of 100
+*==============================================================================
+* 2C) TIME DISCRETIZATION
+* Pseudo-transient: PASAPAS requires time steps even for steady-state problems
+* TFIN and dt are artificial — only the final converged state matters
 TFIN    = 1000.;
 LTEMPS1 = PROG 0. PAS 100. TFIN;
 
-* INITIAL CONDITION (for every mesh node at initital temperature and Imposed lbas at Timpose)
+* INITIAL CONDITION (for every mesh node at initital temperature)
 T_INI   = T0;
 T0_CHPO = MANU 'CHPO' MAIL1 'T' T_INI;
 
+*==============================================================================
 * 3) RESOLUTION (PASAPAS NONLINEAR SOLVER)
 
 *IMPOSED HEAT FLUX on LDROITE 

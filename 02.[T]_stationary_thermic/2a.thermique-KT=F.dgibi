@@ -1,7 +1,7 @@
 *==============================================================================
 *AUTHOR:  Tan Kiet HONG
 *DATE:    2026-03-18
-*DESCRIPTION: This is a simple example of a stationary thermic problem 
+*DESCRIPTION: This is a simple example of a stationary thermic problem that is modified from code 1a, changing the thermal condutivity and removing the imposed temperature at the bottom
 
 *GEOMETRY: A rectangular cantilever beam of length 3 m and height 0.5 m.
 *BOUNDARY CONDITIONS:
