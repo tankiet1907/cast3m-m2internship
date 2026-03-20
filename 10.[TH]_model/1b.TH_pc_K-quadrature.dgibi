@@ -1,5 +1,7 @@
 *=====================================================================
-* Drying and shrinkage test case - coupled thermo-hydro model (single luquid phase)     
+* Drying and shrinkage test case - coupled thermo-hydro model (single luquid phase)
+* Extended version: Uncertainty quantification on permeability Kint with Quadrature method.
+
 * Original author : G. Sciume (24-04-2017)                          
 * Modified and debugged by: Tan Kiet HONG (20-03-2026)                                    
 * Modifications :                                                   
@@ -8,45 +10,11 @@
 *   - Added 'TREF' and 'TALP' to mechanical material (fixes ERREUR 77)           
 *   - English comments throughout           
 
-* PHYSICAL PROBLEM:                                                   
-*   A cubic concrete specimen (10cm x 10cm x 10cm) is subjected to   
-*   drying: internal relative humidity drops from 90% (initial) to   
-*   50% (imposed at exposed surfaces). Drying induces capillary       
-*   pressure build-up in the pore liquid, which in turn generates     
-*   shrinkage deformation in the solid skeleton.                      
-*                                                                     
-* GOVERNING EQUATIONS:                                                
-*   STEP 1 - HYGRAL (moisture transport):                             
-*     Mass conservation of liquid water in the pore space:           
-*       -eps * rho * dSl/dPc * dPc/dt = div[ rho * krl*Kint/mu* grad(Pc) ]            
-*     State variable : capillary pressure Pc [Pa]                    
-*     Solved by      : PASAPAS (nonlinear transient, theta-scheme)   
-*                                                                     
-*   STEP 2 - MECHANICAL (shrinkage):                                  
-*     Linear elastic equilibrium with equivalent thermal loading:     
-*       sigma = C : (eps_total - eps_shrinkage)                       
-*     Shrinkage stress driven by skeleton pressure:                   
-*       Ps = -Sl(Pc) * Pc   [Bishop-type effective stress]           
-*     Applied as equivalent thermal field via 'ALPHA' coefficient:   
-*       alpha_eq = Biot / (3 * K_bulk)                                
-*     State variable : displacement field U [m]                      
-*     Solved by      : PASAPAS (linear elastic, coupled to hygral)   
-*                                                                     
-* CONSTITUTIVE RELATIONSHIPS (van Genuchten model):                   
-*   Degree of saturation : Sl(Pc) = [1 + (Pc/a1)^(b1/(b1-1))]^(-1/b1)
-*   Relative permeability: krl(Pc) = Sl^0.5 * [1-(1-Sl^b1)^(1/b1)]^2
-*   Relative humidity    : HR = exp(-Mw*Pc / (R*T*rho))              
-*                                                                     
-* GEOMETRY:                                                           
-*   1/8 of the cube modeled (3 symmetry planes)                      
-*   3D mesh, 8-node hexahedral elements (CUB8)                       
-*   Refined mesh near exposed surface (drying front)                  
-*                                                                     
-* OUTPUT:                                                             
-*   - Relative humidity maps at t = 0, 30, 60, 90, 120 days         
-*   - Longitudinal shrinkage strain vs time [micron/meter]           
-*   - Deformed shape at initial and final time                        
-*   - ParaView export: HR + displacement fields (AVS format)         
+* Extended and developed from the debugged TH-model single luquid phase Code 1a
+*   - Uncertainty quantification on permeability Kint:
+*       QUADRATU → quadrature points/weights
+*       PARASTAT → sensitivity analysis
+*       PROBDENS → PDF/CDF of shrinkage strain    
 *=====================================================================
 
 OPTI ECHO 0;
