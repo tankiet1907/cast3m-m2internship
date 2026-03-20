@@ -10,7 +10,7 @@
 *   - Added 'TREF' and 'TALP' to mechanical material (fixes ERREUR 77)           
 *   - English comments throughout           
 
-* Extended and developed from the debugged TH-model single luquid phase Code 1a
+* Extended and developed from the debugged TH-model single luquid phase Code 1a and Sphere.dgibi (quadrature template)
 *   - Uncertainty quantification on permeability Kint:
 *       QUADRATU → quadrature points/weights
 *       PARASTAT → sensitivity analysis
@@ -20,6 +20,36 @@
 OPTI ECHO 0;
 OPTI DIME 3 MODE TRID ELEM CUB8;
 
+*--------------------------------------------------------------------
+*
+*
+*              0) STATISTICAL DESCRIPTION AND INPUT
+*
+*
+*--------------------------------------------------------------------
+* Mean value of intrinsic permeability [m2]
+MU_K  = 1.E-20;
+* Coefficient of variation (20% uncertainty)
+CV_K  = 0.20;
+* Standard deviation
+SIG_K = CV_K * MU_K;
+* Number of quadrature points 
+NpK = 3;
+
+* QUADRATU takes physical mean and std dev directly (no LOG conversion needed)
+TabK = QUADRATU 'LOGN' MU_K SIG_K NpK;
+
+* Global Integration table
+TabGLO = TABLE;
+ITEM = 0;
+REPE BcK NpK;
+  ITEM = ITEM + 1;
+  TabGLO .ITEM = TABLE;
+  TabGLO .ITEM . 'POIDS' = TabK .&BcK . 'POIDS';
+  TabGLO .ITEM . 'KINT'  = TabK .&BcK . 'POINT';
+FIN BcK;
+
+DEBPROC STRAIN_FINAL KINT_val*FLOTTANT;
 *--------------------------------------------------------------------
 *
 *
@@ -88,8 +118,8 @@ EPS  = 0.2;
 A1   = 20.E6;
 * van Genuchten parameter b1 [-]
 B1   = 2.;
-* Intrinsic permeability [m2]
-KINT = 1.E-20;
+* RANDOM VARIABLE - Intrinsic permeability [m2]
+KINT = KINT_val;
 * Dynamic viscosity of water [Pa.s]
 VISC = 1.E-3 ;
 
@@ -117,11 +147,11 @@ p1    =  0.        0.  0.;
 p2    = (LATO1/2.) 0.  0.;
 l12   =  DROI p1 p2 'DINI' DENS_GRO 'DFIN' DENS_FIN;
 SURF1 = l12 TRANS (0. (LATO1/2.) 0.) 'DINI' DENS_GRO 'DFIN' DENS_FIN;
-trac SURF1;
+*trac SURF1;
 
 VEC1  = 0. 0. (LATO1/2.);
 MAIL1 = SURF1 VOLU TRAN VEC1 'DINI' DENS_GRO 'DFIN' DENS_FIN;
-TRAC CACH MAIL1;
+*TRAC CACH MAIL1;
 
 * Extract exposed surface (convective boundary condition)
 p3 = (LATO1/2.) (LATO1/2.)  0. ;
@@ -131,10 +161,10 @@ p6 = 0.000 (LATO1/2.)  0.01;
 P_CONT1 = 'POIN' MAIL1 'PLAN' p2 p3 p5 0.0005;
 P_CONT2 = 'POIN' MAIL1 'PLAN' p3 p4 p6 0.0005;
 P_CONT = P_CONT1 et P_CONT2;
-trac P_CONT;
+*trac P_CONT;
 
 CONTH = (face 3 mail1) 'ELEM' 'APPUYE' 'STRICTEMENT' P_CONT;
-trac conth;
+*trac conth;
 
 
 *=====================================================================
@@ -180,7 +210,7 @@ REPETER BOUCLE (150);
   XPC  = XPC et (PROG tXPC);
   YKRL = YKRL et (PROG tYKRL);
 FIN BOUCLE;
-YK    = YKRL * ((RHO * KINT)/VISC);
+YK    = YKRL * ((RHO * KINT_val)/VISC);
 K_EFF = EVOL MANU 'T' XPC 'K' YK;
 DESS K_EFF;
 
@@ -238,16 +268,6 @@ trac tab_hr.30  mail1 SCALA_HR;
 trac tab_hr.60  mail1 SCALA_HR;
 trac tab_hr.90  mail1 SCALA_HR;
 trac tab_hr.120 mail1 SCALA_HR;
-
-
-*l_tot = l12 et l23 et l34;
-*
-***Umidità relativa sull'asse
-*evhr_1 = evol ROUG CHPO tabrh.20  l_tot;
-*evhr_2 = evol VERT CHPO tabrh.40 l_tot;
-*evhr_3 = evol BLEU CHPO tabrh.130 l_tot;
-*dess (evhr_1 et evhr_2 et evhr_3);
-
 
 *=====================================================================
 * SAVE hygro results to file (relative path - works on any machine)  
@@ -310,14 +330,14 @@ BASE1 = surf1;
 
 p7 = p2 'PLUS' (0.0  0.0 0.1);
 p8 = p4 'PLUS' (0.0  0.0 0.1);
-*
+
 P_CO12 = 'POIN' MAIL1 'PLAN' p1 p2 p7 0.0005;
 P_CO14 = 'POIN' MAIL1 'PLAN' p1 p4 p8 0.0005;
-*
+
 LATO12 = (face 3 mail1) 'ELEM' 'APPUYE' 'STRICTEMENT' P_CO12;
 LATO14 = (face 3 mail1) 'ELEM' 'APPUYE' 'STRICTEMENT' P_CO14;
 trac (BASE1 et LATO12 et LATO14);
-*
+
 CONTM1 =  BASE1;
 CONTM2 =  LATO12;
 CONTM3 =  LATO14;
@@ -448,3 +468,5 @@ SORT AVS DD MAIL1;
 
 a = a + 1;
 fin boucle;
+
+FINPROC STRAIN_FINAL
