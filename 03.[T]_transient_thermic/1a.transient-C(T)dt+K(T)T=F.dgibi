@@ -1,6 +1,6 @@
 *==============================================================================
 *AUTHOR:  Tan Kiet HONG
-*DATE:    2026-03-24
+*DATE:    2026-03-23
 *DESCRIPTION: This is a sample of a nonlinear transient thermic problem C(T)dT+K(T)T=F, developed from the code 2b thermique K(T)T=F
 
 *GEOMETRY: A rectangular cantilever beam of length 3 m and height 0.5 m.

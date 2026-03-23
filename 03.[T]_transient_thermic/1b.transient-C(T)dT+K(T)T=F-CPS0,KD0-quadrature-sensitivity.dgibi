@@ -1,8 +1,12 @@
 *==============================================================================
 *AUTHOR:  Tan Kiet HONG
-*DATE:    2026-03-21
-*DESCRIPTION: This is a sample of a nonlinear stationary thermic problem K(T)T=F, developed from the code 2a KT=F and Sphere.dgibi (quadrature template). Addtions:
-*   - Uncertainty quantification on thermal conductivity Kd0:
+*DATE:    2026-03-24
+*DESCRIPTION: This is a sample of a nonlinear transient thermic problem C(T)dT+K(T)T=F from 1a. transient C(T)dT+K(T)T=F
+*EXTENDED:
+
+*   - Added INDIVIDUAL SENSITIVITY: fix one variable, vary the other and compare contribution of random variables.
+
+*   - Uncertainty quantification on thermal conductivity Kd0 and heat capacity Cps0:
 *       QUADRATU → quadrature points/weights
 *       PARASTAT → sensitivity analysis
 *       PROBDENS → PDF/CDF of temperature  
@@ -14,12 +18,16 @@
 * - The left edge (LGAUCHE) is thermally insulated (no heat flux and has no imposed temperature) and fixed in space (no mechanical displacement).
 
 *INPUTS:
-* - KTHERMAL CONDUCTIVITY K: 
+* - K THERMAL CONDUCTIVITY K: 
 *   K = KD*(1+4*(SL*PHI*RHO_L)/((1-PHI)*RHO_S))
 *   KD(T)=KD0(1+A_K (T-T0))
 *   WITH KD0=2, A_K=0.005, T0=20
 
 *   SL = 0.2; PHI = 0.18; RHO_L = 1000.; RHO_S = 2500.;
+
+* - C HEAT CAPACITY
+*   CPS(T) = CPS0(1+A_C(T-T0))
+*   WITH CPS0 = 948; A_C = 0.00037
 
 * - CONVECTION COEFFICIENT: HCONVEC = 100.
 * - AMBIENT TEMPERATURE: TLIBRE = 25.
@@ -73,6 +81,7 @@ LGAUCHE  = LDA;
 
 *MATERIAL PROPERTY DEFINITION
 A_K     = 0.005;
+A_C     = 0.00037;
 T0      = 20.;
 
 SL      = 0.2;
@@ -126,37 +135,83 @@ CHAR_CV = CHAR 'TECO' CONV1 EV_CONV;
 CHAR_TOT = FLT2 ET CHAR_CV;
 
 *==============================================================================
-* 3) QUADRATURE POINTS FOR KD0 ~ LogNormal(MU_KD0, SIG_KD0)
+* 3) QUADRATURE POINTS FOR KD0 AND CPS0 ~ LogNormal(MU_KD0, SIG_KD0)
 
 MU_KD0  = 2.0;    
-SIG_KD0 = 0.1;    
-NpKD0   = 10;      
+SIG_KD0 = 0.2;    
+NpKD0   = 3;      
 
+MU_CPS0  = 948;    
+SIG_CPS0 = 0.1;    
+NpCPS0   = 3;      
+
+* QUADRATU takes physical mean and std dev directly
 TabKD0 = QUADRATU 'LOGN' MU_KD0 SIG_KD0 NpKD0;
+TabCPS0 = QUADRATU 'LOGN' MU_CPS0 SIG_CPS0 NpCPS0;
+
+* BUILD TabGLO: ALL COMBINATIONS OF RANDOM VARIABLES (K0, PHI0)
+TabGLO = TABLE;
+ITEM = 0;
+
+REPE BcKD0 NpKD0;
+  REPE BcCPS0 NpCPS0;
+    ITEM = ITEM + 1;
+    TabGLO.ITEM = TABLE;
+    TabGLO.ITEM.'POIDS' = TabKD0.&BcKD0.'POIDS'
+                         * TabCPS0.&BcCPS0.'POIDS';
+    TabGLO.ITEM.'KD0'    = TabKD0.&BcKD0.'POINT';
+    TabGLO.ITEM.'CPS0'  = TabCPS0.&BcCPS0.'POINT';
+  FIN BcCPS0;
+FIN BcKD0;
+
+N_TOTAL = ITEM;
+MESS 'Total quadrature combinations = ' N_TOTAL;
 
 *==============================================================================
 * 4) PROCEDURE: FEM solve for a given KD0 value → returns T_max
 
-DEBPROC CalTmax KD0val*FLOTTANT;
+DEBPROC CalTmax CPS0val*FLOTTANT KD0val*FLOTTANT;
 
-* Build K(T) curve for this KD0 sample
+* 4A) CAPACITY C(T) CALCULATION
+* Formula: CPS(T) = CPS0(1+A_C(T-T0))
+
+* Temperature list for building C(T) curves (0° to 100°, step 1°)
+tXT = PROG 0. PAS 1. 150.;
+tYC = PROG;
+
+* Build C(T) curve
+REPE BOUCLEC (DIME tXT);
+  tT_i = EXTR tXT &BOUCLEC;
+  tCPT_i = CPS0val * (1. + (A_C * (tT_i - T0)));
+  tYC = tYC ET (PROG tCPT_i);
+FIN BOUCLEC;
+
+C_EVOL_i = EVOL MANU 'T' tXT 'C' tYC;
+
+*==============================================================================
+* 4B) CONDUCTIVITY K(T) CALCULATION
+* Formula: K(T) = KD(T) * [1 + 4 * (SL * PHI * RHO_L) / ((1 - PHI) * RHO_S)]
+
+* Temperature list for building K(T) curves (0° to 100°, step 1°)
 tXT = PROG 0. PAS 1. 150.;
 tYK = PROG;
 
-REPE BoucleT (DIME tXT);
-   tT_i   = EXTR tXT &BoucleT;
-   tKD_i  = KD0val * (1. + (A_K * (tT_i - T0)));
-   tKT_i  = tKD_i * FEAU;
-   tYK    = tYK ET (PROG tKT_i);
-FIN BoucleT;
+* Build K(T) curve
+REPE BOUCLEK (DIME tXT);
+  tT_i = EXTR tXT &BOUCLEK;
+  tKD_i =KD0val * (1. + (A_K * (tT_i - T0)));
+  tKT_i = tKD_i * FEAU;
+  tYK = tYK ET (PROG tKT_i);
+FIN BOUCLEK;
 
-K_EVOL_i = EVOL MANU 'T' tXT 'K' tYK;
+K_EVOL_I = EVOL MANU 'T' tXT 'K' tYK;
 
-* Assemble material (K depends on KD0val)
-MAT1_i   = MATE MOD1 'K' K_EVOL_i;
+*MATERIAL DEFINITION
+MAT1_i     = MATE MOD1 'C' C_EVOL_i 'K' K_EVOL_i 'RHO' RHO_S;
 MAT_TOT_i = MAT1_i ET MAT2;
 
-* PASAPAS nonlinear solve
+
+*RESOLUTION PASAPAS (nonlinear thermal)
 TABi = TABLE;
 TABi.TEMPERATURES        = TABLE;
 TABi.TEMPERATURES.0      = T0_CHPO;
@@ -181,24 +236,27 @@ FINPROC Tmax_i;
 
 TabRES = TABLE;
 
-REPE BoucleQ NpKD0;
-  KD0_q   = TabKD0 .&BoucleQ. 'POINT';
-  POIDS_q = TabKD0 .&BoucleQ. 'POIDS';
+REPE BoucleQ N_TOTAL;
+  KD0_q     = TabGLO.&BoucleQ.'KD0';
+  CPS0_q   = TabGLO.&BoucleQ.'CPS0';
+  POIDS_q = TabGLO.&BoucleQ.'POIDS';
 
-  Tmax_q  = CalTmax KD0_q;
+* Call FEM with both random variables
+  Tmax_q  = CalTmax KD0_q CPS0_q;
 
   TabRES .&BoucleQ = TABLE;
   TabRES .&BoucleQ. 'POINT' = Tmax_q;
   TabRES .&BoucleQ. 'POIDS' = POIDS_q;
 
-  MESS '--- Quadrature point ' &BoucleQ ' / ' NpKD0;
-  MESS '    KD0   = ' KD0_q;
+  MESS '--- Quadrature point ' &BoucleQ ' / ' N_TOTAL;
+  MESS '    KD0    = ' KD0_q;
+  MESS '    CPS0  = ' CPS0_q;
   MESS '    POIDS = ' POIDS_q;
   MESS '    Tmax  = ' Tmax_q;
 FIN BoucleQ;
 
 *==============================================================================
-* 6) STATISTICAL MOMENTS via PARASTAT
+* 6) STATISTICAL MOMENTS via PARASTAT (GLOBAL)
 
 MU_T SIGMA_T RB1_T B2_T = PARASTAT TabRES;
 
@@ -210,31 +268,73 @@ MESS '%%% SKEWNESS        (RB1)   = ' RB1_T;
 MESS '%%% KURTOSIS        (B2)    = ' B2_T;
 MESS '%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%';
 
-*==============================================================================
-* 7) PDF / CDF of T_max via PROBDENS
+* PDF / CDF of T_max via PROBDENS (GLOBAL)
 
 PDF_T CDF_T = PROBDENS MU_T SIGMA_T RB1_T B2_T;
-DESS PDF_T;
-DESS CDF_T;
+DESS PDF_T TITR 'PDF of Tmax';
+DESS CDF_T TITR 'CDF of Tmax';
 
 *==============================================================================
-* 8) DETERMINISTIC REFERENCE RUN (KD0 = MU_KD0) FOR VISUALIZATION
+* 7) SENSITIVITY ANALYSIS: fix one variable, vary the other
 
-MESS '%%% DETERMINISTIC REFERENCE RUN (KD0 = mean)';
+* --- Sensitivity to KD0 alone (fix CPS0 = mean) ---
+TabRES_KD0 = TABLE;
+REPE BcK NpKD0;
+  TabRES_KD0 . &BcK = TABLE;
+  TabRES_KD0 . &BcK . 'POIDS' = TabKD0 . &BcK . 'POIDS';
+  TabRES_KD0 . &BcK . 'POINT' = CalTmax MU_CPS0 (TabKD0 . &BcK . 'POINT');
+FIN BcK;
+
+MU_K SIG_K RB1_K B2_K = PARASTAT TabRES_KD0;
+MESS '%%% Sensitivity KD0 only:  mean=' MU_K '  std=' SIG_K;
+
+* --- Sensitivity to CPS0 alone (fix KD0 = mean) ---
+TabRES_CPS = TABLE;
+REPE BcC NpCPS0;
+  TabRES_CPS . &BcC = TABLE;
+  TabRES_CPS . &BcC . 'POIDS' = TabCPS0 . &BcC . 'POIDS';
+  TabRES_CPS . &BcC . 'POINT' = CalTmax (TabCPS0 . &BcC . 'POINT') MU_KD0;
+FIN BcC;
+
+MU_C SIG_C RB1_C B2_C = PARASTAT TabRES_CPS;
+MESS '%%% Sensitivity CPS0 only: mean=' MU_C '  std=' SIG_C;
+
+* --- Compare contributions ---
+VAR_TOTAL = SIG_K ** 2 + SIG_C ** 2;
+CONTRIB_K = 100. * (SIG_K ** 2) / VAR_TOTAL;
+CONTRIB_C = 100. * (SIG_C ** 2) / VAR_TOTAL;
+MESS '%%% KD0  contribution: ' CONTRIB_K ' %';
+MESS '%%% CPS0 contribution: ' CONTRIB_C ' %';
+
+*==============================================================================
+* 8) DETERMINISTIC REFERENCE RUN FOR VISUALIZATION
+
+MESS '%%% DETERMINISTIC REFERENCE RUN';
+
+tXT_ref = PROG 0. PAS 1. 150.;
+tYC_ref = PROG;
+REPE BOUCLEREFC (DIME tXT_ref);
+  tT_r = EXTR tXT_ref &BOUCLEREFC;
+  tCPT_r = MU_CPS0 * (1. + (A_C * (tT_r - T0)));
+  tYC_ref = tYC_ref ET (PROG tCPT_r);
+FIN BOUCLEREFC;
+
+C_REF = EVOL MANU 'T' tXT_ref 'C' tYC_ref;
+DESS C_REF;
 
 tXT_ref = PROG 0. PAS 1. 150.;
 tYK_ref = PROG;
-REPE BoucleRef (DIME tXT_ref);
-  tT_r  = EXTR tXT_ref &BoucleRef;
+REPE BoucleRefK (DIME tXT_ref);
+  tT_r  = EXTR tXT_ref &BoucleRefK;
   tKD_r = MU_KD0 * (1. + (A_K * (tT_r - T0)));
   tKT_r = tKD_r * FEAU;
   tYK_ref = tYK_ref ET (PROG tKT_r);
-FIN BoucleRef;
+FIN BoucleRefK;
 
 K_REF   = EVOL MANU 'T' tXT_ref 'K' tYK_ref;
 DESS K_REF;
 
-MAT1_R  = MATE MOD1 'K' K_REF;
+MAT1_R  = MATE MOD1 'C' C_REF 'K' K_REF 'RHO' RHO_S;
 MAT_R   = MAT1_R ET MAT2;
 
 TAB_REF = TABLE;
