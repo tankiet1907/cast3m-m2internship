@@ -88,9 +88,9 @@ FLUXIMPOSE = 100.;
 *==============================================================================
 * 2A) RANDOM LOGNORMAL FIELD FOR KD0
 *    Mean(KD0) = 2, Std(KD0) = 0.5
-LC       = 0.5;
+LC       = 0.1;
 KD0MOYENNE = 2.;
-KSIGMA   = 0.2;
+KSIGMA   = 0.1;
 KD0CV      = KSIGMA / KD0MOYENNE;
 
 GVAR     = LOG (1. + KD0CV**2);
