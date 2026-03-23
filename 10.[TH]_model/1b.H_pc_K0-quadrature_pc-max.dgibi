@@ -3,18 +3,19 @@
 * Extended version: Uncertainty quantification on permeability Kint with Quadrature method.
 
 * Original author : G. Sciume (24-04-2017)                          
-* Modified and debugged by: Tan Kiet HONG (20-03-2026)                                    
+* Modified by: Tan Kiet HONG (23-03-2026)                                    
 * Modifications :                                                   
 *   - All absolute file paths replaced with relative paths            
 *     (runs on any machine without modification)                      
 *   - Added 'TREF' and 'TALP' to mechanical material (fixes ERREUR 77)           
 *   - English comments throughout           
 
-* Extended and developed from the debugged TH-model single luquid phase Code 1a and Sphere.dgibi (quadrature template)
+* Simplifed from the debugged TH-model single luquid phase Code 1a and Sphere.dgibi (quadrature template)
+*   - Simplified from TH-model to H model (no schrinkage strain)
 *   - Uncertainty quantification on permeability Kint:
 *       QUADRATU → quadrature points/weights
 *       PARASTAT → sensitivity analysis
-*       PROBDENS → PDF/CDF of shrinkage strain    
+*       PROBDENS → PDF/CDF of pcmax   
 *=====================================================================
 
 OPTI ECHO 0;
@@ -102,7 +103,7 @@ HR_EXT = 0.50;
 HR_INI = 0.90;
 
 *=====================================================================
-* 4) MESH CONSTRUCTION: 1/8 of a cubic specimenCUBIQUE 
+* 4) MESH CONSTRUCTION: 1/8 of a cubic specimen
 *=====================================================================
 * Full side length of cube [m]
 LATO1    = 0.10;
@@ -133,7 +134,6 @@ P_CONT = P_CONT1 et P_CONT2;
 
 CONTH = (face 3 mail1) 'ELEM' 'APPUYE' 'STRICTEMENT' P_CONT;
 *trac conth;
-
 
 *=====================================================================
 * 5) TIME DISCRETIZATION                                                 
@@ -288,7 +288,7 @@ DESS CDF_PC;
 *=====================================================================
 MESS '%%% DETERMINISTIC REFERENCE RUN (KINT = mean)';
 
-* K_EFF with nominal KINT and Recalculate YKRL
+* K_EFF with nominal KINT and Recalculate YKRL (fix error)
 tXPC  = 0.;
 tYKRL = 1.;
 XPC  = PROG tXPC;
@@ -300,7 +300,7 @@ REPETER BOUCLE (150);
   YKRL = YKRL et (PROG tYKRL);
 FIN BOUCLE;
 YK_ref    = YKRL * ((RHO * MU_K0) / VISC);
-K_EFF_ref = EVOL MANU 'T' XPC 'K' YK_ref;
+K_EFF_ref = EVOL MANU 'T' XPC 'K0' YK_ref;
 DESS K_EFF_ref;
 
 MA_HYGR_ref = MATE MO_HYGR 'RHO' 1. 'C' CP 'K' K_EFF_ref;
