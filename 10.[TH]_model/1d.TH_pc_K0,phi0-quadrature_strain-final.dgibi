@@ -83,8 +83,6 @@ FINP chhpc;
 *=====================================================================
 * Water density [kg/m3]
 RHO  = 1000.;
-* Porosity [-]
-EPS  = 0.2;
 * van Genuchten parameter a1 [Pa]
 A1   = 20.E6;
 * van Genuchten parameter b1 [-]
@@ -150,22 +148,6 @@ LTEMPS1 = PROG 0. PAS (24 * heure1) TFIN;
 MO_HYGR = MODE MAIL1 THERMIQUE;
 MO_CONV = MODE CONTH THERMIQUE CONVECTION;
 MO_TOT  = MO_HYGR et MO_CONV;
-
-* Build moisture capacity coefficient C(Pc) = -eps * rho * dSl/dPc
-tXPC  = 0.;
-tYDSW = 0.;
-XPC  = PROG tXPC;
-YDSW = PROG tYDSW;
-REPETER BOUCLE (150);
-  tXPC = tXPC + 1.E6;
-  tYDSW = sldepc tXPC;
-  XPC  = XPC  et (PROG tXPC);
-  YDSW = YDSW et (PROG tYDSW);
-FIN BOUCLE;
-DSWPC = EVOL MANU 'T' XPC 'T' YDSW;
-YCP   = -1. * YDSW * EPS * RHO;
-CP    =  EVOL MANU 'T' XPC 'C' YCP;
-DESS CP;
 
 MA_CONV = MATE MO_CONV 'H' 1.E-13;
 
@@ -251,7 +233,7 @@ p3_meas = MAIL1 POIN PROC (0.  0. (LATO1/2.));
 L0      = LATO1/2.;
 
 *=====================================================================
-* I.8A) QUADRATURE POINTS FOR K0 ~ LogNormal(MU_K0, SIG_K0)
+* I.8A) QUADRATURE POINTS FOR K0 and PHI0
 *=====================================================================
 
 * Mean value of intrinsic permeability [m2]
@@ -263,13 +245,56 @@ SIG_K0 = CV_K0 * MU_K0;
 * Number of quadrature points 
 NpK0 = 3;
 
-*==============================================================================
-* I.8B) PROCEDURE: FEM solve for a given K value
+* Mean value of porosity [-]
+MU_PHI0  = 0.20;
+* Coefficient of variation (10% uncertainty)
+CV_PHI0  = 0.10;
+* Standard deviation
+SIG_PHI0 = CV_PHI0 * MU_PHI0;
+* Number of quadrature points
+NpPHI0 = 3;
 
 * QUADRATU takes physical mean and std dev directly (no LOG conversion needed)
 TabK0 = QUADRATU 'LOGN' MU_K0 SIG_K0 NpK0;
+TabPHI0 = QUADRATU 'LOGN' MU_PHI0 SIG_PHI0 NpPHI0;
 
-DEBPROC CalStrain KINT_val*FLOTTANT;
+* BUILD TabGLO: ALL COMBINATIONS OF RANDOM VARIABLES (K0, PHI0)
+TabGLO = TABLE;
+ITEM = 0;
+
+REPE BcK0 NpK0;
+  REPE BcPHI0 NpPHI0;
+    ITEM = ITEM + 1;
+    TabGLO.ITEM = TABLE;
+    TabGLO.ITEM.'POIDS' = TabK0.&BcK0.'POIDS'
+                         * TabPHI0.&BcPHI0.'POIDS';
+    TabGLO.ITEM.'K0'    = TabK0.&BcK0.'POINT';
+    TabGLO.ITEM.'PHI0'  = TabPHI0.&BcPHI0.'POINT';
+  FIN BcPHI0;
+FIN BcK0;
+
+N_TOTAL = ITEM;
+MESS 'Total quadrature combinations = ' N_TOTAL;
+
+*==============================================================================
+* I.8B) PROCEDURE: FEM solve for a given K0 and Phi0 value
+
+DEBPROC CalStrain KINT_val*FLOTTANT PHI0_val*FLOTTANT;
+
+* Build moisture capacity coefficient C(Pc) = -phi0 * rho * dSl/dPc
+tXPC  = 0.;
+tYDSW = 0.;
+XPC  = PROG tXPC;
+YDSW = PROG tYDSW;
+REPETER BOUCLE (150);
+  tXPC = tXPC + 1.E6;
+  tYDSW = sldepc tXPC;
+  XPC  = XPC  et (PROG tXPC);
+  YDSW = YDSW et (PROG tYDSW);
+FIN BOUCLE;
+DSWPC = EVOL MANU 'T' XPC 'T' YDSW;
+YCP   = -1. * YDSW * PHI0_val * RHO;
+CP_i    =  EVOL MANU 'T' XPC 'C' YCP;
 
 * Build effective hydraulic conductivity K_eff(Pc) = krl * rho * Kint / visc
 tXPC  = 0.;
@@ -286,7 +311,7 @@ YK    = YKRL * ((RHO * KINT_val)/VISC);
 
 K_EFF_i = EVOL MANU 'T' XPC 'K' YK;
 
-MA_HYGR_i = MATE MO_HYGR 'RHO' 1. 'C' CP 'K' K_EFF_i;
+MA_HYGR_i = MATE MO_HYGR 'RHO' 1. 'C' CP_i 'K' K_EFF_i;
 MAT_TOT_i = MA_HYGR_i ET MA_CONV;
 
 * PASAPAS nonlinear solve
@@ -325,7 +350,7 @@ FIN BOU_PSi;
 
 * Build thermal-like load from skeletal pressure history
 CHAM_THi = CHAR 'T'  (TABi . 'TEMPS')  (TABi . 'PS') ;
-*LIST CHAM_TH;
+*LIST CHAM_THi;
 
 *=====================================================================
 * II.6) MECHANICAL RESOLUTION - PASAPAS 
@@ -351,18 +376,21 @@ FINP strain_i;
 *==============================================================================
 TabRES = TABLE;
 
-REPE BoucleQ NpK0;
-  K0_q   = TabK0 .&BoucleQ. 'POINT';
-  POIDS_q = TabK0 .&BoucleQ. 'POIDS';
+REPE BoucleQ N_TOTAL;
+  K0_q     = TabGLO.&BoucleQ.'K0';
+  PHI0_q   = TabGLO.&BoucleQ.'PHI0';
+  POIDS_q = TabGLO.&BoucleQ.'POIDS';
 
-  strain_q  = CalStrain K0_q;
+* Call FEM with both random variables
+  strain_q  = CalStrain K0_q PHI0_q;
 
   TabRES .&BoucleQ = TABLE;
   TabRES .&BoucleQ. 'POINT' = strain_q;
   TabRES .&BoucleQ. 'POIDS' = POIDS_q;
 
-  MESS '--- Quadrature point ' &BoucleQ ' / ' NpK0;
+  MESS '--- Quadrature point ' &BoucleQ ' / ' N_TOTAL;
   MESS '    K0    = ' K0_q;
+  MESS '    PHI0  = ' PHI0_q;
   MESS '    POIDS = ' POIDS_q;
   MESS '    Strain= ' strain_q;
 FIN BoucleQ;
@@ -388,11 +416,26 @@ DESS PDF_S;
 DESS CDF_S;
 
 *=====================================================================
-* I.8F) DETERMINISTIC REFERENCE RUN (KINT = MU_KINT)
+* I.8F) DETERMINISTIC REFERENCE RUN
 *=====================================================================
-MESS '%%% DETERMINISTIC REFERENCE RUN (KINT = mean)';
+MESS '%%% DETERMINISTIC REFERENCE RUN';
+* C(Pc) with nominal PHI0_MEAN
+tXPC  = 0.;
+tYDSW = 0.;
+XPC  = PROG tXPC;
+YDSW = PROG tYDSW;
+REPETER BOUCLE (150);
+  tXPC = tXPC + 1.E6;
+  tYDSW = sldepc tXPC;
+  XPC  = XPC  et (PROG tXPC);
+  YDSW = YDSW et (PROG tYDSW);
+FIN BOUCLE;
+DSWPC = EVOL MANU 'T' XPC 'T' YDSW;
+YCP   = -1. * YDSW * MU_PHI0 * RHO;
+CP_ref    =  EVOL MANU 'T' XPC 'C' YCP;
+DESS CP_ref;
 
-* K_EFF with nominal KINT and Recalculate YKRL (fix error)
+* K_EFF with nominal KINT_mean
 tXPC  = 0.;
 tYKRL = 1.;
 XPC  = PROG tXPC;
@@ -407,7 +450,7 @@ YK_ref    = YKRL * ((RHO * MU_K0) / VISC);
 K_EFF_ref = EVOL MANU 'T' XPC 'K' YK_ref;
 DESS K_EFF_ref;
 
-MA_HYGR_ref = MATE MO_HYGR 'RHO' 1. 'C' CP 'K' K_EFF_ref;
+MA_HYGR_ref = MATE MO_HYGR 'RHO' 1. 'C' CP_ref 'K' K_EFF_ref;
 MA_TOT_ref  = MA_HYGR_ref et MA_CONV;
 
 *=====================================================================
