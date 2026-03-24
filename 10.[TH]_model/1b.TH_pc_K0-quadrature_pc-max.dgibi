@@ -11,7 +11,7 @@
 *   - English comments throughout           
 
 * Simplifed from the debugged TH-model single luquid phase Code 1a and Sphere.dgibi (quadrature template)
-*   - Simplified from TH-model to H model (no schrinkage strain)
+*   - Removed schrinkage strain calculation
 *   - Uncertainty quantification on permeability Kint:
 *       QUADRATU → quadrature points/weights
 *       PARASTAT → sensitivity analysis
