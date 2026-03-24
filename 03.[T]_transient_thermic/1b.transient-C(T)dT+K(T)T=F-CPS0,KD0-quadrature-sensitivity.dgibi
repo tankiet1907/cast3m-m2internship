@@ -300,7 +300,7 @@ MU_C SIG_C RB1_C B2_C = PARASTAT TabRES_CPS;
 MESS '%%% Sensitivity CPS0 only: mean=' MU_C '  std=' SIG_C;
 
 * --- Compare contributions ---
-VAR_TOTAL = SIG_K ** 2 + SIG_C ** 2;
+VAR_TOTAL = (SIG_K ** 2) + (SIG_C ** 2);
 CONTRIB_K = 100. * (SIG_K ** 2) / VAR_TOTAL;
 CONTRIB_C = 100. * (SIG_C ** 2) / VAR_TOTAL;
 MESS '%%% KD0  contribution: ' CONTRIB_K ' %';
