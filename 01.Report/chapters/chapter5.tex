@@ -1,5 +1,5 @@
 \cleardoublepage
-\chapter{Probabilistic sensitivity analysis}
+\chapter{Probabilistic analysis of the THM model}
 
 \review{This chapter is currently a draft version and will undergo further review and revision.}
 
@@ -53,7 +53,7 @@ A critical source of aleatoric uncertainty in civil engineering is the inherent 
 Because these material parameters are fundamentally variable, evaluating the true safety and performance of a structure requires geotechnical and structural predictions to abandon purely deterministic values. Instead, they must rely on random variables and stochastic fields to accurately model this spatial heterogeneity.
 \end{draftblock}   
 
-\section{Probabilistic framework and implementation}
+\section{Stochastic finite element framework (Monte Carlo)}
 
 \begin{reviewblock}
 Main ideas:
@@ -65,7 +65,7 @@ Main ideas:
 \end{itemize}
 \end{reviewblock}
 
-\subsection{Spatial variability and Random Field theory}
+\subsection{Random Field theory and Spatial variability}
 
 \review{This section is currently under development and will be refined as the study progresses.}
 
@@ -210,7 +210,7 @@ For a predefined number of simulations $N_{simu}$, the global algorithm performs
 \end{enumerate}
 \end{draftblock}
 
-\subsubsection{Data extraction and exportation strategy}
+\subsubsection{Data extraction and post-processing}
 
 This section is currently under development and will be refined as the study progresses
 
@@ -224,7 +224,46 @@ In the Cast3M script, this is executed using the \texttt{EXCO} (to extract the s
 This exported dataset containing the input realizations and the corresponding QoI outputs serves as the direct input for the external probabilistic software (e.g., Persalys) to compute the probability density functions and rank the dominant parameters via Sobol indices.
 \end{draftblock}
 
-\section{Sensitivity analysis methodology}
+\section{Gaussian Quadrature framework}
+
+This section is currently under development and will be refined as the study progresses.
+  
+\subsection{Principle of Gaussian Quadrature}
+\begin{reviewblock}
+Main ideas as follows:
+\end{reviewblock}
+
+\subsubsection{From integration to weighted sum}
+\subsubsection{Orthogonal polynomials and weighting functions}
+\subsubsection{Abscissas and weights construction}
+
+\subsection{Statistical moment estimation}
+\begin{reviewblock}
+Main ideas as follows:
+\end{reviewblock}
+
+\subsubsection{Mean, variance, skewness, kurtosis from quadrature}
+\subsubsection{Variance decomposition per variable}
+
+\subsection{PDF, CDF and reliability assessment}
+\begin{reviewblock}
+Main ideas as follows:
+\end{reviewblock}
+
+\subsubsection{Approximation methods (Pearson, Winterstein, Exp-Polynomial)}
+\subsubsection{Probability of failure and reliability index}
+
+\subsection{Computational efficiency}
+\begin{reviewblock}
+Main ideas as follows:
+\end{reviewblock}
+
+\subsubsection{Cost comparison with Monte Carlo}
+\subsubsection{Quick Quadrature for high-dimensional problems}
+\subsubsection{Data extraction: moments computed directly from weighted sum}
+\subsubsection{Limitations: curse of dimensionality}
+
+\section{Sensitivity analysis}
 
 \begin{reviewblock}
 Main ideas:
@@ -242,11 +281,63 @@ This section is currently under development and will be refined as the study pro
 
 Characterize the chosen input parameters in terms of domain variations and coefficient of variation. 
 
+\begin{reviewblock}
+Main ideas as follows:
+\end{reviewblock}
+
+\subsubsection{Chosen Random variables}
+
+\subsubsection{Correlated vs uncorrelated parameters}
+
+\subsubsection{Physical correlations}
+
 \subsection{Sensitivity indicators and ranking methods}
 
 This section is currently under development and will be refined as the study progresses.
 
 Pearson correlation, Sobol indices (if variance-based), or Sensitivity derivatives (OAT - One-At-a-Time)
 
-\section{Identification of dominant parameters}
+\begin{reviewblock}
+Main ideas as follows:
+\end{reviewblock}
+
+\subsubsection{Variance decomposition}
+
+\subsubsection{Uncorrelated parameters}
+
+\subsubsection{Correlated parameters}
+
+\subsubsection{Quadrature: one-variable-at-a-time moments}
+
+\subsubsection{Monte Carlo: Sobol indices and Pearson correlation}
+
+\subsection{Identification of dominant parameters}
+This section is currently under development and will be refined as the study progresses.
+
+\begin{reviewblock}
+Main ideas as follows:
+\end{reviewblock}
+
+\subsubsection{Ranking from most to least influential}
+
+\subsubsection{Comparison: Quadrature ranking vs Monte Carlo ranking}
+
+\subsubsection{Physical interpretation of dominant parameters}
+
+\section{Reliability analysis}
+
+\begin{reviewblock}
+Main ideas as follows:
+\end{reviewblock}
+
+\subsection{Probability of failure and reliability index}
+This section is currently under development and will be refined as the study progresses.
+
+\subsection{Probability of failure from moment-based PDF}
+This section is currently under development and will be refined as the study progresses.
+
+\subsection{Probability of failure from Monte Carlo sampling}
+This section is currently under development and will be refined as the study progresses.
+
+\subsection{Effect of spatial heterogeneity on structural safety}
 This section is currently under development and will be refined as the study progresses.
