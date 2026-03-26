@@ -209,6 +209,51 @@
       \verb C:\Users\thong\Zotero\storage\GRDNYWFY\Hamon - 2013 - Model of damage of MAZARS.pdf
       \endverb
     \endentry
+    \entry{liu2001}{article}{}{}
+      \name{author}{3}{}{%
+        {{hash=c98b8df825976ea7cb8362592da21cc7}{%
+           family={Liu},
+           familyi={L\bibinitperiod},
+           given={Ning},
+           giveni={N\bibinitperiod}}}%
+        {{hash=1ea9938fcf457149a57010bc4a52557c}{%
+           family={Hu},
+           familyi={H\bibinitperiod},
+           given={Bin},
+           giveni={B\bibinitperiod}}}%
+        {{hash=e4fa00695e0fa936c7894d2b925cac77}{%
+           family={Yu},
+           familyi={Y\bibinitperiod},
+           given={Zhi-Wen},
+           giveni={Z\bibinithyphendelim W\bibinitperiod}}}%
+      }
+      \strng{namehash}{4b53889ab99701d8ec0e97dbf1ea82cc}
+      \strng{fullhash}{4b53889ab99701d8ec0e97dbf1ea82cc}
+      \strng{fullhashraw}{4b53889ab99701d8ec0e97dbf1ea82cc}
+      \strng{bibnamehash}{4b53889ab99701d8ec0e97dbf1ea82cc}
+      \strng{authorbibnamehash}{4b53889ab99701d8ec0e97dbf1ea82cc}
+      \strng{authornamehash}{4b53889ab99701d8ec0e97dbf1ea82cc}
+      \strng{authorfullhash}{4b53889ab99701d8ec0e97dbf1ea82cc}
+      \strng{authorfullhashraw}{4b53889ab99701d8ec0e97dbf1ea82cc}
+      \field{sortinit}{L}
+      \field{sortinithash}{7c47d417cecb1f4bd38d1825c427a61a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{International Journal of Solids and Structures}
+      \field{month}{9}
+      \field{title}{Stochastic Finite Element Method for Random Temperature in Concrete Structures}
+      \field{volume}{38}
+      \field{year}{2001}
+      \field{dateera}{ce}
+      \field{pages}{6965\bibrangedash 6983}
+      \range{pages}{19}
+      \verb{doi}
+      \verb 10.1016/S0020-7683(00)00414-5
+      \endverb
+      \verb{file}
+      \verb C:\Users\thong\Zotero\storage\4AVICVHG\Liu et al. - 2001 - Stochastic finite element method for random temperature in concrete structures.pdf
+      \endverb
+    \endentry
   \enddatalist
 \endrefsection
 \endinput

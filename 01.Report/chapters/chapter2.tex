@@ -430,6 +430,49 @@ Applying the principle of virtual work, the global linear system takes the well-
 where $[\mathbf{K}] = \int_V \mathbf{B}^T \mathbf{C} \mathbf{B} dV$ is the global elastic stiffness matrix, and $\{\mathbf{F}\}$ is the vector of equivalent nodal forces\draft{, which accumulates the prescribed surface forces $\{\mathbf{F}\}^S$, reaction forces $\{\mathbf{F}\}^R$, volume forces $\{\mathbf{F}\}^V$, and thermal pseudo-forces.} In Cast3M, this linear system is directly assembled and solved using the \texttt{RIGI} and \texttt{RESO} operators.
 \end{reviewblock}
 
+\begin{reviewblock}
+\review{This is a rewrite version of the above text}
+
+The spatial discretization of the momentum conservation 
+equation (\cref{eq:final_momentum}) is carried out using 
+the standard Galerkin finite element method. The 
+continuous displacement field $\mathbf{u}$ is approximated 
+by nodal displacements $\mathbf{U}$ using shape functions 
+$\mathbf{N}$, and the strain is obtained via the 
+compatibility matrix $\mathbf{B}$ such that 
+$\boldsymbol{\varepsilon} = \mathbf{B}\mathbf{U}$.
+
+Applying the principle of virtual work, the global 
+system takes the form:
+\begin{equation}
+    [\mathbf{K}_M]\{\mathbf{U}\} = \{\mathbf{F}\}
+    \label{eq:KMU_F}
+\end{equation}
+where $[\mathbf{K}_M] = \int_V \mathbf{B}^T \mathbf{D} 
+\mathbf{B}\,dV$ is the global stiffness matrix and 
+$\{\mathbf{F}\}$ is the equivalent nodal force vector. 
+In the THM context, this force vector includes 
+contributions from the thermo-hydric fields:
+\begin{equation}
+    \{\mathbf{F}\} = \{\mathbf{F}\}^{ext} 
+    + \{\mathbf{F}\}^{th}(T) 
+    + \{\mathbf{F}\}^{sh}(p_g, p_c) 
+    + \{\mathbf{F}\}^{p}(p_g, p_c)
+    \label{eq:F_THM}
+\end{equation}
+where $\{\mathbf{F}\}^{ext}$ groups the prescribed 
+surface forces and gravity, $\{\mathbf{F}\}^{th}$ is the 
+thermal dilation pseudo-force derived from 
+\cref{eq:eps_th}, $\{\mathbf{F}\}^{sh}$ is the 
+shrinkage pseudo-force from \cref{eq:eps_sh}, and 
+$\{\mathbf{F}\}^{p}$ is the pore pressure loading from 
+\cref{eq:eff_stress}. These three last terms are 
+computed from the TH solution at each time step.
+
+In Cast3M, this linear system is assembled and solved 
+using the \texttt{RIGI} and \texttt{RESO} operators.
+\end{reviewblock}
+
 \subsection{Mazars damage model}
 
 Concrete cracks when tensile strains become too large. In this work, this behaviour is represented with the Mazars damage model \cite{hamon2013}. 
@@ -497,6 +540,8 @@ To solve this, the \texttt{PASAPAS} non-linear procedure evaluates the deviation
 At each iteration $i$, the algorithm solves the system using the initial elastic stiffness matrix: $[\mathbf{K}]\{\delta\mathbf{U}\}^{i+1} = \{\mathbf{R}\}^i$. The displacements and internal variables (like $D$) are continuously updated until the norm of the imbalance vector becomes negligible ($\|\mathbf{R}\| < \epsilon \mathbf{F}_{ref}$).
 \end{reviewblock}
 
+\begin{reviewblock}
+\review{This is a rewritten version of above text}
 Due to damage evolution, the constitutive relation 
 becomes non-linear and \cref{eq:KMU_F} cannot be solved 
 in a single step. The equilibrium is enforced iteratively 
@@ -518,7 +563,7 @@ updated until convergence
 ($\|\mathbf{R}\| < \epsilon\,F_{ref}$). In Cast3M, 
 this iterative procedure is handled by the 
 \texttt{PASAPAS} operator.
-
+\end{reviewblock}
 
 \subsection{Mesh dependency and fracture energy regularization}
 
