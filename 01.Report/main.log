@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex 2026.3.4)  25 MAR 2026 11:09
+This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex 2026.3.4)  26 MAR 2026 18:37
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -934,12 +934,12 @@ Package hyperref Info: Link coloring ON on input line 91.
 Package tocbasic Info: omitting babel extension for `lol'
 (tocbasic)             because of missing \bbl@set@language on input line 91.
  (./frontmatter/titlepage.tex
-<figures/common/logo_uga_phitem.png, id=372, 337.26pt x 150.5625pt>
+<figures/common/logo_uga_phitem.png, id=392, 337.26pt x 150.5625pt>
 File: figures/common/logo_uga_phitem.png Graphic file (type png)
 <use figures/common/logo_uga_phitem.png>
 Package pdftex.def Info: figures/common/logo_uga_phitem.png  used on input line 19.
 (pdftex.def)             Requested size: 159.34074pt x 71.13188pt.
-<figures/common/logo_3sr.png, id=373, 647.41875pt x 353.32pt>
+<figures/common/logo_3sr.png, id=393, 647.41875pt x 353.32pt>
 File: figures/common/logo_3sr.png Graphic file (type png)
 <use figures/common/logo_3sr.png>
 Package pdftex.def Info: figures/common/logo_3sr.png  used on input line 24.
@@ -959,11 +959,13 @@ Package pdftex.def Info: figures/common/logo_3sr.png  used on input line 24.
 ]) [4] (./main.toc [5
 
 
-] [6] [7])
+] [6] [7] [8])
 \tf@toc=\write7
 \openout7 = `main.toc'.
 
- [8]
+ [9] [10
+
+]
 \openout2 = `chapters/chapter1.aux'.
 
  (./chapters/chapter1.tex
@@ -974,7 +976,6 @@ pdfTeX warning (ext4): destination with the same identifier (name{page.1}) has b
                    \relax 
 l.23 \end{itemize}
                    [1
-
 
 
 {c:/texlive/2026/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc}]
@@ -994,58 +995,117 @@ l.55 \subsection
 Chapter 2.
 [5
 
-] [6] [7] [8] [9] [10] [11] [12] [13] [14]) [15]
+] [6] [7] [8] [9] [10] [11] [12]
+Overfull \hbox (4.68102pt too wide) in paragraph at lines 344--345
+[]\T1/cmr/m/n/12 where $\OMS/cmsy/m/n/12 D$ \T1/cmr/m/n/12 is the dam-age pa-ram-e-ter and $\OML/cmm/m/it/12 A[]$ \T1/cmr/m/n/12 is a ma-te-rial con-stant. This damage-permeability
+ []
+
+[13] [14] [15] [16] [17] [18] [19] [20]
+Overfull \hbox (1.78465pt too wide) in paragraph at lines 585--586
+\T1/cmr/m/n/12 The en-ergy con-ser-va-tion equa-tion gov-erns the tem-per-a-ture field within the porous medium.
+ []
+
+[21] [22] [23] [24] [25]
+
+LaTeX Warning: Reference `eq:eff_stress_final' on page 26 undefined on input line 764.
+
+
+LaTeX Warning: Reference `fig:spalling_TM' on page 26 undefined on input line 778.
+
+[26]
+
+LaTeX Warning: Reference `fig:spalling_TH' on page 27 undefined on input line 796.
+
+
+LaTeX Warning: Reference `eq:eff_stress_final' on page 27 undefined on input line 810.
+
+[27]
+Underfull \hbox (badness 10000) in paragraph at lines 839--839
+[]\T1/cmr/m/n/12 Low water-to-
+ []
+
+
+Underfull \hbox (badness 2644) in paragraph at lines 839--839
+[]\T1/cmr/m/n/12 Hinders va-por evac-u-a-tion
+ []
+
+
+Underfull \hbox (badness 1308) in paragraph at lines 840--840
+[]\T1/cmr/m/n/12 Dense pore struc-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 841--841
+[]\T1/cmr/m/n/12 High com-pres-sive
+ []
+
+
+Underfull \hbox (badness 6125) in paragraph at lines 842--842
+\T1/cmr/m/n/12 fore frac-ture $\OMS/cmsy/m/n/12 !$ \T1/cmr/m/n/12 sud-den
+ []
+
+
+Underfull \hbox (badness 2547) in paragraph at lines 843--844
+[]\T1/cmr/m/n/12 More wa-ter avail-able for
+ []
+
+[28] [29]) [30]
 \openout2 = `chapters/chapter3.aux'.
 
- (./chapters/chapter3.tex [16
+ (./chapters/chapter3.tex
+Chapter 3.
+[31
+
 
 
 
 
 ]
-Chapter 3.
+
+LaTeX Warning: Reference `eq:perm_Td' on page 1 undefined on input line 72.
+
+[32]
 \g__tcobox_out_iow=\write8
 \openout8 = `main.listing'.
 
-(./main.listing
+ (./main.listing
 LaTeX Font Info:    Font shape `T1/cmtt/bx/n' in size <10.95> not available
 (Font)              Font shape `T1/cmtt/m/n' tried instead on input line 1.
-) [17
-
-] [18] [19]) [20]
+) [33] [34]) [35]
 \openout2 = `chapters/chapter4.aux'.
 
- (./chapters/chapter4.tex
+ (./chapters/chapter4.tex [36
+
+
+
+
+]
 Chapter 4.
-[21
+[37
 
-
-
-
-
-]) [22]
+]) [38]
 \openout2 = `chapters/chapter5.aux'.
 
  (./chapters/chapter5.tex
 Chapter 5.
-[23
+[39
 
 
 
 
 
-] [24] [25] [26] [27] [28] [29] [30] [31]) [32]
+] [40] [41] [42] [43] [44] [45] [46] [47]) [48]
 \openout2 = `chapters/chapter6.aux'.
 
  (./chapters/chapter6.tex
 Chapter 6.
-) [33
+) [49
 
 
 
 
 
-] [34
+] [50
 
 
 
@@ -1053,16 +1113,16 @@ Chapter 6.
 \tf@lof=\write9
 \openout9 = `main.lof'.
 
- [35
+ [51
 
 ] (./main.lot)
 \tf@lot=\write10
 \openout10 = `main.lot'.
 
- [36
+ [52
 
 
-] [37
+] [53
 
 
 ] (./main.aux (./chapters/chapter1.aux) (./chapters/chapter2.aux) (./chapters/chapter3.aux) (./chapters/chapter4.aux) (./chapters/chapter5.aux) (./chapters/chapter6.aux))
@@ -1070,25 +1130,29 @@ Chapter 6.
 LaTeX2e <2025-11-01>
 L3 programming layer <2026-01-19>
  ***********
+
+
+LaTeX Warning: There were undefined references.
+
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: 9FCCE9342D23718EFDC59E61DF96A0E7;19539.
+(rerunfilecheck)             Checksum: 79FD3A28660B940268CD43F36BF1FD45;20156.
 Package logreq Info: Writing requests to 'main.run.xml'.
 \openout1 = `main.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 36427 strings out of 467525
- 710337 string characters out of 5423210
- 1650803 words of memory out of 5000000
- 64505 multiletter control sequences out of 15000+600000
+ 36710 strings out of 467525
+ 714544 string characters out of 5423210
+ 1679421 words of memory out of 5000000
+ 64677 multiletter control sequences out of 15000+600000
  646012 words of font info for 80 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 115i,13n,110p,1024b,1784s stack positions out of 10000i,1000n,20000p,200000b,200000s
-<c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmmib10.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/cm-super/sfbx1200.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/cm-super/sfbx1440.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/cm-super/sfbx1728.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/cm-super/sfbx2488.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/cm-super/sfcc1200.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/cm-super/sfit1095.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/cm-super/sfrm0600.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/cm-super/sfrm1095.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/cm-super/sfrm1200.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/cm-super/sfrm1440.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/cm-super/sfrm1728.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/cm-super/sfti1200.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/cm-super/sfti1440.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/cm-super/sftt1095.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/cm-super/sftt1200.pfb>
-Output written on main.pdf (47 pages, 547077 bytes).
+ 115i,17n,110p,1024b,1783s stack positions out of 10000i,1000n,20000p,200000b,200000s
+<c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmmib10.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/cm-super/sfbx1200.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/cm-super/sfbx1440.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/cm-super/sfbx1728.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/cm-super/sfbx2488.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/cm-super/sfcc1200.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/cm-super/sfit1095.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/cm-super/sfrm0600.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/cm-super/sfrm0800.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/cm-super/sfrm1095.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/cm-super/sfrm1200.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/cm-super/sfrm1440.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/cm-super/sfrm1728.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/cm-super/sfti1200.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/cm-super/sfti1440.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/cm-super/sftt1095.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/cm-super/sftt1200.pfb>
+Output written on main.pdf (65 pages, 642099 bytes).
 PDF statistics:
- 999 PDF objects out of 1000 (max. 8388607)
- 884 compressed objects within 9 object streams
- 259 named destinations out of 1000 (max. 500000)
- 751 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 1278 PDF objects out of 1440 (max. 8388607)
+ 1140 compressed objects within 12 object streams
+ 370 named destinations out of 1000 (max. 500000)
+ 791 words of extra memory for PDF output out of 10000 (max. 10000000)
 

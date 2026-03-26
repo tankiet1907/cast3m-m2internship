@@ -1,9 +1,75 @@
 \cleardoublepage
-\chapter{Numerical implementation}
+\chapter{Numerical implementation} \label{chapter3}
 
 \review{This chapter is currently empty and is intended to outline the proposed structure of the thesis.}
 
-As described by the governing equations in \cref{chapter2}, the numerical implementation in Cast3M is performed by solving the thermal, hydric, and mechanical models separately, and then coupling them together to form the THM coupled model. The implementation of each model and the coupling strategies are detailed in the following sections.
+This chapter describes the numerical solution of the THM governing equations developed in \cref{chapter2}. The implementation proceeds incrementally: the thermal, hydric, and mechanical models are first solved separately, then coupled to form the full THM system. All implementations are carried out in the finite element code Cast3M.
+
+\section{Discretization}\label{sec:discretization}
+
+\subsection{Spatial discretization} \label{sec:spatial_discret}
+\review{This section is currently under development and will be refined as the study progresses.}
+
+Applying the standard Galerkin finite element method to the three TH conservation equations (\cref{eq:final_air,eq:final_water,eq:final_energy}) yields the semi-discrete system \cite{dauti2018}:
+\begin{equation}
+    \mathbf{C}\,\dot{\mathbf{Y}} + \mathbf{K}\,\mathbf{Y} = \mathbf{f}
+    \label{eq:TH_matrix}
+\end{equation}
+
+where $\mathbf{Y} = \{\bar{p}_g,\, \bar{p}_c,\, \bar{T}\}$ is the vector of nodal TH unknowns. The operators $\mathbf{C}$ (capacity), $\mathbf{K}$ (conductivity), and $\mathbf{f}$ (forcing) are $3\times3$ block matrices:
+\begin{equation}
+    \mathbf{K} = \begin{pmatrix}
+    K_{gg} & K_{gc} & K_{gt} \\
+    K_{cg} & K_{cc} & K_{ct} \\
+    K_{tg} & K_{tc} & K_{tt}
+    \end{pmatrix}, \quad
+    \mathbf{C} = \begin{pmatrix}
+    C_{gg} & C_{gc} & C_{gt} \\
+    0      & C_{cc} & C_{ct} \\
+    0      & C_{tc} & C_{tt}
+    \end{pmatrix}, \quad
+    \mathbf{f} = \begin{pmatrix}
+    f_g \\ f_c \\ f_t
+    \end{pmatrix}
+    \label{eq:TH_blocks}
+\end{equation}
+The off-diagonal entries $K_{ij}$, $C_{ij}$ ($i\neq j$) encode the coupling between the thermal and hydric fields. Detailed expressions of each block are given in \cite{dauti2018}, Appendix~A.
+
+The mechanical problem (\cref{eq:final_momentum}) is solved separately in a staggered manner: at each time step, the TH solution provides $T$, $p_g$, $p_c$,which define the thermal strain (\cref{eq:eps_th}), shrinkage strain (\cref{eq:eps_sh}), and pore pressure loading (\cref{eq:eff_stress}). The equilibrium equation:
+\begin{equation}
+    \mathbf{K}_M\,\mathbf{u} = \mathbf{F}(T,\, p_g,\, p_c)
+    \label{eq:mech_matrix}
+\end{equation}
+is then solved for the displacement field $\mathbf{u}$, where $\mathbf{K}_M$ is the mechanical stiffness matrix and $\mathbf{F}$ is the load vector incorporating thermo-hydric contributions.
+
+\subsection{Temporal discretization} \label{sec:temporal_discret}
+\review{This section is currently under development and will be refined as the study progresses.}
+
+The time integration of \cref{eq:TH_matrix} is carried out using the Wilson-$\theta$ method \cite{dauti2018}, which evaluates the equation at an intermediate time $t_{n+\theta} = t_n + \theta\,\Delta t$ with $\theta \in [0,1]$. This transforms the semi-discrete system into a fully discrete algebraic system at each time step:
+\begin{equation}
+    \tilde{\mathbf{K}}\,\Delta\mathbf{Y}^{n+1} 
+    + \mathbf{K}\,\mathbf{Y}^{n} 
+    = \mathbf{f}^{n+\theta}
+    \label{eq:theta_method}
+\end{equation}
+where:
+\begin{equation}
+    \Delta\mathbf{Y}^{n+1} = \mathbf{Y}^{n+1} 
+    - \mathbf{Y}^{n}, \qquad
+    \tilde{\mathbf{K}} = \frac{\mathbf{C}}{\Delta t} 
+    + \theta\,\mathbf{K}
+    \label{eq:theta_Ktilde}
+\end{equation}
+The parameter $\theta$ controls the scheme: $\theta=0$ gives the explicit forward Euler method, $\theta=1$ the fully implicit backward Euler, and $\theta=0.5$ the Crank-Nicolson scheme. In practice, $\theta=1$ is used for unconditional stability.
+
+Since the capacity and conductivity matrices depend nonlinearly on the unknowns ($\mathbf{C} = \mathbf{C}(\mathbf{Y})$, $\mathbf{K} = \mathbf{K}(\mathbf{Y})$), \cref{eq:theta_method} is solved iteratively using the Newton-Raphson method within each time step.
+
+\subsection{Solution strategy} \label{sec:solution_strategy}
+\review{This section is currently under development and will be refined as the study progresses.}
+
+The TH subsystem (\cref{eq:theta_method}) is solved \textit{monolithically}: all three unknowns $p_g$, $p_c$, $T$ are updated simultaneously within a single Newton-Raphson loop at each time step.
+
+The mechanical problem (\cref{eq:mech_matrix}) is solved in a \textit{staggered} manner: at each time step, the converged TH solution provides $T$, $p_g$, $p_c$, which are then used to assemble $\mathbf{F}$ and solve for $\mathbf{u}$. The damage variable $\mathcal{D}$ computed from the Mazars model feeds back to the intrinsic permeability via \cref{eq:perm_Td}, creating a weak M$\to$H coupling that is updated at the next time step.
 
 \section{Modeling strategy and model parameters}
 
@@ -72,15 +138,15 @@ This section is currently under development and will be refined as the study pro
 \subsection{Mazars model}
 This section is currently under development and will be refined as the study progresses.
 
+\section{Implementation of the TH coupled model}
+This section is currently under development and will be refined as the study progresses.
+
 \section{Implementation of the THM coupled model}
 \subsection{TH coupling strategy}
 This section is currently under development and will be refined as the study progresses.
 \subsection{TM coupling strategy}
 This section is currently under development and will be refined as the study progresses.
 \subsection{THM coupling strategy}
-This section is currently under development and will be refined as the study progresses.
-
-\section{Integration into THM-D Coupled model}
 This section is currently under development and will be refined as the study progresses.
 
 \section{Numerical results}
