@@ -485,7 +485,7 @@ The coefficients $\alpha_t$ and $\alpha_c$ depend on the principal stress state,
 \begin{reviewblock}
 \review{Further references are needed to strengthen the scientific basis of this section. Such as "Numerical Methods for Nonlinear Mechanics lectures" by Stefano DAL PONT}
 
-Due to the damage evolution, the stress-strain relationship becomes non-linear. The mechanical equilibrium \draft{cannot be solved in a single step like the elastic model. By introducing the non-linear complementary stress $\boldsymbol{\sigma}_{nl}$, the equilibrium} is rewritten as:
+Due to the damage evolution, the stress-strain relationship becomes non-linear and. The mechanical equilibrium \cref{eq:KMU_F} \draft{cannot be solved in a single step like the elastic model. By introducing the non-linear complementary stress $\boldsymbol{\sigma}_{nl}$, the equilibrium} is rewritten as:
 \begin{equation}
     [\mathbf{K}]\{\mathbf{U}\} = \{\mathbf{F}\}_{ext} - \int_V \mathbf{B}^T \boldsymbol{\sigma}_{nl} dV
 \end{equation}
@@ -496,6 +496,29 @@ To solve this, the \texttt{PASAPAS} non-linear procedure evaluates the deviation
 \end{equation}
 At each iteration $i$, the algorithm solves the system using the initial elastic stiffness matrix: $[\mathbf{K}]\{\delta\mathbf{U}\}^{i+1} = \{\mathbf{R}\}^i$. The displacements and internal variables (like $D$) are continuously updated until the norm of the imbalance vector becomes negligible ($\|\mathbf{R}\| < \epsilon \mathbf{F}_{ref}$).
 \end{reviewblock}
+
+Due to damage evolution, the constitutive relation 
+becomes non-linear and \cref{eq:KMU_F} cannot be solved 
+in a single step. The equilibrium is enforced iteratively 
+using a Newton-Raphson-type algorithm. At each iteration 
+$i$, the imbalance vector is evaluated:
+\begin{equation}
+    \{\mathbf{R}\}^i = \{\mathbf{F}\} 
+    - \int_V \mathbf{B}^T \boldsymbol{\sigma}^i\,dV
+\end{equation}
+where $\{\mathbf{F}\}$ includes all thermo-hydric 
+contributions as defined in \cref{eq:F_THM}. The 
+correction is obtained from:
+\begin{equation}
+    [\mathbf{K}_M]\{\delta\mathbf{U}\}^{i+1} 
+    = \{\mathbf{R}\}^i
+\end{equation}
+The displacements and damage variable $\mathcal{D}$ are 
+updated until convergence 
+($\|\mathbf{R}\| < \epsilon\,F_{ref}$). In Cast3M, 
+this iterative procedure is handled by the 
+\texttt{PASAPAS} operator.
+
 
 \subsection{Mesh dependency and fracture energy regularization}
 

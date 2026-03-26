@@ -41,31 +41,31 @@
 \contentsline {subsubsection}{Damage parameter and equivalent strain}{16}{section*.20}%
 \contentsline {subsubsection}{Damage evolution laws for tension and compression}{17}{section*.21}%
 \contentsline {subsubsection}{Non-linear equilibrium and Imbalance vector ($\mathbf {R}$)}{18}{section*.22}%
-\contentsline {subsection}{\numberline {2.3.3}Mesh dependency and fracture energy regularization}{18}{subsection.2.3.3}%
-\contentsline {subsubsection}{Evaluation of the elastic energy ($G_{elastic}$)}{19}{section*.23}%
+\contentsline {subsection}{\numberline {2.3.3}Mesh dependency and fracture energy regularization}{19}{subsection.2.3.3}%
+\contentsline {subsubsection}{Evaluation of the elastic energy ($G_{elastic}$)}{20}{section*.23}%
 \contentsline {subsubsection}{Analytical evaluation of $G_{softening}$ and the softening parameter $B_t$}{20}{section*.24}%
-\contentsline {subsubsection}{Dynamic regularization of $B_t$ ($B_t^{mod}$)}{20}{section*.25}%
+\contentsline {subsubsection}{Dynamic regularization of $B_t$ ($B_t^{mod}$)}{21}{section*.25}%
 \contentsline {section}{\numberline {2.4}Coupling mechanisms}{21}{section.2.4}%
 \contentsline {subsection}{\numberline {2.4.1}Thermo-Hydric (TH) coupling mechanisms}{21}{subsection.2.4.1}%
 \contentsline {subsubsection}{Temperature as a driver of hydric phenomena}{21}{section*.26}%
-\contentsline {subsubsection}{Energy conservation equation}{21}{section*.27}%
-\contentsline {subsection}{\numberline {2.4.2}Thermo-hydric input to the mechanical field}{22}{subsection.2.4.2}%
+\contentsline {subsubsection}{Energy conservation equation}{22}{section*.27}%
+\contentsline {subsection}{\numberline {2.4.2}Thermo-hydric input to the mechanical field}{23}{subsection.2.4.2}%
 \contentsline {subsubsection}{Strain decomposition}{23}{section*.28}%
 \contentsline {subsubsection}{Thermal dilation}{23}{section*.29}%
-\contentsline {subsubsection}{Capillary shrinkage}{23}{section*.30}%
+\contentsline {subsubsection}{Capillary shrinkage}{24}{section*.30}%
 \contentsline {subsubsection}{Effective stress and pore pressure loading}{24}{section*.31}%
-\contentsline {section}{\numberline {2.5}THM model and spalling}{24}{section.2.5}%
+\contentsline {section}{\numberline {2.5}THM model and spalling}{25}{section.2.5}%
 \contentsline {subsection}{\numberline {2.5.1}Full THM governing formulation}{25}{subsection.2.5.1}%
 \contentsline {subsubsection}{Dry air conservation}{25}{section*.32}%
 \contentsline {subsubsection}{Water species conservation}{25}{section*.33}%
-\contentsline {subsubsection}{Energy conservation}{25}{section*.34}%
-\contentsline {subsubsection}{Momentum conservation}{25}{section*.35}%
+\contentsline {subsubsection}{Energy conservation}{26}{section*.34}%
+\contentsline {subsubsection}{Momentum conservation}{26}{section*.35}%
 \contentsline {subsection}{\numberline {2.5.2}Spalling mechanisms}{26}{subsection.2.5.2}%
-\contentsline {subsubsection}{Thermal gradient mechanism}{26}{section*.36}%
+\contentsline {subsubsection}{Thermal gradient mechanism}{27}{section*.36}%
 \contentsline {subsubsection}{Pore pressure mechanism (moisture clog)}{27}{section*.37}%
 \contentsline {subsubsection}{Combined mechanism and HPC vulnerability}{28}{section*.38}%
-\contentsline {subsubsection}{Role of damage-permeability coupling}{28}{section*.39}%
-\contentsline {subsubsection}{Factors influencing spalling}{29}{section*.40}%
+\contentsline {subsubsection}{Role of damage-permeability coupling}{29}{section*.39}%
+\contentsline {subsubsection}{Factors influencing spalling}{30}{section*.40}%
 \contentsline {chapter}{\numberline {3}Numerical implementation}{31}{chapter.3}%
 \contentsline {section}{\numberline {3.1}Discretization}{31}{section.3.1}%
 \contentsline {subsection}{\numberline {3.1.1}Spatial discretization}{31}{subsection.3.1.1}%
