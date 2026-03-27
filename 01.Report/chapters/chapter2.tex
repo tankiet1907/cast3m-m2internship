@@ -408,19 +408,19 @@ The specific coupling method between the TH and mechanical solvers has not yet b
 
 \subsection{Linear elastic model}
 
-In the present work, concrete is modeled as a linear elastic material. The effective stress tensor $\tilde{\boldsymbol{\sigma}}$, defined as the stress acting on the undamaged material, is related to the elastic strain tensor $\boldsymbol{\varepsilon}_e$ through the isotropic Hooke's law:
+In the present work, concrete is modeled as a linear elastic material. The effective stress tensor $\tilde{\boldsymbol{\sigma}}$, defined as the stress acting on the undamaged material, is related to the elastic strain tensor $\boldsymbol{\varepsilon}_e$ through the isotropic Hooke's law: 
 \begin{equation}
-    \tilde{\boldsymbol{\sigma}} = \mathbf{C} : \boldsymbol{\varepsilon}_e
+    \boldsymbol{\sigma} = \mathbb{C} : \boldsymbol{\varepsilon}_e
     \label{eq:hooke}
 \end{equation}
 where $\mathbf{C}$ is the constant fourth-order elastic stiffness tensor, defined by the Young's modulus $E$ and Poisson's ratio $\nu$.
 
-The elastic strain is obtained from the total strain by subtracting the free (stress-free) strain components:
+The total strain is decomposed into mechanical and free (stress-free) components, as detailed in \cref{sec:THM_coupling}. Since creep is neglected in this work, the elastic strain reduces to:
 \begin{equation}
     \boldsymbol{\varepsilon}_e = \boldsymbol{\varepsilon} - \boldsymbol{\varepsilon}_{th} - \boldsymbol{\varepsilon}_{sh}
     \label{eq:eps_elastic}
 \end{equation}
-where the thermal strain $\boldsymbol{\varepsilon}_{th}$ and the shrinkage strain $\boldsymbol{\varepsilon}_{sh}$ are defined in \cref{sec:THM_coupling}.
+which enters directly into Hooke's law (\cref{eq:hooke}).
 
 \subsubsection{Linear finite element formulation}
 \begin{reviewblock}
@@ -435,20 +435,20 @@ Applying the principle of virtual work, the global system takes the form:
     \mathbf{K}_M\,\mathbf{U} = \mathbf{F}
     \label{eq:KMU_F}
 \end{equation}
-where $\mathbf{K}_M = \int_V \mathbf{B}^T \mathbf{D}_e\,\mathbf{B}\,dV$ is the elastic stiffness matrix.The load vector $\mathbf{F}$ receives contributions from two distinct thermo-hydric mechanisms 
+where $\mathbf{K}_M = \int_V \mathbf{B}^T \mathbb{C}\,\mathbf{B}\,dV$ is the elastic stiffness matrix. The load vector $\mathbf{F}$ receives contributions from two distinct thermo-hydric mechanisms 
 (\cref{sec:TH_coupling}):
 \begin{equation}
     \mathbf{F} = \mathbf{f}_{ext}
     + \underbrace{
-        \int_V \mathbf{B}^T \mathbf{D}_e\,
+        \int_V \mathbf{B}^T \mathbb{C}\,
         \boldsymbol{\varepsilon}^{th}\,dV
-        + \int_V \mathbf{B}^T \mathbf{D}_e\,
+        + \int_V \mathbf{B}^T \mathbb{C}\,
         \boldsymbol{\varepsilon}^{sh}\,dV
       }_{\text{strain decomposition 
          (\cref{eq:strain_decomp})}}
     + \underbrace{
         \int_V \mathbf{B}^T\,
-        \alpha_{Biot}(S_l\,p_c + p_g)\,
+        \alpha\, p_s\,
         \mathbf{I}\,dV
       }_{\text{effective stress 
          (\cref{eq:eff_stress})}}
@@ -465,11 +465,11 @@ Concrete cracks when tensile strains become too large. In this work, this behavi
 \subsubsection{Damage parameter and equivalent strain}
 The model introduces a single scalar internal variable $\mathcal{D}$, damage parameter, ranging from $0$ (intact material) to $1$ (fully broken material). The apparent macroscopic stress is reduced according to the effective stress concept:
 \begin{equation}
-    \boldsymbol{\sigma} = (1 - \mathcal{D})\, \tilde{\boldsymbol{\sigma}}
+    \boldsymbol{\sigma}' = (1 - \mathcal{D})\,\boldsymbol{\sigma}
     \label{eq:damage_stress}
 \end{equation}
 
-The term \textit{effective stress} here refers to the Mazars concept (stress in the undamaged skeleton), and should not be confused with the Biot effective stress $\boldsymbol{\sigma}''$ used in the THM framework (\cref{sec:coupling}), which accounts for pore pressure effects.
+The term $\boldsymbol{\sigma}'$ in \cref{eq:damage_stress} then enters Bishop's relation (\cref{eq:eff_stress}) to form the total stress $\boldsymbol{\sigma}^{Total}$.
 
 \begin{reviewblock}
 Because concrete cracking is primarily governed by tensile extensions, Mazars introduced an \textit{equivalent strain} ($\varepsilon_{eq}$) to translate any 3D multiaxial strain state into a scalar uniaxial indicator. In the case of a thermo-mechanical loading, it is important to note that only the elastic strain tensor $\boldsymbol{\varepsilon}_e$ contributes to the evolution of damage. The equivalent strain is calculated solely from the positive principal elastic strains $\varepsilon_i$:
@@ -512,6 +512,17 @@ The coefficients $\alpha_t$ and $\alpha_c$ depend on the principal stress state,
 \subsubsection{Non-linear equilibrium and Imbalance vector ($\mathbf{R}$)}
 \begin{reviewblock}
 \review{Further references are needed to strengthen the scientific basis of this section. Such as "Numerical Methods for Nonlinear Mechanics lectures" by Stefano DAL PONT}
+
+In the general case with damage, the stiffness matrix reads:
+\begin{equation}
+    [\mathbf{K}_M] = \int_V \mathbf{B}^T\,
+    (1-\mathcal{D})\,\mathbb{C}\,\mathbf{B}\,dV
+    \label{eq:KM_effective}
+\end{equation}
+
+When $\mathcal{D}=0$ (intact material), this reduces 
+to the standard linear elastic stiffness matrix 
+$\int_V \mathbf{B}^T\mathbb{C}\,\mathbf{B}\,dV$.
 
 Due to damage evolution, the constitutive relation becomes non-linear and \cref{eq:KMU_F} cannot be solved in a single step. The equilibrium is enforced iteratively using a Newton-Raphson-type algorithm. At each iteration $i$, the imbalance vector is evaluated:
 \begin{equation}
@@ -642,6 +653,30 @@ Thus, the thermal and hydric fields are \textit{strongly coupled}: temperature m
 
 The mechanical behavior of heated concrete is driven by the thermal and hydric fields. In the framework adopted here, the coupling is \textit{one-way}: the outputs of the TH problem --- temperature $T$, gas pressure $p_g$, and capillary pressure $p_c$ --- serve as input to the mechanical problem. The mechanical field feeds back into the TH equations only through the damage-enhanced permeability; this coupling is discussed in \cref{sec:THM_model}.
 
+In the staggered TH$\to$M coupling, the thermo-hydric 
+fields produce two types of mechanical loading on the 
+solid skeleton:
+
+\begin{enumerate}
+    \item \textbf{Free strains} 
+    ($\boldsymbol{\varepsilon}_{th}$, 
+    $\boldsymbol{\varepsilon}_{sh}$), which modify the 
+    elastic strain entering Hooke's law 
+    (\cref{eq:eps_elastic});
+    \item \textbf{Pore pressure loading}, which acts 
+    directly on the stress state through the Biot 
+    effective stress:
+\end{enumerate}
+\begin{equation}
+    \boldsymbol{\sigma}' = \boldsymbol{\sigma} 
+    + \mathbf{I}\,\alpha\,p_s
+    \label{eq:eff_stress}
+\end{equation}
+where $\boldsymbol{\sigma}$ is the total (nominal) 
+stress from \cref{eq:damage_stress} and $p_s$ is the 
+average pore pressure defined in 
+\cref{eq:ps_shrinkage}.
+
 \subsubsection{Strain decomposition}
 
 When a mechanically loaded concrete element is exposed to high temperature, the total strain is decomposed as a superposition of components of different origins 
@@ -662,6 +697,13 @@ where:
     \textit{capillary shrinkage strain}, driven by the 
     capillary pressure field.
 \end{itemize}
+
+In general, the mechanical strain includes elastic and creep contributions:
+\begin{equation}
+    \boldsymbol{\varepsilon}_\sigma = \boldsymbol{\varepsilon}_{el} + \boldsymbol{\varepsilon}_{creep}
+    \label{eq:eps_sigma_decomp}
+\end{equation}
+Since creep is neglected in this work, $\boldsymbol{\varepsilon}_{creep} = \mathbf{0}$ and thus $\boldsymbol{\varepsilon}_\sigma = \boldsymbol{\varepsilon}_{el}$ 
 
 \subsubsection{Thermal dilation}
 
@@ -702,12 +744,12 @@ As the concrete dries during heating, the capillary pressure increases (the pore
 
 \subsubsection{Effective stress and pore pressure loading}
 
-Beyond the free strains ($\boldsymbol{\varepsilon}_{th}$, $\boldsymbol{\varepsilon}_{sh}$), the pore pressure directly modifies the stress state in the solid skeleton through the concept of effective stress, which is defined as:
+Beyond the free strains ($\boldsymbol{\varepsilon}_{th}$, $\boldsymbol{\varepsilon}_{sh}$), the pore pressure directly modifies the stress state in the solid skeleton through the concept of effective stress introduced in \cref{eq:damage_stress}, which is defined as:
 \begin{equation}
-    \boldsymbol{\sigma}'' = \boldsymbol{\sigma} + \mathbf{I}\,\alpha\,p_s
+    \boldsymbol{\sigma}' = \boldsymbol{\sigma}^{Total} + \mathbf{I}\,\alpha\,p_s
     \label{eq:eff_stress}
 \end{equation}
-where $\boldsymbol{\sigma}$ is the total stress tensor and $p_s$ is the average pore pressure defined in \cref{eq:ps_shrinkage}.
+where $\boldsymbol{\sigma}^{Total}$ is the total stress tensor and $p_s$ is the average pore pressure defined in \cref{eq:ps_shrinkage}.
 
 In heated concrete, gas pressure builds up due to 
 evaporation and dehydration (see \cref{sec:pore_pressure}). This increase in $p_g$ raises $p_s$, which reduces the effective compressive stress in the skeleton, effectively pushing the material towards tensile failure. When the tensile effective stress exceeds the tensile strength $f_t$, cracking initiates. 

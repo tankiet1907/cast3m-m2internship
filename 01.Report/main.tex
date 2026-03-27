@@ -41,7 +41,7 @@ The work was carried out during the Master 2 internship at 3SR Laboratory.
 \usepackage[T1]{fontenc}
 \usepackage{graphicx}
 \usepackage{setspace}
-\usepackage{amsmath}
+\usepackage{amsmath,amssymb,amsfonts}
 
 % #endregion
 
@@ -102,15 +102,16 @@ The work was carried out during the Master 2 internship at 3SR Laboratory.
 \input{frontmatter/acknowledgement}
 
 % Abstract
+\clearpage
 \input{frontmatter/abstract}
 
 % Nomenclature
-\input{frontmatter/nomenclature}
 \clearpage
+\input{frontmatter/nomenclature}
 \printnomenclature
 
 % Table of Contents
-\cleardoublepage
+\clearpage
 %\renewcommand{\contentsname}{Table of Contents} % Optional: Change "Contents" to "Table of Contents"
 \tableofcontents
 

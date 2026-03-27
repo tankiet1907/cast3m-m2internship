@@ -51,108 +51,106 @@
 \contentsline {subsubsection}{Energy conservation equation}{22}{section*.27}%
 \contentsline {subsection}{\numberline {2.4.2}Thermo-hydric input to the mechanical field}{23}{subsection.2.4.2}%
 \contentsline {subsubsection}{Strain decomposition}{23}{section*.28}%
-\contentsline {subsubsection}{Thermal dilation}{23}{section*.29}%
+\contentsline {subsubsection}{Thermal dilation}{24}{section*.29}%
 \contentsline {subsubsection}{Capillary shrinkage}{24}{section*.30}%
-\contentsline {subsubsection}{Effective stress and pore pressure loading}{24}{section*.31}%
+\contentsline {subsubsection}{Effective stress and pore pressure loading}{25}{section*.31}%
 \contentsline {section}{\numberline {2.5}THM model and spalling}{25}{section.2.5}%
 \contentsline {subsection}{\numberline {2.5.1}Full THM governing formulation}{25}{subsection.2.5.1}%
-\contentsline {subsubsection}{Dry air conservation}{25}{section*.32}%
-\contentsline {subsubsection}{Water species conservation}{25}{section*.33}%
+\contentsline {subsubsection}{Dry air conservation}{26}{section*.32}%
+\contentsline {subsubsection}{Water species conservation}{26}{section*.33}%
 \contentsline {subsubsection}{Energy conservation}{26}{section*.34}%
 \contentsline {subsubsection}{Momentum conservation}{26}{section*.35}%
-\contentsline {subsection}{\numberline {2.5.2}Spalling mechanisms}{26}{subsection.2.5.2}%
+\contentsline {subsection}{\numberline {2.5.2}Spalling mechanisms}{27}{subsection.2.5.2}%
 \contentsline {subsubsection}{Thermal gradient mechanism}{27}{section*.36}%
-\contentsline {subsubsection}{Pore pressure mechanism (moisture clog)}{27}{section*.37}%
-\contentsline {subsubsection}{Combined mechanism}{28}{section*.38}%
-\contentsline {chapter}{\numberline {3}Numerical implementation}{29}{chapter.3}%
-\contentsline {section}{\numberline {3.1}Discretization}{29}{section.3.1}%
-\contentsline {subsection}{\numberline {3.1.1}Spatial discretization}{29}{subsection.3.1.1}%
-\contentsline {subsection}{\numberline {3.1.2}Temporal discretization}{30}{subsection.3.1.2}%
-\contentsline {subsection}{\numberline {3.1.3}Solution strategy}{31}{subsection.3.1.3}%
-\contentsline {section}{\numberline {3.2}Model description and parameters}{31}{section.3.2}%
-\contentsline {subsection}{\numberline {3.2.1}Geometry}{31}{subsection.3.2.1}%
-\contentsline {subsection}{\numberline {3.2.2}Material properties}{32}{subsection.3.2.2}%
-\contentsline {subsection}{\numberline {3.2.3}Boundary conditions and loadings}{32}{subsection.3.2.3}%
-\contentsline {section}{\numberline {3.3}Implementation of the thermal model}{32}{section.3.3}%
-\contentsline {subsection}{\numberline {3.3.1}Stationary linear thermal analysis}{32}{subsection.3.3.1}%
-\contentsline {subsection}{\numberline {3.3.2}Transient linear and non-linear thermal analysis}{32}{subsection.3.3.2}%
-\contentsline {section}{\numberline {3.4}Implementation of the hydric model}{33}{section.3.4}%
-\contentsline {subsection}{\numberline {3.4.1}Drying}{33}{subsection.3.4.1}%
-\contentsline {subsection}{\numberline {3.4.2}Shrinkage}{33}{subsection.3.4.2}%
-\contentsline {section}{\numberline {3.5}Implementation of the mechanical model}{33}{section.3.5}%
-\contentsline {subsection}{\numberline {3.5.1}Elastic linear mechanical model}{33}{subsection.3.5.1}%
-\contentsline {subsection}{\numberline {3.5.2}Mazars model}{33}{subsection.3.5.2}%
-\contentsline {section}{\numberline {3.6}Implementation of the TH coupled model}{33}{section.3.6}%
-\contentsline {section}{\numberline {3.7}Implementation of the THM coupled model}{33}{section.3.7}%
-\contentsline {subsection}{\numberline {3.7.1}Thermal and shrinkage strain input}{33}{subsection.3.7.1}%
-\contentsline {subsection}{\numberline {3.7.2}Pore pressure loading input}{34}{subsection.3.7.2}%
-\contentsline {section}{\numberline {3.8}Numerical results}{34}{section.3.8}%
-\contentsline {chapter}{\numberline {4}Experimental data and Model validation}{35}{chapter.4}%
-\contentsline {section}{\numberline {4.1}Experimental data}{35}{section.4.1}%
-\contentsline {subsection}{\numberline {4.1.1}Experimental tests and material properties}{35}{subsection.4.1.1}%
-\contentsline {subsection}{\numberline {4.1.2}Thermal, hydraulic and mechanic loadings}{35}{subsection.4.1.2}%
-\contentsline {subsection}{\numberline {4.1.3}Measured data}{35}{subsection.4.1.3}%
-\contentsline {section}{\numberline {4.2}Validation}{36}{section.4.2}%
-\contentsline {subsection}{\numberline {4.2.1}Comparison between numerical and experimental results}{36}{subsection.4.2.1}%
-\contentsline {subsection}{\numberline {4.2.2}Discussions on model performance}{36}{subsection.4.2.2}%
-\contentsline {chapter}{\numberline {5}Probabilistic analysis of the THM model}{37}{chapter.5}%
-\contentsline {section}{\numberline {5.1}Sources of uncertainty and concrete heterogeneity}{37}{section.5.1}%
-\contentsline {subsection}{\numberline {5.1.1}Motivation for probabilistic assessment}{37}{subsection.5.1.1}%
-\contentsline {subsection}{\numberline {5.1.2}Classification of uncertainties}{38}{subsection.5.1.2}%
-\contentsline {subsection}{\numberline {5.1.3}Concrete heterogeneity and material variability}{38}{subsection.5.1.3}%
-\contentsline {section}{\numberline {5.2}Stochastic finite element framework (Monte Carlo)}{38}{section.5.2}%
-\contentsline {subsection}{\numberline {5.2.1}Random Field theory and Spatial variability}{39}{subsection.5.2.1}%
-\contentsline {subsubsection}{Random fields}{39}{section*.39}%
-\contentsline {subsubsection}{Discretized random field}{39}{section*.40}%
-\contentsline {subsubsection}{Spatial correlation length ($\lambda $)}{39}{section*.41}%
-\contentsline {subsection}{\numberline {5.2.2}Transformation of Lognormal to Gaussian distributionn}{40}{subsection.5.2.2}%
-\contentsline {subsubsection}{1. Solving for $\sigma _G^2$}{40}{section*.42}%
-\contentsline {subsubsection}{2. Solving for $\mu _G$}{41}{section*.43}%
-\contentsline {subsubsection}{Summary of calculation steps in the numerical algorithm}{41}{section*.44}%
-\contentsline {subsection}{\numberline {5.2.3}Integration of spatial variability into the THM model}{42}{subsection.5.2.3}%
-\contentsline {subsection}{\numberline {5.2.4}Monte Carlo simulation framework}{42}{subsection.5.2.4}%
-\contentsline {subsubsection}{Simulation loop and dynamic material updating}{42}{section*.45}%
-\contentsline {subsubsection}{Data extraction and post-processing}{42}{section*.46}%
-\contentsline {section}{\numberline {5.3}Gaussian Quadrature framework}{43}{section.5.3}%
-\contentsline {subsection}{\numberline {5.3.1}Principle of Gaussian Quadrature}{43}{subsection.5.3.1}%
-\contentsline {subsubsection}{From integration to weighted sum}{43}{section*.47}%
-\contentsline {subsubsection}{Orthogonal polynomials and weighting functions}{43}{section*.48}%
-\contentsline {subsubsection}{Abscissas and weights construction}{43}{section*.49}%
-\contentsline {subsection}{\numberline {5.3.2}Statistical moment estimation}{43}{subsection.5.3.2}%
-\contentsline {subsubsection}{Mean, variance, skewness, kurtosis from quadrature}{43}{section*.50}%
-\contentsline {subsubsection}{Variance decomposition per variable}{43}{section*.51}%
-\contentsline {subsection}{\numberline {5.3.3}PDF, CDF and reliability assessment}{43}{subsection.5.3.3}%
-\contentsline {subsubsection}{Approximation methods (Pearson, Winterstein, Exp-Polynomial)}{44}{section*.52}%
-\contentsline {subsubsection}{Probability of failure and reliability index}{44}{section*.53}%
-\contentsline {subsection}{\numberline {5.3.4}Computational efficiency}{44}{subsection.5.3.4}%
-\contentsline {subsubsection}{Cost comparison with Monte Carlo}{44}{section*.54}%
-\contentsline {subsubsection}{Quick Quadrature for high-dimensional problems}{44}{section*.55}%
-\contentsline {subsubsection}{Data extraction: moments computed directly from weighted sum}{44}{section*.56}%
-\contentsline {subsubsection}{Limitations: curse of dimensionality}{44}{section*.57}%
-\contentsline {section}{\numberline {5.4}Sensitivity analysis}{44}{section.5.4}%
-\contentsline {subsection}{\numberline {5.4.1}Characterization of input parameters}{44}{subsection.5.4.1}%
-\contentsline {subsubsection}{Chosen Random variables}{45}{section*.58}%
-\contentsline {subsubsection}{Correlated vs uncorrelated parameters}{45}{section*.59}%
-\contentsline {subsubsection}{Physical correlations}{45}{section*.60}%
-\contentsline {subsection}{\numberline {5.4.2}Sensitivity indicators and ranking methods}{45}{subsection.5.4.2}%
-\contentsline {subsubsection}{Variance decomposition}{45}{section*.61}%
-\contentsline {subsubsection}{Uncorrelated parameters}{45}{section*.62}%
-\contentsline {subsubsection}{Correlated parameters}{45}{section*.63}%
-\contentsline {subsubsection}{Quadrature: one-variable-at-a-time moments}{45}{section*.64}%
-\contentsline {subsubsection}{Monte Carlo: Sobol indices and Pearson correlation}{45}{section*.65}%
-\contentsline {subsection}{\numberline {5.4.3}Identification of dominant parameters}{45}{subsection.5.4.3}%
-\contentsline {subsubsection}{Ranking from most to least influential}{46}{section*.66}%
-\contentsline {subsubsection}{Comparison: Quadrature ranking vs Monte Carlo ranking}{46}{section*.67}%
-\contentsline {subsubsection}{Physical interpretation of dominant parameters}{46}{section*.68}%
-\contentsline {section}{\numberline {5.5}Reliability analysis}{46}{section.5.5}%
-\contentsline {subsection}{\numberline {5.5.1}Probability of failure and reliability index}{46}{subsection.5.5.1}%
-\contentsline {subsection}{\numberline {5.5.2}Probability of failure from moment-based PDF}{46}{subsection.5.5.2}%
-\contentsline {subsection}{\numberline {5.5.3}Probability of failure from Monte Carlo sampling}{46}{subsection.5.5.3}%
-\contentsline {subsection}{\numberline {5.5.4}Effect of spatial heterogeneity on structural safety}{46}{subsection.5.5.4}%
-\contentsline {chapter}{\numberline {6}Conclusions and Perspectives}{47}{chapter.6}%
-\contentsline {section}{\numberline {6.1}Main findings}{47}{section.6.1}%
-\contentsline {section}{\numberline {6.2}Model limitations and possible improvements}{47}{section.6.2}%
-\contentsline {section}{\numberline {6.3}Perspectives for future research}{47}{section.6.3}%
-\contentsline {chapter}{List of Figures}{49}{section*.69}%
-\contentsline {chapter}{List of Tables}{50}{section*.71}%
-\contentsline {chapter}{Bibliography}{51}{chapter*.74}%
+\contentsline {subsubsection}{Pore pressure mechanism (moisture clog)}{28}{section*.37}%
+\contentsline {subsubsection}{Combined mechanism}{29}{section*.38}%
+\contentsline {chapter}{\numberline {3}Numerical implementation}{31}{chapter.3}%
+\contentsline {section}{\numberline {3.1}Discretization}{31}{section.3.1}%
+\contentsline {subsection}{\numberline {3.1.1}Spatial discretization}{31}{subsection.3.1.1}%
+\contentsline {subsection}{\numberline {3.1.2}Temporal discretization}{32}{subsection.3.1.2}%
+\contentsline {subsection}{\numberline {3.1.3}Solution strategy}{33}{subsection.3.1.3}%
+\contentsline {section}{\numberline {3.2}Model description and parameters}{33}{section.3.2}%
+\contentsline {subsection}{\numberline {3.2.1}Geometry}{33}{subsection.3.2.1}%
+\contentsline {subsection}{\numberline {3.2.2}Material properties}{34}{subsection.3.2.2}%
+\contentsline {subsection}{\numberline {3.2.3}Boundary conditions and loadings}{34}{subsection.3.2.3}%
+\contentsline {section}{\numberline {3.3}Implementation of the thermal model}{34}{section.3.3}%
+\contentsline {subsection}{\numberline {3.3.1}Stationary linear thermal analysis}{34}{subsection.3.3.1}%
+\contentsline {subsection}{\numberline {3.3.2}Transient linear and non-linear thermal analysis}{34}{subsection.3.3.2}%
+\contentsline {section}{\numberline {3.4}Implementation of the hydric model}{35}{section.3.4}%
+\contentsline {subsection}{\numberline {3.4.1}Drying}{35}{subsection.3.4.1}%
+\contentsline {subsection}{\numberline {3.4.2}Shrinkage}{35}{subsection.3.4.2}%
+\contentsline {section}{\numberline {3.5}Implementation of the mechanical model}{35}{section.3.5}%
+\contentsline {subsection}{\numberline {3.5.1}Elastic linear mechanical model}{35}{subsection.3.5.1}%
+\contentsline {subsection}{\numberline {3.5.2}Mazars model}{35}{subsection.3.5.2}%
+\contentsline {section}{\numberline {3.6}Implementation of the TH coupled model}{35}{section.3.6}%
+\contentsline {section}{\numberline {3.7}Implementation of the THM coupled model}{35}{section.3.7}%
+\contentsline {section}{\numberline {3.8}Numerical results}{35}{section.3.8}%
+\contentsline {chapter}{\numberline {4}Experimental data and Model validation}{37}{chapter.4}%
+\contentsline {section}{\numberline {4.1}Experimental data}{37}{section.4.1}%
+\contentsline {subsection}{\numberline {4.1.1}Experimental tests and material properties}{37}{subsection.4.1.1}%
+\contentsline {subsection}{\numberline {4.1.2}Thermal, hydraulic and mechanic loadings}{37}{subsection.4.1.2}%
+\contentsline {subsection}{\numberline {4.1.3}Measured data}{37}{subsection.4.1.3}%
+\contentsline {section}{\numberline {4.2}Validation}{38}{section.4.2}%
+\contentsline {subsection}{\numberline {4.2.1}Comparison between numerical and experimental results}{38}{subsection.4.2.1}%
+\contentsline {subsection}{\numberline {4.2.2}Discussions on model performance}{38}{subsection.4.2.2}%
+\contentsline {chapter}{\numberline {5}Probabilistic analysis of the THM model}{39}{chapter.5}%
+\contentsline {section}{\numberline {5.1}Sources of uncertainty and concrete heterogeneity}{39}{section.5.1}%
+\contentsline {subsection}{\numberline {5.1.1}Motivation for probabilistic assessment}{39}{subsection.5.1.1}%
+\contentsline {subsection}{\numberline {5.1.2}Classification of uncertainties}{40}{subsection.5.1.2}%
+\contentsline {subsection}{\numberline {5.1.3}Concrete heterogeneity and material variability}{40}{subsection.5.1.3}%
+\contentsline {section}{\numberline {5.2}Stochastic finite element framework (Monte Carlo)}{40}{section.5.2}%
+\contentsline {subsection}{\numberline {5.2.1}Random Field theory and Spatial variability}{41}{subsection.5.2.1}%
+\contentsline {subsubsection}{Random fields}{41}{section*.39}%
+\contentsline {subsubsection}{Discretized random field}{41}{section*.40}%
+\contentsline {subsubsection}{Spatial correlation length ($\lambda $)}{41}{section*.41}%
+\contentsline {subsection}{\numberline {5.2.2}Transformation of Lognormal to Gaussian distributionn}{42}{subsection.5.2.2}%
+\contentsline {subsubsection}{1. Solving for $\sigma _G^2$}{42}{section*.42}%
+\contentsline {subsubsection}{2. Solving for $\mu _G$}{43}{section*.43}%
+\contentsline {subsubsection}{Summary of calculation steps in the numerical algorithm}{43}{section*.44}%
+\contentsline {subsection}{\numberline {5.2.3}Integration of spatial variability into the THM model}{44}{subsection.5.2.3}%
+\contentsline {subsection}{\numberline {5.2.4}Monte Carlo simulation framework}{44}{subsection.5.2.4}%
+\contentsline {subsubsection}{Simulation loop and dynamic material updating}{44}{section*.45}%
+\contentsline {subsubsection}{Data extraction and post-processing}{44}{section*.46}%
+\contentsline {section}{\numberline {5.3}Gaussian Quadrature framework}{45}{section.5.3}%
+\contentsline {subsection}{\numberline {5.3.1}Principle of Gaussian Quadrature}{45}{subsection.5.3.1}%
+\contentsline {subsubsection}{From integration to weighted sum}{45}{section*.47}%
+\contentsline {subsubsection}{Orthogonal polynomials and weighting functions}{45}{section*.48}%
+\contentsline {subsubsection}{Abscissas and weights construction}{45}{section*.49}%
+\contentsline {subsection}{\numberline {5.3.2}Statistical moment estimation}{45}{subsection.5.3.2}%
+\contentsline {subsubsection}{Mean, variance, skewness, kurtosis from quadrature}{45}{section*.50}%
+\contentsline {subsubsection}{Variance decomposition per variable}{45}{section*.51}%
+\contentsline {subsection}{\numberline {5.3.3}PDF, CDF and reliability assessment}{45}{subsection.5.3.3}%
+\contentsline {subsubsection}{Approximation methods (Pearson, Winterstein, Exp-Polynomial)}{46}{section*.52}%
+\contentsline {subsubsection}{Probability of failure and reliability index}{46}{section*.53}%
+\contentsline {subsection}{\numberline {5.3.4}Computational efficiency}{46}{subsection.5.3.4}%
+\contentsline {subsubsection}{Cost comparison with Monte Carlo}{46}{section*.54}%
+\contentsline {subsubsection}{Quick Quadrature for high-dimensional problems}{46}{section*.55}%
+\contentsline {subsubsection}{Data extraction: moments computed directly from weighted sum}{46}{section*.56}%
+\contentsline {subsubsection}{Limitations: curse of dimensionality}{46}{section*.57}%
+\contentsline {section}{\numberline {5.4}Sensitivity analysis}{46}{section.5.4}%
+\contentsline {subsection}{\numberline {5.4.1}Characterization of input parameters}{46}{subsection.5.4.1}%
+\contentsline {subsubsection}{Chosen Random variables}{47}{section*.58}%
+\contentsline {subsubsection}{Correlated vs uncorrelated parameters}{47}{section*.59}%
+\contentsline {subsubsection}{Physical correlations}{47}{section*.60}%
+\contentsline {subsection}{\numberline {5.4.2}Sensitivity indicators and ranking methods}{47}{subsection.5.4.2}%
+\contentsline {subsubsection}{Variance decomposition}{47}{section*.61}%
+\contentsline {subsubsection}{Uncorrelated parameters}{47}{section*.62}%
+\contentsline {subsubsection}{Correlated parameters}{47}{section*.63}%
+\contentsline {subsubsection}{Quadrature: one-variable-at-a-time moments}{47}{section*.64}%
+\contentsline {subsubsection}{Monte Carlo: Sobol indices and Pearson correlation}{47}{section*.65}%
+\contentsline {subsection}{\numberline {5.4.3}Identification of dominant parameters}{47}{subsection.5.4.3}%
+\contentsline {subsubsection}{Ranking from most to least influential}{48}{section*.66}%
+\contentsline {subsubsection}{Comparison: Quadrature ranking vs Monte Carlo ranking}{48}{section*.67}%
+\contentsline {subsubsection}{Physical interpretation of dominant parameters}{48}{section*.68}%
+\contentsline {section}{\numberline {5.5}Reliability analysis}{48}{section.5.5}%
+\contentsline {subsection}{\numberline {5.5.1}Probability of failure and reliability index}{48}{subsection.5.5.1}%
+\contentsline {subsection}{\numberline {5.5.2}Probability of failure from moment-based PDF}{48}{subsection.5.5.2}%
+\contentsline {subsection}{\numberline {5.5.3}Probability of failure from Monte Carlo sampling}{48}{subsection.5.5.3}%
+\contentsline {subsection}{\numberline {5.5.4}Effect of spatial heterogeneity on structural safety}{48}{subsection.5.5.4}%
+\contentsline {chapter}{\numberline {6}Conclusions and Perspectives}{49}{chapter.6}%
+\contentsline {section}{\numberline {6.1}Main findings}{49}{section.6.1}%
+\contentsline {section}{\numberline {6.2}Model limitations and possible improvements}{49}{section.6.2}%
+\contentsline {section}{\numberline {6.3}Perspectives for future research}{49}{section.6.3}%
+\contentsline {chapter}{List of Figures}{51}{section*.69}%
+\contentsline {chapter}{List of Tables}{52}{section*.71}%
+\contentsline {chapter}{Bibliography}{53}{chapter*.74}%
