@@ -394,10 +394,16 @@ The magnitude of pore pressure depends on:
 
 When the pore pressure exceeds the tensile strength of the material, it can trigger cracking and potentially explosive spalling. This mechanism is discussed in more detail in \cref{sec:spalling}.
 
-\section{Mechanical behavior}
+\section{Mechanical behavior} \label{sec:mechanical}
 
 \begin{reviewblock}
 The mechanical response of concrete under high-temperature conditions is characterized by an initial linear elastic phase, followed by severe stiffness degradation due to the formation of micro-cracks. In this numerical framework, the behavior is modeled by coupling a linear elastic constitutive law with a continuum damage mechanics approach.
+\end{reviewblock}
+
+\begin{reviewblock}
+The mechanical equilibrium presented above assumes a staggered (sequential) solution strategy: the TH subsystem is solved first to obtain $p_g$, $p_c$, $T$, which are then passed as known loading to the mechanical step. 
+
+The specific coupling method between the TH and mechanical solvers has not yet been finalized and will be detailed and modified in \cref{chapter2} and \cref{chapter3} as the study progresses.
 \end{reviewblock}
 
 \subsection{Linear elastic model}
@@ -417,60 +423,39 @@ The elastic strain is obtained from the total strain by subtracting the free (st
 where the thermal strain $\boldsymbol{\varepsilon}_{th}$ and the shrinkage strain $\boldsymbol{\varepsilon}_{sh}$ are defined in \cref{sec:THM_coupling}.
 
 \subsubsection{Linear finite element formulation}
-
 \begin{reviewblock}
 \review{Further references are needed to strengthen the scientific basis of this section. Such as "Numerical Methods for Nonlinear Mechanics lectures" by Stefano DAL PONT}
 
-\draft{In the context of the Finite Element Method (FEM), the continuous equilibrium equation ($\text{div} \boldsymbol{\sigma} + \mathbf{f} = \mathbf{0}$) is transformed into a discrete weak formulation. The continuous displacement field $\mathbf{u}$ is approximated by the nodal displacements $\mathbf{U}$ using the matrix of shape functions $\mathbf{N}$, and the linear strains are obtained via the derivative matrix $\mathbf{B}$ \draft{such that $\boldsymbol{\varepsilon}_{lin} = \mathbf{B}\mathbf{U}$.}}
+The spatial discretization of the momentum conservation equation (\cref{eq:final_momentum}) is carried out using the standard Galerkin finite element method. 
 
-Applying the principle of virtual work, the global linear system takes the well-known fundamental form:
+The continuous displacement field $\mathbf{u}$ is approximated by nodal displacements $\mathbf{U}$ using shape functions $\mathbf{N}$, and the strain is obtained via the compatibility matrix $\mathbf{B}$ such that $\boldsymbol{\varepsilon} = \mathbf{B}\mathbf{U}$.
+
+Applying the principle of virtual work, the global system takes the form:
 \begin{equation}
-    [\mathbf{K}]\{\mathbf{U}\} = \{\mathbf{F}\}
-\end{equation}
-where $[\mathbf{K}] = \int_V \mathbf{B}^T \mathbf{C} \mathbf{B} dV$ is the global elastic stiffness matrix, and $\{\mathbf{F}\}$ is the vector of equivalent nodal forces\draft{, which accumulates the prescribed surface forces $\{\mathbf{F}\}^S$, reaction forces $\{\mathbf{F}\}^R$, volume forces $\{\mathbf{F}\}^V$, and thermal pseudo-forces.} In Cast3M, this linear system is directly assembled and solved using the \texttt{RIGI} and \texttt{RESO} operators.
-\end{reviewblock}
-
-\begin{reviewblock}
-\review{This is a rewrite version of the above text}
-
-The spatial discretization of the momentum conservation 
-equation (\cref{eq:final_momentum}) is carried out using 
-the standard Galerkin finite element method. The 
-continuous displacement field $\mathbf{u}$ is approximated 
-by nodal displacements $\mathbf{U}$ using shape functions 
-$\mathbf{N}$, and the strain is obtained via the 
-compatibility matrix $\mathbf{B}$ such that 
-$\boldsymbol{\varepsilon} = \mathbf{B}\mathbf{U}$.
-
-Applying the principle of virtual work, the global 
-system takes the form:
-\begin{equation}
-    [\mathbf{K}_M]\{\mathbf{U}\} = \{\mathbf{F}\}
+    \mathbf{K}_M\,\mathbf{U} = \mathbf{F}
     \label{eq:KMU_F}
 \end{equation}
-where $[\mathbf{K}_M] = \int_V \mathbf{B}^T \mathbf{D} 
-\mathbf{B}\,dV$ is the global stiffness matrix and 
-$\{\mathbf{F}\}$ is the equivalent nodal force vector. 
-In the THM context, this force vector includes 
-contributions from the thermo-hydric fields:
+where $\mathbf{K}_M = \int_V \mathbf{B}^T \mathbf{D}_e\,\mathbf{B}\,dV$ is the elastic stiffness matrix.The load vector $\mathbf{F}$ receives contributions from two distinct thermo-hydric mechanisms 
+(\cref{sec:TH_coupling}):
 \begin{equation}
-    \{\mathbf{F}\} = \{\mathbf{F}\}^{ext} 
-    + \{\mathbf{F}\}^{th}(T) 
-    + \{\mathbf{F}\}^{sh}(p_g, p_c) 
-    + \{\mathbf{F}\}^{p}(p_g, p_c)
-    \label{eq:F_THM}
+    \mathbf{F} = \mathbf{f}_{ext}
+    + \underbrace{
+        \int_V \mathbf{B}^T \mathbf{D}_e\,
+        \boldsymbol{\varepsilon}^{th}\,dV
+        + \int_V \mathbf{B}^T \mathbf{D}_e\,
+        \boldsymbol{\varepsilon}^{sh}\,dV
+      }_{\text{strain decomposition 
+         (\cref{eq:strain_decomp})}}
+    + \underbrace{
+        \int_V \mathbf{B}^T\,
+        \alpha_{Biot}(S_l\,p_c + p_g)\,
+        \mathbf{I}\,dV
+      }_{\text{effective stress 
+         (\cref{eq:eff_stress})}}
+    \label{eq:F_full}
 \end{equation}
-where $\{\mathbf{F}\}^{ext}$ groups the prescribed 
-surface forces and gravity, $\{\mathbf{F}\}^{th}$ is the 
-thermal dilation pseudo-force derived from 
-\cref{eq:eps_th}, $\{\mathbf{F}\}^{sh}$ is the 
-shrinkage pseudo-force from \cref{eq:eps_sh}, and 
-$\{\mathbf{F}\}^{p}$ is the pore pressure loading from 
-\cref{eq:eff_stress}. These three last terms are 
-computed from the TH solution at each time step.
+Since $\boldsymbol{\varepsilon}^{th}$, $\boldsymbol{\varepsilon}^{sh}$, $p_c$, and $p_g$ are known from the TH solution at each time step, all three terms enter the right-hand side as prescribed loading. In Cast3M, this system is assembled and solved using the \texttt{RIGI} and \texttt{RESO} operators.
 
-In Cast3M, this linear system is assembled and solved 
-using the \texttt{RIGI} and \texttt{RESO} operators.
 \end{reviewblock}
 
 \subsection{Mazars damage model}
@@ -528,41 +513,16 @@ The coefficients $\alpha_t$ and $\alpha_c$ depend on the principal stress state,
 \begin{reviewblock}
 \review{Further references are needed to strengthen the scientific basis of this section. Such as "Numerical Methods for Nonlinear Mechanics lectures" by Stefano DAL PONT}
 
-Due to the damage evolution, the stress-strain relationship becomes non-linear and. The mechanical equilibrium \cref{eq:KMU_F} \draft{cannot be solved in a single step like the elastic model. By introducing the non-linear complementary stress $\boldsymbol{\sigma}_{nl}$, the equilibrium} is rewritten as:
+Due to damage evolution, the constitutive relation becomes non-linear and \cref{eq:KMU_F} cannot be solved in a single step. The equilibrium is enforced iteratively using a Newton-Raphson-type algorithm. At each iteration $i$, the imbalance vector is evaluated:
 \begin{equation}
-    [\mathbf{K}]\{\mathbf{U}\} = \{\mathbf{F}\}_{ext} - \int_V \mathbf{B}^T \boldsymbol{\sigma}_{nl} dV
+    \{\mathbf{R}\}^i = \{\mathbf{F}\} - \int_V \mathbf{B}^T \boldsymbol{\sigma}^i\,dV
 \end{equation}
-
-To solve this, the \texttt{PASAPAS} non-linear procedure evaluates the deviation from equilibrium using an iterative Newton-Raphson-type algorithm. It calculates the \textit{imbalance vector} (or residual), $\{\mathbf{R}\}$, which represents the difference between the external applied forces and the internal resisting forces:
+where $\{\mathbf{F}\}$ includes all thermo-hydric contributions as defined in \cref{eq:F_THM}. The correction is obtained from:
 \begin{equation}
-    \{\mathbf{R}\} = \{\mathbf{F}\}_{ext} - \int_V \mathbf{B}^T \boldsymbol{\sigma} dV
+    [\mathbf{K}_M]\{\delta\mathbf{U}\}^{i+1} = \{\mathbf{R}\}^i
 \end{equation}
-At each iteration $i$, the algorithm solves the system using the initial elastic stiffness matrix: $[\mathbf{K}]\{\delta\mathbf{U}\}^{i+1} = \{\mathbf{R}\}^i$. The displacements and internal variables (like $D$) are continuously updated until the norm of the imbalance vector becomes negligible ($\|\mathbf{R}\| < \epsilon \mathbf{F}_{ref}$).
-\end{reviewblock}
-
-\begin{reviewblock}
-\review{This is a rewritten version of above text}
-Due to damage evolution, the constitutive relation 
-becomes non-linear and \cref{eq:KMU_F} cannot be solved 
-in a single step. The equilibrium is enforced iteratively 
-using a Newton-Raphson-type algorithm. At each iteration 
-$i$, the imbalance vector is evaluated:
-\begin{equation}
-    \{\mathbf{R}\}^i = \{\mathbf{F}\} 
-    - \int_V \mathbf{B}^T \boldsymbol{\sigma}^i\,dV
-\end{equation}
-where $\{\mathbf{F}\}$ includes all thermo-hydric 
-contributions as defined in \cref{eq:F_THM}. The 
-correction is obtained from:
-\begin{equation}
-    [\mathbf{K}_M]\{\delta\mathbf{U}\}^{i+1} 
-    = \{\mathbf{R}\}^i
-\end{equation}
-The displacements and damage variable $\mathcal{D}$ are 
-updated until convergence 
-($\|\mathbf{R}\| < \epsilon\,F_{ref}$). In Cast3M, 
-this iterative procedure is handled by the 
-\texttt{PASAPAS} operator.
+The displacements and damage variable $\mathcal{D}$ are updated until convergence 
+($\|\mathbf{R}\| < \epsilon\,F_{ref}$). In Cast3M, this iterative procedure is handled by the \texttt{PASAPAS} operator.
 \end{reviewblock}
 
 \subsection{Mesh dependency and fracture energy regularization}
@@ -822,14 +782,13 @@ By neglecting inertial forces:
     \nabla\cdot\boldsymbol{\sigma}^{Total} + \rho\,\mathbf{g} = \mathbf{0}
     \label{eq:final_momentum}
 \end{equation}
-where $\mathbf{g}$ is the gravitational acceleration and 
-the total density is:
+where $\mathbf{g}$ is the gravitational acceleration and the total density is:
 \begin{equation}
     \rho = (1-\phi)\rho_s + \phi\left(S_l\rho_l + (1-S_l)\rho_g\right)
     \label{eq:rho_total}
 \end{equation}
 
-The total stress $\boldsymbol{\sigma}^{Total}$ is related to the effective stress via Bishop's relation (Eq.~\eqref{eq:eff_stress_final}), which in turn depends on the primary variables $p_g$ and $p_c$.
+The total stress $\boldsymbol{\sigma}^{Total}$ is related to the effective stress via Bishop's relation (\cref{eq:eff_stress}), which in turn depends on the primary variables $p_g$ and $p_c$.
 
 The governing equations presented in this chapter --- dry air conservation, water species conservation, energy conservation, and momentum conservation --- together with the constitutive laws, form a complete THM model for concrete exposed to fire. These equations are continuous partial differential equations defined on the domain $\Omega$. Their numerical solution requires spatial and temporal discretization, which is the subject of the following \cref{chapter3}.
 
@@ -879,7 +838,7 @@ In terms of the THM model, this mechanism involves the water species conservatio
 
 The key material parameters governing this mechanism are the \textit{intrinsic permeability} $K_0$ and the \textit{initial moisture content}. Low permeability hinders vapor evacuation, while high moisture content provides more water to be evaporated, both promoting higher pore pressures.
 
-\subsubsection{Combined mechanism and HPC vulnerability} \label{sec:combined_mech}
+\subsubsection{Combined mechanism} \label{sec:combined_mech}
 
 \review{This section is currently under development and will be refined as the study progresses.}
 
@@ -892,50 +851,3 @@ In practice, explosive spalling generally occurs under the \textit{combined acti
 where $\sigma_{thermal}$ represents the thermal stress from differential dilation, $\sigma_{pore}$ represents the stress from pore pressure loading (via effective stress), and $f_t(T)$ is the temperature-degraded tensile strength. When the sum of stresses exceeds the tensile strength, cracks develop parallel to the heated surface, often leading to violent failure of the fire-exposed region.
 
 This combined criterion highlights why the complete THM model is needed: neither a purely thermal analysis ($T$ only) nor a purely hydral analysis ($p_g$, $p_c$ only) can capture the full picture.
-
-\begin{reviewblock}
-High Performance Concrete (HPC) is particularly vulnerable to spalling for several compounding reasons, all of which are captured by the THM model:
-\end{reviewblock}
-
-\begin{table}[htbp]
-\centering
-\caption{Factors contributing to HPC vulnerability to spalling}
-\label{tab:HPC_vulnerability}
-\begin{tabular}{p{3.5cm}p{4cm}p{5cm}}
-\textbf{HPC property} & \textbf{Model parameter} & 
-\textbf{Effect on spalling} \\
-Low water-to-cement ratio & Low intrinsic permeability $K_0$ & Hinders vapor evacuation $\rightarrow$ higher $p_g$ \\[4pt]
-Dense pore structure & Low porosity $\phi_0$ & Less storage volume for vapor $\rightarrow$ rapid pressure build-up \\[4pt]
-High compressive strength & Higher $E_0$ & More elastic energy stored $\rightarrow$ more violent release \\[4pt]
-Higher brittleness & Lower $G_f / f_t$ ratio & Less energy dissipation before fracture $\rightarrow$ sudden failure \\[4pt]
-Higher initial saturation & Higher $S_{l,0}$ & More water available for evaporation $\rightarrow$ higher $p_g$ \\
-\end{tabular}
-\end{table}
-
-\subsubsection{Role of damage-permeability coupling}
-
-\review{This section is currently under development and will be refined as the study progresses.}
-
-The competition between pore pressure build-up and damage-induced permeability increase (Eq.~\eqref{eq:perm_damage}) plays a decisive role in determining whether spalling occurs:
-
-\begin{itemize}
-    \item \textbf{Scenario 1 --- No spalling:} If microcracking develops early (e.g., from thermal stresses), the damage variable $D$ increases, causing an increase in permeability via the factor $10^{A_d \cdot d}$. This creates additional escape paths for vapor, \textit{reducing} pore pressure before it can reach the critical level. This self-regulating mechanism is more effective in normal-strength concrete, which has higher initial permeability and cracks more readily.
-    
-    \item \textbf{Scenario 2 --- Spalling:} In HPC, the low initial permeability causes rapid pressure build-up, while the high tensile strength delays cracking. By the time the first cracks form, the pore pressure may already exceed the tensile strength, leading to sudden, explosive failure before permeability can increase sufficiently.
-\end{itemize}
-
-This explains the paradox that \textit{stronger} concrete is often \textit{more} vulnerable to spalling than weaker concrete.
-
-\subsubsection{Factors influencing spalling}
-
-In addition to the material properties discussed above, the main parameters promoting spalling, as identified by experimental research, include:
-\begin{itemize}
-    \item \textbf{Moisture content:} Higher initial moisture provides more water for evaporation and therefore higher peak pore pressures;
-    \item \textbf{Heating rate:} Faster heating creates steeper thermal gradients and allows less time for pressure relief through transport;
-    \item \textbf{External loading:} Compressive loading superimposes additional stresses to the thermally induced ones, reducing the margin before tensile failure;
-    \item \textbf{Concrete strength and permeability:} As discussed above, higher strength and lower permeability increase vulnerability;
-    \item \textbf{Aggregate type:} Mineralogical character of aggregates affects thermal expansion compatibility and crack initiation;
-    \item \textbf{Geometry and element size:} Thinner sections and edges are more prone to spalling.
-\end{itemize}
-
-The THM model thus provides a unified framework to explain, quantify, and predict spalling by computing the spatial and temporal evolution of the thermal, hydric, and mechanical fields and their interactions.

@@ -8,15 +8,17 @@ This chapter describes the numerical solution of the THM governing equations dev
 \section{Discretization}\label{sec:discretization}
 
 \subsection{Spatial discretization} \label{sec:spatial_discret}
-\review{This section is currently under development and will be refined as the study progresses.}
+
+\begin{reviewblock}
+The specific coupling method mentioned in \cref{sec:mechanical} between the TH and mechanical solvers has not yet been finalized and will be updated in \cref{chapter2} and \cref{chapter3} as the study progresses.
+\end{reviewblock}
 
 Applying the standard Galerkin finite element method to the three TH conservation equations (\cref{eq:final_air,eq:final_water,eq:final_energy}) yields the semi-discrete system \cite{dauti2018}:
 \begin{equation}
     \mathbf{C}\,\dot{\mathbf{Y}} + \mathbf{K}\,\mathbf{Y} = \mathbf{f}
     \label{eq:TH_matrix}
 \end{equation}
-
-where $\mathbf{Y} = \{\bar{p}_g,\, \bar{p}_c,\, \bar{T}\}$ is the vector of nodal TH unknowns. The operators $\mathbf{C}$ (capacity), $\mathbf{K}$ (conductivity), and $\mathbf{f}$ (forcing) are $3\times3$ block matrices:
+where $\mathbf{Y} = \{\bar{p}_g,\, \bar{p}_c,\, \bar{T}\}$ is the vector of nodal TH unknowns. The operators $\mathbf{C}$ (capacity), $\mathbf{K}$(conductivity), and $\mathbf{f}$ (forcing) are $3\times3$ block matrices:
 \begin{equation}
     \mathbf{K} = \begin{pmatrix}
     K_{gg} & K_{gc} & K_{gt} \\
@@ -35,12 +37,12 @@ where $\mathbf{Y} = \{\bar{p}_g,\, \bar{p}_c,\, \bar{T}\}$ is the vector of noda
 \end{equation}
 The off-diagonal entries $K_{ij}$, $C_{ij}$ ($i\neq j$) encode the coupling between the thermal and hydric fields. Detailed expressions of each block are given in \cite{dauti2018}, Appendix~A.
 
-The mechanical problem (\cref{eq:final_momentum}) is solved separately in a staggered manner: at each time step, the TH solution provides $T$, $p_g$, $p_c$,which define the thermal strain (\cref{eq:eps_th}), shrinkage strain (\cref{eq:eps_sh}), and pore pressure loading (\cref{eq:eff_stress}). The equilibrium equation:
+The mechanical problem (\cref{eq:final_momentum}) is solved separately in a staggered manner: at each time step, the converged TH solution $\bar{T}$, $\bar{p}_g$, $\bar{p}_c$ enters the mechanical problem as prescribed loading through the two mechanisms defined in \cref{sec:mechanical} --- strain decomposition (\cref{eq:strain_decomp}) and effective stress (\cref{eq:eff_stress}). The discrete equilibrium (\cref{eq:KMU_F,eq:F_full}) reduces to solving:
 \begin{equation}
-    \mathbf{K}_M\,\mathbf{u} = \mathbf{F}(T,\, p_g,\, p_c)
+    \mathbf{K}_M\,\mathbf{U} = \mathbf{F}
     \label{eq:mech_matrix}
 \end{equation}
-is then solved for the displacement field $\mathbf{u}$, where $\mathbf{K}_M$ is the mechanical stiffness matrix and $\mathbf{F}$ is the load vector incorporating thermo-hydric contributions.
+for the nodal displacement vector $\mathbf{U}$, where $\mathbf{F}$ is the load vector defined in \cref{eq:F_full}.
 
 \subsection{Temporal discretization} \label{sec:temporal_discret}
 \review{This section is currently under development and will be refined as the study progresses.}
@@ -69,12 +71,11 @@ Since the capacity and conductivity matrices depend nonlinearly on the unknowns 
 
 The TH subsystem (\cref{eq:theta_method}) is solved \textit{monolithically}: all three unknowns $p_g$, $p_c$, $T$ are updated simultaneously within a single Newton-Raphson loop at each time step.
 
-The mechanical problem (\cref{eq:mech_matrix}) is solved in a \textit{staggered} manner: at each time step, the converged TH solution provides $T$, $p_g$, $p_c$, which are then used to assemble $\mathbf{F}$ and solve for $\mathbf{u}$. The damage variable $\mathcal{D}$ computed from the Mazars model feeds back to the intrinsic permeability via \cref{eq:perm_Td}, creating a weak M$\to$H coupling that is updated at the next time step.
+The mechanical problem (\cref{eq:mech_matrix}) is solved in a \textit{staggered} manner: at each time step, the converged TH solution provides $\bar{T}$, $\bar{p}_g$, $\bar{p}_c$, which are used to assemble $\mathbf{F}$ (\cref{eq:F_full}) and solve for $\mathbf{U}$. The damage variable $\mathcal{D}$ computed from the Mazars model feeds back to the intrinsic permeability via \cref{eq:perm_damage}, creating a weak M$\to$H coupling updated at the next time step.
 
-\section{Modeling strategy and model parameters}
+\section{Model description and parameters} \label{sec:model_description}
 
-\subsection{Modeling strategy}
-This section is currently under development and will be refined as the study progresses.
+This geometry is chosen as a representative benchmark for validating the THM implementation against the experimental results presented in \cref{chapter4}, obtained from an experimental campaign conducted under the supervision of S. Dal Pont. The model geometry, material properties, and boundary conditions are described in the following subsections.
 
 \subsection{Geometry}
 This section is currently under development and will be refined as the study progresses.
@@ -113,7 +114,6 @@ MAIL1   = DALL LAB LBC LCD LDA;
 TRAC MAIL1;
 \end{cast3m}
 
-
 \subsection{Material properties}
 
 \subsection{Boundary conditions and loadings}
@@ -137,16 +137,29 @@ This section is currently under development and will be refined as the study pro
 \subsection{Mazars model}
 This section is currently under development and will be refined as the study progresses.
 
-\section{Implementation of the TH coupled model}
+\section{Implementation of the TH coupled model} \label{sec:TH_implementation}
 This section is currently under development and will be refined as the study progresses.
 
 \section{Implementation of the THM coupled model}
-\subsection{TH coupling strategy}
+The THM coupling follows the staggered TH$\to$M approach introduced in \cref{sec:mechanical}: the TH subsystem (\cref{sec:TH_implementation}) is solved first, and the resulting fields $\bar{T}$, $\bar{p}_g$, $\bar{p}_c$ are passed as prescribed loading to the mechanical step through the load vector $\mathbf{F}$ defined in \cref{eq:F_full}.
+
+\subsection{Thermal and shrinkage strain input}
+
 This section is currently under development and will be refined as the study progresses.
-\subsection{TM coupling strategy}
+
+The thermal dilation strain $\boldsymbol{\varepsilon}^{th}$ (\cref{eq:eps_th}) and shrinkage strain $\boldsymbol{\varepsilon}^{sh}$ (\cref{eq:eps_sh}), computed from $\bar{T}$ and $\bar{p}_c$, contribute to the load vector as:
+\begin{equation}
+    \mathbf{F}^{th+sh} = \int_V \mathbf{B}^T \mathbf{D}_e\,\boldsymbol{\varepsilon}^{th}\,dV + \int_V \mathbf{B}^T \mathbf{D}_e\,\boldsymbol{\varepsilon}^{sh}\,dV
+\end{equation}
+
+\subsection{Pore pressure loading input}
+
 This section is currently under development and will be refined as the study progresses.
-\subsection{THM coupling strategy}
-This section is currently under development and will be refined as the study progresses.
+
+The effective stress contribution from pore pressures $\bar{p}_g$, $\bar{p}_c$ (\cref{eq:eff_stress}) enters the load vector as:
+\begin{equation}
+    \mathbf{F}^{pore} = \int_V \mathbf{B}^T\, \alpha_{Biot}(S_l\,p_c + p_g)\,\mathbf{I}\,dV
+\end{equation}
 
 \section{Numerical results}
 This section is currently under development and will be refined as the study progresses.
