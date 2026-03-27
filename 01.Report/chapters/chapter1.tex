@@ -4,30 +4,43 @@
 \review{This chapter is currently a draft version and will undergo further review and revision.}
 
 \section{Context and problem statement}
-Concrete containment structures under severe-accident thermal loading present coupled thermo-hydro-mechanical challenges \cite{dauti2018}.
+
+Concrete structures exposed to fire undergo a complex interplay of thermal, hydric, and mechanical phenomena that can lead to progressive degradation and, in the most severe cases, to \textit{spalling} --- the sudden detachment of concrete layers from the exposed surface. Several catastrophic tunnel fires have illustrated the severity of this phenomenon: the Channel Tunnel fire (1996), the Mont-Blanc tunnel fire (1999), and the St.~Gotthard tunnel fire (2001) all caused extensive spalling-induced structural damage \cite{dauti2018}. 
+
+In nuclear containment structures, where concrete is exposed to extreme temperatures during severe accidents, the consequences of spalling are particularly critical as they may compromise structural integrity and containment function.
 
 \subsection{Concrete behaviour under high temperature} 
-Main contextes:
+When concrete is subjected to rapid heating, several coupled physical processes develop simultaneously:
+
 \begin{itemize}
-    \item Concrete in nuclear containment structures is exposed to extreme temperatures during severe accidents.
-    \item Rapid heating leads to strong thermal stresses, dehydration, cracking and possible spalling govern structural integrity.
+    \item \textbf{Thermal:} steep temperature gradients develop through the cross-section, driving differential thermal dilation and generating compressive stresses at the heated surface.
+    
+    \item \textbf{Hydric:} free and chemically bound water evaporate and migrate through the pore network; in low-permeability concretes such as high-performance concrete (HPC), vapor cannot escape rapidly enough, leading to pore pressure build-up behind a quasi-saturated \textit{moisture clog}.
+    
+    \item \textbf{Mechanical:} the combined action of thermal stresses and pore pressure loading on the solid skeleton can exceed the (temperature-degraded) tensile strength, initiating cracks parallel to the heated surface and potentially triggering explosive spalling.
 \end{itemize}
+
+Despite extensive experimental research, the mechanisms governing spalling remain incompletely understood and no general consensus has been reached \cite{dauti2018}.
 
 \subsection{Problem statement}
 
-Main problems:
+Reliable prediction of spalling requires a consistent \textit{thermo-hydro-mechanical} (THM) framework capable of capturing:
 \begin{itemize}
-  \item Complex multi-physics coupling under high temperature.
-  \item Temperature- and damage-dependent evolution of transport properties with cracking and stiffness degradation altering the permeability and pore pressure.
-  \item Reliable prediction requires a consistent thermo-hydro-mechanical (THM) framework.
+    \item the multi-physics coupling between thermal, hydric, and mechanical fields under high temperature;
+    
+    \item the temperature- and damage-dependent evolution of transport properties, whereby microcracking alters permeability and redistributes  pore pressure;
+    
+    \item the inherent spatial variability of material parameters (permeability, porosity, tensile strength) and its influence on the onset and location of spalling.
 \end{itemize}
 
 \subsection{Limitations of existing THM models}
-Main limitations of existing THM models:
+Current THM models present several limitations that this work aims to address:
 \begin{itemize}
-    \item Lack of fully coupled interactions between the damage state and transport properties. 
-    \item Lack of consistent regularization for strain localization.
-    \item Limited probabilistic assessment of parameter uncertainty and sensitivity.
+    \item incomplete coupling between the damage state and transport properties, often neglecting the feedback of cracking on permeability;
+    
+    \item lack of consistent regularization for strain localization, leading to mesh-dependent solutions;
+    
+    \item limited probabilistic assessment of parameter uncertainty: existing models typically treat material properties as homogeneous deterministic values, neglecting the spatial variability of concrete properties.
 \end{itemize}
 
 \section{Objectives and scope of the thesis}
