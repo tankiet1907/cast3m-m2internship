@@ -1,15 +1,17 @@
 [0] Config.pm:328> INFO - This is Biber 2.21
 [0] Config.pm:331> INFO - Logfile is 'main.blg'
-[116] biber-MSWIN64:342> INFO - === 
-[153] Biber.pm:421> INFO - Reading 'main.bcf'
-[277] Biber.pm:1002> INFO - Found 6 citekeys in bib section 0
-[293] Biber.pm:4487> INFO - Processing section 0
-[304] Biber.pm:4678> INFO - Looking for bibtex file 'bibliography/zotero-m2internship.bib' for section 0
-[379] bibtex.pm:1713> INFO - LaTeX decoding ...
-[412] bibtex.pm:1519> INFO - Found BibTeX data source 'bibliography/zotero-m2internship.bib'
-[512] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'normalization = NFD' with 'normalization = prenormalized'
-[512] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'variable = shifted' with 'variable = non-ignorable'
-[513] Biber.pm:4307> INFO - Sorting list 'nty/global//global/global/global' of type 'entry' with template 'nty' and locale 'en-US'
-[513] Biber.pm:4313> INFO - No sort tailoring available for locale 'en-US'
-[524] bbl.pm:676> INFO - Writing 'main.bbl' with encoding 'UTF-8'
-[527] bbl.pm:779> INFO - Output to main.bbl
+[117] biber-MSWIN64:342> INFO - === 
+[155] Biber.pm:421> INFO - Reading 'main.bcf'
+[282] Biber.pm:1002> INFO - Found 12 citekeys in bib section 0
+[297] Biber.pm:4487> INFO - Processing section 0
+[309] Biber.pm:4678> INFO - Looking for bibtex file 'bibliography/zotero-m2internship.bib' for section 0
+[376] bibtex.pm:1713> INFO - LaTeX decoding ...
+[422] bibtex.pm:1519> INFO - Found BibTeX data source 'bibliography/zotero-m2internship.bib'
+[530] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'variable = shifted' with 'variable = non-ignorable'
+[530] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'normalization = NFD' with 'normalization = prenormalized'
+[530] Biber.pm:4307> INFO - Sorting list 'nty/global//global/global/global' of type 'entry' with template 'nty' and locale 'en-US'
+[530] Biber.pm:4313> INFO - No sort tailoring available for locale 'en-US'
+[546] bbl.pm:676> INFO - Writing 'main.bbl' with encoding 'UTF-8'
+[552] bbl.pm:779> INFO - Output to main.bbl
+[553] Biber.pm:132> WARN - I didn't find a database entry for 'Baldeweck1999' (section 0)
+[553] Biber.pm:134> INFO - WARNINGS: 1

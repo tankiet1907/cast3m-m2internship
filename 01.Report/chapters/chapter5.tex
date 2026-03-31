@@ -19,21 +19,17 @@ Main ideas:
 
 In civil engineering, a structure or mechanical system is considered safe when it remains fit for duty for the duration of its service life, without causing damage to itself or its environment. Traditionally, deterministic models have been used to evaluate structural safety. However, the inevitable gap between a real physical system and a simplified numerical model, along with the unforeseeable nature of future loads and environmental conditions, inherently leads to uncertainty. 
 
-\begin{draftblock}
 To properly manage these risks and optimize the total lifecycle cost, modern engineering codes—such as the Eurocodes—rely heavily on probabilistic and statistical tools. The primary motivation for probabilistic assessment lies in its ability to explicitly quantify the safety of a structure through its probability of failure ($P_f$) and, conversely, its overall reliability ($R = 1 - P_f$). By adopting a probabilistic format, it becomes much easier to introduce random variables into mechanical behavior models, propagate them through structural analyses, and eventually make objective decisions based on both the probability of an event and the gravity of its consequences.
-\end{draftblock}
 
 \subsection{Classification of uncertainties}
 
 Predicting the exact lifetime or mechanical response of a construction project is impossible without accounting for multiple sources of uncertainty. According to reliability theory, these uncertainties can be broadly classified into two main categories: Aleatoric and Epistemic.
 
-\begin{draftblock}
 \begin{itemize}
     \item \textbf{Aleatoric (inherent or natural) uncertainties:} These uncertainties arise from the natural randomness of the environment and the spatial or temporal variability of material properties. Because they represent the inherent physical variation in nature, aleatoric uncertainties cannot be reduced or eliminated; they can only be accurately quantified (through data acquisition) and taken into account during the design process.
     
     \item \textbf{Epistemic (knowledge-based) uncertainties:} These stem from a lack of complete knowledge or insufficient data. They include \textit{model uncertainties} (the discrepancy between empirical or theoretical mathematical models and actual physical processes) and \textit{statistical uncertainties} (arising from limited data sampling or poor data collection methods). Furthermore, observation errors heavily contribute to epistemic uncertainty. These errors include measurement inaccuracies (caused by operators or poorly calibrated devices), representativity issues (e.g., deducing stress or rigidity indirectly from strain measurements), and time discrepancies (e.g., changes in material properties between the time of measurement and actual casting). Unlike aleatoric uncertainties, epistemic uncertainties can be effectively reduced by improving physical models, increasing training, and gathering more accurate data.
 \end{itemize}
-\end{draftblock}
 
 \subsection{Concrete heterogeneity and material variability}
 
@@ -49,155 +45,414 @@ A critical source of aleatoric uncertainty in civil engineering is the inherent 
     \end{enumerate}
 \end{itemize}
 
-\begin{draftblock}
 Because these material parameters are fundamentally variable, evaluating the true safety and performance of a structure requires geotechnical and structural predictions to abandon purely deterministic values. Instead, they must rely on random variables and stochastic fields to accurately model this spatial heterogeneity.
-\end{draftblock}   
 
-\section{Stochastic finite element framework (Monte Carlo)}
+\section{Stochastic finite element framework} \label{sec:stochastic-framework}
+In structural engineering, material properties such as the Young's modulus, permeability, or thermal conductivity are never perfectly known.
+As noted by \cite{delarrard2010}, even under strict quality control the compressive strength of high-performance concrete can range from 62 to~100~MPa, reflecting the heterogeneous microstructure, cement composition, and environmental conditions during curing.
+A \emph{deterministic} analysis assigns a single fixed value to each parameter and produces a unique structural response; it cannot, by itself, quantify the likelihood that a design limit will be exceeded.
+A \emph{stochastic} (probabilistic) analysis, on the other hand, treats uncertain parameters as random quantities, propagates this uncertainty through the model, and delivers statistical information---mean, variance, probability of failure---about the structural response.
 
-\begin{reviewblock}
-Main ideas:
-\begin{itemize}
-    \item Treat uncertain material parameters as random variables.
-    \item Generate many random samples.
-    \item Run the THM model for each sample.
-    \item Collect the outputs and analyze variability and sensitivity.
-\end{itemize}
-\end{reviewblock}
+Two levels of stochastic description are used in this work. When a material property is spatially uniform but uncertain in magnitude, it is represented by a \emph{random variable} (\cref{subsec:random-variables}): a single uncertain value applies to the entire domain. When the property varies from point to point across the structure, it must be represented by a \emph{random field} (\cref{subsec:random-fields}): a spatially varying uncertain value is associated with every location, subject to a spatial correlation structure.
+These two mathematical objects form the theoretical foundation for the Gaussian Quadrature method (\cref{sec:quadrature}) and the Monte Carlo simulation (\cref{sec:monte-carlo}), respectively.
 
-\subsection{Random Field theory and Spatial variability}
+
+\subsection{Random variables (PDF, CDF, moments, CoV)}
+
+\review{This section is currently under development and will be refined as the study progresses.}
+
+A \textbf{random variable} $X$ is a quantity whose value is not fixed but described by a probability law.
+Instead of saying ``$E = 30$~GPa'', one writes $E \sim \mathcal{N}(30,\,3^2)$~GPa, meaning that the Young's modulus follows a normal (Gaussian) distribution with mean $\mu = 30$~GPa and standard deviation $\sigma = 3$~GPa.
+
+\subsubsection{Probability Density Function (PDF)}
+
+The \textbf{probability density function} (PDF) $f_X(x)$ characterises the likelihood of $X$ taking a given value. It satisfies:
+
+\begin{draftblock}
+
+\begin{equation}
+    f_X(x) \geq 0 \quad \forall\, x, \qquad
+    \int_{-\infty}^{+\infty} f_X(x)\,\mathrm{d}x = 1.
+    \label{eq:pdf-properties}
+\end{equation}
+
+For a \textbf{normal} (Gaussian) distribution $\mathcal{N}(\mu,\sigma^2)$:
+
+\begin{equation}
+    f_X(x) = \frac{1}{\sigma\sqrt{2\pi}}\,
+    \exp\!\left[-\frac{(x-\mu)^2}{2\sigma^2}\right].
+    \label{eq:pdf-normal}
+\end{equation}
+
+For a \textbf{lognormal} distribution $\mathrm{LN}(\mu_{\ln},\sigma_{\ln}^2)$, the variable $\ln X$ is normally distributed, ensuring $X > 0$:
+
+\begin{equation}
+    f_X(x) = \frac{1}{x\,\sigma_{\ln}\sqrt{2\pi}}\,
+    \exp\!\left[-\frac{(\ln x - \mu_{\ln})^2}{2\sigma_{\ln}^2}\right],
+    \qquad x > 0.
+    \label{eq:pdf-lognormal}
+\end{equation}
+
+The lognormal distribution is particularly relevant for material properties such as the Young's modulus or permeability, which must remain strictly positive \cite{delarrard2010,sudret2000}.
+
+\end{draftblock}
+
+\subsubsection{Cumulative Distribution Function (CDF)}
+
+The \textbf{cumulative distribution function} (CDF) $F_X(x)$ gives the probability that $X$ does not exceed a threshold:
+
+\begin{draftblock}
+
+\begin{equation}
+    F_X(x) = P(X \leq x) = \int_{-\infty}^{x} f_X(t)\,\mathrm{d}t.
+    \label{eq:cdf-def}
+\end{equation}
+
+$F_X$ is a non-decreasing function with $F_X(-\infty) = 0$ and $F_X(+\infty) = 1$.
+In reliability analysis, the CDF is used directly to evaluate the probability of exceeding a critical value: $P(X > x_{\mathrm{cr}}) = 1 - F_X(x_{\mathrm{cr}})$.
+
+\end{draftblock}
+
+\subsubsection{Statistical moments}
+
+The distribution of $X$ can be summarised by its \textbf{statistical moments}, which quantify location, spread, asymmetry, and tail heaviness:
+
+\begin{enumerate}
+    \item \textbf{Mean} (first moment, expected value):
+    
+    \begin{equation}
+        \mu_X = E[X] = \int_{-\infty}^{+\infty} x\, f_X(x)\,\mathrm{d}x.
+        \label{eq:mean}
+    \end{equation}
+
+    \item \textbf{Variance} (second central moment):
+    
+    \begin{equation}
+        \sigma_X^2 = \mathrm{Var}[X] = E\!\left[(X - \mu_X)^2\right]
+        = \int_{-\infty}^{+\infty} (x - \mu_X)^2\, f_X(x)\,\mathrm{d}x.
+        \label{eq:variance}
+    \end{equation}
+    
+    The \textbf{standard deviation} $\sigma_X = \sqrt{\mathrm{Var}[X]}$ has the same unit as $X$.
+
+    \item \textbf{Skewness} (third standardised moment):
+    
+    \begin{equation}
+        \gamma_3 = \frac{E\!\left[(X - \mu_X)^3\right]}{\sigma_X^3}.
+        \label{eq:skewness}
+    \end{equation}
+    
+    $\gamma_3 = 0$ for a symmetric distribution (e.g.\ Gaussian); $\gamma_3 > 0$ indicates a right-skewed distribution (e.g.\ lognormal).
+
+    \item \textbf{Kurtosis} (fourth standardised moment):
+    
+    \begin{equation}
+        \gamma_4 = \frac{E\!\left[(X - \mu_X)^4\right]}{\sigma_X^4}.
+        \label{eq:kurtosis}
+    \end{equation}
+    
+    $\gamma_4 = 3$ for the Gaussian distribution.
+    Heavy-tailed distributions have $\gamma_4 > 3$.
+\end{enumerate}
+
+These four moments play a central role in the Gaussian Quadrature method (\cref{sec:quadrature}), where the response PDF is reconstructed from the computed moments using Winterstein or Pearson approximations \cite{sudret2003}.
+
+\subsubsection{Coefficient of Variation (CoV)}
+
+The \textbf{coefficient of variation} quantifies the relative dispersion of $X$:
+
+\begin{equation}
+    \mathrm{CoV}_X = \frac{\sigma_X}{\mu_X}.
+    \label{eq:cov}
+\end{equation}
+
+It is a dimensionless measure that allows comparison of variability across parameters with different units and magnitudes.
+For concrete, typical values are $\mathrm{CoV}_E \approx 0.10$--$0.20$ for the Young's modulus \cite{delarrard2010} and $\mathrm{CoV}_K \approx 0.15$--$0.30$ for permeability.
+
+
+\subsection{Random fields and correlation structure}
 
 \review{This section is currently under development and will be refined as the study progresses.}
 
 \subsubsection{Random fields}
 
-Spatial variability of material properties can be described using random field theory, in which a parameter is modeled as a stochastic function defined over the spatial domain. In this representation, the value of the property varies from point to point according to a prescribed probability distribution and spatial correlation structure. Random fields therefore provide a convenient framework to represent the heterogeneous nature of materials such as concrete.
-
-\subsubsection{Discretized random field}
-
-For numerical simulations, the continuous random field must be discretized in order to be implemented within a finite element model. This discretization assigns random values of the considered property to the elements or integration points of the mesh. In this way, the spatial variability of the material parameters can be incorporated directly into the computational model.
-
-\subsubsection{Spatial correlation length ($\lambda$)}
-
-\review{This section requires additional references to support the statements presented.}
-
-A fundamental parameter in the generation of random fields is the spatial correlation length, often denoted as $\lambda$ (or $b$). 
+A random variable assigns a \emph{single} uncertain value to a material property for the entire structure. In reality, concrete properties vary spatially due to heterogeneous microstructure, local variations in the water-to-cement ratio, and non-uniform compaction duringcasting \cite{delarrard2010}.
+A \textbf{random field} extends the notion of a random variable to continuous space: it associates an uncertain value with \emph{every point} $\mathbf{x}$ in the structural domain $\mathcal{D} \subset \mathbb{R}^d$.
 
 \begin{draftblock}
-While the mean and standard deviation define the statistical distribution of the values at any given single point, the correlation length dictates the spatial structure and the degree of spatial dependence between neighboring points.
+    
+A random field is a collection of random variables indexed by position:
 
-Physically, in a heterogeneous material like concrete, the macroscopic properties (such as Young's modulus or permeability) at two closely located spatial points are not entirely independent. They are correlated due to the presence of meso-scale structures, such as aggregates and the cement paste matrix. The correlation length $\lambda$ mathematically represents the distance over which these macroscopic properties remain statistically correlated.
-\end{draftblock}
-
-Depending on the assigned value of $\lambda$:
-\begin{itemize}
-    \item A very small correlation length ($\lambda \rightarrow 0$) implies that the material properties fluctuate rapidly and erratically over short distances\draft{, approaching a completely uncorrelated "white noise" spatial distribution.}
-    \item A large correlation length ($\lambda \rightarrow \infty$) implies a slow spatial variation, moving towards a uniformly homogeneous material\draft{ where the property is identical across the entire macro-scale structure.}
-\end{itemize}
-
-\begin{reviewblock}
-In the context of this study, the choice of the correlation length is closely related to the maximum aggregate size of the concrete mixture. 
-\end{reviewblock}
-
-\begin{draftblock}
-In the finite element implementation using the Cast3M code, this spatial correlation is explicitly introduced into the generation of the log-normal field via the \texttt{ALEA} operator using the \texttt{'LAMBDA'} keyword. For instance, an exponential covariance function with a specific correlation length $b$ is generated using the Turning Bands Method (\texttt{'BANDES\_TOURNANTES'} algorithm). 
-\end{draftblock}
-
-\draft{The accurate selection of this parameter is crucial, as it directly governs the tortuosity of the damage patterns and influences the localization of cracks during the high-temperature spalling process.}
-
-\subsection{Transformation of Lognormal to Gaussian distributionn}
-
-In practical finite element implementations using the Cast3M software, material parameters like the Young's modulus ($E$) are often assigned a lognormal random field to ensure the generated stiffness values remain strictly positive. However, the built-in random field operator (\texttt{ALEA}) generates Gaussian (normal) distributions, necessitating a mathematical transformation.
-
-\begin{reviewblock}
-\review{This section requires additional references to support the statements presented.}
-
-Assuming the actual mean of the material's Young's modulus is $\mu_E$ and its standard deviation is $\sigma_E$. The fundamental relationship between these two variables is expressed through the exponential transformation:
-\[
-E = \exp(G) \iff G = \ln(E)
-\]
-
-From statistical properties, we can establish a system of two equations relating the moments of $E$ ($\mu_E, \sigma_E$) and $G$ ($\mu_G, \sigma_G$) as follows:
 \begin{equation}
-\begin{cases}
-\mu_E = \exp\left(\mu_G + \dfrac{\sigma_G^2}{2}\right) \\
-\sigma_E^2 = \left[ \exp(\sigma_G^2) - 1 \right] \exp(2\mu_G + \sigma_G^2)
-\end{cases}
+    H \;=\; \bigl\{H(\mathbf{x},\omega) : \mathbf{x} \in \mathcal{D},\;
+                                            \omega \in \Omega \bigr\},
+    \label{eq:rf-definition}
 \end{equation}
 
-To find the input parameters $\mu_G$ and $\sigma_G$ for the random number generation algorithm, we need to solve the above system of equations.
-\end{reviewblock}
+where $\omega$ denotes a particular realisation (outcome) drawn from the probability space $(\Omega, \mathcal{F}, P)$ \cite{sudret2000}. For a fixed $\omega$, $H(\cdot,\omega)$ is a deterministic spatial function called a \emph{realisation} of the random field; for a fixed $\mathbf{x}$, $H(\mathbf{x},\cdot)$ is an ordinary random variable.
 
-\subsubsection{1. Solving for $\sigma_G^2$}
-By squaring the first equation, we get:
-\[
-\mu_E^2 = \exp(2\mu_G + \sigma_G^2)
-\]
-Substituting this result into the second equation yields:
-\[
-\sigma_E^2 = \left[ \exp(\sigma_G^2) - 1 \right] \mu_E^2
-\]
-Rearranging the terms, we obtain:
-\[
-\exp(\sigma_G^2) = \frac{\sigma_E^2}{\mu_E^2} + 1
-\]
-Taking the natural logarithm of both sides gives the variance of the Gaussian distribution:
-\[
-\sigma_G^2 = \ln\left(1 + \frac{\sigma_E^2}{\mu_E^2}\right)
-\]
+A second-order random field is fully characterised by two functions \cite{sudret2000}:
+\begin{itemize}
+    \item the \textbf{mean field}:
+    \begin{equation}
+        \bar{H}(\mathbf{x}) \;=\; E\!\left[H(\mathbf{x},\omega)\right],
+        \label{eq:rf-mean}
+    \end{equation}
+    \item the \textbf{covariance function}:
+    \begin{equation}
+        C_H(\mathbf{x},\mathbf{y})
+        \;=\; E\!\left[
+            \bigl(H(\mathbf{x}) - \bar{H}(\mathbf{x})\bigr)
+            \bigl(H(\mathbf{y}) - \bar{H}(\mathbf{y})\bigr)
+        \right].
+        \label{eq:rf-covariance}
+    \end{equation}
+\end{itemize}
 
-\subsubsection{2. Solving for $\mu_G$}
-Using the first equation and isolating $\exp(\mu_G)$, we have:
-\[
-\mu_E = \exp(\mu_G) \cdot \exp\left(\dfrac{\sigma_G^2}{2}\right)
-\]
-Substituting $\sigma_G^2 = \ln\left(1 + \frac{\sigma_E^2}{\mu_E^2}\right)$ into the exponential term, we get:
-\[
-\mu_E = \exp(\mu_G) \cdot \exp\left(\ln\left(\sqrt{1 + \frac{\sigma_E^2}{\mu_E^2}}\right)\right) = \exp(\mu_G) \cdot \sqrt{1 + \frac{\sigma_E^2}{\mu_E^2}}
-\]
-Rearranging to solve for $\mu_G$:
-\[
-\exp(\mu_G) = \frac{\mu_E}{\sqrt{1 + \frac{\sigma_E^2}{\mu_E^2}}} \implies \mu_G = \ln\left(\frac{\mu_E}{\sqrt{1 + \frac{\sigma_E^2}{\mu_E^2}}}\right)
-\]
+The covariance function quantifies the statistical dependence between the values of $H$ at two distinct locations. A random field is called \textbf{homogeneous} (or \emph{stationary}) if both $\bar{H}(\mathbf{x})$ and $C_H(\mathbf{x},\mathbf{y})$ depend only on the separation vector $\boldsymbol{\tau} = \mathbf{x} - \mathbf{y}$, i.e.$C_H(\mathbf{x},\mathbf{y}) = C_H(\boldsymbol{\tau})$.
 
-\subsubsection{Summary of calculation steps in the numerical algorithm}
-Based on the exact solutions derived above, the implementation follows these sequential steps:
+\end{draftblock}
+
+\subsubsection{Correlation function and correlation length} \label{sec:correlation}
+
+For a homogeneous random field, the \textbf{autocorrelation function} $\rho_H(\boldsymbol{\tau})$ is defined by normalising the covariance:
+
+\begin{draftblock}
+
+\begin{equation}
+    \rho_H(\boldsymbol{\tau})
+    \;=\; \frac{C_H(\boldsymbol{\tau})}{\sigma_H^2},
+    \qquad \rho_H(\mathbf{0}) = 1,
+    \label{eq:autocorrelation}
+\end{equation}
+
+where $\sigma_H^2 = C_H(\mathbf{0})$ is the variance of the field. The most common model for concrete material properties is the \textbf{squared-exponential} (Gaussian) correlation function \cite{sudret2000,fenton2014}:
+
+\begin{equation}
+    \rho_H(\tau) \;=\; \exp\!\left(-\frac{\tau^2}{L_c^2}\right),
+    \label{eq:corr-gaussian}
+\end{equation}
+
+and the \textbf{exponential} (Markov) correlation function:
+
+\begin{equation}
+    \rho_H(\tau) \;=\; \exp\!\left(-\frac{|\tau|}{L_c}\right),
+    \label{eq:corr-exponential}
+\end{equation}
+
+where $\tau = \|\boldsymbol{\tau}\|$ is the Euclidean distance between two points, and $L_c > 0$ is the \textbf{correlation length}.
+
+\end{draftblock}
+
+The correlation length $L_c$ is the central parameter of the random field model. It controls the spatial scale over which the field exhibits coherent variations:
+
+\begin{itemize}
+    \item If $L_c \gg L_{\mathrm{struct}}$ (the structural dimension), the field is nearly uniform in space and behaves like a random variable: one realisation has almost the same value everywhere.
+    \item If $L_c \ll L_{\mathrm{struct}}$, adjacent points are nearly independent and the field fluctuates rapidly over short distances.
+    \item For intermediate values, the field exhibits smooth but spatially varying realisations, which is the typical case for concrete \cite{delarrard2010}.
+\end{itemize}
+
+The effect of $L_c$ on structural response is illustrated in \cref{fig:correlation-length-effect}: a small $L_c$ produces highly heterogeneous fields that may create local weak zones, whereas a large $L_c$ produces fields closer to a uniform random variable.
+
+\subsection{Summary: random variable versus random field}
+
+\cref{tab:rv-vs-rf} summarises the key differences between the two levels of stochastic description and their implications for the numerical methods used in this work.
+
+\begin{table}[htbp]
+\centering
+\caption{Comparison of random variable and random field stochastic descriptions.}
+\label{tab:rv-vs-rf}
+\begin{tabular}{p{4cm} p{4.5cm} p{4.5cm}}
+\textbf{Aspect}
+    & \textbf{Random variable}
+    & \textbf{Random field} \\
+Spatial variation
+    & None (spatially uniform)
+    & Yes (spatially heterogeneous) \\[4pt]
+Characterisation
+    & PDF: mean $\mu$, std $\sigma$
+    & Mean field $\bar{H}(\mathbf{x})$, covariance $C_H(\mathbf{x},\mathbf{y})$ \\[4pt]
+Key parameter
+    & CoV
+    & Correlation length $L_c$ \\[4pt]
+Stochastic level
+    & First-order
+    & Second-order \\[4pt]
+Resolution method
+    & Gaussian Quadrature
+    & Karhunen--Lo\`eve + Monte Carlo \\[4pt]
+Cast3m operator
+    & \texttt{QUADRATU}
+    & \texttt{ALEA} \\[4pt]
+Computational cost
+    & Low (3--7 runs per variable)
+    & High (hundreds to thousands of runs) \\
+\end{tabular}
+\end{table}
+
+The choice between these two levels of description is governed by the spatial scale of heterogeneity relative to the structural dimensions. For the THM analyses presented in this work, the Gaussian Quadrature method (\cref{sec:quadrature}) is applied when properties are treated as spatially uniform uncertain quantities, while the Monte Carlo method (\cref{sec:monte-carlo}) is employed when spatial variability is explicitly modelled.
+
+\section{Monte Carlo simulation framework} \label{sec:monte-carlo}
+
+Monte Carlo simulation (MCS) is the reference method for propagating uncertainty through complex nonlinear models such as the THM framework adopted in this work. Its principle is straightforward: a large number of independent realisations of the uncertain input fields are generated, the deterministic model is evaluated for each realisation, and theresulting ensemble of responses is used to estimate statistics and failure probabilities \cite{fenton2014}. Because no assumption is made on the shape of the response surface, MCS is able to estimate the \emph{entire} output distribution, a major advantage over linearisation methods such as FORM/SORM \cite{fenton2014}.
+
+\subsection{Principle and convergence}
+
+\review{This section is currently under development and will be refined as the study progresses.}
+
+\begin{draftblock}
+
+\paragraph{General procedure}
+
+Each Monte Carlo trial consists of three steps \cite{fenton2014}:
+
 \begin{enumerate}
-    \item The coefficient of variation ($cov_E$) of the desired lognormal distribution is calculated:
-    \[
-    cov_E = \frac{\sigma_E}{\mu_E}
-    \]
-    \item The mean of the equivalent Gaussian distribution ($\mu_G$):
-    \[
-    \mu_G = \ln\left(\frac{\mu_E}{\sqrt{1 + cov_E^2}}\right)
-    \]
-    \item The variance of the equivalent Gaussian distribution ($\sigma_G^2$):
-    \[
-    \sigma_G^2 = \ln(1 + cov_E^2)
-    \]
-    \item The standard deviation of the Gaussian distribution ($\sigma_G$):
-    \[
-    \sigma_G = \sqrt{\ln(1 + cov_E^2)}
-    \]
-    \item A standard Gaussian random field (\texttt{GFIELD}) is then generated using the \texttt{ALEA} operator with the computed Gaussian mean $\mu_G$ and standard deviation $\sigma_G$.
-    \item Finally, this Gaussian field is transformed back into the actual lognormal distribution (\texttt{EFIELD}) using the exponential function. A scale factor of $10^9$ is multiplied to convert the physical unit from GPa to Pa for the mechanical solver:
-    \[
-    EFIELD = \exp(GFIELD) \times 10^9
-    \]
+    \item Generate a realisation of the random input (random variable or random field) according to its prescribed distribution.
+    \item Evaluate the deterministic model (here, the THM finite element solver in Cast3M) to obtain the system response.
+    \item Repeat steps 1--2 until the output statistics have converged to a stable estimate.
 \end{enumerate}
 
-\subsection{Integration of spatial variability into the THM model}
+The probability of failure $p_f$ is estimated as:
+
+\begin{equation}
+    \hat{p}_f = \frac{N_f}{n},
+    \label{eq:mc-pf}
+\end{equation}
+
+where $N_f$ is the number of realisations for which the limit state function $g < 0$ (failure), and $n$ is the total number of realisations. Since $N_f$ follows a binomial distribution, $\hat{p}_f$ is an unbiased estimator of $p_f$ \cite{fenton2014}.
+
+\paragraph{Convergence criterion}
+
+The variance of the estimator $\hat{p}_f$ is:
+
+\begin{equation}
+    \mathrm{Var}[\hat{p}_f] = \frac{p_f(1-p_f)}{n},
+    \label{eq:mc-variance}
+\end{equation}
+
+so that the standard deviation of the estimate decreases as $1/\sqrt{n}$. For a maximum tolerable absolute error $e$ at $95\%$ confidence level, the required number of realisations is \cite{fenton2014}:
+
+\begin{equation}
+    n \;\geq\; \frac{4\,p_f(1-p_f)}{e^2}.
+    \label{eq:mc-nsample}
+\end{equation}
+
+For example, estimating $p_f \approx 10^{-3}$ with a relative error of $10\%$ (i.e.\ $e = 10^{-4}$) at $95\%$ confidence requires $n \approx 400{,}000$ realisations \cite{fenton2014}. This illustrates the main limitation of crude MCS for rare-event estimation: the computational cost grows rapidly as $p_f$ decreases. In the context of THM finite element analyses, where a single evaluation may take several minutes, this cost is prohibitive and motivates the use of the Gaussian Quadrature method presented in
+\cref{sec:quadrature}.
+
+\paragraph{Convergence in practice}
+
+When highly accurate probability estimates for low-probability events are not achievable directly, two complementary strategies are employed \cite{fenton2014}:
+
+\begin{itemize}
+    \item \textbf{Distribution fitting}: fit a parametric distribution to the simulated response and extrapolate into the tails. This is justified by the central limit theorem when the response is approximately a sum or product of independent contributions.
+    \item \textbf{Variance reduction}: use simulation techniques such as antithetic variates (negatively correlated pairs) to reduce the variance of the estimator for a given $n$.
+\end{itemize}
+    
+\end{draftblock}
+
+\subsection{Transformation of Lognormal to Gaussian distribution} \label{sec:lognormal-transformation}
+
+In practical finite element implementations using the Cast3M software, material parameters such as Young's modulus and permeability must remain strictly positive. However, the built-in random field operator \texttt{ALEA} generates Gaussian (normal) distributions, necessitating a mathematical transformation \cite{sudret2000}.
+
+A \textbf{lognormal random field} $H(\mathbf{x})$ is therefore adopted: by definition, $\ln H(\mathbf{x})$ is a Gaussian random field, which guarantees $H(\mathbf{x}) > 0$ at every point \cite{delarrard2010}. The moments of $H(\mathbf{x})$ are related to those of the underlying Gaussian field $G(\mathbf{x}) \sim \mathcal{N}(\mu_{\ln},\,\sigma_{\ln}^2)$ by \cite{sudret2000}:
+
+\begin{equation}
+    \begin{cases}
+        \mu_X \;=\; \exp\!\left(\mu_{\ln} + \dfrac{\sigma_{\ln}^2}{2}\right) \\[8pt]
+        \sigma_X^2 \;=\; \left[\exp(\sigma_{\ln}^2) - 1\right]
+                         \exp\!\left(2\mu_{\ln} + \sigma_{\ln}^2\right)
+    \end{cases}
+    \label{eq:lognormal-system}
+\end{equation}
+
+where $\mu_X$ and $\sigma_X$ are the physical mean and standard deviation of the material property. Inverting \cref{eq:lognormal-system} yields the Gaussian parameters as functions of the physical moments:
+
+\begin{equation}
+    \sigma_{\ln}^2 = \ln\!\left(1 + CoV_X^2\right),
+    \qquad
+    \mu_{\ln} = \ln(\mu_X) - \tfrac{1}{2}\,\sigma_{\ln}^2,
+    \label{eq:lognormal-params}
+\end{equation}
+
+where $CoV_X = \sigma_X/\mu_X$ is the coefficient of variation.
+
+The standard computational procedure in Cast3M \texttt{ALEA} then consists of two steps:
+
+\begin{enumerate}
+    \item Generate a Gaussian random field
+          $G(\mathbf{x}) \sim \mathcal{N}(\mu_{\ln},\,\sigma_{\ln}^2)$ using the Turning Band Method (see \cref{sec:tbm}), with parameters computed from \cref{eq:lognormal-params}.
+
+    \item Transform pointwise to obtain the lognormal field:
+          \begin{equation}
+              H(\mathbf{x}) \;=\;
+              \exp\!\bigl(G(\mathbf{x})\bigr),
+              \label{eq:lognormal-transform}
+          \end{equation}
+          which guarantees $H(\mathbf{x}) > 0$ and preserves the correlation structure characterised by $L_c$ (see \cref{sec:correlation}).
+\end{enumerate}
+
+This pointwise transformation is exact: the autocorrelation structure of the underlying Gaussian field is preserved in the lognormal field, so the spatial variability characterised by the correlation length $L_c$ remains physically meaningful after transformation \cite{delarrard2010}.
+
+\subsection{Random field generation and discretization}
+Representing the spatial variability of material properties in a finite element model requires both a method to \emph{generate} a random field realisation over the domain and a strategy to \emph{discretise} it onto the mesh, so that spatially varying values can be assigned directly to the elements or integration points of the finite element model. Several approaches exist in the literature; the principal families are surveyed below before the Turning Bands Method adopted in this work is described in detail in \cref{sec:tbm}.
+
+\subsubsection{Overview of generation methods} \label{sec:rf-methods}
+A random field $H(\mathbf{x}, \omega)$ with prescribed mean, variance, and covariance structure $C(\mathbf{x}, \mathbf{x}')$ can be simulated by several families of methods \cite{fenton2014}:
+
+\begin{itemize}
+    \item \textbf{Matrix decomposition (Cholesky).}
+          The covariance matrix $\mathbf{C}$ is factorised as $\mathbf{C} = \mathbf{L}\mathbf{L}^T$ and a correlated realisation is obtained as $\mathbf{h} = \mathbf{L}\mathbf{z}$, where $\mathbf{z}$ is a vector of independent standard normal variates \cite{fenton2014}. The method is exact but scales as $\mathcal{O}(n^3)$ in the number of nodes $n$, making it prohibitive for large meshes.
+
+    \item \textbf{Spectral methods (FFT-based).}
+          Realisations are generated by filtering white noise in the frequency domain using the spectral density corresponding to the target covariance \cite{fenton2014}. FFT algorithms are computationally efficient on regular grids, but the method is limited to stationary fields on rectangular domains with periodic boundary conditions.
+    \item \textbf{Local Average Subdivision (LAS).}
+          LAS generates the random field by successively subdividing the domain and assigning local averages consistent with the target covariance at each level of refinement \cite{fenton2014}. The method is computationally efficient and naturally produces spatially averaged values over elements, making it well-suited for direct use in finite element models. However, it is primarily designed for regular rectangular grids.
+
+    \item \textbf{Series expansion methods.}
+          Methods such as the Karhunen--Loève (KL) expansion parametrise the random field as a finite series of deterministic spatial functions multiplied by independent random variables \cite{sudret2000, delarrard2010}. They provide a compact representation of the spatial variability but require solving a global eigenvalue problem on the finite element mesh, whose cost increases with mesh size and targeted accuracy.
+
+    \item \textbf{Turning Bands Method (TBM).}
+          The TBM reduces the $d$-dimensional simulation to a set of one-dimensional stationary processes along random lines (bands) passing through the domain \cite{matheron1973, fenton2014}. It requires neither a global matrix factorisation nor an eigenvalue solve, and operates directly on any mesh geometry. The method is described in detail in \cref{sec:tbm} and is the approach adopted in this work.
+
+\end{itemize}
+
+\subsubsection{Turning Bands Method for random field generation} \label{sec:tbm}
+\paragraph{Principle}
+
+The Turning Bands Method (TBM), introduced by \cite{matheron1973}, generates a random field over a 2-D or 3-D domain by combining a set of simple 1-D random processes. The idea is illustrated in \cref{fig:tbm}: a number $L$ of lines (bands) are drawn through the domain in uniformly distributed directions. Along each line, an independent 1-D random process is simulated. The value of the field at any point $\mathbf{x}$ is then obtained by projecting that point onto each line and averaging the 1-D values:
+
+\begin{equation}
+    Z(\mathbf{x}) \;=\; \frac{1}{\sqrt{L}}
+    \sum_{i=1}^{L}
+    Z_i\!\left(\mathbf{x} \cdot \mathbf{u}_i\right),
+    \label{eq:tbm}
+\end{equation}
+
+where $\mathbf{u}_i$ is the unit direction vector of the $i$-th band and $Z_i$ is the corresponding 1-D process. The 1-D processes are constructed so that the resulting 2-D field reproduces the prescribed spatial covariance structure, for instance the isotropic exponential model:
+
+\begin{equation}
+    C(\mathbf{x}, \mathbf{x}') \;=\;
+    \sigma^2 \exp\!\left(
+        -\frac{\|\mathbf{x} - \mathbf{x}'\|}{L_c}
+    \right),
+    \label{eq:cov-expo}
+\end{equation}
+
+where $L_c$ is the correlation length, mentioned in \cref{sec:correlation} controlling how rapidly the field varies in space. The quality of the simulation improves with the number of bands; in practice $L = 16$ issufficient for isotropic fields in two dimensions \cite{fenton2014}.
+
+\paragraph{Implementation in Cast3M}
+
+The TBM is natively implemented in the Cast3M \texttt{ALEA} operator, which takes as input the Gaussian parameters $(\mu_{\ln}, \sigma_{\ln})$ and the correlation length $L_c$, and returns the simulated field directly as nodal values on the mesh. The lognormal transformation and assignment to \texttt{MATE} follow the procedure described in \cref{sec:lognormal-transformation}.
+
+\subsection{Integration of spatial variability into the THM model} \label{sec:thm-integration-mc}
 This section is currently under development and will be refined as the study progresses.
 
-\subsection{Monte Carlo simulation framework}
+Once the lognormal random field $H(\mathbf{x})$ has been constructed via the Turning Band Method (see \cref{sec:tbm}), it is propagated through the nonlinear THM model using Monte Carlo simulation. Given the computational cost of each THM evaluation, the iterative procedure is fully automated in Cast3M using the \texttt{REPETER} operator.
 
-After successfully implementing the log-normal random fields to represent the concrete's spatial heterogeneity, the next step in the probabilistic assessment is to perform multiple independent realizations. This is achieved through a Monte Carlo simulation framework.
+\subsubsection{Simulation loop and dynamic material updating} \label{sec:mc-loop}
 
-\draft{Given the inherent complexity and computational cost of the non-linear Thermo-Hydro-Mechanical (THM) model, solving the problem for hundreds of iterations requires a robust automated procedure. }In the finite element code Cast3M, this iterative process is seamlessly governed by the \texttt{REPETER} operator.
-
-\subsubsection{Simulation loop and dynamic material updating}
-
-This section is currently under development and will be refined as the study progresses
+This section is currently under development and will be refined as the study progresses.
 
 \begin{draftblock}
 
@@ -224,56 +479,259 @@ In the Cast3M script, this is executed using the \texttt{EXCO} (to extract the s
 This exported dataset containing the input realizations and the corresponding QoI outputs serves as the direct input for the external probabilistic software (e.g., Persalys) to compute the probability density functions and rank the dominant parameters via Sobol indices.
 \end{draftblock}
 
-\section{Gaussian Quadrature framework}
+\section{Gaussian Quadrature framework} \label{sec:quadrature}
 
-This section is currently under development and will be refined as the study progresses.
-  
+The Gaussian Quadrature method offers a fundamentally different approach to uncertainty propagation compared to Monte Carlo simulation: instead of generating a large number of random realisations, it evaluates the THM model at a small, strategically chosen set of deterministic points and reconstructs the output statistics from a weighted sum \cite{Baldeweck1999, sudret2003}. This section describes the mathematical framework of the method, its application to moment and PDF estimation, and its integration into the Cast3M environment.
+
 \subsection{Principle of Gaussian Quadrature}
-\begin{reviewblock}
-Main ideas as follows:
-\end{reviewblock}
+\begin{draftblock}
 
-\subsubsection{From integration to weighted sum}
-\subsubsection{Orthogonal polynomials and weighting functions}
-\subsubsection{Abscissas and weights construction}
+Consider a scalar response quantity $G = g(\mathbf{X})$, where $\mathbf{X} = \{X_1, \ldots, X_N\}$ is a vector of independent random variables with joint PDF $f_{\mathbf{X}}(\mathbf{x})$. Computing any statistical moment of $G$ requires evaluating an integral of the form:
+
+\begin{equation}
+    I \;=\; \int_{\mathcal{D}} g(\mathbf{x})\, W(\mathbf{x})\,
+    \mathrm{d}\mathbf{x},
+    \label{eq:quad-integral}
+\end{equation}
+
+where $W(\mathbf{x}) = f_{\mathbf{X}}(\mathbf{x})$ plays the role of a weighting function \cite{sudret2003}. For a single random variable with weighting function $W(x)$, this integral is approximated by a weighted sum over $K$ strategically placed evaluation points (abscissas) $\{x_k\}$:
+
+\begin{equation}
+    I \;\approx\; \sum_{k=1}^{K} w_k\, g(x_k),
+    \label{eq:quad-1d}
+\end{equation}
+
+where $\{w_k, x_k\}_{k=1}^K$ are the quadrature weights and abscissas associated with $W$ \cite{Baldeweck1999}.
+
+The key result of Gaussian quadrature theory is that the optimal abscissas are the roots of the $K$-th order orthogonal polynomial $P_K$ with respect to the scalar product induced by $W$ \cite{sudret2003}:
+
+\begin{equation}
+    \langle f, g \rangle \;=\;
+    \int_{\mathcal{D}} f(x)\, g(x)\, W(x)\, \mathrm{d}x.
+    \label{eq:scalar-product}
+\end{equation}
+
+These polynomials $\{P_j\}$ are constructed by Gram-Schmidt orthogonalisation via the three-term recurrence:
+
+\begin{equation}
+    P_{j+1}(x) \;=\;
+    (x - a_j)\,P_j(x) \;-\; b_j\,P_{j-1}(x),
+    \quad j \geq 1,
+    \label{eq:recurrence}
+\end{equation}
+
+with $P_0(x) = 1$ and $P_1(x) = x - a_0$, where $a_j$ and $b_j$ are scalar products of consecutive polynomials \cite{sudret2003}. The corresponding integration weights are given by:
+
+\begin{equation}
+    w_k \;=\;
+    \frac{\langle P_{K-1},\, P_{K-1} \rangle}
+         {P'_K(x_k)\, P_{K-1}(x_k)},
+    \quad k = 1, \ldots, K,
+    \label{eq:quad-weights}
+\end{equation}
+
+where $P'_K$ denotes the first derivative of $P_K$. A $K$-point scheme integrates exactly any polynomial function of degree up to $2K - 1$ \cite{sudret2003}.
+    
+\end{draftblock}
+
+In Cast3M, the operator \texttt{QUADRATU} automatically computes the abscissas and weights for any prescribed distribution (Normal, Lognormal, Uniform, etc.) by applying the recurrence in \cref{eq:recurrence} with the appropriate weighting function. The user provides only the distribution type and its parameters; no manual derivation of quadrature points is required.
 
 \subsection{Statistical moment estimation}
-\begin{reviewblock}
-Main ideas as follows:
-\end{reviewblock}
 
-\subsubsection{Mean, variance, skewness, kurtosis from quadrature}
-\subsubsection{Variance decomposition per variable}
+\begin{draftblock}
+\paragraph{Multi-variable extension}
+
+For a vector of $N$ independent random variables, the $q$-th moment of $G$ is a multiple integral over the joint domain:
+
+\begin{equation}
+    \mu_q^{(0)} \;=\;
+    \int_{D_1 \times \cdots \times D_N}
+    \bigl[g(x_1, \ldots, x_N)\bigr]^q\,
+    f_1(x_1) \cdots f_N(x_N)\,
+    \mathrm{d}x_1 \cdots \mathrm{d}x_N.
+    \label{eq:moment-integral}
+\end{equation}
+
+Applying the 1-D quadrature rule \cref{eq:quad-1d} separately to each variable using $K_j$-point schemes yields the tensor-product approximation \cite{Baldeweck1999, sudret2003}:
+
+\begin{equation}
+    \mu_q^{(0)} \;\approx\;
+    \sum_{k_1=1}^{K_1} \cdots \sum_{k_N=1}^{K_N}
+    w_{k_1}^{(1)} \cdots w_{k_N}^{(N)}\,
+    \bigl[g\bigl(x_{k_1}^{(1)}, \ldots, x_{k_N}^{(N)}\bigr)\bigr]^q.
+    \label{eq:moment-quadrature}
+\end{equation}
+
+The central moments $\mu_q$ (variance, skewness, kurtosis) are computed similarly by replacing $[g(\cdot)]^q$ with $[g(\cdot) - \mu_1^{(0)}]^q$. In practice, the first four moments are computed: mean $\mu$, standard deviation $\sigma$, skewness $\delta_3 = \mu_3/\sigma^3$, and kurtosis $\delta_4 = \mu_4/\sigma^4$ \citp{sudret2003}.
+\end{draftblock}
+
+\paragraph{Output in Cast3M}
+
+The operator \texttt{PARASTAT} collects the model evaluations at each quadrature point and assembles the weighted sums in \cref{eq:moment-quadrature}. The four moments are returned directly and can be inspected or used for subsequent PDF reconstruction and reliability assessment.
 
 \subsection{PDF, CDF and reliability assessment}
-\begin{reviewblock}
-Main ideas as follows:
-\end{reviewblock}
 
-\subsubsection{Approximation methods (Pearson, Winterstein, Exp-Polynomial)}
-\subsubsection{Probability of failure and reliability index}
+\begin{draftblock}
+    
+\paragraph{PDF reconstruction from moments}
 
-\subsection{Computational efficiency}
+Once the first four moments $(\mu, \sigma, \delta_3, \delta_4)$
+of $G$ are known, a continuous PDF $\tilde{f}_G$ is reconstructed
+by fitting a parametric family to these moments. Three methods are
+available in the Cast3M \texttt{PROBDENS} operator
+\cite{sudret2003}:
+
+\begin{itemize}
+    \item \textbf{Winterstein approximation.} $G$ is expressed as
+          a third-order Hermite polynomial transformation of a
+          standard normal variable $\xi$:
+          %
+          \begin{equation}
+              \tilde{G}(\xi) \;=\;
+              \mu \;+\; \tilde{k}\sigma
+              \bigl[\xi + h_3(\xi^2 - 1) + h_4(\xi^3 - 3\xi)\bigr],
+              \label{eq:winterstein}
+          \end{equation}
+          %
+          where the coefficients $\tilde{k}$, $h_3$, $h_4$ are
+          determined by matching the four moments of $\tilde{G}$
+          to those of $G$ \cite{sudret2003}. The CDF and PDF
+          follow analytically from the standard normal CDF $\Phi$
+          and PDF $\varphi$.
+
+    \item \textbf{Pearson's method.} The PDF is assumed to satisfy
+          a first-order ODE whose coefficients are expressed in
+          terms of the four moments, yielding a family of
+          distributions (normal, beta, gamma, Student, etc.)
+          depending on the discriminant of the equation
+          \cite{sudret2003}.
+
+    \item \textbf{Exponential of polynomials.} The PDF is modelled
+          as $\tilde{f}_G(\gamma) = c\,\exp(Q(\gamma))$, where
+          $Q$ is a polynomial of degree $n$ ($n = 3$ to $6$)
+          whose coefficients are fitted to the moments by solving
+          a linear system \cite{sudret2003}.
+\end{itemize}
+
+All three methods yield consistent results in the central region
+$[\mu - 3\sigma,\; \mu + 3\sigma]$; differences appear mainly in
+the distribution tails \cite{sudret2003}.
+
+\paragraph{Probability of failure and reliability index}
+
+Once $\tilde{f}_G$ (or equivalently the CDF $\tilde{F}_G$) is
+available, the probability of failure associated with the limit
+state $\{G \leq 0\}$ is:
+%
+\begin{equation}
+    P_f \;=\; \tilde{F}_G(0),
+    \label{eq:pf}
+\end{equation}
+%
+and the generalised reliability index is:
+%
+\begin{equation}
+    \beta \;=\; -\Phi^{-1}(P_f).
+    \label{eq:beta}
+\end{equation}
+%
+The method provides accurate results for reliability indices
+$\beta \lesssim 4$ to $5$ \cite{sudret2003}.
+
+\end{draftblock}
+
+\subsection{Integration and Computational efficiency}
+
 \begin{reviewblock}
 Main ideas as follows:
 \end{reviewblock}
 
 \subsubsection{Cost comparison with Monte Carlo}
+
+\begin{draftblock}
+The total number of model evaluations required by the
+tensor-product quadrature scheme with $K$ points per variable
+and $N$ random variables is:
+%
+\begin{equation}
+    N_{\mathrm{eval}} \;=\; K^N.
+    \label{eq:eval-count}
+\end{equation}
+%
+For the THM model considered in this work with $N = 2$ uncertain
+parameters (permeability $K_{\mathrm{int}}$ and Young modulus
+$E$) and a 3-point scheme ($K = 3$), this gives
+$3^2 = 9$ deterministic finite element runs — compared to
+several thousand runs typically required for Monte Carlo
+convergence. Each run is computationally expensive (a full
+transient THM simulation); the reduction in cost by a factor
+of $\mathcal{O}(10^2)$ to $\mathcal{O}(10^3)$ is therefore
+practically decisive.
+\end{draftblock}
+
 \subsubsection{Quick Quadrature for high-dimensional problems}
+
+\begin{draftblock}
+    
+When the number of random variables is larger, the full
+tensor-product scheme becomes expensive. A \emph{quick
+quadrature} variant can be used when two conditions are met:
+(a) the model response values $g(\mathbf{x}_{k_1,\ldots,k_N})$
+are of comparable magnitude across all quadrature points, and
+(b) the combined weights $w_{k_1} \cdots w_{k_N}$ vary by
+several orders of magnitude \cite{sudret2003}. In this case,
+all $K^N$ weight products are sorted in descending order and
+only the first $\tilde{K} \ll K^N$ terms whose cumulative sum
+reaches $1 - \varepsilon$ are evaluated, where $\varepsilon$
+is a user-prescribed tolerance. This reduces the number of
+finite element runs significantly while maintaining a
+prescribed accuracy level \cite{sudret2003}.
+
+For the present study with $N = 2$, the full tensor-product
+scheme is tractable and the quick quadrature option is not
+required.
+\end{draftblock}
+
 \subsubsection{Data extraction: moments computed directly from weighted sum}
+
+\begin{draftblock}
+    
+A by-product of the quadrature framework is the ability to
+perform a global sensitivity analysis at negligible additional
+cost. Since the model has already been evaluated at all
+tensor-product quadrature points, the contribution of each
+random variable $X_j$ to the total output variance can be
+estimated by comparing the variance of the conditional mean
+$\mathbb{E}[G \mid X_j]$ to the total variance $\mathrm{Var}(G)$
+\cite{sudret2003}. In Cast3M, this is carried out by
+\texttt{PARASTAT} using the Pearson correlation coefficients
+between each input and the output, providing a rank-ordering
+of the uncertain parameters by their influence on the response.
+
+\end{draftblock}
+
 \subsubsection{Limitations: curse of dimensionality}
 
-\section{Sensitivity analysis}
+\begin{draftblock}
 
-\begin{reviewblock}
-Main ideas:
-\begin{itemize}
-    \item Sensitivity indicators: Young modulus...
-    \item Change one input parameter at a time (or groups of parameters).
-    \item Measure how much the outputs change.
-    \item Rank the parameters from most to least influential.
-\end{itemize}
-\end{reviewblock}
+The main limitation of the full tensor-product quadrature rule
+is that the number of evaluations $K^N$ grows exponentially
+with $N$. For $N = 10$ variables and $K = 3$, this would
+require $3^{10} = 59\,049$ model evaluations — comparable to
+a Monte Carlo simulation and thus defeating the purpose of the
+method \cite{sudret2003}. This phenomenon is known as the
+\emph{curse of dimensionality}.
+
+For the present application with $N = 2$, this limitation is
+not encountered. Should additional uncertain parameters be
+identified in future work (e.g., creep coefficients, moisture
+diffusivity), the quick quadrature scheme described in
+\cref{subsubsec:sparse-quadrature} provides a practical
+mitigation strategy.
+
+\end{draftblock}
+
+\section{Sensitivity analysis}
 
 \begin{reviewblock}
 18 key parameters are selected for sensitivity analysis \cite{liu2001}.
@@ -311,9 +769,11 @@ Main ideas as follows:
 
 \subsubsection{Correlated parameters}
 
+\subsubsection{Sensitivity indicators: Pearson correlation and Sobol indices}
+
 \subsubsection{Quadrature: one-variable-at-a-time moments}
 
-\subsubsection{Monte Carlo: Sobol indices and Pearson correlation}
+\subsubsection{Monte Carlo: Sobol indices}
 
 \subsection{Identification of dominant parameters}
 This section is currently under development and will be refined as the study progresses.
@@ -335,13 +795,9 @@ Main ideas as follows:
 \end{reviewblock}
 
 \subsection{Probability of failure and reliability index}
-This section is currently under development and will be refined as the study progresses.
 
-\subsection{Probability of failure from moment-based PDF}
-This section is currently under development and will be refined as the study progresses.
+\subsection{PDF/CDF-based assessment (Quadrature)}
 
-\subsection{Probability of failure from Monte Carlo sampling}
-This section is currently under development and will be refined as the study progresses.
+\subsection{Sampling-based assessment (Monte Carlo)}
 
 \subsection{Effect of spatial heterogeneity on structural safety}
-This section is currently under development and will be refined as the study progresses.
