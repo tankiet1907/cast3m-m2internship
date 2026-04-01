@@ -19,6 +19,35 @@
 
 \refsection{0}
   \datalist[entry]{nty/global//global/global/global}
+    \entry{baroth2023}{book}{}{}
+      \name{author}{1}{}{%
+        {{hash=a8bebb79cbb87e04ad72cf0f8e7ff1af}{%
+           family={Baroth},
+           familyi={B\bibinitperiod},
+           given={Julien},
+           giveni={J\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Université Grenoble Alpes}%
+      }
+      \strng{namehash}{a8bebb79cbb87e04ad72cf0f8e7ff1af}
+      \strng{fullhash}{a8bebb79cbb87e04ad72cf0f8e7ff1af}
+      \strng{fullhashraw}{a8bebb79cbb87e04ad72cf0f8e7ff1af}
+      \strng{bibnamehash}{a8bebb79cbb87e04ad72cf0f8e7ff1af}
+      \strng{authorbibnamehash}{a8bebb79cbb87e04ad72cf0f8e7ff1af}
+      \strng{authornamehash}{a8bebb79cbb87e04ad72cf0f8e7ff1af}
+      \strng{authorfullhash}{a8bebb79cbb87e04ad72cf0f8e7ff1af}
+      \strng{authorfullhashraw}{a8bebb79cbb87e04ad72cf0f8e7ff1af}
+      \field{sortinit}{B}
+      \field{sortinithash}{d7095fff47cda75ca2589920aae98399}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{day}{30}
+      \field{month}{10}
+      \field{title}{Construction {{Reliability}}}
+      \field{year}{2023}
+      \field{dateera}{ce}
+    \endentry
     \entry{baroth2011}{incollection}{}{}
       \name{author}{3}{}{%
         {{hash=a8bebb79cbb87e04ad72cf0f8e7ff1af}{%
@@ -103,6 +132,33 @@
       \verb{file}
       \verb C:\Users\thong\Zotero\storage\JEEHEQGK\Bergman and Lavine - 2017 - Introduction.pdf
       \endverb
+    \endentry
+    \entry{dalpont2020}{book}{}{}
+      \name{author}{1}{}{%
+        {{hash=612cba7e4e060464aeae380c060ac9d3}{%
+           family={Dal\bibnamedelima Pont},
+           familyi={D\bibinitperiod\bibinitdelim P\bibinitperiod},
+           given={Stefano},
+           giveni={S\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Université Grenoble Alpes}%
+      }
+      \strng{namehash}{612cba7e4e060464aeae380c060ac9d3}
+      \strng{fullhash}{612cba7e4e060464aeae380c060ac9d3}
+      \strng{fullhashraw}{612cba7e4e060464aeae380c060ac9d3}
+      \strng{bibnamehash}{612cba7e4e060464aeae380c060ac9d3}
+      \strng{authorbibnamehash}{612cba7e4e060464aeae380c060ac9d3}
+      \strng{authornamehash}{612cba7e4e060464aeae380c060ac9d3}
+      \strng{authorfullhash}{612cba7e4e060464aeae380c060ac9d3}
+      \strng{authorfullhashraw}{612cba7e4e060464aeae380c060ac9d3}
+      \field{sortinit}{D}
+      \field{sortinithash}{6f385f66841fb5e82009dc833c761848}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Numerical {{Methods}} for {{Non-Linear Mechanics}}}
+      \field{year}{2020}
+      \field{dateera}{ce}
     \endentry
     \entry{dauti2018}{thesis}{}{}
       \name{author}{1}{}{%
@@ -203,16 +259,13 @@
       \verb https://www.sciencedirect.com/science/article/pii/S002954931000628X
       \endverb
     \endentry
-    \entry{dipaola2023}{report}{}{}
+    \entry{dipaola2023}{unpublished}{}{}
       \name{author}{1}{}{%
         {{hash=a736134b159e5629f38889680d407e63}{%
            family={Di\bibnamedelima Paola},
            familyi={D\bibinitperiod\bibinitdelim P\bibinitperiod},
            given={François},
            giveni={F\bibinitperiod}}}%
-      }
-      \list{institution}{1}{%
-        {CEA}%
       }
       \strng{namehash}{a736134b159e5629f38889680d407e63}
       \strng{fullhash}{a736134b159e5629f38889680d407e63}
@@ -241,16 +294,13 @@
       \verb https://www-cast3m.cea.fr/index.php?xml=maj2011
       \endverb
     \endentry
-    \entry{fenton2014}{report}{}{}
+    \entry{fenton2014}{unpublished}{}{}
       \name{author}{1}{}{%
         {{hash=62da7a02d573022f77b9717a371e11db}{%
            family={Fenton},
            familyi={F\bibinitperiod},
            given={Gorden\bibnamedelima A.},
            giveni={G\bibinitperiod\bibinitdelim A\bibinitperiod}}}%
-      }
-      \list{institution}{1}{%
-        {ALERT Geomaterials}%
       }
       \strng{namehash}{62da7a02d573022f77b9717a371e11db}
       \strng{fullhash}{62da7a02d573022f77b9717a371e11db}
