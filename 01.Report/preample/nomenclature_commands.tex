@@ -1,27 +1,32 @@
-% Grouped Nomenclature Settings
+% --- Grouped Nomenclature Configuration ---
 \usepackage[intoc]{nomencl}
 \usepackage{etoolbox}
 \makenomenclature
 
-% Increase line spacing between entries
-\setlength{\nomitemsep}{0.5em} 
+% 1. Set a fixed width for the symbol column to ensure vertical alignment
+\setlength{\nomlabelwidth}{2.5cm}
+\renewcommand{\nomlabel}[1]{#1\hfil}
 
-% Define Group Titles and Formatting
-\renewcommand{\nomgroup}[1]{%
-  \item[\vspace{0.5em}\bfseries
-  \ifstrequal{#1}{T}{Thermal symbols}{%
-  \ifstrequal{#1}{H}{Hydraulic symbols}{%
-  \ifstrequal{#1}{M}{Mechanical symbols}{%
-  \ifstrequal{#1}{F}{Finite Element notation}{}}}}]
-}
-
-% Command to align units in brackets [ ] fixed to the right margin
+% 2. Define the unit command: forces units to the right margin
 \newcommand{\nomunit}[1]{%
-    \renewcommand{\nomentryend}{%
-        \hspace*{\fill}\makebox[3cm][l]{%   Change [r] to [l] for left alignment
-            \ifstrempty{#1}{}{[#1]}%
-        }%
+  \renewcommand{\nomentryend}{%
+    \unskip\nobreak\hfill\nobreak% Remove trailing spaces and prevent accidental line breaks
+    \makebox[2cm][l]{% Fixed-width box for units, left-aligned within the box
+      \ifstrempty{#1}{}{[#1]}%
     }%
+  }%
 }
-% Align symbols to the left
-\renewcommand{\nomlabel}[1]{#1 \hfill}
+
+% 3. Configure group headers and vertical spacing
+\renewcommand{\nomgroup}[1]{%
+  % Adds an empty item and vertical space to "close" the previous group properly
+  \item[] \vspace{1.5em} 
+  \item[\bfseries
+    \ifstrequal{#1}{A}{Finite Element notation}{%
+    \ifstrequal{#1}{B}{Thermal symbols}{%
+    \ifstrequal{#1}{C}{Hydraulic symbols}{%
+    \ifstrequal{#1}{D}{Mechanical symbols}{%
+    \ifstrequal{#1}{E}{Probabilistic symbols}{}}}}}]
+  \vspace{0.5em} % Small gap after the group title
+}
+% ---------------------------------------

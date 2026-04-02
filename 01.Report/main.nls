@@ -1,33 +1,151 @@
 
 \begin{thenomenclature} 
-\nomgroup{F}
-  \item [{$[C]$}]\begingroup Capacity matrix \nomunit{}\nomeqref {0}\nompageref{iii}
-  \item [{$[K]$}]\begingroup Global stiffness matrix \nomunit{}\nomeqref {0}\nompageref{iii}
-  \item [{$\{F\}$}]\begingroup Nodal force vector \nomunit{}\nomeqref {0}\nompageref{iii}
-  \item [{$\{R\}$}]\begingroup Residual vector \nomunit{}\nomeqref {0}\nompageref{iii}
-  \item [{$\{U\}$}]\begingroup Nodal displacement vector \nomunit{}\nomeqref {0}\nompageref{iii}
-\nomgroup{H}
-  \item [{$\boldsymbol{\varepsilon}_{rd}$}]\begingroup Desiccation shrinkage strain related to drying \nomunit{-}\nomeqref {0}\nompageref{iii}
-  \item [{$\boldsymbol{\varepsilon}_{re}$}]\begingroup Endogenous shrinkage strain related to hydration \nomunit{-}\nomeqref {0}\nompageref{iii}
-\nomgroup{M}
-  \item [{$\boldsymbol{\sigma}$}]\begingroup Cauchy stress tensor \nomunit{Pa}\nomeqref {0}\nompageref{iii}
+\nomgroup{A}
+  \item [{$[\mathbf{B}]$}]\begingroup Compatibility (strain--displacement) matrix \nomunit{}\nomeqref {0}\nompageref{iii}
+  \item [{$[\mathbf{C}]$}]\begingroup Capacity matrix \nomunit{}\nomeqref {0}\nompageref{iii}
+  \item [{$[\mathbf{K}]$}]\begingroup Global stiffness matrix \nomunit{}\nomeqref {0}\nompageref{iii}
+  \item [{$[\mathbf{K}_T]$}]\begingroup Thermal conductivity matrix \nomunit{}\nomeqref {0}\nompageref{iii}
+  \item [{$[\mathbf{N}]$}]\begingroup Shape function matrix \nomunit{}\nomeqref {0}\nompageref{iii}
+  \item [{$\Delta t$}]\begingroup Time step \nomunit{s}\nomeqref {0}\nompageref{iii}
+  \item [{$\theta$}]\begingroup Wilson time integration parameter \nomunit{-}\nomeqref {0}\nompageref{iii}
+  \item [{$\{\mathbf{F}\}$}]\begingroup Nodal force / flux vector \nomunit{}\nomeqref {0}\nompageref{iii}
+  \item [{$\{\mathbf{R}\}$}]\begingroup Internal force (residual) vector \nomunit{}\nomeqref {0}\nompageref{iii}
+  \item [{$\{\mathbf{U}\}$}]\begingroup Nodal displacement vector \nomunit{}\nomeqref {0}\nompageref{iii}
+  \item [{$\{T\}$}]\begingroup Nodal temperature vector \nomunit{}\nomeqref {0}\nompageref{iii}
+\nomgroup{B}
+  \item [{$\beta_s$}]\begingroup Thermal dilation coefficient of the solid skeleton \nomunit{K$^{-1}$}\nomeqref {0}\nompageref{iii}
+  \item [{$\Delta H_{vap}$}]\begingroup Enthalpy of evaporation \nomunit{J$\cdot$kg$^{-1}$}\nomeqref {0}\nompageref{iii}
+  \item [{$\lambda$}]\begingroup Thermal conductivity of the porous medium \nomunit{W$\cdot$m$^{-1}$$\cdot$K$^{-1}$}\nomeqref {0}\nompageref{iii}
+  \item [{$\lambda_d$}]\begingroup Thermal conductivity of the dry skeleton \nomunit{W$\cdot$m$^{-1}$$\cdot$K$^{-1}$}\nomeqref {0}\nompageref{iii}
+  \item [{$\lambda_{d0}$}]\begingroup Reference dry thermal conductivity \nomunit{W$\cdot$m$^{-1}$$\cdot$K$^{-1}$}\nomeqref {0}\nompageref{iii}
+  \item [{$\rho C_p$}]\begingroup Overall volumetric heat capacity of the porous medium \nomunit{J$\cdot$m$^{-3}$$\cdot$K$^{-1}$}\nomeqref {0}\nompageref{iii}
+  \item [{$\rho$}]\begingroup Mass density \nomunit{kg$\cdot$m$^{-3}$}\nomeqref {0}\nompageref{iii}
+  \item [{$\rho_a$}]\begingroup Dry air density \nomunit{kg$\cdot$m$^{-3}$}\nomeqref {0}\nompageref{iii}
+  \item [{$\rho_g$}]\begingroup Gas mixture density \nomunit{kg$\cdot$m$^{-3}$}\nomeqref {0}\nompageref{iii}
+  \item [{$\rho_l$}]\begingroup Liquid water density \nomunit{kg$\cdot$m$^{-3}$}\nomeqref {0}\nompageref{iii}
+  \item [{$\rho_s$}]\begingroup Solid skeleton density \nomunit{kg$\cdot$m$^{-3}$}\nomeqref {0}\nompageref{iii}
+  \item [{$\rho_v$}]\begingroup Water vapor density \nomunit{kg$\cdot$m$^{-3}$}\nomeqref {0}\nompageref{iii}
+  \item [{$\sigma_{SB}$}]\begingroup Stefan--Boltzmann constant \nomunit{W$\cdot$m$^{-2}$$\cdot$K$^{-4}$}\nomeqref {0}\nompageref{iii}
+  \item [{$\varepsilon_{em}$}]\begingroup Emissivity \nomunit{-}\nomeqref {0}\nompageref{iii}
+  \item [{$A_\lambda$}]\begingroup Thermal conductivity temperature coefficient \nomunit{K$^{-1}$}\nomeqref {0}\nompageref{iii}
+  \item [{$C_g$}]\begingroup Specific heat capacity of gas mixture (advection term) \nomunit{J$\cdot$kg$^{-1}$$\cdot$K$^{-1}$}\nomeqref {0}\nompageref{iii}
+  \item [{$C_l$}]\begingroup Specific heat capacity of liquid (advection term) \nomunit{J$\cdot$kg$^{-1}$$\cdot$K$^{-1}$}\nomeqref {0}\nompageref{iii}
+  \item [{$c_p$}]\begingroup Specific heat capacity \nomunit{J$\cdot$kg$^{-1}$$\cdot$K$^{-1}$}\nomeqref {0}\nompageref{iii}
+  \item [{$C_{pa}$}]\begingroup Specific heat capacity of dry air \nomunit{J$\cdot$kg$^{-1}$$\cdot$K$^{-1}$}\nomeqref {0}\nompageref{iii}
+  \item [{$C_{pl}$}]\begingroup Specific heat capacity of liquid water \nomunit{J$\cdot$kg$^{-1}$$\cdot$K$^{-1}$}\nomeqref {0}\nompageref{iii}
+  \item [{$C_{ps}$}]\begingroup Specific heat capacity of the solid skeleton \nomunit{J$\cdot$kg$^{-1}$$\cdot$K$^{-1}$}\nomeqref {0}\nompageref{iii}
+  \item [{$C_{pv}$}]\begingroup Specific heat capacity of water vapor \nomunit{J$\cdot$kg$^{-1}$$\cdot$K$^{-1}$}\nomeqref {0}\nompageref{iii}
+  \item [{$h$}]\begingroup Convective heat transfer coefficient \nomunit{W$\cdot$m$^{-2}$$\cdot$K$^{-1}$}\nomeqref {0}\nompageref{iii}
+  \item [{$H_{dehyd}$}]\begingroup Enthalpy of dehydration \nomunit{J$\cdot$kg$^{-1}$}\nomeqref {0}\nompageref{iii}
+  \item [{$q''$}]\begingroup Heat flux \nomunit{W$\cdot$m$^{-2}$}\nomeqref {0}\nompageref{iii}
+  \item [{$T$}]\begingroup Temperature \nomunit{K}\nomeqref {0}\nompageref{iii}
+  \item [{$T_0$}]\begingroup Reference temperature \nomunit{K}\nomeqref {0}\nompageref{iii}
+  \item [{$T_{crit}$}]\begingroup Critical temperature of water (647 K) \nomunit{K}\nomeqref {0}\nompageref{iii}
+\nomgroup{C}
+  \item [{$\Delta m_{dehyd}$}]\begingroup Cumulative dehydrated water mass \nomunit{kg$\cdot$m$^{-3}$}\nomeqref {0}\nompageref{iii}
+  \item [{$\dot{m}_{dehyd}$}]\begingroup Dehydration rate (negative, mass loss of solid) \nomunit{kg$\cdot$m$^{-3}$$\cdot$s$^{-1}$}\nomeqref {0}\nompageref{iii}
+  \item [{$\dot{m}_{vap}$}]\begingroup Evaporation rate (positive for evaporation) \nomunit{kg$\cdot$m$^{-3}$$\cdot$s$^{-1}$}\nomeqref {0}\nompageref{iii}
+  \item [{$\mathbf{v}_{g-s}$}]\begingroup Velocity of gas relative to the solid skeleton \nomunit{m$\cdot$s$^{-1}$}\nomeqref {0}\nompageref{iii}
+  \item [{$\mathbf{v}_{l-s}$}]\begingroup Velocity of liquid relative to the solid skeleton \nomunit{m$\cdot$s$^{-1}$}\nomeqref {0}\nompageref{iii}
+  \item [{$\mu_g$}]\begingroup Dynamic viscosity of gas mixture \nomunit{Pa$\cdot$s}\nomeqref {0}\nompageref{iii}
+  \item [{$\mu_l$}]\begingroup Dynamic viscosity of liquid water \nomunit{Pa$\cdot$s}\nomeqref {0}\nompageref{iii}
+  \item [{$\phi$}]\begingroup Porosity \nomunit{-}\nomeqref {0}\nompageref{iii}
+  \item [{$\phi_0$}]\begingroup Initial porosity \nomunit{-}\nomeqref {0}\nompageref{iii}
+  \item [{$\tau$}]\begingroup Tortuosity factor \nomunit{-}\nomeqref {0}\nompageref{iii}
+  \item [{$a$}]\begingroup Van Genuchten pressure parameter \nomunit{Pa}\nomeqref {0}\nompageref{iii}
+  \item [{$A_\phi$}]\begingroup Porosity temperature coefficient \nomunit{K$^{-1}$}\nomeqref {0}\nompageref{iii}
+  \item [{$A_D$}]\begingroup Permeability--damage coefficient \nomunit{-}\nomeqref {0}\nompageref{iii}
+  \item [{$A_p$}]\begingroup Permeability pressure exponent \nomunit{-}\nomeqref {0}\nompageref{iii}
+  \item [{$A_S$}]\begingroup Van Genuchten exponent for relative permeability \nomunit{-}\nomeqref {0}\nompageref{iii}
+  \item [{$A_T$}]\begingroup Permeability temperature coefficient \nomunit{K$^{-1}$}\nomeqref {0}\nompageref{iii}
+  \item [{$b$}]\begingroup Van Genuchten shape parameter \nomunit{-}\nomeqref {0}\nompageref{iii}
+  \item [{$D$}]\begingroup Effective diffusivity of vapor in the porous medium \nomunit{m$^{2}$$\cdot$s$^{-1}$}\nomeqref {0}\nompageref{iii}
+  \item [{$D_{v0}$}]\begingroup Reference binary diffusion coefficient \nomunit{m$^{2}$$\cdot$s$^{-1}$}\nomeqref {0}\nompageref{iii}
+  \item [{$D_{va}$}]\begingroup Binary diffusion coefficient of vapor in air \nomunit{m$^{2}$$\cdot$s$^{-1}$}\nomeqref {0}\nompageref{iii}
+  \item [{$K$}]\begingroup Intrinsic permeability \nomunit{m$^{2}$}\nomeqref {0}\nompageref{iii}
+  \item [{$K_0$}]\begingroup Reference intrinsic permeability \nomunit{m$^{2}$}\nomeqref {0}\nompageref{iii}
+  \item [{$k_{rg}$}]\begingroup Relative permeability of gas \nomunit{-}\nomeqref {0}\nompageref{iii}
+  \item [{$k_{rl}$}]\begingroup Relative permeability of liquid \nomunit{-}\nomeqref {0}\nompageref{iii}
+  \item [{$M_a$}]\begingroup Molar mass of dry air \nomunit{kg$\cdot$mol$^{-1}$}\nomeqref {0}\nompageref{iii}
+  \item [{$m_a$}]\begingroup Mass of dry air per unit volume \nomunit{kg$\cdot$m$^{-3}$}\nomeqref {0}\nompageref{iii}
+  \item [{$M_g$}]\begingroup Molar mass of gas mixture \nomunit{kg$\cdot$mol$^{-1}$}\nomeqref {0}\nompageref{iii}
+  \item [{$m_l$}]\begingroup Mass of liquid water per unit volume \nomunit{kg$\cdot$m$^{-3}$}\nomeqref {0}\nompageref{iii}
+  \item [{$m_s$}]\begingroup Mass of solid per unit volume \nomunit{kg$\cdot$m$^{-3}$}\nomeqref {0}\nompageref{iii}
+  \item [{$M_v$}]\begingroup Molar mass of water vapor \nomunit{kg$\cdot$mol$^{-1}$}\nomeqref {0}\nompageref{iii}
+  \item [{$m_v$}]\begingroup Mass of water vapor per unit volume \nomunit{kg$\cdot$m$^{-3}$}\nomeqref {0}\nompageref{iii}
+  \item [{$p_a$}]\begingroup Partial pressure of dry air \nomunit{Pa}\nomeqref {0}\nompageref{iii}
+  \item [{$p_c$}]\begingroup Capillary pressure \nomunit{Pa}\nomeqref {0}\nompageref{iii}
+  \item [{$p_g$}]\begingroup Gas pressure \nomunit{Pa}\nomeqref {0}\nompageref{iii}
+  \item [{$p_l$}]\begingroup Liquid water pressure \nomunit{Pa}\nomeqref {0}\nompageref{iii}
+  \item [{$p_s$}]\begingroup Average pore pressure acting on the solid skeleton \nomunit{Pa}\nomeqref {0}\nompageref{iii}
+  \item [{$p_v$}]\begingroup Partial pressure of water vapor \nomunit{Pa}\nomeqref {0}\nompageref{iii}
+  \item [{$p_{atm}$}]\begingroup Atmospheric pressure \nomunit{Pa}\nomeqref {0}\nompageref{iii}
+  \item [{$p_{vs}$}]\begingroup Saturation vapor pressure \nomunit{Pa}\nomeqref {0}\nompageref{iii}
+  \item [{$R$}]\begingroup Universal gas constant \nomunit{J$\cdot$mol$^{-1}$$\cdot$K$^{-1}$}\nomeqref {0}\nompageref{iii}
+  \item [{$S_l$}]\begingroup Degree of liquid saturation \nomunit{-}\nomeqref {0}\nompageref{iii}
+\nomgroup{D}
+  \item [{$\alpha$}]\begingroup Biot's coefficient \nomunit{-}\nomeqref {0}\nompageref{iii}
+  \item [{$\alpha_c$}]\begingroup Mazars compression weight \nomunit{-}\nomeqref {0}\nompageref{iii}
+  \item [{$\alpha_t$}]\begingroup Mazars tension weight \nomunit{-}\nomeqref {0}\nompageref{iii}
+  \item [{$\boldsymbol{\sigma}$}]\begingroup Cauchy stress tensor (undamaged) \nomunit{Pa}\nomeqref {0}\nompageref{iii}
+  \item [{$\boldsymbol{\sigma}'$}]\begingroup Effective stress tensor (skeleton) \nomunit{Pa}\nomeqref {0}\nompageref{iii}
+  \item [{$\boldsymbol{\sigma}^{Total}$}]\begingroup Total stress tensor \nomunit{Pa}\nomeqref {0}\nompageref{iii}
   \item [{$\boldsymbol{\varepsilon}$}]\begingroup Total strain tensor \nomunit{-}\nomeqref {0}\nompageref{iii}
+  \item [{$\boldsymbol{\varepsilon}_\sigma$}]\begingroup Mechanical strain (elastic $+$ creep) \nomunit{-}\nomeqref {0}\nompageref{iii}
   \item [{$\boldsymbol{\varepsilon}_e$}]\begingroup Elastic strain tensor \nomunit{-}\nomeqref {0}\nompageref{iii}
-  \item [{$\boldsymbol{\varepsilon}_{th}$}]\begingroup Thermal strain \nomunit{-}\nomeqref {0}\nompageref{iii}
-  \item [{$\mathbf{C}$}]\begingroup Fourth-order isotropic elasticity tensor defined by $E$ and $\nu$ \nomunit{-}\nomeqref {0}\nompageref{iii}
-  \item [{$D$}]\begingroup Damage variable \nomunit{-}\nomeqref {0}\nompageref{iii}
+  \item [{$\boldsymbol{\varepsilon}_{sh}$}]\begingroup Capillary shrinkage strain \nomunit{-}\nomeqref {0}\nompageref{iii}
+  \item [{$\boldsymbol{\varepsilon}_{th}$}]\begingroup Thermal dilation strain \nomunit{-}\nomeqref {0}\nompageref{iii}
+  \item [{$\mathbb{C}$}]\begingroup Fourth-order isotropic elasticity tensor \nomunit{Pa}\nomeqref {0}\nompageref{iii}
+  \item [{$\mathcal{D}$}]\begingroup Isotropic damage variable \nomunit{-}\nomeqref {0}\nompageref{iii}
+  \item [{$\nu$}]\begingroup Poisson's ratio \nomunit{-}\nomeqref {0}\nompageref{iii}
+  \item [{$\varepsilon_{d0}$}]\begingroup Initial damage threshold strain \nomunit{-}\nomeqref {0}\nompageref{iii}
+  \item [{$\varepsilon_{eq}$}]\begingroup Mazars equivalent strain \nomunit{-}\nomeqref {0}\nompageref{iii}
+  \item [{$A_c$}]\begingroup Mazars softening parameter (compression) \nomunit{-}\nomeqref {0}\nompageref{iii}
+  \item [{$A_t$}]\begingroup Mazars softening parameter (tension) \nomunit{-}\nomeqref {0}\nompageref{iii}
+  \item [{$B_c$}]\begingroup Mazars softening exponent (compression) \nomunit{-}\nomeqref {0}\nompageref{iii}
+  \item [{$B_t$}]\begingroup Mazars softening exponent (tension) \nomunit{-}\nomeqref {0}\nompageref{iii}
+  \item [{$B_t^{mod}$}]\begingroup Regularized Mazars tension exponent \nomunit{-}\nomeqref {0}\nompageref{iii}
   \item [{$E$}]\begingroup Young's modulus \nomunit{Pa}\nomeqref {0}\nompageref{iii}
   \item [{$f_t$}]\begingroup Tensile strength \nomunit{Pa}\nomeqref {0}\nompageref{iii}
   \item [{$G_f$}]\begingroup Fracture energy \nomunit{J$\cdot$m$^{-2}$}\nomeqref {0}\nompageref{iii}
   \item [{$L_e$}]\begingroup Characteristic element length \nomunit{m}\nomeqref {0}\nompageref{iii}
-\nomgroup{T}
-  \item [{$\lambda$}]\begingroup Thermal conductivity \nomunit{W$\cdot$m$^{-1}$$\cdot$K$^{-1}$}\nomeqref {0}\nompageref{iii}
-  \item [{$\rho$}]\begingroup Mass density \nomunit{kg$\cdot$m$^{-3}$}\nomeqref {0}\nompageref{iii}
-  \item [{$\sigma$}]\begingroup Stefan--Boltzmann constant \nomunit{W$\cdot$m$^{-2}$$\cdot$K$^{-4}$}\nomeqref {0}\nompageref{iii}
-  \item [{$\varepsilon$}]\begingroup Emissivity \nomunit{-}\nomeqref {0}\nompageref{iii}
-  \item [{$c_p$}]\begingroup Specific heat capacity \nomunit{J$\cdot$kg$^{-1}$$\cdot$K$^{-1}$}\nomeqref {0}\nompageref{iii}
-  \item [{$h$}]\begingroup Convective heat transfer coefficient \nomunit{W$\cdot$m$^{-2}$$\cdot$K$^{-1}$}\nomeqref {0}\nompageref{iii}
-  \item [{$q''$}]\begingroup Heat flux \nomunit{W$\cdot$m$^{-2}$}\nomeqref {0}\nompageref{iii}
-  \item [{$T$}]\begingroup Temperature \nomunit{K}\nomeqref {0}\nompageref{iii}
+\nomgroup{E}
+  \item [{$\beta$}]\begingroup Generalised reliability index $= -\Phi^{-1}(P_f)$\nomeqref {0}\nompageref{iii}
+  \item [{$\delta_3$}]\begingroup Skewness $= \mu_3 / \sigma^3$ (third standardised moment)\nomeqref {0}\nompageref{iii}
+  \item [{$\delta_4$}]\begingroup Kurtosis $= \mu_4 / \sigma^4$ (fourth standardised moment)\nomeqref {0}\nompageref{iii}
+  \item [{$\hat{P}_f$}]\begingroup Estimated probability of failure (Monte Carlo)\nomeqref {0}\nompageref{iii}
+  \item [{$\mathbf{X}$}]\begingroup Vector of random variables $(X_1, \ldots, X_N)$\nomeqref {0}\nompageref{iii}
+  \item [{$\mu$}]\begingroup Mean (first moment)\nomeqref {0}\nompageref{iii}
+  \item [{$\Phi$}]\begingroup Standard normal CDF\nomeqref {0}\nompageref{iii}
+  \item [{$\Phi^{-1}$}]\begingroup Inverse standard normal CDF\nomeqref {0}\nompageref{iii}
+  \item [{$\rho_H$}]\begingroup Autocorrelation function of field $H$\nomeqref {0}\nompageref{iii}
+  \item [{$\sigma$}]\begingroup Standard deviation\nomeqref {0}\nompageref{iii}
+  \item [{$\sigma^2$}]\begingroup Variance (second central moment)\nomeqref {0}\nompageref{iii}
+  \item [{$\text{CoV}$}]\begingroup Coefficient of variation $= \sigma / \mu$\nomeqref {0}\nompageref{iii}
+  \item [{$C_H$}]\begingroup Covariance function of field $H$\nomeqref {0}\nompageref{iii}
+  \item [{$C_i$}]\begingroup Contribution of $X_i$ to output variance (\%)\nomeqref {0}\nompageref{iii}
+  \item [{$D_f$}]\begingroup Failure domain ($G \leq 0$)\nomeqref {0}\nompageref{iii}
+  \item [{$D_s$}]\begingroup Safety domain ($G > 0$)\nomeqref {0}\nompageref{iii}
+  \item [{$e$}]\begingroup Acceptable absolute error (Monte Carlo convergence)\nomeqref {0}\nompageref{iii}
+  \item [{$F_X$}]\begingroup Cumulative distribution function (CDF) of $X$\nomeqref {0}\nompageref{iii}
+  \item [{$f_X$}]\begingroup Probability density function (PDF) of $X$\nomeqref {0}\nompageref{iii}
+  \item [{$G$}]\begingroup Model output; performance function in reliability ($G>0$: safe)\nomeqref {0}\nompageref{iii}
+  \item [{$g(\cdot)$}]\begingroup Deterministic model (input--output mapping)\nomeqref {0}\nompageref{iii}
+  \item [{$H(\mathbf{x})$}]\begingroup Random field\nomeqref {0}\nompageref{iii}
+  \item [{$K$}]\begingroup Number of quadrature points per variable\nomeqref {0}\nompageref{iii}
+  \item [{$L_c$}]\begingroup Correlation length \nomunit{m}\nomeqref {0}\nompageref{iii}
+  \item [{$L_{\mathrm{struct}}$}]\begingroup Characteristic structural dimension \nomunit{m}\nomeqref {0}\nompageref{iii}
+  \item [{$n$}]\begingroup Number of Monte Carlo simulations\nomeqref {0}\nompageref{iii}
+  \item [{$N_f$}]\begingroup Number of failure realisations\nomeqref {0}\nompageref{iii}
+  \item [{$P_f$}]\begingroup Probability of failure\nomeqref {0}\nompageref{iii}
+  \item [{$S_i$}]\begingroup First-order Sobol index of $X_i$\nomeqref {0}\nompageref{iii}
+  \item [{$S_{ij}$}]\begingroup Second-order Sobol index (interaction between $X_i$ and $X_j$)\nomeqref {0}\nompageref{iii}
+  \item [{$S_{T_i}$}]\begingroup Total-order Sobol index of $X_i$\nomeqref {0}\nompageref{iii}
+  \item [{$V_i$}]\begingroup First-order partial variance of $X_i$\nomeqref {0}\nompageref{iii}
+  \item [{$V_{ij}$}]\begingroup Second-order partial variance (interaction $X_i$, $X_j$)\nomeqref {0}\nompageref{iii}
+  \item [{$W(x)$}]\begingroup Weight function (= PDF $f_X$) in quadrature integral\nomeqref {0}\nompageref{iii}
+  \item [{$w_k$}]\begingroup Quadrature weight\nomeqref {0}\nompageref{iii}
+  \item [{$X$}]\begingroup Random variable\nomeqref {0}\nompageref{iii}
+  \item [{$x_k$}]\begingroup Quadrature abscissa (evaluation point)\nomeqref {0}\nompageref{iii}
 
 \end{thenomenclature}

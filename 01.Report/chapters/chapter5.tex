@@ -441,7 +441,7 @@ where $\tilde{F}_G$ is the reconstructed CDF and $\Phi^{-1}$ the inverse standar
 
 The total number of model evaluations is $K^N$, which grows exponentially with $N$. For the present study with $N = 2$ and $K = 3$, this gives only 9 runs---compared to thousands for Monte Carlo. However, for large $N$ (e.g.\ $3^{10} = 59{,}049$ runs), the cost becomes comparable to Monte Carlo. This \emph{curse of dimensionality} limits the method to problems with a small number of random variables ($N \lesssim 10$--$15$) \cite{sudret2003}.
 
-\section{Sensitivity analysis}
+\section{Sensitivity analysis} \label{sec:sensitivity}
 
 The THM model involves numerous material parameters. Following \cite{liu2001}, 18 key parameters are selected for sensitivity analysis based on their expected influence on the structural response.
 
@@ -575,9 +575,11 @@ Main ideas as follows:
 
 \subsection{Probability of failure and reliability index} \label{sec:pf-beta}
 
-\subsubsection{Limit state function}
+\subsubsection{Limit state function} \label{sec:limit-state}
 
-In the reliability context, the same model output $G$ (\cref{eq:hoeffding}) is reinterpreted as a \emph{limit-state function}. Each failure scenario is associated with a performance function (also called safety margin), denoted $G$ \cite{baroth2011}. By convention \cite{baroth2011,baroth2023}:
+In the sensitivity analysis (\cref{sec:sensitivity}), $G = g(X_1, \ldots, X_N)$ denoted the model output without any notion of safety or failure. In reliability analysis, the same symbol $G$ is given an additional meaning: its \emph{sign} now defines whether the structure is safe or has failed.
+
+Specifically, $G$ is rewritten as a \textbf{performance function} (also called limit-state function or safety margin) \cite{baroth2011}. A simple example: if $R$ is the material resistance and $S$ is the applied load, then $G = R - S$. The structure is safe when $G > 0$ and fails when $G \leq 0$:
 
 \begin{equation}
     G(\mathbf{X}) > 0

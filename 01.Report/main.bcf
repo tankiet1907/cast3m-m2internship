@@ -2422,7 +2422,8 @@
     <bcf:citekey order="43" intorder="1">dauti2018</bcf:citekey>
     <bcf:citekey order="44" intorder="1">dauti2018</bcf:citekey>
     <bcf:citekey order="45" intorder="1">dauti2018</bcf:citekey>
-    <bcf:citekey order="46" intorder="1">dauti2018</bcf:citekey>
+    <bcf:citekey order="46" intorder="1">lewis1998</bcf:citekey>
+    <bcf:citekey order="46" intorder="2">zienkiewicz2013</bcf:citekey>
     <bcf:citekey order="47" intorder="1">baroth2011</bcf:citekey>
     <bcf:citekey order="48" intorder="1">baroth2023</bcf:citekey>
     <bcf:citekey order="49" intorder="1">baroth2011</bcf:citekey>
@@ -2481,16 +2482,14 @@
     <bcf:citekey order="94" intorder="1">sobol1993</bcf:citekey>
     <bcf:citekey order="95" intorder="1">baroth2011</bcf:citekey>
     <bcf:citekey order="96" intorder="1">baroth2011</bcf:citekey>
-    <bcf:citekey order="96" intorder="2">baroth2023</bcf:citekey>
     <bcf:citekey order="97" intorder="1">baroth2011</bcf:citekey>
-    <bcf:citekey order="98" intorder="1">baroth2011</bcf:citekey>
-    <bcf:citekey order="99" intorder="1">sudret2003</bcf:citekey>
+    <bcf:citekey order="98" intorder="1">sudret2003</bcf:citekey>
+    <bcf:citekey order="99" intorder="1">baroth2011</bcf:citekey>
+    <bcf:citekey order="99" intorder="2">baroth2023</bcf:citekey>
     <bcf:citekey order="100" intorder="1">baroth2011</bcf:citekey>
     <bcf:citekey order="100" intorder="2">baroth2023</bcf:citekey>
-    <bcf:citekey order="101" intorder="1">baroth2011</bcf:citekey>
-    <bcf:citekey order="101" intorder="2">baroth2023</bcf:citekey>
-    <bcf:citekey order="102" intorder="1">delarrard2010</bcf:citekey>
-    <bcf:citekey order="102" intorder="2">fenton2014</bcf:citekey>
+    <bcf:citekey order="101" intorder="1">delarrard2010</bcf:citekey>
+    <bcf:citekey order="101" intorder="2">fenton2014</bcf:citekey>
   </bcf:section>
   <!-- SORTING TEMPLATES -->
   <bcf:sortingtemplate name="nty">

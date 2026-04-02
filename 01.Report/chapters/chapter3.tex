@@ -47,7 +47,7 @@ where $\mathbf{K}_M$ (\cref{eq:KM_effective}) contains the damaged stiffness $(1
 \subsection{Temporal discretization} \label{sec:temporal_discret}
 \review{This section is currently under development and will be refined as the study progresses.}
 
-The time integration of \cref{eq:TH_matrix} is carried out using the Wilson-$\theta$ method \cite{dauti2018}, which evaluates the equation at an intermediate time $t_{n+\theta} = t_n + \theta\,\Delta t$ with $\theta \in [0,1]$. This transforms the semi-discrete system into a fully discrete algebraic system at each time step:
+The time integration of \cref{eq:TH_matrix} is carried out using the Wilson-$\theta$ method \cite{lewis1998,zienkiewicz2013}, which evaluates the equation at an intermediate time $t_{n+\theta} = t_n + \theta\,\Delta t$ with $\theta \in [0,1]$. This transforms the semi-discrete system into a fully discrete algebraic system at each time step:
 \begin{equation}
     \tilde{\mathbf{K}}\,\Delta\mathbf{Y}^{n+1} 
     + \mathbf{K}\,\mathbf{Y}^{n} 
