@@ -67,7 +67,7 @@ exceed a threshold $x$:
     \label{eq:cdf-def}
 \end{equation}
 
-In reliability analysis, the CDF is used directly to evaluate the probability of exceeding a critical value: $P(X > x_{\mathrm{cr}}) = 1 - F_X(x_{\mathrm{cr}})$.
+In reliability analysis, the CDF is used directly to evaluate the probability of exceeding a critical value: $P(X > x_{\mathrm{cr}}) = 1 - F_X(x_{\mathrm{cr}})$ \cite{baroth2011}.
 
 Two distributions are used in this work:
 
@@ -93,13 +93,11 @@ Two distributions are used in this work:
     \end{equation}
 \end{itemize}
 
-The lognormal distribution is particularly relevant for material properties such as the Young modulus or permeability, which must remain strictly positive \cite{delarrard2010, sudret2000}.
+The lognormal distribution is particularly relevant for material properties such as the Young modulus or permeability, which must remain strictly positive \cite{delarrard2010, sudret2000, baroth2023}.
 
 \subsubsection{Statistical moments}
 
-The distribution of $X$ can be summarised by its \textbf{statistical moments}, which quantify location, spread, asymmetry, and tail heaviness:
-
-A distribution is summarised by its \textbf{statistical moments}. In this work, the first two moments are prescribed as \emph{input} to the stochastic analysis, while the higher moments are \emph{computed as output} by the quadrature method (\cref{sec:quadrature}).
+The distribution of $X$ can be summarised by its \textbf{statistical moments} \cite{baroth2011}, which quantify location, spread, asymmetry, and tail heaviness. In this work, the first two moments are prescribed as \emph{input} to the stochastic analysis, while the higher moments are \emph{computed as output} by the quadrature method (\cref{sec:quadrature}).
 
 \paragraph{Input moments.}
 The \textbf{mean} $\mu_X$ and \textbf{variance} $\sigma_X^2$ (or equivalently the standard deviation $\sigma_X = \sqrt{\mathrm{Var}[X]}$) define the centre and spread of the distribution:
@@ -113,12 +111,12 @@ The \textbf{mean} $\mu_X$ and \textbf{variance} $\sigma_X^2$ (or equivalently th
 \end{equation}
 
 \paragraph{Output moments.}
-The \textbf{skewness} $\gamma_3$ and \textbf{kurtosis} $\gamma_4$ measure the asymmetry and tail heaviness of the response distribution:
+The \textbf{skewness} $\delta_3$ and \textbf{kurtosis} $\delta_4$ measure the asymmetry and tail heaviness of the response distribution:
 
 \begin{equation}
-    \gamma_3 = \frac{E\!\left[(X-\mu_X)^3\right]}{\sigma_X^3},
+    \delta_3 = \frac{E\!\left[(X-\mu_X)^3\right]}{\sigma_X^3},
     \qquad
-    \gamma_4 = \frac{E\!\left[(X-\mu_X)^4\right]}{\sigma_X^4}.
+    \delta_4 = \frac{E\!\left[(X-\mu_X)^4\right]}{\sigma_X^4}.
     \label{eq:skew-kurt}
 \end{equation}
 
@@ -133,7 +131,7 @@ The coefficient of variation quantifies the relative dispersion of $X$:
     \label{eq:cov}
 \end{equation}
 
-It is a dimensionless measure that allows comparison of variability across parameters with different units and magnitudes. For concrete, typical values are $\mathrm{CoV}_E \approx 0.10$--$0.20$ for the Young's modulus \cite{delarrard2010} and $\mathrm{CoV}_K \approx 0.15$--$0.30$ for permeability.
+It is a dimensionless measure that allows comparison of variability across parameters with different units and magnitudes. For concrete, typical values are $\mathrm{CoV}_E \approx 0.10$--$0.20$ for the Young's modulus \cite{delarrard2010} and $\mathrm{CoV}_K \approx 0.15$--$0.30$ for permeability \cite{baroth2023}.
 
 \subsection{Random fields and correlation structure} \label{sec:random-fields}
 
@@ -170,7 +168,7 @@ The mean field gives the average value at each point; the covariance function me
 
 \subsubsection{Correlation function and correlation length} \label{sec:correlation}
 
-For a homogeneous random field, the \textbf{autocorrelation function} $\rho_H(\boldsymbol{\tau})$ is defined by normalising the covariance:
+When a material property (e.g.\ Young's modulus) is modelled as a random field, nearby points tend to have similar values while distant points are more different. The \textbf{autocorrelation function} $\rho_H(\boldsymbol{\tau})$ quantifies this similarity as a function of distance $\tau$:
 
 \begin{equation}
     \rho_H(\boldsymbol{\tau})
@@ -179,28 +177,24 @@ For a homogeneous random field, the \textbf{autocorrelation function} $\rho_H(\b
     \label{eq:autocorrelation}
 \end{equation}
 
-where $\sigma_H^2 = C_H(\mathbf{0})$ is the field variance. It measures how similar the values at two points are as a function of their distance $\tau = \|\boldsymbol{\tau}\|$: $\rho = 1$ means identical values, $\rho \approx 0$ means nearly independent.
+where $\sigma_H^2 = C_H(\mathbf{0})$ is the field variance. $\rho = 1$ means two points have identical values; $\rho \approx 0$ means they are nearly independent.
 
-Two common models are used for concrete properties \cite{sudret2000, fenton2014}:
+The rate at which $\rho$ decays is controlled by the \textbf{correlation length} $L_c > 0$. Two common models for concrete \cite{sudret2000, fenton2014}:
 
 \begin{equation}
-    \rho_H(\tau) = \exp\!\left(-\frac{\tau^2}{L_c^2}\right)
-    \quad \text{(squared-exponential)},
+    \rho_H(\tau) =
+    \exp\!\left(-\frac{\tau^2}{L_c^2}\right)
+    \;\text{(squared-exponential)},
     \qquad
-    \rho_H(\tau) = \exp\!\left(-\frac{|\tau|}{L_c}\right)
-    \quad \text{(exponential)},
+    \rho_H(\tau) =
+    \exp\!\left(-\frac{|\tau|}{L_c}\right)
+    \;\text{(exponential)}.
     \label{eq:corr-models}
 \end{equation}
 
-where $L_c > 0$ is the \textbf{correlation length}. It controls the spatial scale over which the field varies coherently:
+Physically, $L_c$ represents the distance beyond which material properties become essentially independent. A small $L_c$ means the material varies rapidly in space (highly heterogeneous); a large $L_c$ means properties change slowly (nearly uniform). This effect is illustrated in \cref{fig:correlation-length-effect}.
 
-\begin{itemize}
-    \item $L_c \gg L_{\mathrm{struct}}$: the field is nearly uniform everywhere---it behaves like a random variable.
-    \item $L_c \ll L_{\mathrm{struct}}$: adjacent points are nearly independent---the field fluctuates rapidly.
-    \item Intermediate $L_c$: smooth but spatially varying realisations, which is the typical case for concrete \cite{delarrard2010}.
-\end{itemize}
-
-The effect of $L_c$ on structural response is illustrated in \cref{fig:correlation-length-effect}: a small $L_c$ produces highly heterogeneous fields that may create local weak zones, whereas a large $L_c$ produces fields closer to a uniform random variable.
+\paragraph{Remark:} In this work, $L_c$ is not treated as a parameter to be varied. A single representative value is adopted from experimental data \cite{delarrard2010} to account for spatial heterogeneity in the Monte Carlo simulations (\cref{sec:mc-framework}). The objective is not to study the effect of $L_c$ itself, but to compare the structural response \emph{with} and \emph{without} spatial variability.
 
 \subsection{Random field simulation} \label{sec:rf-methods}
 To use a random field in a finite element model, one must \emph{generate} realisations that respect the prescribed covariance structure, then \emph{assign} the values to elements or integration points. Several families of methods exist \cite{fenton2014}:
@@ -253,7 +247,7 @@ Computational cost  & Low (3--7 runs per variable)    & High (hundreds to thousa
 
 \subsection{Principle}
 
-Monte Carlo simulation (MCS) propagates uncertainty by repeating the deterministic analysis many times with different random inputs \cite{fenton2014}. Each trial consists of three steps:
+Monte Carlo simulation (MCS) estimates the effect of uncertain inputs by running the same deterministic model many times, each time with a different random sample \cite{fenton2014}. Each trial consists of three steps:
 
 \begin{enumerate}
     \item Generate a realisation of the random input (random variable or random field) according to its prescribed distribution.
@@ -281,7 +275,7 @@ At $95\%$ confidence, the required number of runs is \cite{fenton2014}:
     \label{eq:mc-nsample}
 \end{equation}
 
-where $e$ is the acceptable absolute error. For a small failure probability ($p_f \approx 10^{-3}$) with $10\%$ relative accuracy, this gives $n \approx 400{,}000$ runs. When a single THM analysis takes several minutes, this cost becomes prohibitive---motivating the Gaussian Quadrature method (\cref{sec:quadrature}) as a complementary approach.
+where $e$ is the acceptable absolute error. For a small failure probability ($p_f \approx 10^{-3}$) with $10\%$ relative accuracy, this gives $n \approx 400{,}000$ runs. When a single THM analysis takes several minutes, this cost becomes prohibitive---motivating the Gaussian Quadrature method (\cref{sec:quadrature}) as a faster alternative.
 
 \subsection{Transformation of Lognormal to Gaussian distribution} \label{sec:lognormal-transformation}
 
@@ -344,7 +338,7 @@ where $\mathbf{u}_i$ is the direction of the $i$-th line and $Z_i$ is the 1-D pr
 
 \paragraph{Implementation in Cast3M}
 
-The TBM is natively implemented in the Cast3M \texttt{ALEA} operator, which takes as input the Gaussian parameters $(\mu_{\ln}, \sigma_{\ln})$ and the correlation length $L_c$ as input, and returns the simulated field directly as nodal values on the mesh. The lognormal transformation and assignment to \texttt{MATE} follow the procedure described in \cref{sec:lognormal-transformation}.
+The TBM is natively implemented in the Cast3M \texttt{ALEA} operator, which takes as input the Gaussian parameters $(\mu_{\ln}, \sigma_{\ln})$ and the correlation length $L_c$, and returns the simulated field directly as nodal values on the mesh. The lognormal transformation and assignment to \texttt{MATE} follow the procedure described in \cref{sec:lognormal-transformation}.
 
 \subsection{Integration of spatial variability into the THM model} \label{sec:thm-integration-mc}
 This section is currently under development and will be refined as the study progresses.
@@ -372,12 +366,12 @@ Instead of saving the entire mesh history, a specific "Quantity of Interest" (Qo
 
 In the Cast3M script, this is executed using the \texttt{EXCO} (to extract the specific component, e.g., the internal variable \texttt{'V1'} for damage) and \texttt{MAXI} operators to find the extreme value over the spatial domain. Finally, the extracted scalar values are continuously appended to an external structured text file (CSV format) using the \texttt{SORT 'CHAI'} command. 
 
-This exported dataset containing the input realizations and the corresponding QoI outputs serves as the direct input for the external probabilistic software (e.g., Persalys) to compute the probability density functions and rank the dominant parameters via Sobol indices.
+This exported dataset containing the input realizations and the corresponding QoI outputs serves as the direct input for the external probabilistic software (e.g., Persalys) to compute the probability density functions and rank the dominant parameters via Sobol indices \cref{sec:sobol}.
 \end{draftblock}
 
 \section{Gaussian Quadrature framework} \label{sec:quadrature}
 
-Unlike Monte Carlo, which runs thousands of simulations, Gaussian Quadrature evaluates the model at a small number of strategically chosen points and reconstructs the output statistics from a weighted sum \cite{Baldeweck1999, sudret2003}. The method has three steps, corresponding to three Cast3M operators:
+Unlike Monte Carlo, which runs thousands of simulations, Gaussian Quadrature evaluates the model at a small number of strategically chosen points and reconstructs the output statistics from a weighted sum \cite{baldeweck1999, sudret2003}. The method has three steps, corresponding to three Cast3M operators:
 
 \begin{enumerate}
     \item \textbf{\texttt{QUADRATU}}: compute the evaluation points and weights for each random variable.
@@ -394,7 +388,7 @@ Computing any statistical moment of the output $G = g(\mathbf{X})$ requires eval
     \label{eq:quad-integral}
 \end{equation}
 
-where $W(x) = f_X(x)$ is the PDF of the input variable. Gaussian quadrature approximates this by a weighted sum over $K$ evaluation points \cite{Baldeweck1999}:
+where $W(x) = f_X(x)$ is the PDF of the input variable. Gaussian quadrature approximates this by a weighted sum over $K$ evaluation points \cite{baldeweck1999}:
 
 \begin{equation}
     I \;\approx\; \sum_{k=1}^{K} w_k\, g(x_k),
@@ -449,9 +443,7 @@ The total number of model evaluations is $K^N$, which grows exponentially with $
 
 \section{Sensitivity analysis}
 
-\begin{reviewblock}
-18 key parameters are selected for sensitivity analysis \cite{liu2001}.
-\end{reviewblock}
+The THM model involves numerous material parameters. Following \cite{liu2001}, 18 key parameters are selected for sensitivity analysis based on their expected influence on the structural response.
 
 \subsection{Characterization of input parameters}
 
@@ -473,7 +465,7 @@ Main ideas as follows:
 
 \subsubsection{Variance decomposition} \label{sec:var-decomp}
 
-For a model $G = g(X_1, \ldots, X_N)$ with $N$ independent random inputs, Hoeffding's decomposition expresses $G$ as a sum of functions of increasing dimension:
+For a model $G = g(X_1, \ldots, X_N)$ with $N$ independent random inputs, Hoeffding's decomposition \cite{sobol1993} expresses $G$ as a sum of functions of increasing dimension:
 
 \begin{equation}
     G \;=\; g_0
@@ -499,7 +491,7 @@ where $V_i = \mathrm{Var}[g_i(X_i)]$ is the first-order variance (effect of $X_i
 
 \subsubsection{Variance-based sensitivity: Sobol indices} \label{sec:sobol}
 
-Dividing each term in \cref{eq:var-decomp} by the total variance defines the \emph{Sobol indices}:
+Dividing each term in \cref{eq:var-decomp} by the total variance defines the \emph{Sobol indices} \cite{sobol1993}:
 
 \begin{equation}
     S_i \;=\; \frac{V_i}{\mathrm{Var}(G)},
@@ -542,7 +534,15 @@ A variable with a large $S_i$ (or $S_{T_i}$) is a \emph{dominant parameter}: it 
 
 \subsubsection{Practical sensitivity approximation}
 
-When computing exact Sobol indices is too costly, a simpler estimate can be obtained by varying each variable $X_i$ individually while holding the others at their mean. The resulting marginal variance $\hat{\sigma}_i^2$ approximates the numerator of \cref{eq:sobol-cond}, so that:
+Computing exact Sobol indices requires a large number of model evaluations. A simpler approach, used by the the expansion of Englishquadrature method (\cref{sec:quadrature}), estimates the contribution of each variable one at a time:
+
+\begin{enumerate}
+    \item Fix all variables at their mean except $X_i$.
+    \item Run the model at each quadrature point of $X_i$ to obtain the marginal variance $\hat{\sigma}_i^2$.
+    \item Repeat for every variable.
+\end{enumerate}
+
+The \textbf{contribution} of $X_i$ to the total output variability is then:
 
 \begin{equation}
     C_i \;=\;
@@ -553,7 +553,7 @@ When computing exact Sobol indices is too costly, a simpler estimate can be obta
     \label{eq:contribution-approx}
 \end{equation}
 
-This approximation is valid for uncorrelated variables with negligible interaction effects. The detailed results are presented in \cref{sec:dominant-params}.
+A variable with $C_i \approx 0\,\%$ has negligible influence and could be treated as deterministic. This approximation is valid when variables are uncorrelated and interaction effects are small. The detailed results are presented in \cref{sec:dominant-params}.
 
 \subsection{Identification of dominant parameters}  \label{sec:dominant-params}
 
@@ -573,13 +573,11 @@ Main ideas as follows:
 Main ideas as follows:
 \end{reviewblock}
 
-\subsection{Probability of failure and reliability index}
-
-\label{sec:pf-beta}
+\subsection{Probability of failure and reliability index} \label{sec:pf-beta}
 
 \subsubsection{Limit state function}
 
-Each failure scenario is associated with a performance function (also called limit state function, or safety margin), denoted $G$ \cite{baroth2011}. By convention \cite{baroth2011,baroth2023}:
+In the reliability context, the same model output $G$ (\cref{eq:hoeffding}) is reinterpreted as a \emph{limit-state function}. Each failure scenario is associated with a performance function (also called safety margin), denoted $G$ \cite{baroth2011}. By convention \cite{baroth2011,baroth2023}:
 
 \begin{equation}
     G(\mathbf{X}) > 0
@@ -635,4 +633,4 @@ The key consequence for reliability is that spatial heterogeneity generally lead
     \item With random fields (Monte Carlo), local weak zones can form where failure initiates, without being compensated by surrounding material.
 \end{itemize}
 
-This explains why Monte Carlo simulations with spatial variability typically yield higher probabilities of failure (lower $\beta$) than the quadrature approach for the same nominal input distributions. 
+This explains why Monte Carlo simulations with spatial variability typically yield higher probabilities of failure (lower $\beta$) than the quadrature approach for the same nominal input distributions \cite{delarrard2010, fenton2014}. 

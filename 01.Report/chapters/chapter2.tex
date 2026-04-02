@@ -81,18 +81,35 @@ To solve this equation, appropriate boundary conditions must be specified:
 
 The thermal properties of concrete are strongly influenced by both the hydric state and the material composition.
 
-The overall heat capacity $\rho C_p$ reflects the multiphase nature of the porous medium, combining contributions from the solid skeleton, liquid water, dry air, and water vapor:
+The overall heat capacity $\rho C_p$ reflects the multiphase nature of the porous medium, combining contributions from the solid skeleton, liquid water, dry air, and water vapor \cite{lewis1998}:
 \begin{equation}
     \rho C_p = (1-\phi)\,\rho_s\,C_{ps} + \phi\left[S_l\,\rho_l\,C_{pl} + (1-S_l)\left(\rho_a\,C_{pa} + \rho_v\,C_{pv}\right)\right]
     \label{eq:rhoCp}
 \end{equation}
 
-The thermal conductivity depends on saturation, porosity, and temperature:
+where:
+
+The solid density decreases linearly with temperature due to dehydration: $\rho_s(T) = \rho_{s0}[1-A_{\rho}(T-T_0)]$ with $\rho_{s0} = 2611$ kg/m$^3$.
+
+The liquid water density evolves with temperature according to a polynomial fit \cite{furbish1997}:
+\begin{equation}
+    \rho_l(T) = \sum_{i=0}^{5} a_i\,T^i
+    \label{eq:rho_l}
+\end{equation}
+with coefficients $a_i$ given in Table~\ref{tab:rho_coeff}.
+
+The solid thermal capacity evolves linearly with temperature \cite{harmathy1973}:
+\begin{equation}
+    C_{ps}(T) = C_{ps0}[1 + A_c(T - T_0)]
+\end{equation}
+with $C_{ps0} = 940$ J$\cdot$kg$^{-1}$K$^{-1}$.
+
+The thermal conductivity depends on saturation, porosity, and temperature \cite{baggio1993}:
 \begin{equation}
     \lambda = \lambda_d \left(1 + 4\,\frac{S_l\,\phi\,\rho_l}{(1-\phi)\,\rho_s}\right)
     \label{eq:lambda}
 \end{equation}
-with:
+with \cite{harmathy1973}:
 \begin{equation}
     \lambda_d = \lambda_{d0}\left[1 + A_\lambda\,(T-T_0)\right]
     \label{eq:lambda_d}
@@ -183,8 +200,8 @@ Two distinct phase-change mechanisms govern the release of water in heated concr
 
 Both evaporation and dehydration act as vapor sources that increase gas pressure within the pore network. They also consume latent energy, affecting the temperature field (see \cref{sec:coupling}).
 
-The cumulative dehydrated water mass is described by the following phenomenological relationship 
-
+\subsubsection{Dehydration kinetics}
+The cumulative dehydrated water mass is described by the following phenomenological relationship \cite{pesavento2000}:
 \begin{equation}
     \Delta m_{dehyd} = f_s \cdot f_m \cdot f_c \cdot f(T) \label{eq:dehyd}
 \end{equation}
@@ -196,6 +213,16 @@ where $f_s$ is a stoichiometric factor, $f_m$ accounts for the concrete's age, $
     \end{cases}
     \label{eq:fT_dehyd}
 \end{equation}
+
+\subsubsection{Enthalpy of evaporation}
+The enthalpy of evaporation is temperature-dependent and is approximated by the Watson formula \cite{reid1987}:
+\begin{equation}
+    \Delta H_{vap}(T) = \Delta H_{vap,0}
+    \left(\frac{T_{crit} - T}{T_{crit} - T_0}
+    \right)^{0.38}
+    \label{eq:Hvap}
+\end{equation}
+where $T_{crit} = 647$ K is the critical temperature of water and $\Delta H_{vap,0} = 2.672 \times 10^5$ J/kg.
 
 \subsection{Moisture transport equation} \label{sec:moisture}
 \subsubsection{Transport mechanisms}
@@ -297,7 +324,7 @@ The gaseous phase (dry air + water vapor) is governed by the following relations
     \begin{equation}
         p_v = p_{vs}(T)\,\exp\left(\frac{M_v}{\rho_l R T} (p_g - p_c - p_{vs})\right) \label{eq:kelvin}
     \end{equation}
-    where $p_{vs}(T)$ is the saturation vapor pressure, approximated by the Hyland-Wexler relationship:
+    where $p_{vs}(T)$ is the saturation vapor pressure, approximated by the Hyland-Wexler relationship \cite{ashrae2001}:
     \begin{equation}
         p_{vs}(T) = \exp\left[\frac{C_1}{T} + C_2 + C_3 T + C_4 T^2 + C_5 T^3 + C_6 \ln(T)\right] \label{eq:pvs}
     \end{equation}
@@ -305,7 +332,7 @@ The gaseous phase (dry air + water vapor) is governed by the following relations
 
 \subsubsection{Sorption isotherms}
 
-The relationship between capillary pressure and liquid saturation is described by the Van Genuchten model:
+The relationship between capillary pressure and liquid saturation is described by the Van Genuchten model \cite{vangenuchten1980, baroghel1999}:
 \begin{equation}
     p_c = a\left(S_l^{-b} - 1\right)^{1-1/b} \label{eq:VG}
 \end{equation}
@@ -325,7 +352,7 @@ $b$ [-]   & 2.275 & 2.060 & 2.168 & 1.954 \\
 \end{tabular}
 \end{table}
 
-At elevated temperatures, the parameter $a$ is modified to account for changes in surface tension and pore structure:
+At elevated temperatures, the parameter $a$ is modified to account for changes in surface tension and pore structure \cite{pesavento2000}:
 \begin{equation}
     S_l = \left(\left(\frac{E(T)}{a(T)}\, p_c\right)^{b/(b-1)} + 1\right)^{-1/b}
     \label{eq:sorption_T}
@@ -334,14 +361,14 @@ where $E(T)$ accounts for the surface tension evolution and $a(T)$ accounts for 
 
 \subsubsection{Intrinsic permeability}
 
-Permeability is a key parameter governing moisture transport. For a thermo-hydral problem, the following relationship is adopted:
+Permeability is a key parameter governing moisture transport. For a thermo-hydral problem, the following relationship is adopted \cite{gawin1999}:
 \begin{equation}
     K = K_0 \cdot 10^{A_T(T-T_0)} \left(\frac{p_g}{p_{atm}}\right)^{A_p}
     \label{eq:perm}
 \end{equation}
 where $K_0$ is the intrinsic permeability at reference conditions, $A_T = 0.005$ and $A_p = 0.368$.
 
-When mechanical damage is considered, the permeability increases significantly:
+When mechanical damage is considered, the permeability increases significantly \cite{gawin2002}:
 \begin{equation}
     K = K_0 \cdot 10^{A_T(T-T_0)} \left(\frac{p_g}{p_{atm}}\right)^{A_p} \cdot 10^{A_D\, \mathcal{D}}
     \label{eq:perm_damage}
@@ -351,7 +378,7 @@ where $\mathcal{D}$ is the damage parameter and $A_D$ is a material constant. Th
 
 \subsubsection{Relative permeability}
 
-The relative permeabilities of liquid and gas are described by the Van Genuchten relationships:
+The relative permeabilities of liquid and gas are described by the Van Genuchten relationships \cite{vangenuchten1980}:
 \begin{align}
     k_{rl} &= \sqrt{S_l}\left(
     1 - \left(1 - S_l^{1/A_S}\right)^{A_S}
@@ -365,7 +392,7 @@ where $A_S = 0.6$.
 
 \subsubsection{Effective diffusivity}
 
-The diffusivity of vapor in air at a given temperature and pressure is:
+The diffusivity of vapor in air at a given temperature and pressure is \cite{perre1990}:
 \begin{equation}
     D_{va}(T, p_g) = D_{v0} \left(\frac{T}{T_0}\right)^{B_v} \frac{p_{g0}}{p_g}
     \label{eq:Dva}
@@ -379,9 +406,22 @@ with the tortuosity:
     \tau(\phi, S_l) = \phi^{1/3}(1-S_l)^{7/3} \label{eq:tortuosity}
 \end{equation}
 
+\subsubsection{Fluid viscosities}
+The dynamic viscosities are temperature-dependent \cite{ashrae2001}. The gas viscosity is a concentration-weighted average:
+\begin{equation}
+    \mu_g = \frac{p_v}{p_g}\mu_v + 
+    \frac{p_a}{p_g}\mu_a
+\end{equation}
+where $\mu_v$ and $\mu_a$ are linear functions of temperature. The liquid water viscosity decreases strongly with temperature \cite{thomas1995}:
+\begin{equation}
+    \mu_l = \mu_{l0}\exp
+    \left(\frac{-\alpha_l(T-T_0)}{T}\right)
+\end{equation}
+with $\mu_{l0} = 1.002 \times 10^{-3}$ Pa$\cdot$s and $\alpha_l = 0.6612$.
+
 \subsubsection{Porosity evolution}
 
-The porosity increases with temperature due to microstructural changes:
+The porosity increases with temperature due to microstructural changes \cite{schneider1989}:
 \begin{equation}
     \phi = \phi_0 + A_\phi\,(T - T_0) \label{eq:porosity}
 \end{equation}
@@ -420,7 +460,6 @@ The total strain is decomposed into mechanical and free (stress-free) components
 which enters directly into Hooke's law (\cref{eq:hooke}).
 
 \subsubsection{Linear finite element formulation}
-\begin{reviewblock}
 
 The spatial discretization of the momentum conservation equation (\cref{eq:final_momentum}) is carried out using the standard Galerkin finite element method \cite{dalpont2020}. 
 
@@ -457,20 +496,19 @@ where $\{\mathbf{f}_{ext}\}$ groups the classical external forces. All thermo-hy
 
 In Cast3M, this system is assembled using the \texttt{RIGI} and \texttt{RESO} operators for the linear part. When damage is included, the non-linear iterative solution is handled by \texttt{PASAPAS} (\cref{eq:NR_iteration}).
 
-\end{reviewblock}
-
 \subsection{Mazars damage model}
 
-Concrete cracks when tensile strains become too large. In this work, this behaviour is represented with the Mazars damage model \cite{hamon2013}. 
+Concrete cracks when tensile strains become too large. In this work, this behaviour is represented with the Mazars damage model \cite{mazars1986, hamon2013}. 
 
 \subsubsection{Damage parameter and equivalent strain}
-The model introduces a single scalar internal variable $\mathcal{D}$, damage parameter, ranging from $0$ (intact material) to $1$ (fully broken material). The apparent macroscopic stress is reduced according to the effective stress concept:
+
+The model introduces a single scalar damage variable $\mathcal{D} \in [0,1]$ \cite{mazars1986}. The effective stress in the damaged material is:
 \begin{equation}
-    \boldsymbol{\sigma}' = (1 - \mathcal{D})\,\boldsymbol{\sigma}
+    \boldsymbol{\sigma}' = (1-\mathcal{D})\,
+    \mathbb{C}\,\boldsymbol{\varepsilon}_{el}
     \label{eq:damage_stress}
 \end{equation}
-
-The term $\boldsymbol{\sigma}'$ in \cref{eq:damage_stress} then enters Bishop's relation (\cref{eq:eff_stress}) to form the total stress $\boldsymbol{\sigma}^{Total}$.
+When $\mathcal{D}=0$, this reduces to Hooke's law  (\cref{eq:hooke}). The damage variable is driven by the equivalent strain, computed from the positive principal elastic strains:
 
 \begin{reviewblock}
 Because concrete cracking is primarily governed by tensile extensions, Mazars introduced an \textit{equivalent strain} ($\varepsilon_{eq}$) to translate any 3D multiaxial strain state into a scalar uniaxial indicator. In the case of a thermo-mechanical loading, it is important to note that only the elastic strain tensor $\boldsymbol{\varepsilon}_e$ contributes to the evolution of damage. The equivalent strain is calculated solely from the positive principal elastic strains $\varepsilon_i$:
@@ -511,7 +549,6 @@ The global macroscopic damage $\mathcal{D}$ is then calculated using a linear co
 The coefficients $\alpha_t$ and $\alpha_c$ depend on the principal stress state, evaluating the respective contributions of tensile and compressive stresses. In pure tension, $\alpha_t = 1$ and $\alpha_c = 0$; conversely, in pure compression, $\alpha_c = 1$ and $\alpha_t = 0$. The parameter $\beta$ (typically fixed at 1.06) is a shear-correction coefficient introduced to improve the structural response under shear loadings.
 
 \subsubsection{Non-linear equilibrium and iterative solution}
-\begin{reviewblock}
 
 In the general case with damage, the stiffness matrix reads:
 \begin{equation}
@@ -536,69 +573,48 @@ where:
 \end{itemize}
 
 The displacements and damage are updated until convergence: $\|\{\mathbf{F}\} - \{\mathbf{R}\}^i\| < \epsilon\,F_{ref}$. In Cast3M, this iterative procedure is handled by the \texttt{PASAPAS} operator.
-\end{reviewblock}
 
 \subsection{Mesh dependency and fracture energy regularization}
 
-A major drawback of local softening models is the pathological mesh dependency. Mathematically, softening causes a loss of ellipticity in the differential equations, leading to strain localization in a band whose width depends entirely on the finite element size. \draft{This results in physically unacceptable ruptures with zero energy dissipation upon mesh refinement.}
+A well-known drawback of local softening models such as Mazars' is the pathological mesh dependency: softening causes strain localization in a band whose width depends on the element size, leading to vanishing energy dissipation upon mesh refinement \cite{bazant1976}.
 
-\begin{reviewblock}
-\review{This section requires additional references to support the statements presented.}
+Two main families of regularization exist in the literature:
+\begin{itemize}
+    \item \textbf{Nonlocal averaging:} the local equivalent strain $\varepsilon_{eq}$ is replaced by a weighted spatial average $\bar{\varepsilon}_{eq}$ over a characteristic volume controlled by an internal length $l_c$ \cite{pijaudier1987,giry2011}. This is the approach adopted by \cite{dauti2018}.
+    
+    \item \textbf{Fracture energy regularization (Hillerborg):} the softening law parameters are adjusted element-by-element so that each element dissipates the same fracture energy $G_f$ per unit crack area, regardless of its size \cite{hillerborg1976}. This is the approach adopted in the present work, as it is simpler to implement in Cast3M and does not require additional nonlocal operators.
+\end{itemize}
 
-To overcome this issue without resorting to complex non-local formulations, a regularization technique based on Hillerborg's specific fracture energy ($G_f$) is utilized. Physically, the fracture energy $G_f$ represents the energy required to propagate a discrete crack per unit \textit{area} (expressed in $\text{J/m}^2$). However, in the continuum damage mechanics framework of the Finite Element Method, cracking is modeled as a smeared softening phenomenon occurring over the \textit{volume} of the 3D finite element. 
+\subsubsection{Principle of fracture energy regularization}
 
-To reconcile the areal energy dissipation of a real crack with the volumetric dissipation of the continuum element, a characteristic length of the finite element, $L_e$, is introduced. In the Cast3M implementation (using the \texttt{@LONGEF} procedure), this equivalent length is evaluated based on the element's geometry, calculated as $L_e = V^{1/D}$ where $D$ is the spatial dimension. 
+Physically, the fracture energy $G_f$ \cite{hillerborg1976} represents the energy per unit area required to propagate a crack. In the continuum damage framework, cracking is smeared over the element volume. A characteristic length $L_e$ bridges the two descriptions: in Cast3M (using \texttt{@LONGEF}), $L_e = V^{1/D}$ where $D$ is the spatial dimension.
 
-The total fracture energy $G_f$ dissipated by a finite element of size $L_e$ is the product of $L_e$ and the total area under the uniaxial stress-strain ($\sigma-\varepsilon$) softening curve (which represents the volumetric dissipated energy density $g_f = G_f / L_e$). This total energy is strictly partitioned into two components: the reversible elastic strain energy stored up to the peak stress, and the energy dissipated strictly during the non-linear damage softening phase:
+The total dissipated energy per unit crack area is:
 \begin{equation}
     G_f = G_{elastic} + G_{softening}
 \end{equation}
-    
-\end{reviewblock}
 
-\subsubsection{Evaluation of the elastic energy ($G_{elastic}$)}
+\subsubsection{Elastic energy ($G_{elastic}$)}
 
-\begin{reviewblock}
-\review{This section requires additional references to support the statements presented.}
-
-The elastic energy density up to the onset of damage (when the stress reaches the tensile strength $f_t$ at the initial strain threshold $\varepsilon_{d0} = f_t/E_0$) corresponds to the area of the elastic triangle under the curve:
+The elastic energy density up to damage onset is:
 \begin{equation}
-    g_{elastic} = \frac{1}{2} f_t \varepsilon_{d0} = \frac{f_t^2}{2E_0}
+    g_{elastic} = \frac{1}{2}\,f_t\,\varepsilon_{d0} 
+    = \frac{f_t^2}{2E_0}
 \end{equation}
-\end{reviewblock}
-
-Multiplying by the characteristic length yields the areal elastic energy: $G_{elastic} = \frac{f_t^2}{2E_0} L_e$. Consequently, the remaining energy strictly available for the damage softening phase is calculated as:
+so that $G_{elastic} = g_{elastic}\,L_e = \frac{f_t^2}{2E_0}\,L_e$, and the energy available for softening is:
 \begin{equation}
-    G_{softening} = G_f - \frac{f_t^2}{2E_0} L_e
+    G_{softening} = G_f 
+    - \frac{f_t^2}{2E_0}\,L_e
 \end{equation}
 
-\subsubsection{Analytical evaluation of $G_{softening}$ and the softening parameter $B_t$}
+\subsubsection{Regularization of $B_t$}
 
-\begin{reviewblock}
-\review{This section requires additional references to support the statements presented.}
-
-In the original Mazars formulation, the evolution of damage in pure tension is governed by an exponential law. Assuming a purely brittle failure in tension ($A_t \approx 1$), the post-peak stress-strain relationship can be simplified to:
+Assuming $A_t \approx 1$ (brittle tension), the post-peak stress simplifies to $\sigma \approx f_t\exp[-B_t(\varepsilon - \varepsilon_{d0})]$, whose integral gives $g_{softening} = f_t/B_t$. Equating $G_{softening} = g_{softening}\cdot L_e$ yields the modified parameter:
 \begin{equation}
-    \sigma(\varepsilon) \approx f_t \exp\left[ -B_t (\varepsilon - \varepsilon_{d0}) \right]
+    B_t^{mod} = \frac{f_t\,L_e}{G_f 
+    - \frac{f_t^2}{2E_0}\,L_e}
 \end{equation}
-The volumetric softening energy density ($g_{softening}$) is the integral of this stress-strain curve from the peak strain $\varepsilon_{d0}$ to infinity:
-\begin{equation}
-    g_{softening} = \int_{\varepsilon_{d0}}^{\infty} f_t \exp\left[ -B_t (\varepsilon - \varepsilon_{d0}) \right] d\varepsilon = \frac{f_t}{B_t}
-\end{equation}
-\end{reviewblock}
-
-By converting this volumetric density into areal energy via the characteristic length $L_e$, we establish the fundamental relationship between the fracture energy and the Mazars tensile parameter:
-\begin{equation}
-    G_{softening} = g_{softening} \cdot L_e = \frac{f_t \cdot L_e}{B_t}
-\end{equation}
-
-\subsubsection{Dynamic regularization of $B_t$ ($B_t^{mod}$)}
-To ensure that each finite element dissipates exactly the objective intrinsic energy $G_f$ regardless of its size $L_e$, the parameter $B_t$ must be dynamically recalculated. By equating the integral of the Mazars softening curve to the available softening energy, we deduce the modified parameter $B_t^{mod}$:
-\begin{equation}
-    B_t^{mod} = \frac{f_t \cdot L_e}{G_{softening}} = \frac{f_t \cdot L_e}{G_f - \frac{f_t^2}{2E_0} L_e}
-\end{equation}
-
-\draft{In the finite element code Cast3M, this explicit regularization is implemented element-by-element, where the numerator ($f_t \cdot L_e$) and denominator ($G_{softening}$) are defined as \texttt{NUM1} and \texttt{DEN1}, respectively.} This energetic adjustment guarantees that the macroscopic crack propagation and global energy dissipation remain completely objective and independent of the selected spatial discretization.
+This ensures that every element dissipates exactly $G_f$ regardless of mesh size, making the global response objective with respect to spatial discretization.
 
 \section{Coupling mechanisms} \label{sec:coupling}
 
@@ -715,14 +731,21 @@ This expression represents the saturation-weighted average of the gas and liquid
 
 \subsubsection{Effective stress and pore pressure loading}
 
-Beyond the free strains ($\boldsymbol{\varepsilon}_{th}$, $\boldsymbol{\varepsilon}_{sh}$), the pore pressure directly modifies the stress state in the solid skeleton through the concept of effective stress. Following Bishop's relation:
+For a porous medium saturated by multiple fluids, the total stress is decomposed into the part carried  by the solid skeleton and the part carried by the pore fluids. Following \cite{lewis1998,dauti2018}, the effective stress is defined as:
 \begin{equation}
-    \boldsymbol{\sigma}' = \boldsymbol{\sigma}^{Total} + \mathbf{I}\,\alpha\,p_s
+    \boldsymbol{\sigma}' = \boldsymbol{\sigma}^{Total} 
+    + \alpha\,p_s\,\mathbf{I}
     \label{eq:eff_stress}
 \end{equation}
-where $\boldsymbol{\sigma}^{Total}$ is the total stress tensor and $p_s$ is the average pore pressure (\cref{eq:ps_shrinkage}). This relation decomposes the total stress into the part carried by the solid skeleton ($\boldsymbol{\sigma}'$) and the part carried by the pore fluids ($\alpha\,p_s$).
+where $\boldsymbol{\sigma}^{Total}$ is the total  stress tensor, $\alpha$ is Biot's coefficient, and  $p_s$ is the average pore pressure (\cref{eq:ps_shrinkage}).
 
-The effective stress $\boldsymbol{\sigma}'$ is the stress that governs the mechanical behaviour of the skeleton: it is the input to the Mazars damage model (\cref{eq:damage_stress}). In heated concrete, gas pressure builds up due to evaporation and dehydration (\cref{sec:pore_pressure}). This increase in $p_s$ enters the load vector as an additional tensile loading on the skeleton (\cref{eq:F_full}), shifting $\boldsymbol{\sigma}'$ toward tension and promoting damage initiation when $f_t$ is exceeded.
+The effective stress $\boldsymbol{\sigma}'$ is the  stress that governs the mechanical behaviour of the  skeleton. In the finite element implementation, this relation is not applied directly; instead, the pore  pressure term $\alpha\,p_s$ enters the load vector as an external loading (\cref{eq:F_full}), and the effective stress is recovered from the elastic strain after solving for displacements:
+\begin{equation}
+    \boldsymbol{\sigma}' = (1-\mathcal{D})\,
+    \mathbb{C}\,\boldsymbol{\varepsilon}_{el}
+    \label{eq:sigma_eff_FE}
+\end{equation}
+where $\boldsymbol{\varepsilon}_{el} = \boldsymbol{\varepsilon} - \boldsymbol{\varepsilon}_{th} - \boldsymbol{\varepsilon}_{sh}$ (\cref{eq:eps_elastic}). This effective stress is the input to the Mazars damage criterion (\cref{sec:mazars}). In heated concrete, the build-up of gas pressure (\cref{sec:pore_pressure}) increases $p_s$ in the load vector, which shifts $\boldsymbol{\sigma}'$ toward tension and promotes damage when $f_t$ is exceeded.
 
 \section{THM model and spalling}
 
