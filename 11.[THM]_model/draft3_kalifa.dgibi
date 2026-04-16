@@ -64,7 +64,7 @@ LTP_TOT  = LTP_HYDR ET LTP_AGIN ET LTP_ACCI                     ;
 * Saved times
 LSA_HYDR = PROG  0.             PAS hours1 temps1; 
 LSA_AGIN = PROG (temps1 + DT23) PAS DT23   temps3;                    
-LSA_ACCI = PROG (temps3 + 60. ) PAS 60.    temps4; 
+LSA_ACCI = PROG (temps3 + DT34 ) PAS DT34  temps4; 
 LSA_TOT  = LSA_HYDR ET LSA_AGIN ET LSA_ACCI                     ;  
 *---------------------------------------------------------------------*
 
