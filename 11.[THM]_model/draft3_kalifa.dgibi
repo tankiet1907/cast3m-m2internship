@@ -138,7 +138,7 @@ PO_40  = MAIL1 POIN 'PROC' (0.06 0.040);
 PO_50  = MAIL1 POIN 'PROC' (0.06 0.050);
 PO_120 = MAIL1 POIN 'PROC' (0.06 0.120);
 *
-TRAC MAIL1;
+*TRAC MAIL1;
 *---------------------------------------------------------------------*
 
 
@@ -434,12 +434,9 @@ FIN BOU_HR;
 
 LIST (DIME TAB0 . 'TEMPERATURES' );
 
-NN1 = 191 + 60;
-NN2 = 191 + 120;
-NN3 = 191 + 180;
 
 *********** TEMPERATURE ********************************************
-EVT_00  = EVOL 'NOIR' 'TEMP' TAB0 'TEMPERATURES' 'T'  PO_00;
+EVT_00  = EVOL 'BLAN' 'TEMP' TAB0 'TEMPERATURES' 'T'  PO_00;
 EVT_10  = EVOL 'BLEU' 'TEMP' TAB0 'TEMPERATURES' 'T'  PO_10;
 EVT_20  = EVOL 'VERT' 'TEMP' TAB0 'TEMPERATURES' 'T'  PO_20;
 EVT_30  = EVOL 'ROUG' 'TEMP' TAB0 'TEMPERATURES' 'T'  PO_30;
@@ -447,19 +444,19 @@ EVT_40  = EVOL 'TURQ' 'TEMP' TAB0 'TEMPERATURES' 'T'  PO_40;
 EVT_50  = EVOL 'ROSE' 'TEMP' TAB0 'TEMPERATURES' 'T'  PO_50;
 EVT_120 = EVOL 'JAUN' 'TEMP' TAB0 'TEMPERATURES' 'T'  PO_120;
 DESS (EVT_00 ET EVT_10 ET EVT_20 ET EVT_30 ET
-      EVT_40 ET EVT_50 ET EVT_120);
+      EVT_40 ET EVT_50 ET EVT_120)
+      'XBOR' temps3 temps4;
 ********************************************************************
 
 *********** GAS PRESSURE *******************************************
-EVPG_00  = EVOL 'NOIR' 'TEMP' TAB0 'TEMPERATURES' 'PG' PO_00;
 EVPG_10  = EVOL 'BLEU' 'TEMP' TAB0 'TEMPERATURES' 'PG' PO_10;
 EVPG_20  = EVOL 'VERT' 'TEMP' TAB0 'TEMPERATURES' 'PG' PO_20;
 EVPG_30  = EVOL 'ROUG' 'TEMP' TAB0 'TEMPERATURES' 'PG' PO_30;
 EVPG_40  = EVOL 'TURQ' 'TEMP' TAB0 'TEMPERATURES' 'PG' PO_40;
 EVPG_50  = EVOL 'ROSE' 'TEMP' TAB0 'TEMPERATURES' 'PG' PO_50;
-EVPG_120 = EVOL 'JAUN' 'TEMP' TAB0 'TEMPERATURES' 'PG' PO_120;
-DESS (EVPG_00 ET EVPG_10 ET EVPG_20 ET EVPG_30 ET
-      EVPG_40 ET EVPG_50 ET EVPG_120);
+DESS (EVPG_10 ET EVPG_20 ET EVPG_30 ET
+      EVPG_40 ET EVPG_50) 
+      'XBOR' temps3 temps4;
 ********************************************************************
 
 
