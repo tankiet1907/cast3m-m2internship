@@ -1,0 +1,469 @@
+*---------------------------------------------------------------------*
+* TEST 0 : ADIABATIC HYDRATION / AGING / ACCIDENT
+* G.Sciumè (31 - 10 - 2024)
+*
+* Reference
+* "CONCRETE CASTING AND LIFETIME CONDITIONS IMPACT ON HIGH 
+* TEMPERATURE RESISTANCE"  
+*
+* G. Sciumè (1), S. Dal Pont (2), D. Dauti (2)
+*
+* (1) I2M, Université de Bordeaux, Bordeaux, France
+* (2) 3SR, Université Grenoble Alpes, Grenoble, France
+
+* Modified by: Tan Kiet Hong (14 - 04 - 2026)                                         
+*   - Early Age (hydration) phase REMOVED                            
+*   - Aging phase REMOVED                                            
+*   - Only accident phase kept (mature concrete, HY=1 from t=0) 
+*   - Input from Kalifa (2000) experiment HPC slab 300x300x120mm, w/c=0.32, fc=100MPa
+*   - Exportation at 0, 10, 20, 30, 40, 50, 120 mm 
+*---------------------------------------------------------------------*
+
+OPTI ECHO 0;
+
+
+*---------------------------------------------------------------------*
+* CONSTANT PHYSICAL PARAMEMTERS
+*---------------------------------------------------------------------*
+RGP1     = 8.3145 ;                                                   
+MMGA1    = 28.9645E-3 ;                                               
+MMGW1    = 18.0153E-3 ;
+RHOS1    = 2625.8 ;
+RHOW0    = 1000. ;
+CPW1     = 4181.0 ;
+CPGW1    = 1805.0 ;
+CPGA1    = 1005.7 ;
+*---------------------------------------------------------------------*
+
+
+*---------------------------------------------------------------------*
+* TEST DESCRIPTION AND TEMPORAL DISCRETIZATION
+*---------------------------------------------------------------------*
+* 
+* Modeled phases
+* I)   Early age :        0 ---> 3 days        /  adiabatic conditions 
+* I)   Early age : REMOVED (Set Hydration degree = 1 at t=0)
+
+* II)  Aging     :        3 ---> age time      /  H & T convection
+* II)  Aging     : REMOVED (Mature concrete, initial HR = 0.5)
+
+* III) Accident  : age time ---> age time + 6h /  H & T convection
+* III) Accident  : CHANGED: 6h
+*---------------------------------------------------------------------*
+minutes1 = 60.         ;
+
+*change accident duration = 10h = 600 min = 36000 s
+acc_time =   600 * minutes1;
+
+temps4   =  acc_time;
+
+
+*change dt = 5 min = 300 s, 120 steps for 6h
+DT34     =   5 * minutes1  ;
+
+LTP_ACCI = PROG 0. PAS DT34 temps4 ;
+LTP_TOT  = LTP_ACCI;
+* Saved times
+LSA_ACCI = PROG 0. PAS DT34 temps4 ;
+LSA_TOT  = LSA_ACCI;
+
+*---------------------------------------------------------------------*
+
+*---------------------------------------------------------------------*
+* DATI MATERIALE (PARTE THC)
+*---------------------------------------------------------------------*
+
+* MIX DATA (changed aggr, wc)
+cem  = 400.   ;
+aggr = 1765.  ;
+wc   = 0.4625 ;
+sc   = 0.     ;
+
+* HYDRATION PROCESS DATA (affinity. activation energy. hydration heat)
+* kept for MATE keyword compatibility, HY=1 so no hydration runs. changed AI, AP, GAMP, ALFA, EAR1, LAT1)
+AI   = 6    ;
+AP   = 1250.  ;
+GAMP = 0.24   ;
+ALFA = 48.    ;
+EAR1 = 5369.  ;
+lat1 = 114.3e6 ;
+
+* INTRINSIC PERMEABILITY (changed)
+KINT = 7.5E-20 ;
+
+* DESORPTION ISOTHERME MODEL PARAMETERS (unchanged)
+a1   =  18.6E6 ;
+b1   =  2.27    ;
+c1   =  1.5     ;
+
+* THERMAL PARAMETERS (changed CS and KS)
+CS   = 948.   ;
+KS   = 1.67   ;
+*---------------------------------------------------------------------*
+
+
+*---------------------------------------------------------------------*
+* COSTRUZIONE MESH
+* GEOMETRY UPDATED TO MATCH KALIFA (2000) EXPERIMENT
+*     2D square mesh: 120mm × 120mm, 28 divisions per side
+*     Hot face  = TOP    (y=L1, DCD1) — heater placed ABOVE specimen
+*     Cold face = BOTTOM (y=0,  DAB1)
+*     Output points at 0 (front hot face), 10, 20, 30, 40, 50, 120 mm (rear cold face)
+*---------------------------------------------------------------------*
+'OPTI' 'DIME' 2 'MODE' PLAN CONT 'ELEM' QUA4;
+
+* slab thickness: 120 mm
+L1 = 0.12D0 ;
+
+* Corner points (origin = bottom-left)
+* bottom-left
+P1 = 0.   0.   ;
+* bottom-right
+P2 = L1   0.   ;
+* top-right
+P3 = L1   L1   ;
+* top-left
+P4 = 0.   L1   ;
+
+* 4 edges, 28 divisions each
+* bottom edge ---> COLD face (y=0)
+DAB1 = DROI 28 P1 P2 ; 
+* right  edge (adiabatic)
+DDA1 = DROI 28 P2 P3 ;
+* top    edge ---> HOT  face (y=L1)
+DCD1 = DROI 28 P3 P4 ;
+* left   edge (adiabatic)
+DBC1 = DROI 28 P4 P1 ; 
+
+* 2D mesh from contour
+CONTOUR1 = DAB1 ET DDA1 ET DCD1 ET DBC1 ;
+MAIL1    = SURF CONTOUR1 'PLANE' ;
+MAIL1    = MAIL1 COUL VERT ;
+TRAC MAIL1;
+
+* Hot/cold face boundaries
+* hot  face — TOP    (y=0.12m, heater above)
+CONTH = DCD1 ;
+* cold face — BOTTOM (y=0)
+CONTC = DAB1 ; 
+
+* Output points along thickness (x=0.06m, measured from HOT face DOWN)
+* depth from hot face ---> y-coordinate = L1 - depth
+* 0mm hot face
+PO_00  = 0.060  0.120D0 ; 
+PO_10  = 0.060  0.110D0 ;
+PO_20  = 0.060  0.100D0 ;
+PO_30  = 0.060  0.090D0 ;
+PO_40  = 0.060  0.080D0 ;
+PO_50  = 0.060  0.070D0 ;
+* 120mm cold face (rear)
+PO_120 = 0.060  0.000D0 ; 
+
+
+*---------------------------------------------------------------------*
+
+
+*---------------------------------------------------------------------*
+* DEFINIZIONE DEL MODELLO
+* MODEL DEFINITION TO MATCH KALIFA (2000) EXPERIMENT
+*---------------------------------------------------------------------*
+MODTHC  = 'MODE' MAIL1 'THERMOHYDRIQUE' 'BETON_THM' 'CONS' 'BO' ;
+* hot face
+MODCOT1  = 'MODE' CONTH 'THERMIQUE' 'CONVECTION' ;
+* cold face
+MODCOT2  = 'MODE' CONTC 'THERMIQUE' 'CONVECTION' ;
+* hot face only        
+MODRAY  = 'MODE' CONTH 'THERMIQUE' 'RAYONNEMENT' 'INFINI' ; 
+MOD_TOT = MODTHC 'ET' MODCOT1 'ET' MODCOT2 'ET' MODRAY ;
+*---------------------------------------------------------------------*
+
+
+*---------------------------------------------------------------------*
+* DEFINIZIONE DEL MATERIALE
+* MATERIAL DEFINITION TO MATCH KALIFA (2000) EXPERIMENT
+*---------------------------------------------------------------------*
+WINF GAM0 POR1 APOR = @POWERS cem aggr wc sc;
+MATTHC = 'MATE' MODTHC 'CS'  CS    'KS'   KS   'GAM0' GAM0 'WINF' WINF
+'VGA' a1   'VGB'  b1   'VGC' c1    'K1' KINT  'AK'   7.  'BK'   1. 
+'KLI1' 20000.  'AKLI'   1.  'BKLI' 1. 'POR1' POR1 'APOR' APOR 
+'AFF1' Ai  'AFF2' Ap   'AFF3' GAMP 'AFF4' ALFA 'EAR'  EAR1 'QLAT' lat1;
+
+* hot  face — H=8  W/m²K (Kalifa)
+MATCOT1  = 'MATE' MODCOT1  'H'    8.    ;
+* cold face — H=8.3 W/m²K (Kalifa)
+MATCOT2  = 'MATE' MODCOT2  'H'    8.3D0 ;
+* hot  face — emissivity=0.85 (Kalifa)
+MATRAY  = 'MATE' MODRAY  'EMIS' 0.85D0;
+
+MAT_TOT = MATTHC ET MATCOT1 ET MATCOT2 ET MATRAY ;
+*---------------------------------------------------------------------*
+
+
+*---------------------------------------------------------------------*
+* Convection vapeur (traitée par charther)
+* et donc à ne pas ajouter dansle modele total
+* MOISTURE CONVECTION (updated and name changed for clarity)
+*---------------------------------------------------------------------*
+* vapeur hot  face
+MODCOH1  = 'MODE' CONTH 'THERMIQUE' 'CONVECTION' ;   
+* vapeur cold face
+MODCOH2  = 'MODE' CONTC 'THERMIQUE' 'CONVECTION' ;
+* beta_v hot  (changed)
+MATCOH1  = 'MATE' MODCOH1 'H' 0.018D0 ;
+* beta_v cold  (changed)         
+MATCOH2  = 'MATE' MODCOH2 'H' 0.009D0 ;               
+*---------------------------------------------------------------------*
+
+
+*---------------------------------------------------------------------*
+* CONDIZIONE INIZIALE (COST adibatic calorimetry test) 
+* - grado di idratazione iniziale HY_0 = 0
+* - temperatura iniziale          TC_0 = 22° 
+* - pressione del gas iniziale    PG_0 = p_atm
+* - umidità relativa iniziale     HR_0 = 0.999
+
+* Updated Kalifa: HY=1 (mature), TC_0=20°C, HR_0=0.5, CI 3 dof (PG+PC+T)
+
+HY_0   = 0.            ;
+TC_0   = 20.           ;
+TK_0   = 273.15 + TC_0 ;
+PG_0   = 101325.       ;
+HR_0   = 0.5           ;
+
+ZERO1  = MANU 'CHPO' MAIL1 'SCAL' 0.       ;
+CHTK_0 = MANU 'CHPO' MAIL1 'T' TK_0        ;
+PVS_0 XX YY ZZ KK JJ= @PVSAT ZERO1 ZERO1 CHTK_0    ;
+
+* Clapeyron
+PC_0   = PG_0 - PVS_0 + ((-1.)*(RGP1*TK_0*RHOW0*(LOG(HR_0))/MMGW1));
+PC_0   = PC_0 'NOMC' 'PC';
+
+* Calcul degre de saturation correspondant
+CHPC_0 = MANU CHPO MAIL1 1 'SCAL' (MAXI PC_0);
+CHTK_0 = MANU CHPO MAIL1 1 'SCAL' TK_0;
+HYDR   = MANU CHPO MAIL1 1 'SCAL' HY_0;
+cha1   = MANU CHPO MAIL1 1 'SCAL' a1;
+chb1   = MANU CHPO MAIL1 1 'SCAL' b1;
+chc1   = MANU CHPO MAIL1 1 'SCAL' c1;
+chgam0 = MANU CHPO MAIL1 1 'SCAL' gam0;
+
+SW0    = @SATURA CHPC_0 CHTK_0 HYDR cha1 chb1 chc1 chgam0;
+
+CI_TH  = ('MANU' 'CHPO' MAIL1 2 'PG' PG_0 'T' TK_0)  +  PC_0;
+*TRAC CI_TH MAIL1;
+*---------------------------------------------------------------------*
+
+
+
+*---------------------------------------------------------------------*
+* CONDIZIONI AL CONTORNO
+* - PC_ext = p_atm  
+*
+* - TC_ext = 22°C until "age time" then accident ramp (2K/min)
+*
+*             / 0.95            0      < time < 3 days
+* - HR_ext = {  0.95 --> 0.50   3 days < time < 6 days
+*             \ 0.50            6 days < time < age time
+* - Accident:  PGWe_i  = 1300.;
+*---------------------------------------------------------------------*
+* BOUNDARY CONDITIONS — Kalifa (accident phase only, mature concrete)
+
+
+* UPDATED BOUNDARY CONDITIONS — Kalifa (2000)
+*---------------------------------------------------------------------*
+* External conditions (constant throughout experiment)
+TK_E  = TK_0 ;
+PG_E  = PG_0 ; 
+HR_E  = 0.5  ;
+
+*---- T: Thermal convection — ramp 2K/min from t=0 ------------------*
+* temps3 supprimé ramp démarre à t=0
+N1     = 1    ;
+PRO_TK = PROG ;
+REPETER BOU_TE (DIME LTP_TOT) ;
+    TIMEi  = EXTR N1 LTP_TOT ;
+    TKi    = TK_E + (2./60.) * TIMEi ;
+    TKi    = MINI TKi (273.15 + 600.)  ;
+    PRO_TK = PRO_TK ET (PROG TKi)      ;
+    N1     = N1 + 1 ;
+FIN BOU_TE ;
+EVTK1  = 'EVOL' 'MANU' LTP_TOT PRO_TK ;
+*DESS EVTK1;
+
+* hot  face — convection + radiation
+CHTK1  = 'MANU' 'CHPO' CONTH 1 'T' 1. 'NATURE' 'DISCRETE' ;
+CGTK1  = ('CHAR' 'TECO' CHTK1 EVTK1) ET
+          ('CHAR' 'TERA' CHTK1 EVTK1) ;
+
+* cold face — convection only, T=constant 20°C
+CHTK2  = 'MANU' 'CHPO' CONTC 1 'T' 1. 'NATURE' 'DISCRETE' ;
+EVTK2  = 'EVOL' 'MANU' (PROG 0. temps4)
+                        (PROG TK_E TK_E) ;                    
+CGTK2  = 'CHAR' 'TECO' CHTK2 EVTK2 ;                          
+
+*---- PC: Hygral convection — HR=0.5 constant -----------------------*
+* temps1/temps2/temps3 supprimés HR constant = 0.5 dès t=0
+N1      = 2 ;
+PRO_RGW = PROG 0. ;
+REPETER BOU_RGW ((DIME LTP_TOT) - 1) ;
+    TIMEi  = EXTR N1 LTP_TOT ;
+    TKi    = EXTR N1 PRO_TK  ;
+*   Build temperature field on the full mesh
+    CHTK_I = MANU 'CHPO' MAIL1 1 'T' TKi ;
+    PVSe_i XX YY ZZ KK JJ
+           = @PVSAT ZERO1 ZERO1 CHTK_I ;
+    PVSe_i = MAXI PVSe_i ;
+    FGPGW0 = (MMGW1 / RGP1) * (1. / TKi) ;
+    PGWe_i = HR_E * PVSe_i ;
+    RGWi   = FGPGW0 * PGWe_i ;
+    PRO_RGW = PRO_RGW ET (PROG RGWi) ;
+    N1 = N1 + 1 ;
+FIN BOU_RGW ;
+EVPC1 = 'EVOL' 'MANU' LTP_TOT PRO_RGW ;
+*DESS EVPC1;
+
+* hot  face
+CHPC1  = 'MANU' 'CHPO' CONTH 1 'SCAL' 1. 'NATURE' 'DISCRETE' ;
+CGPC1  = 'CHAR' 'TECO' CHPC1 EVPC1 ;
+* cold face
+CHPC2  = 'MANU' 'CHPO' CONTC 1 'SCAL' 1. 'NATURE' 'DISCRETE' ;
+CGPC2  = 'CHAR' 'TECO' CHPC2 EVPC1 ;
+
+*---- Blocages (Dirichlet PG) ----------------------------------------*
+* hot  face
+CLPG1   = 'BLOQ' 'PG' CONTH ;
+* cold face    
+CLPG2   = 'BLOQ' 'PG' CONTC ;    
+CHPG1   = 'DEPI' CLPG1 PG_0 ;
+CHPG2   = 'DEPI' CLPG2 PG_0 ;
+EV_PG   = 'EVOL' 'MANU' (PROG 0. temps4) (PROG 1. 1.) ;
+CGPG1   = 'CHAR' 'TIMP' CHPG1 EV_PG ;
+CGPG2   = 'CHAR' 'TIMP' CHPG2 EV_PG ;
+
+* Dirichlet uniquement
+CLT_TOT = CLPG1 ET CLPG2 ;       
+
+*---- Moisture flux (vapeur convection) ------------------------------*
+* déjà définis dans BOU_RGW
+CHV     = CGPC1 ET CGPC2 ;        
+
+*---- Total thermal loading ------------------------------------------*
+* thermal only (PC dans CHV)
+CGT_TOT = CGTK1 ET CGTK2 ;       
+*---------------------------------------------------------------------*
+
+
+
+*---------------------------------------------------------------------*
+* VI. RESOLUTION PASAPAS — ACCIDENT ONLY (Kalifa, mature concrete)   *
+*     TH2: 3 PASAPAS (HYDR + AGIN + ACCI) Kalifa: 1 PASAPAS   *
+*     SUPPRIMÉ: DEBP PARATHER, SAUV/REST intermédiaires           *
+*     SUPPRIMÉ: TAB0 (HYDR), TAB0 (AGIN), MATCOH H=0.002        *
+
+
+TAB0                              = 'TABL' ;
+TAB0 . 'MODELE'                   = MOD_TOT ;
+TAB0 . 'CARACTERISTIQUES'         = MAT_TOT ;
+TAB0 . 'BLOCAGES_THERMIQUES'      = CLPG1 ET CLPG2 ;
+TAB0 . 'CHARGEMENT'               = CGPG1 ET CGPG2 ET CGTK1 ET CGTK2 ;
+TAB0 . 'TEMPS_CALCULES'           = LTP_ACCI ;
+TAB0 . 'TEMPS_SAUVES'             = LSA_ACCI ;
+TAB0 . 'PROCEDURE_THERMIQUE'      = 'NONLINEAIRE' ;
+TAB0 . 'RELAXATION_THETA'         = 0.51 ;
+TAB0 . 'MOVA'                     = 'D' ;
+
+*-- Convection vapeur (gérée par CHARTHM) --*
+TAB0 . 'MO_CONVECTION_VAPEUR'     = TABLE ;
+TAB0 . 'MO_CONVECTION_VAPEUR' . 1 = MODCOH1 ; 
+TAB0 . 'MO_CONVECTION_VAPEUR' . 2 = MODCOH2 ; 
+TAB0 . 'MA_CONVECTION_VAPEUR'     = TABLE ;
+TAB0 . 'MA_CONVECTION_VAPEUR' . 1 = MATCOH1 ;  
+TAB0 . 'MA_CONVECTION_VAPEUR' . 2 = MATCOH2 ;  
+TAB0 . 'CH_CONVECTION_VAPEUR'     = TABLE ;
+TAB0 . 'CH_CONVECTION_VAPEUR' . 1 = CGPC1 ;  
+TAB0 . 'CH_CONVECTION_VAPEUR' . 2 = CGPC2 ;    
+*---------------------------------------------------------------------*
+TAB0 . 'THM_PARAMETRES'           = MATTHC ;
+TAB0 . 'CTE_STEFAN_BOLTZMANN'     = 5.673e-8 ; 
+TAB0 . 'CONVECTION_VAPEUR'        = 2 ;  
+TAB0 . 'TEMPERATURES'             = 'TABL' ;
+TAB0 . 'TEMPERATURES' . 0         = CI_TH ;
+TAB0 . 'HYDRATATION'              = 'TABL' ;
+TAB0 . 'HYDRATATION'  . 0         = MANU CHML MODTHC 'SCAL' HY_0 ;
+TAB0 . 'DCH'                      = 'TABL' ;
+TAB0 . 'DCH'          . 0         = MANU CHML MODTHC 'SCAL' HY_0 ;
+*---------------------------------------------------------------------*
+PASAPAS TAB0 ;
+*---------------------------------------------------------------------*
+
+*---------------------------------------------------------------------*
+* VII. SAVE RESULTS
+*---------------------------------------------------------------------*
+opti SAUV 'KALIFA_TH_ACCIDENT' ;
+SAUV ;
+
+
+*---------------------------------------------------------------------*
+* VISULAIZATION OF RESULTS
+*---------------------------------------------------------------------*
+opti REST 'EXAMPLE1D_HAA1_2024_PHASE2';
+REST ;
+*---------------------------------------------------------------------*
+
+OPTI ECHO 0;
+
+
+* Calcul humidité relative (Loi de Clapeyron) et SW
+TAB0 . 'HR' = TABLE;
+TAB0 . 'SW' = TABLE;
+*
+VGA  = MANU CHPO MAIL1 1 'SCAL' a1;
+VGB  = MANU CHPO MAIL1 1 'SCAL' b1;
+VGC  = MANU CHPO MAIL1 1 'SCAL' c1;
+VGHY = MANU CHPO MAIL1 1 'SCAL' gam0; 
+*
+N1 = 0;
+REPETER BOU_HR (DIME  TAB0 . 'TEMPERATURES' );
+   CHTKi = EXCO 'T'  TAB0 . 'TEMPERATURES' . N1;
+   CHPCi = EXCO 'PC' TAB0 . 'TEMPERATURES' . N1;
+   CHPGi = EXCO 'PG' TAB0 . 'TEMPERATURES' . N1;
+   HYDRi = CHAN CHPO TAB0 . 'HYDRATATION' . N1  MODTHC;
+   CHPVSATi CHPGWSCi RHOGWi XX YY ZZ = @PVSAT CHPGi CHPCi CHTKi;
+   SWi = @SATURA CHPCi CHTKi HYDRi VGA VGB VGC VGHY;
+   HRi   =   CHPGWSCi * (CHPVSATi**-1);
+   TAB0 . 'HR' . N1 = HRi;
+   TAB0 . 'SW' . N1 = SWi;
+   N1 = N1 + 1;
+FIN BOU_HR;
+
+
+LIST (DIME TAB0 . 'TEMPERATURES' );
+
+NN1 = 191 + 60;
+NN2 = 191 + 120;
+NN3 = 191 + 180;
+
+*********** TEMPERATURE ********************************************
+EVT1 = EVOL 'BLEU' 'CHPO'  tab0.temperatures.NN1 'T'  l12;
+EVT2 = EVOL 'VERT' 'CHPO'  tab0.temperatures.NN2 'T'  l12;
+EVT3 = EVOL 'ROUG' 'CHPO'  tab0.temperatures.NN3 'T'  l12;
+dess (EVT1 ET EVT2 ET EVT3);
+********************************************************************
+
+*********** GAS PRESSURE *******************************************
+EVPG1= EVOL 'BLEU' 'CHPO' tab0.temperatures.NN1 'PG'  l12;
+EVPG2= EVOL 'VERT' 'CHPO' tab0.temperatures.NN2 'PG'  l12;
+EVPG3= EVOL 'ROUG' 'CHPO' tab0.temperatures.NN3 'PG'  l12;
+dess (EVPG1 ET EVPG2 ET EVPG3);
+********************************************************************
+
+*********** Saturation degree **************************************
+EVSW1 =  EVOL 'BLEU'  'CHPO'  tab0.SW.NN1  'SCAL'  l12;
+EVSW2 =  EVOL 'VERT'  'CHPO'  tab0.SW.NN2  'SCAL'  l12;
+EVSW3 =  EVOL 'ROUG'  'CHPO'  tab0.SW.NN3  'SCAL'  l12;
+dess (EVSW1 ET EVSW2 ET EVSW3);
+********************************************************************
+
+
+TRAC   TAB0 . 'DCH' .  370   MODTHC;  
+
