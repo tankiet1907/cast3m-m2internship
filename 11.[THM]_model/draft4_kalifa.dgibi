@@ -75,20 +75,20 @@ LSA_TOT  = LSA_HYDR ET LSA_AGIN ET LSA_ACCI                     ;
 
 * MIX DATA
 cem  = 400.   ;
-aggr = 1806.  ;
-wc   = 0.45   ;
+aggr = 1765.  ;
+wc   = 0.4625 ;
 sc   = 0.     ;
 
 * HYDRATION PROCESS DATA (affinity. activation energy. hydration heat)
-AI   = 3.8    ;
-AP   = 218.   ;
-GAMP = 0.12   ;
-ALFA = 13.    ;
-EAR1 = 5000.  ;
-lat1 = 1.37e8 ;
+AI   = 6    ;
+AP   = 1250.  ;
+GAMP = 0.24   ;
+ALFA = 48.    ;
+EAR1 = 5369.  ;
+lat1 = 114.3e6 ;
 
 * INTRINSIC PERMEABILITY
-KINT = 2.E-19 ;
+KINT = 7.5E-20 ;
 
 * DESORPTION ISOTHERME MODEL PARAMETERS
 a1   =  18.6E6 ;
@@ -96,8 +96,8 @@ b1   =  2.27    ;
 c1   =  1.5     ;
 
 * THERMAL PARAMETERS
-CS   = 835.   ;
-KS   = 1.386    ;
+CS   = 948.   ;
+KS   = 1.67   ;
 *---------------------------------------------------------------------*
 
 
@@ -248,6 +248,10 @@ CGPG2 = 'CHAR' 'TIMP' CHPG2 EV_PG;
 
 * T: Thermal convection
 * Ramp (2K/min)
+
+* T: Radiator temperature — Figure 3.2(b) Dauti
+* Ramp 10min → 400°C, linear → 460°C at 130min, then 466°C plateau
+*
 DELTAT = acc_time * (2./60.);  list DELTAT; 
 N1     = 1   ;
 PRO_TK = PROG;
@@ -262,11 +266,20 @@ REPETER BOU_TE (DIME LTP_TOT);
     PRO_TK = PRO_TK ET (PROG TKi);
     N1 = N1 + 1;
 FIN BOU_TE;
+
 EVTK1 = 'EVOL' 'MANU'  LTP_TOT  PRO_TK;
+* --- Hot face: convection + radiation (T_inf = T_rad) ---
 *DESS EVTK1;
+*DESS EVTK1 'XBOR' temps3 temps4;
 CHTK1 = 'MANU' 'CHPO'  CONTT 1 'T'  1. 'NATURE' 'DISCRETE';
 CGTK1 = ('CHAR' 'TECO'  CHTK1    EVTK1) ET
         ('CHAR' 'TERA'  CHTK1    EVTK1);
+
+* --- Cold face: convection only (T_inf = T_room = const) ---
+EVTC1 = 'EVOL' 'MANU' ('PROG' 0. temps4) ('PROG' TK_0 TK_0);
+CHTK2 = 'MANU' 'CHPO' CONTC 1 'T' 1. 'NATURE' 'DISCRETE';
+CGTK2 = 'CHAR' 'TECO' CHTK2 EVTC1;
+
 * PC: hygral convection ( qw = hcv * (RGW_s - RGW_ext)n )
 N1      = 1   ;
 PRO_RGW = PROG;
@@ -308,11 +321,12 @@ TAB0                         = 'TABL' ;
 TAB0 . 'MODELE'              = MOD_TOT ;
 TAB0 . 'CARACTERISTIQUES'    = MAT_TOT ;
 TAB0 . 'BLOCAGES_THERMIQUES' = CLPGT ;
-TAB0 . 'CHARGEMENT'          = CGPG1 ET CGPG2 ET CGTK1 ;
+TAB0 . 'CHARGEMENT'          = CGPG1 ET CGPG2 ET CGTK1 ET CGTK2;
 TAB0 . 'TEMPS_CALCULES'      = LTP_HYDR ;
 TAB0 . 'TEMPS_SAUVES'        = LSA_HYDR ;
 TAB0 . 'PROCEDURE_THERMIQUE' = 'NONLINEAIRE' ;
-TAB0 . 'RELAXATION_THETA'    = 0.51 ;
+TAB0 . 'RELAXATION_THETA'    = 0.57 ;
+TAB0 . 'PRECISION_THERMIQUE' = 5.E-4; 
 TAB0 . 'MOVA'                = 'D' ;
 
 *--Convection de la vapeur (gerée par la procedure CHARTHM)--*
