@@ -10,6 +10,23 @@
 *
 * (1) I2M, Université de Bordeaux, Bordeaux, France
 * (2) 3SR, Université Grenoble Alpes, Grenoble, France
+
+* Modified by: Tan Kiet Hong (17 - 04 - 2026)                                         
+*   - Small optimizations of the code structure (such as variable names)
+*   - Reduced time step for the aging phase (from 3 days to 1 day) to better converge the model.                
+*   - Update vapor and hydral convection coefficient values and boundary condition for both faces.
+*   - Update gas pressure boundary condition for both faces. 
+*   - Update convection coefficient for thermal convection and emissivity for radiation for accident phase.
+*   - Mesh adapted to Kalifa (2000) experiment (120mm of thickness) 
+*   - Add 7 new points of measurement (0, 10, 20, 30, 40, 50, 120 mm from hot face)
+*   - Exportation of temperature and gas pressure for the model (gradient model view) 
+*   - Exportation of temperature and gas pressure for the points of measurement (time evolution)
+
+* Modified by: Tan Kiet Hong (20 - 04 - 2026)                                         
+*   - Update material parameters input.
+*   - Update thermal convection for both faces.
+*   - Update initial room temperature.
+*   - Update relaxation theta and reduce tolerance for better convergence of the model.
 *---------------------------------------------------------------------*
 
 OPTI ECHO 0;

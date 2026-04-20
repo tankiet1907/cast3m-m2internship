@@ -1,15 +1,15 @@
 *---------------------------------------------------------------------*
 * TEST 0 : ADIABATIC HYDRATION / AGING / ACCIDENT
-* G.Sciumè (31 - 10 - 2024)
+* G.Sciumï¿½ (31 - 10 - 2024)
 *
 * Reference
 * "CONCRETE CASTING AND LIFETIME CONDITIONS IMPACT ON HIGH 
 * TEMPERATURE RESISTANCE"  
 *
-* G. Sciumè (1), S. Dal Pont (2), D. Dauti (2)
+* G. Sciumï¿½ (1), S. Dal Pont (2), D. Dauti (2)
 *
-* (1) I2M, Université de Bordeaux, Bordeaux, France
-* (2) 3SR, Université Grenoble Alpes, Grenoble, France
+* (1) I2M, Universitï¿½ de Bordeaux, Bordeaux, France
+* (2) 3SR, Universitï¿½ Grenoble Alpes, Grenoble, France
 *---------------------------------------------------------------------*
 
 OPTI ECHO 0;
@@ -144,8 +144,8 @@ MAT_TOT = MATCOT et MATTHC et MATRAY;
 
 
 *---------------------------------------------------------------------*
-* Convection vapeur (traitée par charther)
-* et donc à ne pas ajouter dansle modele total
+* Convection vapeur (traitï¿½e par charther)
+* et donc ï¿½ ne pas ajouter dansle modele total
 *---------------------------------------------------------------------*
 MODCOH  = 'MODE' CONTH 'THERMIQUE' 'CONVECTION' ;
 MATCOH  = 'MATE' MODCOH   'H'                0. ;
@@ -155,9 +155,9 @@ MATCOH  = 'MATE' MODCOH   'H'                0. ;
 *---------------------------------------------------------------------*
 * CONDIZIONE INIZIALE (COST adibatic calorimetry test) 
 * - grado di idratazione iniziale HY_0 = 0
-* - temperatura iniziale          TC_0 = 22° 
+* - temperatura iniziale          TC_0 = 22ï¿½ 
 * - pressione del gas iniziale    PG_0 = p_atm
-* - umidità relativa iniziale     HR_0 = 0.999
+* - umiditï¿½ relativa iniziale     HR_0 = 0.999
 HY_0   = 0.            ;
 TC_0   = 22.           ;
 TK_0   = 273.15 + TC_0 ;
@@ -193,7 +193,7 @@ CI_TH  = ('MANU' 'CHPO' MAIL1 2 'PG' PG_0 'T' TK_0)  +  PC_0;
 * CONDIZIONI AL CONTORNO
 * - PC_ext = p_atm  
 *
-* - TC_ext = 22°C until "age time" then accident ramp (2K/min)
+* - TC_ext = 22ï¿½C until "age time" then accident ramp (2K/min)
 *
 *             / 0.95            0      < time < 3 days
 * - HR_ext = {  0.95 --> 0.50   3 days < time < 6 days
@@ -282,7 +282,7 @@ TAB0 . 'PROCEDURE_THERMIQUE' = 'NONLINEAIRE' ;
 TAB0 . 'RELAXATION_THETA'    = 0.51 ;
 TAB0 . 'MOVA'                = 'D' ;
 
-*--Convection de la vapeur (gerée par la procedure CHARTHM)--*
+*--Convection de la vapeur (gerï¿½e par la procedure CHARTHM)--*
 TAB0 . 'MO_CONVECTION_VAPEUR'     = TABLE;
 TAB0 . 'MO_CONVECTION_VAPEUR' . 1 = MODCOH ;
 TAB0 . 'MA_CONVECTION_VAPEUR'     = TABLE  ;
@@ -412,7 +412,7 @@ REST ;
 OPTI ECHO 0;
 
 
-* Calcul humidité relative (Loi de Clapeyron) et SW
+* Calcul humiditï¿½ relative (Loi de Clapeyron) et SW
 TAB0 . 'HR' = TABLE;
 TAB0 . 'SW' = TABLE;
 *
