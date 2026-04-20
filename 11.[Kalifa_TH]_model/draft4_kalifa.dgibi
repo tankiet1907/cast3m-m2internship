@@ -190,7 +190,7 @@ MATCOH  = 'MATE' MODCOH   'H'                0. ;
 * - pressione del gas iniziale    PG_0 = p_atm
 * - umidità relativa iniziale     HR_0 = 0.999
 HY_0   = 0.            ;
-TC_0   = 22.           ;
+TC_0   = 20.           ;
 TK_0   = 273.15 + TC_0 ;
 PG_0   = 101325.       ;
 HR_0   = 0.99995       ;
@@ -249,9 +249,6 @@ CGPG2 = 'CHAR' 'TIMP' CHPG2 EV_PG;
 * T: Thermal convection
 * Ramp (2K/min)
 
-* T: Radiator temperature — Figure 3.2(b) Dauti
-* Ramp 10min → 400°C, linear → 460°C at 130min, then 466°C plateau
-*
 DELTAT = acc_time * (2./60.);  list DELTAT; 
 N1     = 1   ;
 PRO_TK = PROG;
@@ -411,7 +408,6 @@ MATCOH  = 'MATE' MODCOH   'H'     0.018 ;
 
 * Reprise du calcul
 TAB0 . 'PROCEDURE_PARATHER'    = VRAI ;
-TAB0 . 'CTE_STEFAN_BOLTZMANN'     = 5.673e-8 ;
 TAB0 . 'CONVECTION_VAPEUR'        = 2 ;
 TAB0 . 'MA_CONVECTION_VAPEUR' . 1 = MATCOH ;
 TAB0 . 'TEMPS_CALCULES'           = LTP_ACCI ;

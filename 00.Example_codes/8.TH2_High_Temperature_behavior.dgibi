@@ -1,22 +1,15 @@
 *---------------------------------------------------------------------*
 * TEST 0 : ADIABATIC HYDRATION / AGING / ACCIDENT
-* G.SciumÃ¨ (31 - 10 - 2024)
+* G.Sciumè (31 - 10 - 2024)
 *
 * Reference
 * "CONCRETE CASTING AND LIFETIME CONDITIONS IMPACT ON HIGH 
 * TEMPERATURE RESISTANCE"  
 *
-* G. SciumÃ¨ (1), S. Dal Pont (2), D. Dauti (2)
+* G. Sciumè (1), S. Dal Pont (2), D. Dauti (2)
 *
-* (1) I2M, UniversitÃ© de Bordeaux, Bordeaux, France
-* (2) 3SR, UniversitÃ© Grenoble Alpes, Grenoble, France
-
-* Modified by: Tan Kiet Hong (14 - 04 - 2026)                                         
-*   - Early Age (hydration) phase REMOVED                            
-*   - Aging phase REMOVED                                            
-*   - Only accident phase kept (mature concrete, HY=1 from t=0) 
-*   - Input from Kalifa (2000) experiment HPC slab 300x300x120mm, w/c=0.32, fc=100MPa
-*   - Exportation at 0, 10, 20, 30, 40, 50, 120 mm 
+* (1) I2M, Université de Bordeaux, Bordeaux, France
+* (2) 3SR, Université Grenoble Alpes, Grenoble, France
 *---------------------------------------------------------------------*
 
 OPTI ECHO 0;
@@ -46,23 +39,22 @@ CPGA1    = 1005.7 ;
 * III) Accident  : age time ---> age time + 6h /  H & T convection
 *
 *---------------------------------------------------------------------*
-minutes1 = 60.         ;
 hours1   = 3600.       ;
 day1     = 86400.      ;
 year1    = 360 * day1  ;
 *
 age_time =   1 * year1 ;
-acc_time =   600 * minutes1;
+acc_time =   3 * hours1;
 *
-temps1   =  1 * day1   ;
+temps1   =  3 * day1   ;
 temps2   =  6 * day1   ;
 temps3   =  age_time   ;
 temps4   =  age_time +  acc_time;
 
 DT01     =  600.;
 DT12     =  600.;
-DT23     =  1 * day1;
-DT34     =  300.;
+DT23     =    3 * day1;
+DT34     =   60.;
 
 LTP_HYDR = PROG  0.             PAS DT01 temps1        ;  
 LTP_AGIN = PROG (temps1 + DT12) PAS DT12 temps2 PAS DT23 temps3 ;
@@ -72,7 +64,7 @@ LTP_TOT  = LTP_HYDR ET LTP_AGIN ET LTP_ACCI                     ;
 * Saved times
 LSA_HYDR = PROG  0.             PAS hours1 temps1; 
 LSA_AGIN = PROG (temps1 + DT23) PAS DT23   temps3;                    
-LSA_ACCI = PROG (temps3 + DT34  ) PAS DT34  temps4; 
+LSA_ACCI = PROG (temps3 + 60. ) PAS 60.    temps4; 
 LSA_TOT  = LSA_HYDR ET LSA_AGIN ET LSA_ACCI                     ;  
 *---------------------------------------------------------------------*
 
@@ -83,20 +75,20 @@ LSA_TOT  = LSA_HYDR ET LSA_AGIN ET LSA_ACCI                     ;
 
 * MIX DATA
 cem  = 400.   ;
-aggr = 1765.  ;
-wc   = 0.4625 ;
+aggr = 1806.  ;
+wc   = 0.45   ;
 sc   = 0.     ;
 
 * HYDRATION PROCESS DATA (affinity. activation energy. hydration heat)
-AI   = 6    ;
-AP   = 1250.  ;
-GAMP = 0.24   ;
-ALFA = 48.    ;
-EAR1 = 5369.  ;
-lat1 = 114.3e6 ;
+AI   = 3.8    ;
+AP   = 218.   ;
+GAMP = 0.12   ;
+ALFA = 13.    ;
+EAR1 = 5000.  ;
+lat1 = 1.37e8 ;
 
 * INTRINSIC PERMEABILITY
-KINT = 7.5E-20 ;
+KINT = 2.E-19 ;
 
 * DESORPTION ISOTHERME MODEL PARAMETERS
 a1   =  18.6E6 ;
@@ -104,8 +96,8 @@ b1   =  2.27    ;
 c1   =  1.5     ;
 
 * THERMAL PARAMETERS
-CS   = 948.   ;
-KS   = 1.67   ;
+CS   = 835.   ;
+KS   = 1.386    ;
 *---------------------------------------------------------------------*
 
 
@@ -113,7 +105,7 @@ KS   = 1.67   ;
 * COSTRUZIONE MESH
 *---------------------------------------------------------------------*
 'OPTI' 'DIME' 2 'MODE' PLAN CONT 'ELEM' QUA4;
-L1   = 0.12  ;
+L1   = 0.3  ;
 DX1  = 0.001;
 *
 P1  = 0.   0.;
@@ -152,8 +144,8 @@ MAT_TOT = MATCOT et MATTHC et MATRAY;
 
 
 *---------------------------------------------------------------------*
-* Convection vapeur (traitÃ©e par charther)
-* et donc Ã  ne pas ajouter dansle modele total
+* Convection vapeur (traitée par charther)
+* et donc à ne pas ajouter dansle modele total
 *---------------------------------------------------------------------*
 MODCOH  = 'MODE' CONTH 'THERMIQUE' 'CONVECTION' ;
 MATCOH  = 'MATE' MODCOH   'H'                0. ;
@@ -163,11 +155,11 @@ MATCOH  = 'MATE' MODCOH   'H'                0. ;
 *---------------------------------------------------------------------*
 * CONDIZIONE INIZIALE (COST adibatic calorimetry test) 
 * - grado di idratazione iniziale HY_0 = 0
-* - temperatura iniziale          TC_0 = 22Â° 
+* - temperatura iniziale          TC_0 = 22° 
 * - pressione del gas iniziale    PG_0 = p_atm
-* - umiditÃ  relativa iniziale     HR_0 = 0.999
+* - umidità relativa iniziale     HR_0 = 0.999
 HY_0   = 0.            ;
-TC_0   = 20.           ;
+TC_0   = 22.           ;
 TK_0   = 273.15 + TC_0 ;
 PG_0   = 101325.       ;
 HR_0   = 0.99995       ;
@@ -201,7 +193,7 @@ CI_TH  = ('MANU' 'CHPO' MAIL1 2 'PG' PG_0 'T' TK_0)  +  PC_0;
 * CONDIZIONI AL CONTORNO
 * - PC_ext = p_atm  
 *
-* - TC_ext = 22Â°C until "age time" then accident ramp (2K/min)
+* - TC_ext = 22°C until "age time" then accident ramp (2K/min)
 *
 *             / 0.95            0      < time < 3 days
 * - HR_ext = {  0.95 --> 0.50   3 days < time < 6 days
@@ -290,7 +282,7 @@ TAB0 . 'PROCEDURE_THERMIQUE' = 'NONLINEAIRE' ;
 TAB0 . 'RELAXATION_THETA'    = 0.51 ;
 TAB0 . 'MOVA'                = 'D' ;
 
-*--Convection de la vapeur (gerÃ©e par la procedure CHARTHM)--*
+*--Convection de la vapeur (gerée par la procedure CHARTHM)--*
 TAB0 . 'MO_CONVECTION_VAPEUR'     = TABLE;
 TAB0 . 'MO_CONVECTION_VAPEUR' . 1 = MODCOH ;
 TAB0 . 'MA_CONVECTION_VAPEUR'     = TABLE  ;
@@ -326,6 +318,8 @@ PASAPAS TAB0;
 opti SAUV 'EXAMPLE1D_HAA1_2024_PHASE1';
 SAUV;
 *---------------------------------------------------------------------*
+
+
 
 
 *---------------------------------------------------------------------*
@@ -396,6 +390,18 @@ SAUV ;
 *---------------------------------------------------------------------*
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 *---------------------------------------------------------------------*
 * VISULAIZATION OF RESULTS
 *---------------------------------------------------------------------*
@@ -406,7 +412,7 @@ REST ;
 OPTI ECHO 0;
 
 
-* Calcul humiditÃ© relative (Loi de Clapeyron) et SW
+* Calcul humidité relative (Loi de Clapeyron) et SW
 TAB0 . 'HR' = TABLE;
 TAB0 . 'SW' = TABLE;
 *
