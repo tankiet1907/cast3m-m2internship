@@ -31,7 +31,7 @@
 * Modified by: Tan Kiet Hong (21 - 04 - 2026)
 *   - Correcting some material parameters input.
 *   - Update time steps for the accident phase: smaller time steps during the ramp and linear phases, larger time steps during the plateau phase.
-*   - Update thermal convection (heat radiator) based on the experimental temperature of front face (400oC at 10 min is highl gradient so didn't work)
+*   - Update thermal convection (heat radiator) based on the experimental temperature of front face (400oC at 10 min is gradient so didn't work)
 *   - Change accident time from 3hrs to 4hrs (max values before getting error)
 *   - Refinement of the mesh: smaller elements near the hot face and larger elements near the cold face. Convert to a 1D mesh to reduce the computational cost.
 *   - Debugged the visualization of the results: final time steps of accident phase was overwritten by the last time step of the aging phase, now fixed.
@@ -80,11 +80,11 @@ DT23     =    1 * day1;
 DT34     =   60.;
 
 * --- Accident phase time markers ---
+* OLD COMMENT (NOT MODIFIED):
 * Ramp:     0-10 min   (20oC --> 400oC)
 * Linear: 10-130 min (400oC --> 460oC)
 * Plateau:  130-180 min (460oC constant),  3h stops here
-t_acc = 3600.;
-t_ramp   = temps3 + t_acc;
+t_ramp   = temps3 + 3600.;
 t_lin   = temps3 + 7800.;
 DT_RAMP  =   15.; 
 DT_LIN   =   30.; 
