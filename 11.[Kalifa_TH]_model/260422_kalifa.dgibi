@@ -37,7 +37,8 @@
 *   - Debugged the visualization of the results: final time steps of accident phase was overwritten by the last time step of the aging phase, now fixed.
 
 * Modified by: Tan Kiet Hong (22 - 04 - 2026)
-*   - Revert to the original time steps for the accident phase
+*   - Correcting some material parameters input.
+*   - Revert to the original time steps for the accident phase.
 OPTI ECHO 0;
 
 
@@ -101,10 +102,10 @@ LSA_TOT  = LSA_HYDR ET LSA_AGIN ET LSA_ACCI                     ;
 *---------------------------------------------------------------------*
 
 * MIX DATA
-cem  = 350.   ;
+cem  = 377.   ;
 aggr = 1920.  ;
-wc   = 0.32 ;
-sc   = 0.108   ;
+wc   = 0.34 ;
+sc   = 0.100265   ;
 
 * HYDRATION PROCESS DATA (affinity. activation energy. hydration heat)
 AI   = 6    ;
@@ -123,7 +124,7 @@ b1   =  2.0601   ;
 c1   =  1.5     ;
 
 * THERMAL PARAMETERS
-CS   = 948.   ;
+CS   = 940.   ;
 KS   = 1.67   ;
 *---------------------------------------------------------------------*
 
@@ -276,48 +277,48 @@ CGPG2 = 'CHAR' 'TIMP' CHPG2 EV_PG;
 * Source: Kalifa 2000, M100 at 600oC
 * Digitized Tfront [C] every 5 min, converted to K
 
-* --- 1. Danh sach thoi gian (Tu dong sinh tu 300s den 36000s) ---
-* Buoc nhay 300s se tao ra dung 120 gia tri
+* --- * --- 1. Danh sach thoi gian (Tu dong sinh tu 300s den 36000s) ---
+* A 300s increment will generate exactly 120 values
 PRO_TIME_EXP = PROG 0. PAS 300. 36000. ;
 
-* --- 2. Danh sach nhiet do (Do C) duoc trich xuat chinh xac tu anh ---
-* Block 1 (Tu 5 den 100 phut)
+* --- 2. List of temperatures (degrees Celsius) accurately extracted from the image ---
+* Block 1 (From 5 to 100 minutes)
 PRO_TC_EXP = PROG 85.51185 132.7843 164.0376 186.2821 205.7704
     222.2542 236.4517 249.9888 261.5317 273.0746 283.6457 291.4527
     299.2597 307.0667 314.8736 321.2718 326.9023 332.5329 338.1635 343.794 ;
 
-* Block 2 (Tu 105 den 200 phut)
+* Block 2 (From 105 to 200 minutes)
 PRO_TC_EXP = PRO_TC_EXP ET (PROG 349.4246 354.1489 357.5811 361.0132
     364.4454 367.8776 371.3098 374.7419 378.1741 380.8691 382.9878
     385.1066 387.2253 389.344 391.4627 393.5815 395.7002 397.7859
     399.2378 400.6896) ;
 
-* Block 3 (Tu 205 den 300 phut)
+* Block 3 (From 205 to 300 minutes)
 PRO_TC_EXP = PRO_TC_EXP ET (PROG 402.1415 403.5934 405.0453 406.4972
     407.949 409.4009 410.8528 412.3047 413.3293 414.3157 415.3022
     416.2886 417.275 418.2614 419.2478 420.2342 421.2207 422.2071
     423.1935 424.1799) ;
 
-* Block 4 (Tu 305 den 400 phut)
+* Block 4 (From 305 to 400 minutes)
 PRO_TC_EXP = PRO_TC_EXP ET (PROG 425.0341 425.7972 426.5604 427.3236
     428.0867 428.8499 429.613 430.3762 431.1394 431.9025 432.6657
     433.4288 413.7946 389.0105 364.1484 346.5834 329.0184 316.1243
     303.9075 291.6907) ;
 
-* Block 5 (Tu 405 den 500 phut)
+* Block 5 (From 405 to 500 minutes)
 PRO_TC_EXP = PRO_TC_EXP ET (PROG 281.657 272.3306 263.0042 255.6833
     250.1058 244.5283 238.9508 233.3733 227.7959 223.1796 218.7546
     214.3297 209.9047 205.4797 201.0548 196.9569 193.424 189.8912
     186.3583 182.8255) ;
 
-* Block 6 (Tu 505 den 600 phut)
+* Block 6 (From 505 to 600 minutes)
 PRO_TC_EXP = PRO_TC_EXP ET (PROG 179.2926 176.1238 173.2403 170.3568
     167.4734 164.5899 161.6985 158.7551 155.8117 152.8683 149.9249
     147.4087 145.116 142.8233 140.5306 138.2379 135.9451 133.6524
     131.3597 129.067) ;
 
-* --- 3. Chuyen doi sang Kelvin va them diem t=0 ---
-* Cong truc tiep 273.15 vao toan bo 120 gia tri
+* --- 3. Convert to Kelvin and add point t=0 ---
+* Directly add 273.15 to all 120 values
 PRO_TK_EXP = PRO_TC_EXP + 273.15 ;
 PRO_TK_EXP = (PROG TK_0) ET PRO_TK_EXP ;
 
