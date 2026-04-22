@@ -1,0 +1,280 @@
+*---------------------------------------------------------------------*
+* TEST 0 : ADIABATIC HYDRATION 
+* G.Sciumè (07 - 10 - 2024)
+*---------------------------------------------------------------------*
+OPTI ECHO 0 ;
+OPTI 'POLI' 'TIMES_24';
+OPTI 'POTR' 'TIMES_18';
+
+
+*---------------------------------------------------------------------*
+* CONSTANT PHYSICAL PARAMEMTERS
+*---------------------------------------------------------------------*
+RGP1     = 8.3145 ;                                                   
+MMGA1    = 28.9645E-3 ;                                               
+MMGW1    = 18.0153E-3 ;
+RHOW0    = 1000. ;
+CPW1     = 4181.0 ;
+RHOS1    = 2625.8 ;
+*---------------------------------------------------------------------*
+
+
+*---------------------------------------------------------------------*
+* TEMPORAL DISCRETIZATION
+*---------------------------------------------------------------------*
+heure  = 3600.;
+t_fin  = 10 * (24. * heure);
+dt     = 600. ;
+ltemps = PROG 0. PAS dt    t_fin;
+ltsauv = PROG 0. PAS heure t_fin; 
+*---------------------------------------------------------------------*
+
+
+*---------------------------------------------------------------------*
+* DATI MATERIALE (PARTE THC)
+*---------------------------------------------------------------------*
+* MIX DATA
+cem  = 400.   ;
+aggr = 1806.  ;
+wc   = 0.45   ;
+sc   = 0.     ;
+
+* HYDRATION PROCESS DATA (affinity. activation energy. hydration heat)
+* Ref. Sciumè PhD thesis
+AI   = 17.     ;
+AP   = 1340.   ;
+GAMP = 0.289   ;
+ALFA = 32.     ;
+EAR1 = 5369.   ;
+lat1 = 1.171e8 ;
+
+* INTRINSIC PERMEABILITY
+KINT = 1.E-20 ;
+
+* DESORPTION ISOTHERME MODEL PARAMETERS
+a1   =  20.E6 ;
+b1   =  2.    ;
+c1   =  1.     ;
+
+* THERMAL PARAMETERS (porous solid dryed)
+CS   = 730.   ;
+KS   = 1.386  ;
+*---------------------------------------------------------------------*
+
+
+*---------------------------------------------------------------------*
+* COSTRUZIONE MESH
+*---------------------------------------------------------------------*
+OPTI DIME 2 ELEM QUA4 MODE PLAN CONT;
+* Geometry
+L1    = 0.05      ;
+P1    = 0.  0.; 
+P2    = L1  0.;
+L12   = DROI 60 P1 P2;
+MAIL1 = L12 TRAN 1 (0. 0.01);
+CONTT = COTE 2 MAIL1;
+CONTH = COTE 2 MAIL1;
+*TRAC MAIL1;
+*---------------------------------------------------------------------*
+
+
+*---------------------------------------------------------------------*
+* DEFINIZIONE DEL MODELLO
+*---------------------------------------------------------------------*
+MODTHC  = 'MODE' MAIL1 'THERMOHYDRIQUE' 'BETON_THM' 'CONS' 'BO';
+MODCOT  = 'MODE' CONTT 'THERMIQUE' 'CONVECTION';
+MOD_TOT =  MODCOT 'ET' MODTHC;
+*---------------------------------------------------------------------*
+
+
+*---------------------------------------------------------------------*
+* DEFINIZIONE DEL MATERIALE
+*---------------------------------------------------------------------*
+WINF GAM0 POR1 APOR = @POWERS cem aggr wc sc;
+
+* * Calculation of mean thermal capacity during hydration 
+* POR0 = POR1 + APOR;
+* SW_0 = 1.00;
+* SW_1 = 0.87;
+* CTVE_0  = ((1. - POR0) * RHOS1 * CS) + (POR0 * SW_0 * RHOW0 * CPW1);
+* CTVE_1  = ((1. - POR1) * RHOS1 * CS) + (POR1 * SW_1 * RHOW0 * CPW1);
+* CTVE_Moy = 0.5 * (CTVE_0 + CTVE_1);
+* LIST CTVE_Moy;
+
+MATTHC = 'MATE' MODTHC 'CS'  CS    'KS'   KS   'GAM0' GAM0 'WINF' WINF
+'VGA' a1   'VGB'  b1   'VGC' c1    'K1' KINT  'AK'   7.  'BK'   1. 
+'KLI1' 20000.  'AKLI'   1.  'BKLI' 1. 'POR1' POR1 'APOR' APOR 
+'AFF1' Ai  'AFF2' Ap   'AFF3' GAMP 'AFF4' ALFA 'EAR'  EAR1 'QLAT' lat1;
+MATCOT  = 'MATE'  MODCOT   'H'     20;
+MAT_TOT = MATCOT et MATTHC ;
+*---------------------------------------------------------------------*
+
+
+*---------------------------------------------------------------------*
+* CONDIZIONE INIZIALE (COST adibatic calorimetry test) 
+* - grado di idratazione iniziale HY_0 = 0
+* - temperatura iniziale          TC_0 = 22° 
+* - pressione del gas iniziale    PG_0 = p_atm
+* - umidità relativa iniziale     HR_0 = 0.999
+HY_0   = 0.            ;
+TC_0   = 23.8          ;
+TK_0   = 273.15 + TC_0 ;
+PG_0   = 101325.       ;
+HR_0   = 0.99995       ;
+
+ZERO1  = MANU 'CHPO' MAIL1 'SCAL' 0.       ;
+CHTK_0 = MANU 'CHPO' MAIL1 'T' TK_0        ;
+PVS_0 XX YY ZZ KK JJ= @PVSAT ZERO1 ZERO1 CHTK_0    ;
+
+* Clapeyron
+PC_0   = PG_0 - PVS_0 + ((-1.)*(RGP1*TK_0*RHOW0*(LOG(HR_0))/MMGW1));
+PC_0   = PC_0 'NOMC' 'PC';
+
+* Calcul degre de saturation correspondant
+CHPC_0 = MANU CHPO MAIL1 1 'SCAL' (MAXI PC_0);
+CHTK_0 = MANU CHPO MAIL1 1 'SCAL' TK_0;
+HYDR   = MANU CHPO MAIL1 1 'SCAL' HY_0;
+cha1   = MANU CHPO MAIL1 1 'SCAL' a1;
+chb1   = MANU CHPO MAIL1 1 'SCAL' b1;
+chc1   = MANU CHPO MAIL1 1 'SCAL' c1;
+chgam0 = MANU CHPO MAIL1 1 'SCAL' gam0;
+SW0    = @SATURA CHPC_0 CHTK_0 HYDR cha1 chb1 chc1 chgam0;
+*TRAC SW0 mail1;
+
+CI_TH  = ('MANU' 'CHPO' MAIL1 2 'PG' PG_0 'T' TK_0)  +  PC_0;
+*TRAC CI_TH MAIL1;
+*---------------------------------------------------------------------*
+
+
+*---------------------------------------------------------------------*
+* CONDIZIONI AL CONTORNO
+* - PG_ext = p_atm  
+*
+* - TC_ext = 20°C 
+*
+* - Sealed Condition
+*---------------------------------------------------------------------*
+TK_E  = TK_0;
+PG_E  = PG_0;
+HR_E1 = 0.95;
+HR_E2 = 0.50;
+
+* PG: imposed gas pressure
+EV_PG = 'EVOL' 'MANU' 'TEMPS'  ('PROG' 0.  t_fin) ('PROG' 1. 1.);
+CLPG1 = 'BLOQ' 'PG'         CONTH;
+CHPG1 = 'DEPI'  CLPG1        PG_E;
+CGPG1 = 'CHAR' 'TIMP' CHPG1 EV_PG;
+
+* T: Thermal convection
+TK_EXT  = 273.15 + TC_0 ;
+CHT_EXT = 'MANU' 'CHPO' CONTH 1 'T' 1.;
+EVT_EXT = 'EVOL' 'MANU' 'TEMPS' ('PROG' 0.     t_fin ) 
+                                ('PROG' TK_EXT TK_EXT);
+CGTK1   = 'CHAR' 'TECO' CHT_EXT  EVT_EXT ;
+
+
+*---------------------------------------------------------------------*
+*VI. Resolution PASAPAS
+*---------------------------------------------------------------------*
+OUBL TAB1;
+TAB2                         = 'TABL' ;
+TAB2 . 'MODELE'              = MOD_TOT ;
+TAB2 . 'CARACTERISTIQUES'    = MAT_TOT ;
+TAB2 . 'BLOCAGES_THERMIQUES' = CLPG1 ;
+TAB2 . 'CHARGEMENT'          = CGPG1 ET CGTK1;
+TAB2 . 'TEMPS_CALCULES'      = ltemps ;
+TAB2 . 'TEMPS_SAUVES'        = ltsauv ;
+TAB2 . 'PROCEDURE_THERMIQUE' = 'NONLINEAIRE' ;
+TAB2 . 'RELAXATION_THETA'    = 0.50 ;
+TAB2 . 'MOVA'                = 'D' ;
+
+*---------------------------------------------------------------------*
+TAB2 . 'THM_PARAMETRES'      = MATTHC ;
+TAB2 . 'TEMPERATURES'        = 'TABL' ;
+TAB2 . 'TEMPERATURES' . 0    = CI_TH ;
+TAB2 . 'HYDRATATION'         = 'TABL' ;
+TAB2 . 'HYDRATATION' .  0    = MANU CHML MODTHC 'SCAL' HY_0;
+TAB2 . 'DCH'                 = 'TABL' ;
+TAB2 . 'DCH' .  0            = MANU CHML MODTHC 'SCAL' HY_0;
+*---------------------------------------------------------------------*
+
+*---------------------------------------------------------------------*
+PASAPAS TAB2;
+
+
+
+
+* Evoluzione TC. PG. PC. HY durante i 3 giorni di idratazione
+p0    = P1;
+nfin1 = 'DIME'  TAB2.temperatures;
+
+n3   = 1;
+
+PG_P0   = PROG;
+PC_P0   = PROG;
+TK_P0   = PROG;
+HY_P0   = PROG;
+SW_P0   = PROG;
+
+REPETER BOU_T nfin1;
+  n4 = n3 - 1;
+  tmps1 = EXTR ltsauv n3;
+  tmps1 = tmps1 ;
+  val1g0  =  EXTR TAB2.temperatures.n4 'PG' p0;
+  val1p0  =  EXTR TAB2.temperatures.n4 'PC' p0;
+  val1t0  = (EXTR TAB2.temperatures.n4 'T'  p0);
+  val1tk0  = (EXTR TAB2.temperatures.n4 'T'  p0);
+  HYDRAi  = CHAN CHPO (TAB2 . 'HYDRATATION' . n4) MODTHC;
+  val1h0  = EXTR HYDRAi 'SCAL' p0;
+*
+* Calcolo grado di saturazione
+  CHPG1  = MANU CHPO MAIL1 1 'SCAL' val1g0;
+  CHPC1  = MANU CHPO MAIL1 1 'SCAL' val1p0;
+  CHTK1  = MANU CHPO MAIL1 1 'SCAL' val1tk0;
+  HYDR   = MANU CHPO MAIL1 1 'SCAL' val1h0;
+  cha1   = MANU CHPO MAIL1 1 'SCAL' a1;
+  chb1   = MANU CHPO MAIL1 1 'SCAL' b1;
+  chc1   = MANU CHPO MAIL1 1 'SCAL' c1;
+  chgam0 = MANU CHPO MAIL1 1 'SCAL' gam0;
+  SW0    = @SATURA CHPC1 CHTK1 HYDR cha1 chb1 chc1 chgam0;
+* SW0    = @satura CHPC1 HYDR cha1 chb1 chc1 chgam0;
+  val1sw0= MAXI SW0;
+*
+  PG_P0   =  PG_P0     ET (PROG val1g0);
+  PC_P0   =  PC_P0     ET (PROG val1p0);
+  TK_P0   =  TK_P0     ET (PROG val1t0);
+  HY_P0   =  HY_P0     ET (PROG val1h0);
+  SW_P0   =  SW_P0     ET (PROG val1sw0);
+  n3 = n3 + 1;
+FIN BOU_T;
+
+
+evpg_P1 = EVOL 'ROUG' MANU ltsauv PG_P0;
+evpc_P1 = EVOL 'ROUG' MANU ltsauv PC_P0;
+evt_P1  = EVOL 'ROUG' MANU ltsauv TK_P0;
+evh_P1  = EVOL 'BLEU' MANU ltsauv HY_P0;
+evsw_P1 = EVOL 'BLEU' MANU ltsauv SW_P0;
+
+dess evpg_P1;
+dess evpc_P1;
+dess evt_P1;
+dess evh_P1;
+dess evsw_P1;
+
+
+
+
+*@EXCEL1 evt_P1 evt_adiabatic;
+*@EXCEL1 evsw_P1 evsw_adiabatic;
+
+
+
+******* SAUVATAGE DU CALCUL************************
+opti sauv 'FORMAT' 'CALORIMETRIE_THC';
+sauv 'FORMAT';
+****************************************************
+
+
+
+
+
