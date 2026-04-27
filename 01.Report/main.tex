@@ -3,36 +3,6 @@
 % This report presents the results of a Master 2 internship conducted at the 3SR Laboratory, Université Grenoble Alpes. The internship focused on the numerical and experimental study of the thermo-hydro-mechanical (THM) behavior of concrete under severe accident conditions using a poro-mechanical approach.
 % The author, Tan Kiet HONG, conducted this research under the supervision of Prof. Julien BAROTH and Prof. Stefano DAL PONT.
 
-% #region Metadata of the report:
-\title{Numerical and experimental study of the thermo-hydro-mechanical behavior of concrete under severe accident conditions using a poro-mechanical approach}
-\author{Tan Kiet HONG}
-\date{Grenoble, June 2026}
-
-% ---- Custom fields ----
-\makeatletter
-\newcommand{\institution}[1]{\def\@institution{#1}}
-\newcommand{\supervisors}[1]{\def\@supervisors{#1}}
-\newcommand{\institutioninfo}[1]{\def\@institutioninfo{#1}}
-\def\@institution{}
-\def\@supervisors{}
-\def\@institutioninfo{}
-\makeatother
-
-% ---- Fill data ----
-\institution{UNIVERSITÉ GRENOBLE ALPES}
-
-\supervisors{
-Prof. Julien BAROTH, Université Grenoble Alpes\\[0.4cm]
-Prof. Stefano DAL PONT, Université Grenoble Alpes
-}
-
-\institutioninfo{
-This thesis is submitted in partial fulfillment of the requirements for the Master's degree in the International Program ``Geomechanics, Civil Engineering and Risks''.
-\vspace{0.4cm}
-The work was carried out during the Master 2 internship at 3SR Laboratory.
-}
-% #endregion
-
 % ==============================================================================
 % Preamble
 % #region Document class (Paper size and font) and General package imports
@@ -42,6 +12,7 @@ The work was carried out during the Master 2 internship at 3SR Laboratory.
 \usepackage{graphicx}
 \usepackage{setspace}
 \usepackage{amsmath,amssymb,amsfonts}
+\usepackage{pdfpages}
 
 % #endregion
 
@@ -91,8 +62,10 @@ The work was carried out during the Master 2 internship at 3SR Laboratory.
 \begin{document}
 
 % Cover page with double navy frame
-\input{frontmatter/titlepage}
+\includepdf[pages=-]{frontmatter/m2coverpage.pdf}
 \thispagestyle{empty} % Blank page after title page w/out page number
+%\input{frontmatter/titlepage} % Old title page without double frame
+%\thispagestyle{empty} % Blank page after title page w/out page number
 
 \frontmatter
 
@@ -106,14 +79,25 @@ The work was carried out during the Master 2 internship at 3SR Laboratory.
 \input{frontmatter/abstract}
 
 % Nomenclature
-\clearpage
-\input{frontmatter/nomenclature}
-\printnomenclature
+%\clearpage
+%\input{frontmatter/nomenclature}
+%\printnomenclature
 
 % Table of Contents
 \clearpage
-%\renewcommand{\contentsname}{Table of Contents} % Optional: Change "Contents" to "Table of Contents"
+\renewcommand{\contentsname}{Table of Contents} % Optional: Change "Contents" to "Table of Contents"
 \tableofcontents
+
+% List of Figures
+\phantomsection
+\addcontentsline{toc}{chapter}{\listfigurename}
+\listoffigures
+
+% List of Tables
+\clearpage
+\phantomsection
+\addcontentsline{toc}{chapter}{\listtablename}
+\listoftables
 
 % #endregion
 
@@ -144,17 +128,6 @@ The work was carried out during the Master 2 internship at 3SR Laboratory.
 \backmatter
 
 % #region List of figures, tables, bibliography
-
-% List of Figures
-\phantomsection
-\addcontentsline{toc}{chapter}{\listfigurename}
-\listoffigures
-
-% List of Tables
-\clearpage
-\phantomsection
-\addcontentsline{toc}{chapter}{\listtablename}
-\listoftables
 
 % Bibliography
 \clearpage
