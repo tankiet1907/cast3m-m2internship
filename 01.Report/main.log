@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex 2026.3.4)  27 APR 2026 15:43
+This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex 2026.3.4)  27 APR 2026 17:37
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -1481,7 +1481,55 @@ Overfull \hbox (3.91978pt too wide) in paragraph at lines 135--135
 [59
 
 
-] [60] (./main.aux (./chapters/chapter1.aux) (./chapters/chapter2.aux) (./chapters/chapter3.aux) (./chapters/chapter4.aux) (./chapters/chapter5.aux) (./chapters/chapter6.aux))
+] [60]
+<CV/CV.pdf, id=1318, 597.50829pt x 845.0471pt>
+File: CV/CV.pdf Graphic file (type pdf)
+<use CV/CV.pdf>
+Package pdftex.def Info: CV/CV.pdf  used on input line 140.
+(pdftex.def)             Requested size: 597.50682pt x 845.04504pt.
+<CV/CV.pdf, id=1320, page=1, 597.50829pt x 845.0471pt>
+File: CV/CV.pdf Graphic file (type pdf)
+<use CV/CV.pdf, page 1>
+Package pdftex.def Info: CV/CV.pdf , page1 used on input line 140.
+(pdftex.def)             Requested size: 597.50682pt x 845.04504pt.
+File: CV/CV.pdf Graphic file (type pdf)
+<use CV/CV.pdf, page 1>
+Package pdftex.def Info: CV/CV.pdf , page1 used on input line 140.
+(pdftex.def)             Requested size: 597.53416pt x 845.08372pt.
+File: CV/CV.pdf Graphic file (type pdf)
+<use CV/CV.pdf, page 1>
+Package pdftex.def Info: CV/CV.pdf , page1 used on input line 140.
+(pdftex.def)             Requested size: 597.53416pt x 845.08372pt.
+File: CV/CV.pdf Graphic file (type pdf)
+<use CV/CV.pdf, page 1>
+Package pdftex.def Info: CV/CV.pdf , page1 used on input line 140.
+(pdftex.def)             Requested size: 597.53416pt x 845.08372pt.
+File: CV/CV.pdf Graphic file (type pdf)
+<use CV/CV.pdf, page 1>
+Package pdftex.def Info: CV/CV.pdf , page1 used on input line 140.
+(pdftex.def)             Requested size: 597.53416pt x 845.08372pt.
+ [61
+
+
+ <./CV/CV.pdf>]
+<CV/CV.pdf, id=1370, page=2, 597.50829pt x 845.0471pt>
+File: CV/CV.pdf Graphic file (type pdf)
+<use CV/CV.pdf, page 2>
+Package pdftex.def Info: CV/CV.pdf , page2 used on input line 140.
+(pdftex.def)             Requested size: 597.53416pt x 845.08372pt.
+File: CV/CV.pdf Graphic file (type pdf)
+<use CV/CV.pdf, page 2>
+Package pdftex.def Info: CV/CV.pdf , page2 used on input line 140.
+(pdftex.def)             Requested size: 597.53416pt x 845.08372pt.
+File: CV/CV.pdf Graphic file (type pdf)
+<use CV/CV.pdf, page 2>
+Package pdftex.def Info: CV/CV.pdf , page2 used on input line 140.
+(pdftex.def)             Requested size: 597.53416pt x 845.08372pt.
+ [62
+
+ <./CV/CV.pdf>] [63
+
+] (./main.aux (./chapters/chapter1.aux) (./chapters/chapter2.aux) (./chapters/chapter3.aux) (./chapters/chapter4.aux) (./chapters/chapter5.aux) (./chapters/chapter6.aux))
  ***********
 LaTeX2e <2025-11-01>
 L3 programming layer <2026-01-19>
@@ -1497,18 +1545,18 @@ Package logreq Info: Writing requests to 'main.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 38072 strings out of 467525
- 735366 string characters out of 5423210
+ 38090 strings out of 467525
+ 735718 string characters out of 5423210
  1674304 words of memory out of 5000000
- 65953 multiletter control sequences out of 15000+600000
+ 65968 multiletter control sequences out of 15000+600000
  646873 words of font info for 86 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  115i,17n,110p,1661b,1789s stack positions out of 10000i,1000n,20000p,200000b,200000s
-<c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx8.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmmib10.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy6.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/symbols/msam10.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/cm-super/sfbx1200.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/cm-super/sfbx1440.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/cm-super/sfbx1728.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/cm-super/sfbx2488.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/cm-super/sfcc1200.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/cm-super/sfit1095.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/cm-super/sfrm0600.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/cm-super/sfrm0800.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/cm-super/sfrm1200.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/cm-super/sfti1200.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/cm-super/sftt1095.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/cm-super/sftt1200.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/cm-super/sftt1440.pfb>
-Output written on main.pdf (72 pages, 750996 bytes).
+<c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx8.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmmib10.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy6.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/symbols/msam10.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/cm-super/sfbx1200.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/cm-super/sfbx1440.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/cm-super/sfbx1728.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/cm-super/sfbx2488.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/cm-super/sfcc1200.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/cm-super/sfit1095.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/cm-super/sfrm0600.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/cm-super/sfrm0800.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/cm-super/sfrm1095.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/cm-super/sfrm1200.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/cm-super/sfti1200.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/cm-super/sftt1095.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/cm-super/sftt1200.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/cm-super/sftt1440.pfb>
+Output written on main.pdf (75 pages, 918626 bytes).
 PDF statistics:
- 1530 PDF objects out of 1728 (max. 8388607)
- 1368 compressed objects within 14 object streams
- 425 named destinations out of 1000 (max. 500000)
- 812 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 1607 PDF objects out of 1728 (max. 8388607)
+ 1422 compressed objects within 15 object streams
+ 428 named destinations out of 1000 (max. 500000)
+ 832 words of extra memory for PDF output out of 10000 (max. 10000000)
 
