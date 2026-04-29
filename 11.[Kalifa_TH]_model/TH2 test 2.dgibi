@@ -54,7 +54,7 @@ temps4   =  age_time +  acc_time;
 DT01     =  600.;
 DT12     =  600.;
 DT23     =    3 * day1;
-DT34     =  15.;
+DT34     =  60.;
 
 * --- Accident phase time markers ---
 * Ramp:    0    -->x min     (20oC --> 400oC)
@@ -69,7 +69,7 @@ temps_ramp   = temps3 + ramp_time ;
 temps_lin1   = temps3 + ramp_time + lin1_time ;
 temps_lin2   = temps3 + ramp_time + lin1_time + lin2_time ;
 
-DT_RAMP  =   15. ; 
+DT_RAMP  =   60. ; 
 DT_LIN1  =   60. ; 
 DT_LIN2  =   60. ;
 
@@ -300,7 +300,7 @@ FIN BOU_TE;
 
 EVTK1 = 'EVOL' 'MANU'  LTP_TOT  PRO_TK;
 *DESS EVTK1;
-*DESS EVTK1 'XBOR' temps3 temps4;
+DESS EVTK1 'XBOR' temps3 temps4;
 
 * --- XU LY DO THI NHIET DO DE DE QUAN SAT ---
 

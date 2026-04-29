@@ -14,6 +14,7 @@
 
 OPTI ECHO 0;
 
+
 *---------------------------------------------------------------------*
 * CONSTANT PHYSICAL PARAMEMTERS
 *---------------------------------------------------------------------*
@@ -38,13 +39,12 @@ CPGA1    = 1005.7 ;
 * III) Accident  : age time ---> age time + 6h /  H & T convection
 *
 *---------------------------------------------------------------------*
-minute1  = 60.        ;
 hours1   = 3600.       ;
 day1     = 86400.      ;
 year1    = 360 * day1  ;
 *
 age_time =   1 * year1 ;
-acc_time =   140 * minute1;
+acc_time =   3 * hours1;
 *
 temps1   =  3 * day1   ;
 temps2   =  6 * day1   ;
@@ -54,38 +54,17 @@ temps4   =  age_time +  acc_time;
 DT01     =  600.;
 DT12     =  600.;
 DT23     =    3 * day1;
-DT34     =  60.;
+DT34     =   60.;
 
-* --- Accident phase time markers ---
-* Ramp:    0    -->x min     (20oC --> 400oC)
-* Linear1: x    -->x+130 min (400oC --> 460oC)
-* Linear2: x+130-->x+240 min (460oC --> 466oC)
-* Plateau:         x+240 min (466oC constant)
-ramp_time   = 10 * minute1; 
-lin1_time   = 130 * minute1;
-lin2_time   = 110 * minute1;
-
-temps_ramp   = temps3 + ramp_time ;
-temps_lin1   = temps3 + ramp_time + lin1_time ;
-temps_lin2   = temps3 + ramp_time + lin1_time + lin2_time ;
-
-DT_RAMP  =   15. ; 
-DT_LIN1  =   60. ; 
-DT_LIN2  =   60. ;
-
-* Calculation of the time steps for the different phases
 LTP_HYDR = PROG  0.             PAS DT01 temps1        ;  
 LTP_AGIN = PROG (temps1 + DT12) PAS DT12 temps2 PAS DT23 temps3 ;
-*LTP_ACCI = PROG (temps3 + DT_RAMP) PAS DT_RAMP temps_ramp PAS DT_LIN1  temps_lin1 PAS DT_LIN2  temps_lin2PAS DT34  temps4;
-*LTP_ACCI = PROG (temps3 + DT_RAMP) PAS DT_RAMP temps_ramp PAS DT_LIN1  temps_lin1 PAS DT34  temps4;
-LTP_ACCI = PROG (temps3 + DT_RAMP) PAS DT_RAMP temps_ramp PAS DT34 temps4;
-*LTP_ACCI = PROG (temps3 + DT34) PAS  DT34  temps4               ;
-LTP_TOT  = LTP_HYDR ET LTP_AGIN ET LTP_ACCI                     ;   
+LTP_ACCI = PROG (temps3 + DT34) PAS  DT34  temps4               ;
+LTP_TOT  = LTP_HYDR ET LTP_AGIN ET LTP_ACCI                     ;  
 
 * Saved times
 LSA_HYDR = PROG  0.             PAS hours1 temps1; 
 LSA_AGIN = PROG (temps1 + DT23) PAS DT23   temps3;                    
-LSA_ACCI = PROG (temps3 + DT34 ) PAS DT34  temps4; 
+LSA_ACCI = PROG (temps3 + 60. ) PAS 60.    temps4; 
 LSA_TOT  = LSA_HYDR ET LSA_AGIN ET LSA_ACCI                     ;  
 *---------------------------------------------------------------------*
 
@@ -136,7 +115,7 @@ MAIL1 = (TRAN 1 L12 (0. 0.01)) 'COUL' 'ROUG';
 *
 CONTH = COTE 4 MAIL1;
 CONTT = COTE 4 MAIL1;
-*trac MAIL1;
+trac MAIL1;
 *---------------------------------------------------------------------*
 
 
@@ -233,30 +212,10 @@ CHPG1 = 'DEPI'  CLPG1        PG_E;
 CGPG1 = 'CHAR' 'TIMP' CHPG1 EV_PG;
 
 * T: Thermal convection
-* --- Temperature loading curve ---
-* Ramp:    0-10 min   (20oC --> 400oC)
-* Linear:  10-130 min (400oC --> 460oC)
-* Plateau: 130-180 min (460oC constant)
-*
-*DELTAT_RAMP = 400 - TC_0;
-DELTAT_LIN1 = 60;
-DELTAT_LIN2 = 6;
-
-T_START     = TC_0 ;
-T_RAMP      = 350. ;
-
-* Tinh thoi luong cua cac pha (don vi Giay)
-DT_RAMP_S = temps_ramp - temps3 ;
-DT_LIN_S  = temps_lin1 - temps_ramp ;
-
-* Tinh toc do gia nhiet (Dao ham) cua pha Linear (Do C / giay)
-V_LIN = DELTAT_LIN1 / DT_LIN_S ;
-
-* --- 2. TU DONG TINH HE SO PARABOL (aa, bb) ---
-* Dam bao T(dt) = 400 va T'(dt) = V_LIN tai diem noi
-aa = ((V_LIN * DT_RAMP_S) - (T_RAMP - T_START)) / (DT_RAMP_S * DT_RAMP_S) ;
-bb = V_LIN - (2. * aa * DT_RAMP_S) ;
-
+* Ramp (2K/min)
+*DELTAT = acc_time * (2./60.);  list DELTAT; 
+DELTAT = 410.;
+*DELTAT = 415;
 N1     = 1   ;
 PRO_TK = PROG;
 REPETER BOU_TE (DIME LTP_TOT);
@@ -264,63 +223,14 @@ REPETER BOU_TE (DIME LTP_TOT);
     SI (TIMEi '<EG' temps3);
     TKi    = TK_E;
     FINS;
-* Giai doan 1: Parabol Ramp (20C -> 400C)
-    SI ((TIMEi '>' temps3) ET (TIMEi '<EG' temps_ramp));
-        dt = TIMEi - temps3 ;
-        TKi = (aa * dt * dt) + (bb * dt) + TK_E ;
+    SI (TIMEi '>'   temps3);
+    TKi    = TK_E + (DELTAT*((TIMEi - temps3)/(temps4 - temps3)));
     FINS;
-* Giai doan 2: Linear (400C -> 460C)
-    SI ((TIMEi '>' temps_ramp) ET (TIMEi '<EG' temps_lin1));
-        dt_lin = TIMEi - temps_ramp ;
-        TKi = T_RAMP + 273.15 + (DELTAT_LIN1 * (dt_lin / DT_LIN_S)) ;
-    FINS;
-* Ramp 20-->400oC in x min
-*SI ((TIMEi '>' temps3) ET (TIMEi '<EG' temps_ramp));
-*TKi    = TK_E + (DELTAT_RAMP*((TIMEi - temps3)/(temps_ramp - temps3)));
-*FINS;
-
-* Linear 400-->460oC from x min to x+130 min
-*SI ((TIMEi '>' temps_ramp) ET (TIMEi '<EG' temps_lin1));
-*TKi = 673.15 + (DELTAT_LIN1 * ((TIMEi - temps_ramp) / (temps_lin1 - temps_ramp)));
-*FINS;
-    
-* Linear 460-->466oC from x+130 min to x+240 min
-*SI ((TIMEi '>' temps_lin1) ET (TIMEi '<EG' temps_lin2));
-*TKi = 733.15 + (DELTAT_LIN2 * ((TIMEi - temps_lin1) / (temps_lin2 - temps_lin1)));
-*FINS;
-* Plateau 466oC from x+240 min to end of accident phase
-*SI (TIMEi '>' temps_lin2);
-*TKi = 739.15;    
-*FINS;
     PRO_TK = PRO_TK ET (PROG TKi);
     N1 = N1 + 1;
 FIN BOU_TE;
-
 EVTK1 = 'EVOL' 'MANU'  LTP_TOT  PRO_TK;
 *DESS EVTK1;
-DESS EVTK1 'XBOR' temps3 temps4;
-
-* --- XU LY DO THI NHIET DO DE DE QUAN SAT ---
-
-* 1. Trich xuat truc Thoi gian (X) va Nhiet do (Y) tu EVTK1
-L_TIME = EXTR EVTK1 'ABSC' ;
-L_TEMP = EXTR EVTK1 'ORDO' ;
-
-* 2. Tinh tien thoi gian ve 0 va doi sang don vi Phut
-* (Tru di temps3 de bat dau tai t=0 cua pha Accident, sau do chia 60)
-L_TIME_MIN = (L_TIME - (PROG (DIME L_TIME) * temps3)) / 60. ;
-
-* 3. Doi nhiet do tu Kelvin ve do C (De nhin quen mat hon)
-L_TEMP_C   = L_TEMP - (PROG (DIME L_TEMP) * 273.15) ;
-
-* 4. Tao doi tuong EVOL moi danh rieng cho viec ve bieu do
-EV_PLOT = EVOL 'ROUG' 'MANU' 'Time (min)' L_TIME_MIN 'Temp (C)' L_TEMP_C ;
-
-* 5. Ve bieu do (Zoom vao 20 phut dau tien de thay ro duong cong Parabol)
-* YBOR ep truc Y tu 20 do den 480 do de vua van voi khung hinh
-DESS EV_PLOT 'XBOR' 0. 20. 'YBOR' 20. 480. ;
-*DESS EV_PLOT 'XBOR' 0. 140. 'YBOR' 20. 480. ;
-
 CHTK1 = 'MANU' 'CHPO'  CONTT 1 'T'  1. 'NATURE' 'DISCRETE';
 CGTK1 = ('CHAR' 'TECO'  CHTK1    EVTK1) ET
         ('CHAR' 'TERA'  CHTK1    EVTK1);
@@ -405,12 +315,6 @@ TAB0 . 'TEMPS_SAUVES'             = LSA_AGIN ;
 PASAPAS TAB0;
 *---------------------------------------------------------------------*
 
-* --- Check hydration degree at end of aging ---
-N_END = (DIME TAB0.'HYDRATATION') - 1;
-HY_END = TAB0.'HYDRATATION'.N_END;
-MESS '=== HYDRATION DEGREE AT END OF AGING ===';
-MESS 'Min HY = ' (MINI HY_END);
-MESS 'Max HY = ' (MAXI HY_END);
 
 *---------------------------------------------------------------------*
 opti SAUV 'EXAMPLE1D_HAA1_2024_PHASE1';
@@ -499,7 +403,6 @@ SAUV ;
 
 
 
-
 *---------------------------------------------------------------------*
 * VISULAIZATION OF RESULTS
 *---------------------------------------------------------------------*
@@ -536,29 +439,59 @@ FIN BOU_HR;
 
 LIST (DIME TAB0 . 'TEMPERATURES' );
 
+NTOT = DIME TAB0.'TEMPERATURES';
+MESS '--- Total saved steps = ' NTOT;
+
+* 1hr after accident start
 NN1 = 191 + 60;
+* 2hr after accident start
 NN2 = 191 + 120;
-NN3 = 191 + 180;
+* 3hr after accident start
+*NN3 = 191 + 180;
+
+NN3 = NTOT-11;
+NN4 = NTOT-6;
+NN5 = NTOT-1;
+
 
 *********** TEMPERATURE ********************************************
 EVT1 = EVOL 'BLEU' 'CHPO'  tab0.temperatures.NN1 'T'  l12;
 EVT2 = EVOL 'VERT' 'CHPO'  tab0.temperatures.NN2 'T'  l12;
 EVT3 = EVOL 'ROUG' 'CHPO'  tab0.temperatures.NN3 'T'  l12;
-dess (EVT1 ET EVT2 ET EVT3);
+EVT4 = EVOL 'TURQ' 'CHPO'  tab0.temperatures.NN4 'T'  l12;
+EVT5 = EVOL 'JAUN' 'CHPO'  tab0.temperatures.NN5 'T'  l12;
+*dess (EVT1 ET EVT2 ET EVT3 ET EVT4 ET EVT5);
+dess (EVT3 ET EVT4 ET EVT5);
 ********************************************************************
 
 *********** Saturation degree **************************************
 EVSW1 =  EVOL 'BLEU'  'CHPO'  tab0.SW.NN1  'SCAL'  l12;
 EVSW2 =  EVOL 'VERT'  'CHPO'  tab0.SW.NN2  'SCAL'  l12;
 EVSW3 =  EVOL 'ROUG'  'CHPO'  tab0.SW.NN3  'SCAL'  l12;
-dess (EVSW1 ET EVSW2 ET EVSW3);
+EVSW4 =  EVOL 'TURQ'  'CHPO'  tab0.SW.NN4  'SCAL'  l12;
+EVSW5 =  EVOL 'JAUN'  'CHPO'  tab0.SW.NN5  'SCAL'  l12;
+*dess (EVSW1 ET EVSW2 ET EVSW3 ET EVSW4 ET EVSW5);
+dess (EVSW3 ET EVSW4 ET EVSW5);
 ********************************************************************
 
 *********** GAS PRESSURE *******************************************
 EVPG1= EVOL 'BLEU' 'CHPO' tab0.temperatures.NN1 'PG'  l12;
 EVPG2= EVOL 'VERT' 'CHPO' tab0.temperatures.NN2 'PG'  l12;
 EVPG3= EVOL 'ROUG' 'CHPO' tab0.temperatures.NN3 'PG'  l12;
-dess (EVPG1 ET EVPG2 ET EVPG3);
+EVPG4= EVOL 'TURQ' 'CHPO' tab0.temperatures.NN4 'PG'  l12;
+EVPG5= EVOL 'JAUN' 'CHPO' tab0.temperatures.NN5 'PG'  l12;
+*dess (EVPG1 ET EVPG2 ET EVPG3 ET EVPG4 ET EVPG5);
+dess (EVPG3 ET EVPG4 ET EVPG5);
+************
+
+*********** CAPILLARY PRESSURE *******************************************
+EVPC1= EVOL 'BLEU' 'CHPO' tab0.temperatures.NN1 'PC'  l12;
+EVPC2= EVOL 'VERT' 'CHPO' tab0.temperatures.NN2 'PC'  l12;
+EVPC3= EVOL 'ROUG' 'CHPO' tab0.temperatures.NN3 'PC'  l12;
+EVPC4= EVOL 'TURQ' 'CHPO' tab0.temperatures.NN4 'PC'  l12;
+EVPC5= EVOL 'JAUN' 'CHPO' tab0.temperatures.NN5 'PC'  l12;
+*dess (EVPC1 ET EVPC2 ET EVPC3 ET EVPC4 ET EVPC5);
+dess (EVPC3 ET EVPC4 ET EVPC5);
 ************
 
 
