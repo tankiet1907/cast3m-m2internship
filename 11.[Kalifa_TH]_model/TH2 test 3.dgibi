@@ -214,8 +214,9 @@ CGPG1 = 'CHAR' 'TIMP' CHPG1 EV_PG;
 * T: Thermal convection
 * Ramp (2K/min)
 *DELTAT = acc_time * (2./60.);  list DELTAT; 
-DELTAT = 410.;
-*DELTAT = 415;
+*DELTAT = 410.;
+*DELTAT = 420;
+DELTAT = 450;
 N1     = 1   ;
 PRO_TK = PROG;
 REPETER BOU_TE (DIME LTP_TOT);
@@ -281,7 +282,9 @@ TAB0 . 'CHARGEMENT'          = CGPG1 ET CGTK1;
 TAB0 . 'TEMPS_CALCULES'      = LTP_HYDR ;
 TAB0 . 'TEMPS_SAUVES'        = LSA_HYDR ;
 TAB0 . 'PROCEDURE_THERMIQUE' = 'NONLINEAIRE' ;
-TAB0 . 'RELAXATION_THETA'    = 0.51 ;
+TAB0 . 'RELAXATION_THETA'    = 1.0 ;
+*TAB0 . 'PRECISION_THERMIQUE' = 5.E-2; 
+*TAB0 . 'PRECISION' = 5.E-2; 
 TAB0 . 'MOVA'                = 'D' ;
 
 *--Convection de la vapeur (gerée par la procedure CHARTHM)--*
@@ -379,8 +382,9 @@ TAB0 . 'CONVECTION_VAPEUR'        = 2 ;
 TAB0 . 'MA_CONVECTION_VAPEUR' . 1 = MATCOH ;
 TAB0 . 'TEMPS_CALCULES'           = LTP_ACCI ;
 TAB0 . 'TEMPS_SAUVES'             = LSA_ACCI ;
+*TAB0 . 'PRECISION_THERMIQUE'      = 5.E-4; 
 PASAPAS TAB0;
-*---------------------------------------------------------------------*
+*---------------------------------------------------------------------
 
 
 

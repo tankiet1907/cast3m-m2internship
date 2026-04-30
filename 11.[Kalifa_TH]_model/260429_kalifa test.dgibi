@@ -141,21 +141,22 @@ KS   = 1.67   ;
 * COSTRUZIONE MESH - KALIFA 120x120mm
 *---------------------------------------------------------------------*
 'OPTI' 'DIME' 2 'MODE' PLAN CONT 'ELEM' QUA4;
-* 120mm width (x)
-L1       = 0.12 ;
-* 120mm height (y)       
-H1       = 0.12 ;       
-DY_COLD  = 0.005;       
-DY_HOT   = 0.001;       
+* 4 points (kalifa_TH convention)
+p1  = 0.0   0.0;
+p2  = 0.12  0.0;
+p3  = 0.12  0.12;
+p4  = 0.0   0.12;
+
+* 4 lines
+DAB1 = DROI 48 p1 p2;
+DDA1 = DROI 48 p2 p3;
+DCD1 = DROI 48 p3 p4;
+DBC1 = DROI 48 p4 p1;
 *
-P1  = 0.   0.;         
-P2  = 0.   H1;         
-L12 = DROI P1 P2 'DINI' DY_COLD 'DFIN' DY_HOT;
-MAIL1 = (TRAN 1 L12 (L1 0.)) 'COUL' 'BLAN';
-*
-DCD1 = COTE 2 MAIL1;
-DAB1 = COTE 4 MAIL1;
-TRAC (MAIL1 ET (DCD1 'COUL' 'ROUG') ET (DAB1 'COUL' 'BLEU')); 
+* Mesh 2D=
+CONT1  = DAB1 ET DDA1 ET DCD1 ET DBC1;
+MAIL1  = (SURF CONT1) 'COUL' 'BLAN';
+TRAC (MAIL1 ET (DCD1 'COUL' 'ROUG') ET (DAB1 'COUL' 'BLEU'));
 
 * Alias cho boundary conditions
 * DCD1 = hot face (top, y=0.12)
@@ -512,6 +513,17 @@ EVPG_40  = EVOL 'TURQ' 'TEMP' TAB0 'TEMPERATURES' 'PG' PO_40;
 EVPG_50  = EVOL 'ROSE' 'TEMP' TAB0 'TEMPERATURES' 'PG' PO_50;
 DESS (EVPG_10 ET EVPG_20 ET EVPG_30 ET
       EVPG_40 ET EVPG_50) 
+      'XBOR' temps3 temps4;
+********************************************************************
+
+*********** CAPILLARY PRESSURE *******************************************
+EVPC_10  = EVOL 'BLEU' 'TEMP' TAB0 'TEMPERATURES' 'PC' PO_10;
+EVPC_20  = EVOL 'VERT' 'TEMP' TAB0 'TEMPERATURES' 'PC' PO_20;
+EVPC_30  = EVOL 'ROUG' 'TEMP' TAB0 'TEMPERATURES' 'PC' PO_30;
+EVPC_40  = EVOL 'TURQ' 'TEMP' TAB0 'TEMPERATURES' 'PC' PO_40;
+EVPC_50  = EVOL 'ROSE' 'TEMP' TAB0 'TEMPERATURES' 'PC' PO_50;
+DESS (EVPC_10 ET EVPC_20 ET EVPC_30 ET
+      EVPC_40 ET EVPC_50) 
       'XBOR' temps3 temps4;
 ********************************************************************
 
