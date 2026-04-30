@@ -318,6 +318,75 @@ TAB0 . 'TEMPS_SAUVES'             = LSA_AGIN ;
 PASAPAS TAB0;
 *---------------------------------------------------------------------*
 
+*======================================================================*
+* 
+*======================================================================*
+OPTI 'ECHO' 0 ;
+MESS ' ' ;
+MESS '====================================================' ;
+MESS ' KIEM TRA THONG SO KHOI TAO (INITIAL CHECK) ' ;
+MESS '====================================================' ;
+
+* 1
+MESS '1. GIOI HAN HOA HOC (Tu @POWERS):' ;
+MESS '- Do thuy hoa toi da (GAM0)    : ' GAM0 ;
+MESS '- Nuoc lien ket toi da (WINF)  : ' WINF ;
+MESS '- Do rong cuoi cung (POR1)     : ' POR1 ;
+MESS '- Bien do do rong (APOR)       : ' APOR ;
+MESS ' ' ;
+
+* 
+MESS '2. GIA TRI BAN DANG EP VAO (INPUT):' ;
+MESS '- Do thuy hoa ban dau (HY_0)   : ' HY_0 ;
+MESS ' ' ;
+
+* 
+MESS '3. GIA TRI TRUONG VAT LY (CH_INIT):' ;
+VAL_T  = MAXI (EXCO 'T'  CI_TH) ;
+VAL_PG = MAXI (EXCO 'PG' CI_TH) ;
+VAL_PC = MAXI (EXCO 'PC' CI_TH) ;
+MESS '- Nhiet do ban dau (T)         : ' VAL_T ;
+MESS '- Ap suat khi ban dau (PG)     : ' VAL_PG ;
+MESS '- Ap suat mao dan ban dau (PC) : ' VAL_PC ;
+MESS '====================================================' ;
+MESS ' ' ;
+
+
+*======================================================================*
+* TRÍCH XUẤT OUTPUT Ở THỜI ĐIỂM CUỐI CÙNG TRƯỚC KHI CRASH
+*======================================================================*
+MESS ' ' ;
+MESS '====================================================' ;
+MESS ' KIEM TRA OUTPUT SAT MEP CRASH ' ;
+MESS '====================================================' ;
+
+* 1. Tìm xem code sống sót được đến bước số mấy
+NB_STEP = (DIME (TAB0 . 'TEMPERATURES')) - 1 ;
+MESS '=> Thuật toán đã chạy được đến Step số: ' NB_STEP ;
+
+* NẾU NB_STEP = 0, NGHĨA LÀ NÓ CHẾT NGAY TỪ GIÂY ĐẦU TIÊN (Lỗi Input)
+SI (NB_STEP > 0) ;
+* Lấy kết quả ở bước cuối cùng
+    CH_LAST = TAB0 . 'TEMPERATURES' . NB_STEP ;
+    
+* Tách từng trường vật lý ra
+    CH_T_LAST  = EXCO 'T'  CH_LAST ;
+    CH_PG_LAST = EXCO 'PG' CH_LAST ;
+    CH_PC_LAST = EXCO 'PC' CH_LAST ;
+
+* In ra giá trị Min/Max để tìm "Thủ phạm" (Số âm)
+    MESS '1. NHIET DO (T) [C]      : Min=' (MINI CH_T_LAST)  ' / Max=' (MAXI CH_T_LAST) ;
+    MESS '2. AP SUAT KHI (Pg) [Pa] : Min=' (MINI CH_PG_LAST) ' / Max=' (MAXI CH_PG_LAST) ;
+    MESS '3. AP SUAT MAO DAN (Pc)  : Min=' (MINI CH_PC_LAST) ' / Max=' (MAXI CH_PC_LAST) ;
+    
+* (Tùy chọn) Vẽ đồ thị áp suất hoặc nhiệt độ tại thời điểm này
+* EV_PG = EVOL 'CHPO' CH_PG_LAST P0 P1 ;
+* DESS EV_PG 'TITR' 'Ap suat khi o buoc cuoi cung' ;
+SINO ;
+    MESS '=> CODE CHUA CHAY DUOC BUOC NAO! LOI DO THONG SO KHOI TAO t=0.' ;
+FINSI ;
+MESS '====================================================' ;
+MESS ' ' ;
 
 *---------------------------------------------------------------------*
 opti SAUV 'EXAMPLE1D_HAA1_2024_PHASE1';
