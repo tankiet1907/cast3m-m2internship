@@ -326,6 +326,16 @@ FINS;
 SI ((TIMEi '>' temps_ramp) ET (TIMEi '<EG' temps_lin1));
 TKi = T_RAMP + 273.15 + (DELTAT_LIN1 * ((TIMEi - temps_ramp) / (temps_lin1 - temps_ramp)));
 FINS;
+
+* Linear 460-->466oC from x+130 min to x+240 min
+SI ((TIMEi '>' temps_lin1) ET (TIMEi '<EG' temps_lin2));
+TKi = T_RAMP + DELTAT_LIN1 + 273.15 + (DELTAT_LIN2 * ((TIMEi - temps_lin1) / (temps_lin2 - temps_lin1)));
+FINS;
+
+* Plateau 466oC from x+240 min to end of accident phase
+SI (TIMEi '>' temps_lin2);
+TKi = T_RAMP + DELTAT_LIN1 + DELTAT_LIN2 + 273.15;    
+FINS;
     PRO_TK = PRO_TK ET (PROG TKi);
     N1 = N1 + 1;
 FIN BOU_TE;
@@ -399,8 +409,7 @@ TAB0 . 'CHARGEMENT'          = CGPG1 ET CGPG2 ET CGTK1 ET CGTK2;
 TAB0 . 'TEMPS_CALCULES'      = LTP_HYDR ;
 TAB0 . 'TEMPS_SAUVES'        = LSA_HYDR ;
 TAB0 . 'PROCEDURE_THERMIQUE' = 'NONLINEAIRE' ;
-TAB0 . 'RELAXATION_THETA'    = 0.57 ;
-TAB0 . 'PRECISION_THERMIQUE' = 5.E-4; 
+TAB0 . 'RELAXATION_THETA'    = 1. ;
 TAB0 . 'MOVA'                = 'D' ;
 
 *--Convection de la vapeur (gerée par la procedure CHARTHM)--*
