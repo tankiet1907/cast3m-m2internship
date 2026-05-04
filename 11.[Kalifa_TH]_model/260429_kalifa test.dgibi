@@ -298,8 +298,8 @@ CGPG2 = 'CHAR' 'TIMP' CHPG2 EV_PG;
 * Linear:  10-130 min (400oC --> 460oC)
 * Plateau: 130-180 min (460oC constant)
 *
-DELTAT_LIN1 = 60;
-DELTAT_LIN2 = 6;
+DELTAT_LIN1 = 0.;
+DELTAT_LIN2 = 0.;
 
 T_START     = TC_0 ;
 T_RAMP      = 400. ;
