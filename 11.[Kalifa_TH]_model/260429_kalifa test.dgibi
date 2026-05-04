@@ -62,12 +62,13 @@ CPGA1    = 1005.7 ;
 * III) Accident  : age time ---> age time + 6h /  H & T convection
 *
 *---------------------------------------------------------------------*
+minute1  = 60.         ;
 hours1   = 3600.       ;
 day1     = 86400.      ;
 year1    = 360 * day1  ;
 *
 age_time =   1 * year1 ;
-acc_time =   4 * hours1;
+acc_time =   250 * minute1;
 *
 temps1   =  3 * day1   ;
 temps2   =  6 * day1   ;
@@ -76,26 +77,34 @@ temps4   =  temps3 +  acc_time;
 
 DT01     =  600.;
 DT12     =  600.;
-DT23     =    1 * day1;
+DT23     =    3 * day1;
 DT34     =   60.;
 
 * --- Accident phase time markers ---
-* OLD COMMENT (NOT MODIFIED):
-* Ramp:     0-10 min   (20oC --> 400oC)
-* Linear: 10-130 min (400oC --> 460oC)
-* Plateau:  130-180 min (460oC constant),  3h stops here
-t_ramp   = temps3 + 3600.;
-t_lin   = temps3 + 7800.;
-DT_RAMP  =   15.; 
-DT_LIN   =   30.; 
+* Ramp:    0    -->x min     (20oC --> 400oC)
+* Linear1: x    -->x+130 min (400oC --> 460oC)
+* Linear2: x+130-->x+240 min (460oC --> 466oC)
+* Plateau:         x+240 min (466oC constant)
+ramp_time   = 10 * minute1; 
+lin1_time   = 130 * minute1;
+lin2_time   = 110 * minute1;
+
+temps_ramp   = temps3 + ramp_time ;
+temps_lin1   = temps3 + ramp_time + lin1_time ;
+temps_lin2   = temps3 + ramp_time + lin1_time + lin2_time ;
+
+DT_RAMP  =   60.; 
+DT_LIN1  =   15. ; 
+DT_LIN2  =   60. ;
 
 * Calculation of the time steps for the different phases
 LTP_HYDR = PROG  0.             PAS DT01 temps1        ;  
 LTP_AGIN = PROG (temps1 + DT12) PAS DT12 temps2 PAS DT23 temps3 ;
-LTP_ACCI = PROG (temps3 + DT_RAMP) PAS DT_RAMP t_ramp
-                 PAS DT_LIN  t_lin
+LTP_ACCI = PROG (temps3 + DT_RAMP) PAS DT_RAMP temps_ramp
+                 PAS DT_LIN1  temps_lin1
+                 PAS DT_LIN2  temps_lin2
                  PAS DT34  temps4;
-LTP_TOT  = LTP_HYDR ET LTP_AGIN ET LTP_ACCI                     ;  
+LTP_TOT  = LTP_HYDR ET LTP_AGIN ET LTP_ACCI                     ;   
 
 * Saved times
 LSA_HYDR = PROG  0.             PAS hours1 temps1; 
@@ -148,10 +157,10 @@ p3  = 0.12  0.12;
 p4  = 0.0   0.12;
 
 * 4 lines
-DAB1 = DROI 48 p1 p2;
-DDA1 = DROI 48 p2 p3;
-DCD1 = DROI 48 p3 p4;
-DBC1 = DROI 48 p4 p1;
+DAB1 = DROI 24 p1 p2;
+DDA1 = DROI 24 p2 p3;
+DCD1 = DROI 24 p3 p4;
+DBC1 = DROI 24 p4 p1;
 *
 * Mesh 2D=
 CONT1  = DAB1 ET DDA1 ET DCD1 ET DBC1;
@@ -283,8 +292,23 @@ CGPG1 = 'CHAR' 'TIMP' CHPG1 EV_PG;
 CGPG2 = 'CHAR' 'TIMP' CHPG2 EV_PG;
 
 * T: Thermal convection
-* Ramp (2K/min)
-DELTAT = acc_time * (2./60.);  list DELTAT; 
+* T: Thermal convection
+* --- Temperature loading curve ---
+* Ramp:    0-10 min   (20oC --> 400oC)
+* Linear:  10-130 min (400oC --> 460oC)
+* Plateau: 130-180 min (460oC constant)
+*
+DELTAT_LIN1 = 60;
+DELTAT_LIN2 = 6;
+
+T_START     = TC_0 ;
+T_RAMP      = 400. ;
+DELTAT_RAMP = T_RAMP - T_START ;
+
+DT_RAMP_S = temps_ramp - temps3 ;
+DT_LIN_S  = temps_lin1 - temps_ramp ;
+V_LIN = DELTAT_LIN1 / DT_LIN_S ;
+
 N1     = 1   ;
 PRO_TK = PROG;
 REPETER BOU_TE (DIME LTP_TOT);
@@ -292,13 +316,31 @@ REPETER BOU_TE (DIME LTP_TOT);
     SI (TIMEi '<EG' temps3);
     TKi    = TK_E;
     FINS;
-    SI (TIMEi '>'   temps3);
-    TKi    = TK_E + (DELTAT*((TIMEi - temps3)/(temps4 - temps3)));
-    FINS;
+
+* Ramp 20-->400oC in x min
+SI ((TIMEi '>' temps3) ET (TIMEi '<EG' temps_ramp));
+TKi    = TK_E + (DELTAT_RAMP*((TIMEi - temps3)/(temps_ramp - temps3)));
+FINS;
+
+* Linear 400-->460oC from x min to x+130 min
+SI ((TIMEi '>' temps_ramp) ET (TIMEi '<EG' temps_lin1));
+TKi = T_RAMP + 273.15 + (DELTAT_LIN1 * ((TIMEi - temps_ramp) / (temps_lin1 - temps_ramp)));
+FINS;
     PRO_TK = PRO_TK ET (PROG TKi);
     N1 = N1 + 1;
 FIN BOU_TE;
+
 EVTK1 = 'EVOL' 'MANU'  LTP_TOT  PRO_TK;
+*DESS EVTK1;
+*DESS EVTK1 'XBOR' temps3 temps4;
+
+L_TIME = EXTR EVTK1 'ABSC' ;
+L_TEMP = EXTR EVTK1 'ORDO' ;
+L_TIME_MIN = (L_TIME - (PROG (DIME L_TIME) * temps3)) / 60. ;
+L_TEMP_C   = L_TEMP - (PROG (DIME L_TEMP) * 273.15) ;
+EV_PLOT = EVOL 'ROUG' 'MANU' 'Time (min)' L_TIME_MIN 'Temp (C)' L_TEMP_C ;
+*DESS EV_PLOT 'XBOR' 0. 250. 'YBOR' 0. 480. ;
+
 
 * --- Hot face: convection + radiation (T_inf = T_rad) ---
 *DESS EVTK1;
@@ -455,6 +497,9 @@ TAB0 . 'TEMPS_CALCULES'           = LTP_ACCI ;
 TAB0 . 'TEMPS_SAUVES'             = LSA_ACCI ;
 PASAPAS TAB0;
 *---------------------------------------------------------------------*
+
+NTOT = DIME TAB0.'TEMPERATURES';
+MESS '--- Total saved steps = ' NTOT;
 
 *---------------------------------------------------------------------*
 * SAVE RESULTS

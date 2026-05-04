@@ -39,6 +39,7 @@ CPGA1    = 1005.7 ;
 * III) Accident  : age time ---> age time + 6h /  H & T convection
 *
 *---------------------------------------------------------------------*
+minute1   = 60.         ;
 hours1   = 3600.       ;
 day1     = 86400.      ;
 year1    = 360 * day1  ;
@@ -50,15 +51,18 @@ temps1   =  3 * day1   ;
 temps2   =  6 * day1   ;
 temps3   =  age_time   ;
 temps4   =  age_time +  acc_time;
+temps_crit = temps3 + 9600;
 
 DT01     =  600.;
 DT12     =  600.;
 DT23     =    3 * day1;
 DT34     =   60.;
+DT_crit  = 15.;
 
 LTP_HYDR = PROG  0.             PAS DT01 temps1        ;  
 LTP_AGIN = PROG (temps1 + DT12) PAS DT12 temps2 PAS DT23 temps3 ;
-LTP_ACCI = PROG (temps3 + DT34) PAS  DT34  temps4               ;
+*LTP_ACCI = PROG (temps3 + DT34) PAS  DT34  temps4               ;
+LTP_ACCI = PROG (temps3 + DT34) PAS DT34 temps_crit PAS DT_crit temps4 ;
 LTP_TOT  = LTP_HYDR ET LTP_AGIN ET LTP_ACCI                     ;  
 
 * Saved times
@@ -92,8 +96,8 @@ KINT = 2.E-19 ;
 
 * DESORPTION ISOTHERME MODEL PARAMETERS
 a1   =  18.6E6 ;
-b1   =  2.27    ;
-c1   =  1.5     ;
+b1   =  1.8    ;
+c1   =  1.3    ;
 
 * THERMAL PARAMETERS
 CS   = 835.   ;
@@ -115,7 +119,7 @@ MAIL1 = (TRAN 1 L12 (0. 0.01)) 'COUL' 'ROUG';
 *
 CONTH = COTE 4 MAIL1;
 CONTT = COTE 4 MAIL1;
-trac MAIL1;
+*trac MAIL1;
 *---------------------------------------------------------------------*
 
 
@@ -216,7 +220,7 @@ CGPG1 = 'CHAR' 'TIMP' CHPG1 EV_PG;
 *DELTAT = acc_time * (2./60.);  list DELTAT; 
 *DELTAT = 410.;
 *DELTAT = 420;
-DELTAT = 450;
+DELTAT = 430;
 N1     = 1   ;
 PRO_TK = PROG;
 REPETER BOU_TE (DIME LTP_TOT);
@@ -282,9 +286,7 @@ TAB0 . 'CHARGEMENT'          = CGPG1 ET CGTK1;
 TAB0 . 'TEMPS_CALCULES'      = LTP_HYDR ;
 TAB0 . 'TEMPS_SAUVES'        = LSA_HYDR ;
 TAB0 . 'PROCEDURE_THERMIQUE' = 'NONLINEAIRE' ;
-TAB0 . 'RELAXATION_THETA'    = 1.0 ;
-*TAB0 . 'PRECISION_THERMIQUE' = 5.E-2; 
-*TAB0 . 'PRECISION' = 5.E-2; 
+TAB0 . 'RELAXATION_THETA'    = 1. ;
 TAB0 . 'MOVA'                = 'D' ;
 
 *--Convection de la vapeur (gerée par la procedure CHARTHM)--*
@@ -318,75 +320,6 @@ TAB0 . 'TEMPS_SAUVES'             = LSA_AGIN ;
 PASAPAS TAB0;
 *---------------------------------------------------------------------*
 
-*======================================================================*
-* 
-*======================================================================*
-OPTI 'ECHO' 0 ;
-MESS ' ' ;
-MESS '====================================================' ;
-MESS ' KIEM TRA THONG SO KHOI TAO (INITIAL CHECK) ' ;
-MESS '====================================================' ;
-
-* 1
-MESS '1. GIOI HAN HOA HOC (Tu @POWERS):' ;
-MESS '- Do thuy hoa toi da (GAM0)    : ' GAM0 ;
-MESS '- Nuoc lien ket toi da (WINF)  : ' WINF ;
-MESS '- Do rong cuoi cung (POR1)     : ' POR1 ;
-MESS '- Bien do do rong (APOR)       : ' APOR ;
-MESS ' ' ;
-
-* 
-MESS '2. GIA TRI BAN DANG EP VAO (INPUT):' ;
-MESS '- Do thuy hoa ban dau (HY_0)   : ' HY_0 ;
-MESS ' ' ;
-
-* 
-MESS '3. GIA TRI TRUONG VAT LY (CH_INIT):' ;
-VAL_T  = MAXI (EXCO 'T'  CI_TH) ;
-VAL_PG = MAXI (EXCO 'PG' CI_TH) ;
-VAL_PC = MAXI (EXCO 'PC' CI_TH) ;
-MESS '- Nhiet do ban dau (T)         : ' VAL_T ;
-MESS '- Ap suat khi ban dau (PG)     : ' VAL_PG ;
-MESS '- Ap suat mao dan ban dau (PC) : ' VAL_PC ;
-MESS '====================================================' ;
-MESS ' ' ;
-
-
-*======================================================================*
-* TRÍCH XUẤT OUTPUT Ở THỜI ĐIỂM CUỐI CÙNG TRƯỚC KHI CRASH
-*======================================================================*
-MESS ' ' ;
-MESS '====================================================' ;
-MESS ' KIEM TRA OUTPUT SAT MEP CRASH ' ;
-MESS '====================================================' ;
-
-* 1. Tìm xem code sống sót được đến bước số mấy
-NB_STEP = (DIME (TAB0 . 'TEMPERATURES')) - 1 ;
-MESS '=> Thuật toán đã chạy được đến Step số: ' NB_STEP ;
-
-* NẾU NB_STEP = 0, NGHĨA LÀ NÓ CHẾT NGAY TỪ GIÂY ĐẦU TIÊN (Lỗi Input)
-SI (NB_STEP > 0) ;
-* Lấy kết quả ở bước cuối cùng
-    CH_LAST = TAB0 . 'TEMPERATURES' . NB_STEP ;
-    
-* Tách từng trường vật lý ra
-    CH_T_LAST  = EXCO 'T'  CH_LAST ;
-    CH_PG_LAST = EXCO 'PG' CH_LAST ;
-    CH_PC_LAST = EXCO 'PC' CH_LAST ;
-
-* In ra giá trị Min/Max để tìm "Thủ phạm" (Số âm)
-    MESS '1. NHIET DO (T) [C]      : Min=' (MINI CH_T_LAST)  ' / Max=' (MAXI CH_T_LAST) ;
-    MESS '2. AP SUAT KHI (Pg) [Pa] : Min=' (MINI CH_PG_LAST) ' / Max=' (MAXI CH_PG_LAST) ;
-    MESS '3. AP SUAT MAO DAN (Pc)  : Min=' (MINI CH_PC_LAST) ' / Max=' (MAXI CH_PC_LAST) ;
-    
-* (Tùy chọn) Vẽ đồ thị áp suất hoặc nhiệt độ tại thời điểm này
-* EV_PG = EVOL 'CHPO' CH_PG_LAST P0 P1 ;
-* DESS EV_PG 'TITR' 'Ap suat khi o buoc cuoi cung' ;
-SINO ;
-    MESS '=> CODE CHUA CHAY DUOC BUOC NAO! LOI DO THONG SO KHOI TAO t=0.' ;
-FINSI ;
-MESS '====================================================' ;
-MESS ' ' ;
 
 *---------------------------------------------------------------------*
 opti SAUV 'EXAMPLE1D_HAA1_2024_PHASE1';
@@ -400,6 +333,16 @@ SAUV;
 opti REST 'EXAMPLE1D_HAA1_2024_PHASE1';
 REST;
 *---------------------------------------------------------------------*
+
+
+*opti sauv 'FORMAT' 'D:\castem\EXAMPLE1D_HAA1_2024_PHASE1.SAUV';
+*SAUV  'FORMAT';
+
+
+
+
+*opti REST 'FORMAT' 'D:\castem\EXAMPLE1D_HAA1_2024_PHASE1.SAUV';
+*REST  'FORMAT';
 
 OPTI ECHO 0;
 *list (DIME  TAB0 . 'TEMPERATURES');
@@ -445,13 +388,14 @@ MATCOH  = 'MATE' MODCOH   'H'     0.02 ;
 
 
 * Reprise du calcul
+*TAB0 . 'RECHERCHE_LINEAIRE' = VRAI ;
 TAB0 . 'PROCEDURE_PARATHER'    = VRAI ;
 TAB0 . 'CTE_STEFAN_BOLTZMANN'     = 5.673e-8 ;
 TAB0 . 'CONVECTION_VAPEUR'        = 2 ;
 TAB0 . 'MA_CONVECTION_VAPEUR' . 1 = MATCOH ;
 TAB0 . 'TEMPS_CALCULES'           = LTP_ACCI ;
 TAB0 . 'TEMPS_SAUVES'             = LSA_ACCI ;
-*TAB0 . 'PRECISION_THERMIQUE'      = 5.E-4; 
+*TAB0 . 'PRECISION' = 5.E-2; 
 PASAPAS TAB0;
 *---------------------------------------------------------------------
 
@@ -467,7 +411,8 @@ SAUV ;
 *fin;
 
 
-
+NTOT = DIME TAB0.'TEMPERATURES';
+MESS '--- Total saved steps = ' NTOT;
 
 
 
