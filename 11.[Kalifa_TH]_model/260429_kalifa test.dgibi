@@ -69,6 +69,7 @@ year1    = 360 * day1  ;
 *
 age_time =   1 * year1 ;
 acc_time =   250 * minute1;
+* acc_time = ramp_time + lin1_time + lin2_time + plateau_time
 *
 temps1   =  3 * day1   ;
 temps2   =  6 * day1   ;
@@ -295,8 +296,9 @@ CGPG2 = 'CHAR' 'TIMP' CHPG2 EV_PG;
 * T: Thermal convection
 * --- Temperature loading curve ---
 * Ramp:    0-10 min   (20oC --> 400oC)
-* Linear:  10-130 min (400oC --> 460oC)
-* Plateau: 130-180 min (460oC constant)
+* Linear1:  10-130 min (400oC --> 460oC)
+* Linear2: 130-180 min (460oC --> 466oC)
+* Plateau: 180-250 min (466oC constant)
 *
 DELTAT_LIN1 = 0.;
 DELTAT_LIN2 = 0.;
