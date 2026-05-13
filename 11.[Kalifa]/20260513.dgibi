@@ -1,0 +1,122 @@
+*---------------------------------------------------------------------
+* ADIABATIC HYDRATION / AGING / ACCIDENT - COOLING OF KALIFA (2000) EXPERIMENT
+*---------------------------------------------------------------------
+* By: Tan Kiet HONG
+
+* Reference code: * G.Sciumè (31 - 10 - 2024)
+* "CONCRETE CASTING AND LIFETIME CONDITIONS IMPACT ON HIGH TEMPERATURE RESISTANCE" by G. Sciumè (1), S. Dal Pont (2), D. Dauti (2)
+* (1) I2M, Université de Bordeaux, Bordeaux, France
+* (2) 3SR, Université Grenoble Alpes, Grenoble, France
+
+
+OPTI ECHO 0;
+*---------------------------------------------------------------------
+* CONSTANT PHYSICAL PARAMEMTERS
+*---------------------------------------------------------------------
+RGP1     = 8.3145 ;                                                   
+MMGA1    = 28.9645E-3 ;                                               
+MMGW1    = 18.0153E-3 ;
+RHOS1    = 2625.8 ;
+RHOW0    = 1000. ;
+CPW1     = 4181.0 ;
+CPGW1    = 1805.0 ;
+CPGA1    = 1005.7 ;
+
+*---------------------------------------------------------------------
+* MESH - KALIFA 120x120mm
+*---------------------------------------------------------------------
+'OPTI' 'DIME' 2 'MODE' PLAN CONT 'ELEM' QUA4;
+
+* OPTION 1: REGTANGULAR MESH 24X24 ELEMENTS
+p1  = 0.0   0.0;
+p2  = 0.12  0.0;
+p3  = 0.12  0.12;
+p4  = 0.0   0.12;
+
+DAB1 = DROI 24 p1 p2;
+DDA1 = DROI 24 p2 p3;
+DCD1 = DROI 24 p3 p4;
+DBC1 = DROI 24 p4 p1;
+
+CONT1  = DAB1 ET DDA1 ET DCD1 ET DBC1;
+MAIL1  = (SURF CONT1) 'COUL' 'BLAN';
+
+* OPTION 2: REFINED 1D MESH
+L1       = 0.12 ; 
+H1       = 0.12 ;       
+DY_COLD  = 0.005;       
+DY_HOT   = 0.001;       
+
+P1  = 0.   0.;         
+P2  = 0.   H1;         
+L12 = DROI P1 P2 'DINI' DY_COLD 'DFIN' DY_HOT;
+
+*DCD1 = COTE 2 MAIL1;
+*DAB1 = COTE 4 MAIL1; 
+*MAIL1 = (TRAN 1 L12 (L1 0.)) 'COUL' 'BLAN';
+
+* VISUALIZATION OF THE MESH
+TRAC (MAIL1 ET (DCD1 'COUL' 'ROUG') ET (DAB1 'COUL' 'BLEU'));
+
+* ALIAS FOR BOUNDARIES: DCD1 = hot face (top, y=0.12) and DAB1 = cold face (bottom, y=0)
+* [HYRIC] Vapor convection
+CONTH1 = DCD1;
+CONTH2 = DAB1;
+CONTH = CONTH1 ET CONTH2;
+
+* [THERMAL]Thermal convection and radiation
+CONTT1 = DCD1;
+CONTT2 = DAB1;
+
+* Points of measurement for temperature (PO_00 to PO_120) along the vertical centerline of the sample
+* x = 0.06 (mid sample), y = 0.120 - distance from hot face
+PO_00  = MAIL1 POIN 'PROC' (0.06 0.120);
+PO_10  = MAIL1 POIN 'PROC' (0.06 0.110);
+PO_20  = MAIL1 POIN 'PROC' (0.06 0.100);
+PO_30  = MAIL1 POIN 'PROC' (0.06 0.090);
+PO_40  = MAIL1 POIN 'PROC' (0.06 0.080);
+PO_50  = MAIL1 POIN 'PROC' (0.06 0.070);
+PO_120 = MAIL1 POIN 'PROC' (0.06 0.000);
+
+*---------------------------------------------------------------------
+* MATERIAL PROPERTIES
+*---------------------------------------------------------------------
+
+* MIX DATA
+cem  = 350.   ;
+aggr = 1920.  ;
+wc   = 0.32 ;
+sc   = 0.108   ;
+
+* HYDRATION PROCESS DATA (affinity. activation energy. hydration heat)
+AI   = 6    ;
+AP   = 1250.  ;
+GAMP = 0.24   ;
+ALFA = 48.    ;
+EAR1 = 5369.  ;
+lat1 = 114.3e6 ;
+
+* INTRINSIC PERMEABILITY
+KINT = 7.5E-20 ;
+
+* DESORPTION ISOTHERME MODEL PARAMETERS
+a1   =  46.9364E6 ;
+b1   =  2.27   ;
+c1   =  1.5     ;
+
+LPC = PROG 1.E5 PAS 1.E6 1.E9 ;
+LSW = PROG ;
+
+REPETER BOU1 (DIME LPC);
+  PC_I = EXTR LPC &BOU1 ;
+  SW_I = (1. + ((PC_I / a1)**b1))**(-1. * c1) ;
+  LSW = LSW ET (PROG SW_I) ;
+FIN BOU1 ;
+
+EVO1 = EVOL MANU 'Pc (Pa)' LPC 'Sw' LSW ;
+DESS EVO1 XLOG YLIN TITRE 'Desorption Isotherm HPC M100' ;
+
+* THERMAL PARAMETERS
+CS   = 948.   ;
+KS   = 1.67   ;
+*---------------------------------------------------------------------*
