@@ -97,8 +97,8 @@ EAR1 = 5369.  ;
 lat1 = 114.3e6 ;
 
 * INTRINSIC PERMEABILITY
-*KINT = 2.E-19 ;
-KINT = 7.5E-20 ;
+KINT = 2.E-19 ;
+*KINT = 7.5E-20 ;
 
 * THERMAL PARAMETERS
 CS   = 948.   ;
@@ -321,7 +321,7 @@ FINS;
 SI ((TIMEi '>' temps_lin1) ET (TIMEi '<EG' temps3));
 TKi = T_RAMP + DELTAT_LIN1 + 273.15 + (DELTAT_LIN2 * ((TIMEi - temps_lin1) / (temps3 - temps_lin1)));
 FINS;
-* Thermal radiator turn offed after x+240 min
+* Thermal radiator turned off after x+240 min
 SI (TIMEi '>' temps3);
 TKi    = TK_E;
 FINS;
@@ -331,6 +331,16 @@ FIN BOU_TE;
 
 EVTK1 = 'EVOL' 'MANU'  LTP_TOT  PRO_TK;
 *DESS EVTK1 'XBOR' temps3 temps4;
+
+* PLOT THERMAL RAMP IN CELSIUS (Accident and cooling phases)
+L_TIME = EXTR EVTK1 'ABSC' ;
+L_TEMP = EXTR EVTK1 'ORDO' ;
+L_TIME_MIN = (L_TIME - (PROG (DIME L_TIME) * temps2)) / 60. ;
+L_TEMP_C   = L_TEMP - (PROG (DIME L_TEMP) * 273.15) ;
+EV_PLOT = EVOL 'ROUG' 'MANU' 'Time (min)' L_TIME_MIN 'Temp (C)' L_TEMP_C ;
+
+DESS EV_PLOT 'XBOR' 0. 610. 'YBOR' 0. 500. 
+             TITRE 'Thermal Loading Curve - Kalifa HPCv M100' ;
 
 * --- Hot face: convection + radiation (T_inf = T_rad) ---
 CHTK1 = 'MANU' 'CHPO'  CONTT1 1 'T'  1. 'NATURE' 'DISCRETE';
