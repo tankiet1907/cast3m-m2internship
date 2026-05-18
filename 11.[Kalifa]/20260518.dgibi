@@ -184,10 +184,11 @@ age_time   =   1 * year1  ;
 * Linear1: x    -->x+130 min (400oC --> 460oC)
 * Linear2: x+130-->x+240 min (460oC --> 466oC)
 ramp_time   = 1 * minute1; 
-lin1_time   = 130 * minute1;
+lin1_time   = 130 * minute1 - ramp_time;
 lin2_time   = 110 * minute1;
 acc_time    = ramp_time + lin1_time + lin2_time;
 
+ramp2_time  = 1 * minute1;
 cool_time   = 360 * minute1;
 
 * Time markers for the different phases
@@ -200,7 +201,8 @@ temps_ramp   = age_time  + ramp_time ;
 temps_lin1   = age_time  + ramp_time + lin1_time ;
 temps3       = age_time  + acc_time ;
 
-temps4       =  age_time +  acc_time + cool_time ;
+temps_ramp2  = temps3 + ramp2_time ;
+temps4       = temps3 + cool_time ;
 
 
 * Time steps for the different phases
@@ -213,13 +215,14 @@ DT_RAMP  =   5.;
 DT_LIN1  =   15. ; 
 DT_LIN2  =   15. ;
 
-DT34     =   60.;
+DT_RAMP2 =   1.;
+DT34     =   15.;
 
 * Calculation of the time steps for the different phases
 LTP_HYDR = PROG  0.              PAS DT01 temps1        ;  
 LTP_AGIN = PROG (temps1 + DT12a) PAS DT12a temps2a PAS DT2a2 temps2 ;
 LTP_ACCI = PROG (temps2 + DT_RAMP) PAS DT_RAMP temps_ramp PAS DT_LIN1 temps_lin1 PAS DT_LIN2 temps3;
-LTP_COOL = PROG (temps3 + DT34)    PAS DT34 temps4 ;
+LTP_COOL = PROG (temps3 + DT_RAMP2) PAS DT_RAMP2 temps_ramp2 PAS DT34 temps4;
 LTP_TOT  = LTP_HYDR ET LTP_AGIN ET LTP_ACCI ET LTP_COOL;   
 
 * Saved times
@@ -309,13 +312,9 @@ REPETER BOU_TE (DIME LTP_TOT);
 SI (TIMEi '<EG' temps2);
 TKi    = TK_E;
 FINS;
-* Ramp 20-->400oC in x min
-SI ((TIMEi '>' temps2) ET (TIMEi '<EG' temps_ramp));
-TKi    = TK_E + (DELTAT_RAMP*((TIMEi - temps2)/(temps_ramp - temps2)));
-FINS;
 * Linear 400-->460oC from x min to x+130 min
-SI ((TIMEi '>' temps_ramp) ET (TIMEi '<EG' temps_lin1));
-TKi = T_RAMP + 273.15 + (DELTAT_LIN1 * ((TIMEi - temps_ramp) / (temps_lin1 - temps_ramp)));
+SI ((TIMEi '>' temps2) ET (TIMEi '<EG' temps_lin1));
+TKi = T_RAMP + 273.15 + (DELTAT_LIN1 * ((TIMEi - temps2) / (temps_lin1 - temps2)));
 FINS;
 * Linear 460-->466oC from x+130 min to x+240 min
 SI ((TIMEi '>' temps_lin1) ET (TIMEi '<EG' temps3));
@@ -534,9 +533,9 @@ CHMT = EXCO 'T' TAB0 . 'TEMPERATURES' . (NTOT - 1);
 CHPG = EXCO 'PG' TAB0 . 'TEMPERATURES' . (NTOT - 1);
 CHPC = EXCO 'PC' TAB0 . 'TEMPERATURES' . (NTOT - 1);
 
-TRAC CHMT MODTHC MAIL1 TITRE 'Temperature after accident phase';
-TRAC CHPG MODTHC MAIL1 TITRE 'Gas pressure after accident phase';
-TRAC CHPC MODTHC MAIL1 TITRE 'Capillary pressure after accident phase';
+*TRAC CHMT MODTHC MAIL1 TITRE 'Temperature after accident phase';
+*TRAC CHPG MODTHC MAIL1 TITRE 'Gas pressure after accident phase';
+*TRAC CHPC MODTHC MAIL1 TITRE 'Capillary pressure after accident phase';
 
 
 *---------------------------------------------------------------------
