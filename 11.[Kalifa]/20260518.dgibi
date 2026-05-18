@@ -56,7 +56,7 @@ L12 = DROI P1 P2 'DINI' DY_COLD 'DFIN' DY_HOT;
 *DAB1 = COTE 4 MAIL1; 
 
 * VISUALIZATION OF THE MESH
-TRAC (MAIL1 ET (DCD1 'COUL' 'ROUG') ET (DAB1 'COUL' 'BLEU'));
+TRAC (MAIL1 ET (DCD1 'COUL' 'ROUG') ET (DAB1 'COUL' 'BLEU')) TITRE 'Mesh - Kalifa HPC M100' ;
 
 * ALIAS FOR BOUNDARIES: DCD1 = hot face (top, y=0.12) and DAB1 = cold face (bottom, y=0)
 * [HYRIC] Vapor convection
@@ -97,8 +97,8 @@ EAR1 = 5369.  ;
 lat1 = 114.3e6 ;
 
 * INTRINSIC PERMEABILITY
-*KINT = 2.E-19 ;
-KINT = 7.5E-20 ;
+KINT = 2.E-19 ;
+*KINT = 7.5E-20 ;
 
 * THERMAL PARAMETERS
 CS   = 948.   ;
@@ -144,7 +144,7 @@ MOD_TOT = MODTHC ET MODCOT1 ET MODCOT2 ET MODRAY ;
 *---------------------------------------------------------------------
 WINF GAM0 POR1 APOR = @POWERS cem aggr wc sc;
 MATTHC = 'MATE' MODTHC 'CS'  CS    'KS'   KS   'GAM0' GAM0 'WINF' WINF
-'VGA' a1   'VGB'  b1   'VGC' c1    'K1' KINT  'AK'   7.  'BK'   1. 
+'VGA' a1   'VGB'  b1   'VGC' c1    'K1' KINT  'AK'   3.  'BK'   1. 
 'KLI1' 20000.  'AKLI'   1.  'BKLI' 1. 'POR1' POR1 'APOR' APOR 
 'AFF1' Ai  'AFF2' Ap   'AFF3' GAMP 'AFF4' ALFA 'EAR'  EAR1 'QLAT' lat1;
 MATCOT1  = 'MATE'  MODCOT1   'H'     10.;
@@ -211,7 +211,7 @@ DT2a2    =  3 * day1;
 
 DT_RAMP  =   5.; 
 DT_LIN1  =   15. ; 
-DT_LIN2  =   60. ;
+DT_LIN2  =   15. ;
 
 DT34     =   60.;
 
@@ -265,8 +265,6 @@ SW0    = @SATURA CHPC_0 CHTK_0 HYDR cha1 chb1 chc1 chgam0;
 CI_TH  = ('MANU' 'CHPO' MAIL1 2 'PG' PG_0 'T' TK_0)  +  PC_0;
 *TRAC CI_TH MAIL1;
 *---------------------------------------------------------------------*
-
-
 
 *---------------------------------------------------------------------*
 * BOUNDARY CONDITIONS
@@ -332,7 +330,6 @@ FINS;
 FIN BOU_TE;
 
 EVTK1 = 'EVOL' 'MANU'  LTP_TOT  PRO_TK;
-*DESS EVTK1 'XBOR' temps3 temps4;
 
 * PLOT THERMAL RAMP IN CELSIUS (Accident and cooling phases)
 L_TIME = EXTR EVTK1 'ABSC' ;
@@ -423,6 +420,16 @@ TAB0 . 'DCH' .  0            = MANU CHML MODTHC 'SCAL' HY_0;
 *---------------------------------------------------------------------
 PASAPAS TAB0;
 
+*---------------------------------------------------------------------
+opti SAUV 'KALIFA_PHASE1';
+SAUV;
+*---------------------------------------------------------------------
+
+*---------------------------------------------------------------------
+opti REST 'KALIFA_PHASE1';
+REST;
+*---------------------------------------------------------------------
+
 * --- Check the total number of saved steps
 NTOT = DIME TAB0.'TEMPERATURES';
 MESS '--- Total saved steps = ' NTOT;
@@ -431,10 +438,9 @@ MESS '--- Total saved steps = ' NTOT;
 CHMT = EXCO 'T' TAB0 . 'TEMPERATURES' . (NTOT - 1);
 CHPG = EXCO 'PG' TAB0 . 'TEMPERATURES' . (NTOT - 1);
 CHPC = EXCO 'PC' TAB0 . 'TEMPERATURES' . (NTOT - 1);
-*TRAC CHMT MODTHC MAIL1;
-*TRAC CHPG MODTHC MAIL1;
-*TRAC CHPC MODTHC MAIL1;
-
+*TRAC CHMT MODTHC MAIL1 TITRE 'Temperature after early age phase';
+*TRAC CHPG MODTHC MAIL1 TITRE 'Gas pressure after early age phase';
+*TRAC CHPC MODTHC MAIL1 TITRE 'Capillary pressure after early age phase';
 
 *---------------------------------------------------------------------
 * DRYING AND AGING
@@ -446,6 +452,15 @@ TAB0 . 'MA_CONVECTION_VAPEUR' . 1 = MATCOH ;
 TAB0 . 'TEMPS_CALCULES'           = LTP_AGIN ;
 TAB0 . 'TEMPS_SAUVES'             = LSA_AGIN ;
 PASAPAS TAB0;
+
+*---------------------------------------------------------------------
+opti SAUV 'KALIFA_PHASE2';
+SAUV;
+*---------------------------------------------------------------------
+
+*---------------------------------------------------------------------
+opti REST 'KALIFA_PHASE2';
+REST;
 *---------------------------------------------------------------------
 
 * --- Check the total number of saved steps
@@ -456,19 +471,12 @@ MESS '--- Total saved steps = ' NTOT;
 CHMT = EXCO 'T' TAB0 . 'TEMPERATURES' . (NTOT - 1);
 CHPG = EXCO 'PG' TAB0 . 'TEMPERATURES' . (NTOT - 1);
 CHPC = EXCO 'PC' TAB0 . 'TEMPERATURES' . (NTOT - 1);
-*TRAC CHMT MODTHC MAIL1;
-*TRAC CHPG MODTHC MAIL1;
-*TRAC CHPC MODTHC MAIL1;
 
-*---------------------------------------------------------------------
-opti SAUV 'EXAMPLE1D_HAA1_2024_PHASE1';
-SAUV;
-*---------------------------------------------------------------------
-
-*---------------------------------------------------------------------
-opti REST 'EXAMPLE1D_HAA1_2024_PHASE1';
-REST;
-*---------------------------------------------------------------------
+L_ISO_T = PROG 292. PAS 1. 294. ;
+*TRAC CHMT MODTHC MAIL1 L_ISO_T TITRE 'Temperature after aging phase - before accident';
+L_ISO_PG = PROG 1.00E5 PAS 1000. 1.02E5 ;
+*TRAC CHPG MODTHC MAIL1 L_ISO_PG TITRE 'Gas pressure after aging phase - before accident';
+*TRAC CHPC MODTHC MAIL1 TITRE 'Capillary pressure after aging phase - before accident';
 
 
 *---------------------------------------------------------------------
@@ -490,7 +498,7 @@ WTABLE = TABTHER .'WTABLE' ;
 SI ( (INST '>' temps2) ET (INST '<EG' temps3) );
    MATCOT1 = 'MATE' MODCOT1   'H'    8. ;
    MATCOT2 = 'MATE' MODCOT2   'H'    8.3 ;
-   MATRAY  = 'MATE' MODRAY   'EMIS'  0.35  ;
+   MATRAY  = 'MATE' MODRAY   'EMIS'  0.7  ;
    WTABLE.'MAT_TOT' = MATTHC et MATCOT1 et MATRAY et MATCOT2; 
 FINS;
 
@@ -500,12 +508,21 @@ FINP;
 MATCOH  = 'MATE' MODCOH   'H'     0.018 ;
 
 * Reprise du calcul
-TAB0 . 'PROCEDURE_PARATHER'    = VRAI ;
+TAB0 . 'PROCEDURE_PARATHER'       = VRAI ;
 TAB0 . 'CONVECTION_VAPEUR'        = 2 ;
 TAB0 . 'MA_CONVECTION_VAPEUR' . 1 = MATCOH ;
 TAB0 . 'TEMPS_CALCULES'           = LTP_ACCI ;
 TAB0 . 'TEMPS_SAUVES'             = LSA_ACCI ;
 PASAPAS TAB0;
+
+*---------------------------------------------------------------------
+opti SAUV 'KALIFA_PHASE3';
+SAUV;
+*---------------------------------------------------------------------
+
+*---------------------------------------------------------------------
+opti REST 'KALIFA_PHASE3';
+REST;
 *---------------------------------------------------------------------
 
 * --- Check the total number of saved steps
@@ -516,22 +533,48 @@ MESS '--- Total saved steps = ' NTOT;
 CHMT = EXCO 'T' TAB0 . 'TEMPERATURES' . (NTOT - 1);
 CHPG = EXCO 'PG' TAB0 . 'TEMPERATURES' . (NTOT - 1);
 CHPC = EXCO 'PC' TAB0 . 'TEMPERATURES' . (NTOT - 1);
-TRAC CHMT MODTHC MAIL1;
-TRAC CHPG MODTHC MAIL1;
-TRAC CHPC MODTHC MAIL1;
+
+TRAC CHMT MODTHC MAIL1 TITRE 'Temperature after accident phase';
+TRAC CHPG MODTHC MAIL1 TITRE 'Gas pressure after accident phase';
+TRAC CHPC MODTHC MAIL1 TITRE 'Capillary pressure after accident phase';
+
 
 *---------------------------------------------------------------------
 * COOLING
 *---------------------------------------------------------------------
+OPTI ECHO 0;
+DEBP PARATHER ;
+  'ARGUMENT' TABTHER*'TABLE' INST*'FLOTTANT' ;
+WTABLE = TABTHER .'WTABLE' ;
+
+SI  (INST '>' temps3);
+   MATCOT1 = 'MATE' MODCOT1   'H'    8. ;
+   MATCOT2 = 'MATE' MODCOT2   'H'    8.3 ;
+   MATRAY  = 'MATE' MODRAY   'EMIS'  0.  ;
+   WTABLE.'MAT_TOT' = MATTHC et MATCOT1 et MATRAY et MATCOT2; 
+FINS;
+
+FINP;
 MATCOH  = 'MATE' MODCOH   'H'  0.002;
 
 *  Recalculation resumed
+TAB0 . 'PROCEDURE_PARATHER'       = VRAI ;
 TAB0 . 'MA_CONVECTION_VAPEUR' . 1 = MATCOH ;
 TAB0 . 'TEMPS_CALCULES'           = LTP_COOL ;
 TAB0 . 'TEMPS_SAUVES'             = LSA_COOL ;
 PASAPAS TAB0;
 *---------------------------------------------------------------------
 
+*---------------------------------------------------------------------
+opti SAUV 'KALIFA_PHASE4';
+SAUV;
+*---------------------------------------------------------------------
+
+*---------------------------------------------------------------------
+opti REST 'KALIFA_PHASE4';
+REST;
+*---------------------------------------------------------------------
+
 * --- Check the total number of saved steps
 NTOT = DIME TAB0.'TEMPERATURES';
 MESS '--- Total saved steps = ' NTOT;
@@ -540,30 +583,30 @@ MESS '--- Total saved steps = ' NTOT;
 CHMT = EXCO 'T' TAB0 . 'TEMPERATURES' . (NTOT - 1);
 CHPG = EXCO 'PG' TAB0 . 'TEMPERATURES' . (NTOT - 1);
 CHPC = EXCO 'PC' TAB0 . 'TEMPERATURES' . (NTOT - 1);
-TRAC CHMT MODTHC MAIL1;
-TRAC CHPG MODTHC MAIL1;
-TRAC CHPC MODTHC MAIL1;
+TRAC CHMT MODTHC MAIL1 TITRE 'Temperature after cooling phase - final state';
+TRAC CHPG MODTHC MAIL1 TITRE 'Gas pressure after cooling phase - final state';
+TRAC CHPC MODTHC MAIL1 TITRE 'Capillary pressure after cooling phase - final state';
 
 *===================================================================*
-* KHỞI TẠO TRỤC THỜI GIAN CHUNG (ĐỔI SANG PHÚT & RESET VỀ 0 TẠI TEMPS2)
+* INITIALIZE THE GENERAL TIME AXIS (CONVERT TO MINUTES & RESET TO 0 AT TEMPS2)
 *===================================================================*
 EVT_INIT = EVOL 'BLAN' 'TEMP' TAB0 'TEMPERATURES' 'T' PO_00;
 LT_SEC   = EXTR EVT_INIT 'ABSC' ;
 LT_MIN   = (LT_SEC - (PROG (DIME LT_SEC) * temps2)) / 60. ;
 
 *===================================================================*
-*********** GIAI ĐOẠN: TEMPERATURE (°C & min) ***********************
+*********** STAGE: TEMPERATURE (°C & min) ***********************
 *===================================================================*
-* 1. Trích xuất dữ liệu gốc từ bảng kết quả (đơn vị Kelvin)
-EVT_00_O  = EVOL 'BLAN' 'TEMP' TAB0 'TEMPERATURES' 'T'  PO_00;
-EVT_10_O  = EVOL 'BLEU' 'TEMP' TAB0 'TEMPERATURES' 'T'  PO_10;
-EVT_20_O  = EVOL 'VERT' 'TEMP' TAB0 'TEMPERATURES' 'T'  PO_20;
-EVT_30_O  = EVOL 'ROUG' 'TEMP' TAB0 'TEMPERATURES' 'T'  PO_30;
-EVT_40_O  = EVOL 'TURQ' 'TEMP' TAB0 'TEMPERATURES' 'T'  PO_40;
-EVT_50_O  = EVOL 'ROSE' 'TEMP' TAB0 'TEMPERATURES' 'T'  PO_50;
-EVT_120_O = EVOL 'JAUN' 'TEMP' TAB0 'TEMPERATURES' 'T'  PO_120;
+* 1. Extract original data from the results table (in Kelvin units)
+EVT_00_O  = EVOL 'BLEU' 'TEMP' TAB0 'TEMPERATURES' 'T'  PO_00;
+EVT_10_O  = EVOL 'ORAN' 'TEMP' TAB0 'TEMPERATURES' 'T'  PO_10;
+EVT_20_O  = EVOL 'JAUN' 'TEMP' TAB0 'TEMPERATURES' 'T'  PO_20;
+EVT_30_O  = EVOL 'ROSE' 'TEMP' TAB0 'TEMPERATURES' 'T'  PO_30;
+EVT_40_O  = EVOL 'VERT' 'TEMP' TAB0 'TEMPERATURES' 'T'  PO_40;
+EVT_50_O  = EVOL 'TURQ' 'TEMP' TAB0 'TEMPERATURES' 'T'  PO_50;
+EVT_120_O = EVOL 'BLAN' 'TEMP' TAB0 'TEMPERATURES' 'T'  PO_120;
 
-* 2. Trừ đi 273.15 để đổi sang độ C
+* 2. Subtract 273.15 to convert to Celsius.
 LY_00   = (EXTR EVT_00_O  'ORDO') - (PROG (DIME LT_MIN) * 273.15);
 LY_10   = (EXTR EVT_10_O  'ORDO') - (PROG (DIME LT_MIN) * 273.15);
 LY_20   = (EXTR EVT_20_O  'ORDO') - (PROG (DIME LT_MIN) * 273.15);
@@ -572,16 +615,16 @@ LY_40   = (EXTR EVT_40_O  'ORDO') - (PROG (DIME LT_MIN) * 273.15);
 LY_50   = (EXTR EVT_50_O  'ORDO') - (PROG (DIME LT_MIN) * 273.15);
 LY_120  = (EXTR EVT_120_O 'ORDO') - (PROG (DIME LT_MIN) * 273.15);
 
-* 3. Định nghĩa lại các đường Evolution theo hệ trục mới (min và °C)
-EVT_00  = EVOL 'BLAN' 'MANU' 'Time (min)' LT_MIN 'Temperature (C)' LY_00;
-EVT_10  = EVOL 'BLEU' 'MANU' 'Time (min)' LT_MIN 'Temperature (C)' LY_10;
-EVT_20  = EVOL 'VERT' 'MANU' 'Time (min)' LT_MIN 'Temperature (C)' LY_20;
-EVT_30  = EVOL 'ROUG' 'MANU' 'Time (min)' LT_MIN 'Temperature (C)' LY_30;
-EVT_40  = EVOL 'TURQ' 'MANU' 'Time (min)' LT_MIN 'Temperature (C)' LY_40;
-EVT_50  = EVOL 'ROSE' 'MANU' 'Time (min)' LT_MIN 'Temperature (C)' LY_50;
-EVT_120 = EVOL 'JAUN' 'MANU' 'Time (min)' LT_MIN 'Temperature (C)' LY_120;
+* 3. Redefine the Evolution curves according to the new coordinate system (min and °C)
+EVT_00  = EVOL 'BLEU' 'MANU' 'Time (min)' LT_MIN 'Temperature (C)' LY_00;
+EVT_10  = EVOL 'ORAN' 'MANU' 'Time (min)' LT_MIN 'Temperature (C)' LY_10;
+EVT_20  = EVOL 'JAUN' 'MANU' 'Time (min)' LT_MIN 'Temperature (C)' LY_20;
+EVT_30  = EVOL 'ROSE' 'MANU' 'Time (min)' LT_MIN 'Temperature (C)' LY_30;
+EVT_40  = EVOL 'VERT' 'MANU' 'Time (min)' LT_MIN 'Temperature (C)' LY_40;
+EVT_50  = EVOL 'TURQ' 'MANU' 'Time (min)' LT_MIN 'Temperature (C)' LY_50;
+EVT_120 = EVOL 'BLAN' 'MANU' 'Time (min)' LT_MIN 'Temperature (C)' LY_120;
 
-* 4. Vẽ đồ thị nhiệt độ chia vạch 50 đơn vị hoàn chỉnh
+* 4. Draw a complete temperature graph with 50-unit divisions.
 DESS (EVT_00 ET EVT_10 ET EVT_20 ET EVT_30 ET EVT_40 ET EVT_50 ET EVT_120)
      'XBOR' 0. 650. 'XGRA' 50.
      'YBOR' 0. 500. 'YGRA' 50.
@@ -589,23 +632,23 @@ DESS (EVT_00 ET EVT_10 ET EVT_20 ET EVT_30 ET EVT_40 ET EVT_50 ET EVT_120)
      TITRE 'Temperature Evolution at Measurement Points' ;
 
 *===================================================================*
-*********** GIAI ĐOẠN: GAS PRESSURE (Pa & min) *********************
+*********** STAGE: GAS PRESSURE (Pa & min) *********************
 *===================================================================*
-* 1. Trích xuất dữ liệu gốc
+* 1. Extract original data from the results table
 EVPG_10_O = EVOL 'BLEU' 'TEMP' TAB0 'TEMPERATURES' 'PG' PO_10;
-EVPG_20_O = EVOL 'VERT' 'TEMP' TAB0 'TEMPERATURES' 'PG' PO_20;
-EVPG_30_O = EVOL 'ROUG' 'TEMP' TAB0 'TEMPERATURES' 'PG' PO_30;
-EVPG_40_O = EVOL 'TURQ' 'TEMP' TAB0 'TEMPERATURES' 'PG' PO_40;
-EVPG_50_O = EVOL 'ROSE' 'TEMP' TAB0 'TEMPERATURES' 'PG' PO_50;
+EVPG_20_O = EVOL 'ORAN' 'TEMP' TAB0 'TEMPERATURES' 'PG' PO_20;
+EVPG_30_O = EVOL 'JAUN' 'TEMP' TAB0 'TEMPERATURES' 'PG' PO_30;
+EVPG_40_O = EVOL 'ROSE' 'TEMP' TAB0 'TEMPERATURES' 'PG' PO_40;
+EVPG_50_O = EVOL 'VERT' 'TEMP' TAB0 'TEMPERATURES' 'PG' PO_50;
 
-* 2. Gán lại trục hoành mới LT_MIN (Áp suất giữ nguyên đơn vị gốc Pa)
+* 2. Redefine the horizontal axis to LT_MIN (Gas pressure remains in original units Pa)
 EVPG_10 = EVOL 'BLEU' 'MANU' 'Time (min)' LT_MIN 'Gas Pressure (Pa)' (EXTR EVPG_10_O 'ORDO');
-EVPG_20 = EVOL 'VERT' 'MANU' 'Time (min)' LT_MIN 'Gas Pressure (Pa)' (EXTR EVPG_20_O 'ORDO');
-EVPG_30 = EVOL 'ROUG' 'MANU' 'Time (min)' LT_MIN 'Gas Pressure (Pa)' (EXTR EVPG_30_O 'ORDO');
-EVPG_40 = EVOL 'TURQ' 'MANU' 'Time (min)' LT_MIN 'Gas Pressure (Pa)' (EXTR EVPG_40_O 'ORDO');
-EVPG_50 = EVOL 'ROSE' 'MANU' 'Time (min)' LT_MIN 'Gas Pressure (Pa)' (EXTR EVPG_50_O 'ORDO');
+EVPG_20 = EVOL 'ORAN' 'MANU' 'Time (min)' LT_MIN 'Gas Pressure (Pa)' (EXTR EVPG_20_O 'ORDO');
+EVPG_30 = EVOL 'JAUN' 'MANU' 'Time (min)' LT_MIN 'Gas Pressure (Pa)' (EXTR EVPG_30_O 'ORDO');
+EVPG_40 = EVOL 'ROSE' 'MANU' 'Time (min)' LT_MIN 'Gas Pressure (Pa)' (EXTR EVPG_40_O 'ORDO');
+EVPG_50 = EVOL 'VERT' 'MANU' 'Time (min)' LT_MIN 'Gas Pressure (Pa)' (EXTR EVPG_50_O 'ORDO');
 
-* 3. Vẽ đồ thị áp suất khí (Trục X đồng bộ từ 0 đến 600 min, trục Y tự động scale)
+* 3. Draw the gas pressure graph (X-axis synchronized from 0 to 600 min, Y-axis auto-scaled)
 DESS (EVPG_10 ET EVPG_20 ET EVPG_30 ET EVPG_40 ET EVPG_50)
      'XBOR' 0. 650. 'XGRA' 50.
      'GRIL' 'POIN' 'GRIS'
@@ -613,24 +656,26 @@ DESS (EVPG_10 ET EVPG_20 ET EVPG_30 ET EVPG_40 ET EVPG_50)
 
 
 *===================================================================*
-*********** GIAI ĐOẠN: CAPILLARY PRESSURE (Pa & min) ***************
+*********** STAGE: CAPILLARY PRESSURE (Pa & min) ***************
 *===================================================================*
-* 1. Trích xuất dữ liệu gốc
+* 1. Extract original data from the results table
 EVPC_10_O = EVOL 'BLEU' 'TEMP' TAB0 'TEMPERATURES' 'PC' PO_10;
-EVPC_20_O = EVOL 'VERT' 'TEMP' TAB0 'TEMPERATURES' 'PC' PO_20;
-EVPC_30_O = EVOL 'ROUG' 'TEMP' TAB0 'TEMPERATURES' 'PC' PO_30;
-EVPC_40_O = EVOL 'TURQ' 'TEMP' TAB0 'TEMPERATURES' 'PC' PO_40;
-EVPC_50_O = EVOL 'ROSE' 'TEMP' TAB0 'TEMPERATURES' 'PC' PO_50;
+EVPC_20_O = EVOL 'ORAN' 'TEMP' TAB0 'TEMPERATURES' 'PC' PO_20;
+EVPC_30_O = EVOL 'JAUN' 'TEMP' TAB0 'TEMPERATURES' 'PC' PO_30;
+EVPC_40_O = EVOL 'ROSE' 'TEMP' TAB0 'TEMPERATURES' 'PC' PO_40;
+EVPC_50_O = EVOL 'VERT' 'TEMP' TAB0 'TEMPERATURES' 'PC' PO_50;
 
-* 2. Gán lại trục hoành mới LT_MIN
+* 2. Redefine the horizontal axis to LT_MIN
 EVPC_10 = EVOL 'BLEU' 'MANU' 'Time (min)' LT_MIN 'Capillary Pressure (Pa)' (EXTR EVPC_10_O 'ORDO');
-EVPC_20 = EVOL 'VERT' 'MANU' 'Time (min)' LT_MIN 'Capillary Pressure (Pa)' (EXTR EVPC_20_O 'ORDO');
-EVPC_30 = EVOL 'ROUG' 'MANU' 'Time (min)' LT_MIN 'Capillary Pressure (Pa)' (EXTR EVPC_30_O 'ORDO');
-EVPC_40 = EVOL 'TURQ' 'MANU' 'Time (min)' LT_MIN 'Capillary Pressure (Pa)' (EXTR EVPC_40_O 'ORDO');
-EVPC_50 = EVOL 'ROSE' 'MANU' 'Time (min)' LT_MIN 'Capillary Pressure (Pa)' (EXTR EVPC_50_O 'ORDO');
+EVPC_20 = EVOL 'ORAN' 'MANU' 'Time (min)' LT_MIN 'Capillary Pressure (Pa)' (EXTR EVPC_20_O 'ORDO');
+EVPC_30 = EVOL 'JAUN' 'MANU' 'Time (min)' LT_MIN 'Capillary Pressure (Pa)' (EXTR EVPC_30_O 'ORDO');
+EVPC_40 = EVOL 'ROSE' 'MANU' 'Time (min)' LT_MIN 'Capillary Pressure (Pa)' (EXTR EVPC_40_O 'ORDO');
+EVPC_50 = EVOL 'VERT' 'MANU' 'Time (min)' LT_MIN 'Capillary Pressure (Pa)' (EXTR EVPC_50_O 'ORDO');
 
-* 3. Vẽ đồ thị áp suất mao dẫn
+* 3. Draw the capillary pressure graph
 DESS (EVPC_10 ET EVPC_20 ET EVPC_30 ET EVPC_40 ET EVPC_50)
      'XBOR' 0. 650. 'XGRA' 50.
      'GRIL' 'POIN' 'GRIS'
      TITRE 'Capillary Pressure Evolution at Measurement Points' ;
+
+    
