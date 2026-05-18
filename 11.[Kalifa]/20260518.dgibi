@@ -1,0 +1,636 @@
+*---------------------------------------------------------------------
+* ADIABATIC HYDRATION / AGING / ACCIDENT - COOLING OF KALIFA (2000) EXPERIMENT
+*---------------------------------------------------------------------
+* By: Tan Kiet HONG
+
+* Reference code: * G.Sciumè (31 - 10 - 2024)
+* "CONCRETE CASTING AND LIFETIME CONDITIONS IMPACT ON HIGH TEMPERATURE RESISTANCE" by G. Sciumè (1), S. Dal Pont (2), D. Dauti (2)
+* (1) I2M, Université de Bordeaux, Bordeaux, France
+* (2) 3SR, Université Grenoble Alpes, Grenoble, France
+
+
+OPTI ECHO 0;
+*---------------------------------------------------------------------
+* CONSTANT PHYSICAL PARAMEMTERS
+*---------------------------------------------------------------------
+RGP1     = 8.3145 ;                                                   
+MMGA1    = 28.9645E-3 ;                                               
+MMGW1    = 18.0153E-3 ;
+RHOS1    = 2625.8 ;
+RHOW0    = 1000. ;
+CPW1     = 4181.0 ;
+CPGW1    = 1805.0 ;
+CPGA1    = 1005.7 ;
+
+*---------------------------------------------------------------------
+* MESH - KALIFA 120x120mm
+*---------------------------------------------------------------------
+'OPTI' 'DIME' 2 'MODE' PLAN CONT 'ELEM' QUA4;
+
+* OPTION 1: REGTANGULAR MESH 24X24 ELEMENTS (Original mesh used in the paper is 28x28)
+p1  = 0.0   0.0;
+p2  = 0.12  0.0;
+p3  = 0.12  0.12;
+p4  = 0.0   0.12;
+
+DAB1 = DROI 24 p1 p2;
+DDA1 = DROI 24 p2 p3;
+DCD1 = DROI 24 p3 p4;
+DBC1 = DROI 24 p4 p1;
+
+CONT1  = DAB1 ET DDA1 ET DCD1 ET DBC1;
+MAIL1  = (SURF CONT1) 'COUL' 'BLAN';
+
+* OPTION 2: REFINED 1D MESH (Not used in this example)
+L1       = 0.12 ; 
+H1       = 0.12 ;       
+DY_COLD  = 0.005;       
+DY_HOT   = 0.001;       
+
+P1  = 0.   0.;         
+P2  = 0.   H1;         
+L12 = DROI P1 P2 'DINI' DY_COLD 'DFIN' DY_HOT;
+
+*MAIL1 = (TRAN 1 L12 (L1 0.)) 'COUL' 'BLAN';
+*DCD1 = COTE 2 MAIL1;
+*DAB1 = COTE 4 MAIL1; 
+
+* VISUALIZATION OF THE MESH
+TRAC (MAIL1 ET (DCD1 'COUL' 'ROUG') ET (DAB1 'COUL' 'BLEU'));
+
+* ALIAS FOR BOUNDARIES: DCD1 = hot face (top, y=0.12) and DAB1 = cold face (bottom, y=0)
+* [HYRIC] Vapor convection
+CONTH1 = DCD1;
+CONTH2 = DAB1;
+CONTH = CONTH1 ET CONTH2;
+
+* [THERMAL] Thermal convection and radiation
+CONTT1 = DCD1;
+CONTT2 = DAB1;
+
+* Points of measurement for temperature (PO_00 to PO_120) along the vertical centerline of the sample
+* x = 0.06 (mid sample), y = 0.120 - distance from hot face
+PO_00  = MAIL1 POIN 'PROC' (0.06 0.120);
+PO_10  = MAIL1 POIN 'PROC' (0.06 0.110);
+PO_20  = MAIL1 POIN 'PROC' (0.06 0.100);
+PO_30  = MAIL1 POIN 'PROC' (0.06 0.090);
+PO_40  = MAIL1 POIN 'PROC' (0.06 0.080);
+PO_50  = MAIL1 POIN 'PROC' (0.06 0.070);
+PO_120 = MAIL1 POIN 'PROC' (0.06 0.000);
+
+*---------------------------------------------------------------------
+* MATERIAL PROPERTIES (HPC M100)
+*---------------------------------------------------------------------
+
+* MIX DATA
+cem  = 350.   ;
+aggr = 1920.  ;
+wc   = 0.32   ;
+sc   = 0.108  ;
+
+* HYDRATION PROCESS DATA (affinity. activation energy. hydration heat)
+AI   = 6    ;
+AP   = 1250.  ;
+GAMP = 0.24   ;
+ALFA = 48.    ;
+EAR1 = 5369.  ;
+lat1 = 114.3e6 ;
+
+* INTRINSIC PERMEABILITY
+*KINT = 2.E-19 ;
+KINT = 7.5E-20 ;
+
+* THERMAL PARAMETERS
+CS   = 948.   ;
+KS   = 1.67   ;
+
+* DESORPTION ISOTHERME MODEL PARAMETERS
+*a1   =  46.9364E6 ;
+*b1   =  1.9433    ;
+*c1   =  0.4854    ;
+
+a1   =  18.6E6 ;
+b1   =  2.27    ;
+c1   =  1.5     ;
+
+* VISUALAIZATION OF THE RETENTION CURVE
+LPC = PROG 1.E5 PAS 1.E6 1.E9 ;
+LSW = PROG ;
+
+REPETER BOU1 (DIME LPC);
+  PC_I = EXTR LPC &BOU1 ;
+  SW_I = (1. + ((PC_I / a1)**b1))**(-1. * c1) ;
+  LSW = LSW ET (PROG SW_I) ;
+FIN BOU1 ;
+
+EVO1 = EVOL 'BLEU' MANU 'Pc (Pa)' LPC 'Sw' LSW ;
+DESS EVO1 XLOG YLIN 
+      'GRIL' 'POIN' 'GRIS'
+      TITRE 'Desorption Isotherm HPC M100' ;
+
+
+*---------------------------------------------------------------------
+* MODEL DEFINITION
+*---------------------------------------------------------------------
+MODTHC  = 'MODE' MAIL1 'THERMOHYDRIQUE' 'BETON_THM' 'CONS' 'BO';
+MODCOT1 = 'MODE' CONTT1 'THERMIQUE' 'CONVECTION';
+MODCOT2 = 'MODE' CONTT2 'THERMIQUE' 'CONVECTION';
+MODRAY  = 'MODE' CONTT1 'THERMIQUE' 'RAYONNEMENT' 'INFINI';
+MOD_TOT = MODTHC ET MODCOT1 ET MODCOT2 ET MODRAY ;
+*---------------------------------------------------------------------
+
+*---------------------------------------------------------------------
+* MATERIAL MODEL DEFINITION
+*---------------------------------------------------------------------
+WINF GAM0 POR1 APOR = @POWERS cem aggr wc sc;
+MATTHC = 'MATE' MODTHC 'CS'  CS    'KS'   KS   'GAM0' GAM0 'WINF' WINF
+'VGA' a1   'VGB'  b1   'VGC' c1    'K1' KINT  'AK'   7.  'BK'   1. 
+'KLI1' 20000.  'AKLI'   1.  'BKLI' 1. 'POR1' POR1 'APOR' APOR 
+'AFF1' Ai  'AFF2' Ap   'AFF3' GAMP 'AFF4' ALFA 'EAR'  EAR1 'QLAT' lat1;
+MATCOT1  = 'MATE'  MODCOT1   'H'     10.;
+MATCOT2  = 'MATE'  MODCOT2   'H'     10.;
+MATRAY  = 'MATE'  MODRAY   'EMIS'   0.;
+MAT_TOT = MATTHC et MATCOT1 ET MATCOT2 ET MATRAY;
+*---------------------------------------------------------------------
+
+*---------------------------------------------------------------------
+* Vapor convection (processed by Charther) and therefore not to be added to the overall model
+*---------------------------------------------------------------------
+MODCOH  = 'MODE' CONTH 'THERMIQUE' 'CONVECTION' ;
+MATCOH  = 'MATE' MODCOH   'H'                0. ;
+*---------------------------------------------------------------------
+
+*---------------------------------------------------------------------*
+* TEST DESCRIPTION AND TEMPORAL DISCRETIZATION
+*---------------------------------------------------------------------*
+* Modeled phases
+* I)   Early age :        0           ---> 3 days              /  adiabatic conditions 
+* II)  Aging     :        3           ---> age time            /  H & T convection
+* III) Accident  : age time           ---> age time + 240 mins /  H convection & T convection + radiation (hot face)
+* IV)  Cooling   : age time + 240 min ---> age time + 600 mins /  H & T convection
+*---------------------------------------------------------------------*
+minute1  = 60.         ;
+hours1   = 3600.       ;
+day1     = 86400.      ;
+year1    = 360 * day1  ;
+
+* Duration of diferent phases
+early_time =   3 * day1   ;
+age_time   =   1 * year1  ;
+
+* Accident phase duration 
+* x = 10 mins (original paper is 0 mins but we need some time for the ramp to reach 400oC)
+* Ramp:    0    -->x min     (20oC --> 400oC)
+* Linear1: x    -->x+130 min (400oC --> 460oC)
+* Linear2: x+130-->x+240 min (460oC --> 466oC)
+ramp_time   = 1 * minute1; 
+lin1_time   = 130 * minute1;
+lin2_time   = 110 * minute1;
+acc_time    = ramp_time + lin1_time + lin2_time;
+
+cool_time   = 360 * minute1;
+
+* Time markers for the different phases
+temps1       =  early_time ;
+
+temps2a      =  early_time + (3 * day1) ;   
+temps2       =  age_time   ;
+
+temps_ramp   = age_time  + ramp_time ;
+temps_lin1   = age_time  + ramp_time + lin1_time ;
+temps3       = age_time  + acc_time ;
+
+temps4       =  age_time +  acc_time + cool_time ;
+
+
+* Time steps for the different phases
+DT01     =  600.;
+
+DT12a    =  600.;
+DT2a2    =  3 * day1;
+
+DT_RAMP  =   5.; 
+DT_LIN1  =   15. ; 
+DT_LIN2  =   60. ;
+
+DT34     =   60.;
+
+* Calculation of the time steps for the different phases
+LTP_HYDR = PROG  0.              PAS DT01 temps1        ;  
+LTP_AGIN = PROG (temps1 + DT12a) PAS DT12a temps2a PAS DT2a2 temps2 ;
+LTP_ACCI = PROG (temps2 + DT_RAMP) PAS DT_RAMP temps_ramp PAS DT_LIN1 temps_lin1 PAS DT_LIN2 temps3;
+LTP_COOL = PROG (temps3 + DT34)    PAS DT34 temps4 ;
+LTP_TOT  = LTP_HYDR ET LTP_AGIN ET LTP_ACCI ET LTP_COOL;   
+
+* Saved times
+LSA_HYDR = PROG  0.              PAS hours1 temps1; 
+LSA_AGIN = PROG (temps1 + DT2a2) PAS DT2a2  temps2;                    
+LSA_ACCI = PROG (temps2 + 60.)  PAS 60.   temps3; 
+LSA_COOL = PROG (temps3 + 60.)  PAS 60.   temps4; 
+LSA_TOT  = LSA_HYDR ET LSA_AGIN ET LSA_ACCI ET LSA_COOL;          
+*---------------------------------------------------------------------
+
+
+*---------------------------------------------------------------------
+* INITIAL CONDITION (COST adibatic calorimetry test)
+* - initial degree of hydration HY_0 = 0
+* - initial temperature TC_0 = 22°
+* - initial gas pressure PG_0 = p_atm
+* - initial relative humidity HR_0 = 0.99995
+HY_0   = 0.            ;
+TC_0   = 20.           ;
+TK_0   = 273.15 + TC_0 ;
+PG_0   = 101325.       ;
+HR_0   = 0.5       ;
+
+ZERO1  = MANU 'CHPO' MAIL1 'SCAL' 0.       ;
+CHTK_0 = MANU 'CHPO' MAIL1 'T' TK_0        ;
+PVS_0 XX YY ZZ KK JJ= @PVSAT ZERO1 ZERO1 CHTK_0    ;
+
+* Clapeyron
+PC_0   = PG_0 - PVS_0 + ((-1.)*(RGP1*TK_0*RHOW0*(LOG(HR_0))/MMGW1));
+PC_0   = PC_0 'NOMC' 'PC';
+
+* Calculation of the corresponding degree of saturation
+CHPC_0 = MANU CHPO MAIL1 1 'SCAL' (MAXI PC_0);
+CHTK_0 = MANU CHPO MAIL1 1 'SCAL' TK_0;
+HYDR   = MANU CHPO MAIL1 1 'SCAL' HY_0;
+cha1   = MANU CHPO MAIL1 1 'SCAL' a1;
+chb1   = MANU CHPO MAIL1 1 'SCAL' b1;
+chc1   = MANU CHPO MAIL1 1 'SCAL' c1;
+chgam0 = MANU CHPO MAIL1 1 'SCAL' gam0;
+
+SW0    = @SATURA CHPC_0 CHTK_0 HYDR cha1 chb1 chc1 chgam0;
+
+CI_TH  = ('MANU' 'CHPO' MAIL1 2 'PG' PG_0 'T' TK_0)  +  PC_0;
+*TRAC CI_TH MAIL1;
+*---------------------------------------------------------------------*
+
+
+
+*---------------------------------------------------------------------*
+* BOUNDARY CONDITIONS
+* - PC_ext = p_atm  
+*
+* - TC_ext = 20°C until "age time" then accident phase thermal loading (see below)
+*
+*             / 0.95            0      < time < 3 days
+* - HR_ext = {  0.95 --> 0.50   3 days < time < 6 days
+*             \ 0.50            6 days < time < age time
+* - Accident:  PGWe_i  = 1300.;
+*---------------------------------------------------------------------*
+TK_E  = TK_0;
+PG_E  = PG_0;
+HR_E1 = 0.95;
+HR_E2 = 0.50;
+
+* PG: imposed gas pressure at the top and bottom faces (PG_ext = p_atm)
+EV_PG = 'EVOL' 'MANU' 'TEMPS'  ('PROG' 0.  temps4) ('PROG' 1. 1.);
+CLPG1 = 'BLOQ' 'PG'         CONTT1;
+CLPG2 = 'BLOQ' 'PG'         CONTT2;
+CLPGT = CLPG1 ET CLPG2;   
+CHPG1 = 'DEPI'  CLPG1        PG_E;
+CHPG2 = 'DEPI'  CLPG2        PG_E;     
+CGPG1 = 'CHAR' 'TIMP' CHPG1 EV_PG;
+CGPG2 = 'CHAR' 'TIMP' CHPG2 EV_PG;
+
+
+* T: Thermal convection and radiation
+* --- Temperature loading curve ---
+
+T_RAMP      = 400. ;
+DELTAT_RAMP = T_RAMP - TC_0;
+DELTAT_LIN1 = 60.;
+DELTAT_LIN2 = 6.;
+
+N1     = 1   ;
+PRO_TK = PROG;
+REPETER BOU_TE (DIME LTP_TOT);
+    TIMEi  = EXTR N1 LTP_TOT;
+* Before accident phase, temperature is constant at 20oC
+SI (TIMEi '<EG' temps2);
+TKi    = TK_E;
+FINS;
+* Ramp 20-->400oC in x min
+SI ((TIMEi '>' temps2) ET (TIMEi '<EG' temps_ramp));
+TKi    = TK_E + (DELTAT_RAMP*((TIMEi - temps2)/(temps_ramp - temps2)));
+FINS;
+* Linear 400-->460oC from x min to x+130 min
+SI ((TIMEi '>' temps_ramp) ET (TIMEi '<EG' temps_lin1));
+TKi = T_RAMP + 273.15 + (DELTAT_LIN1 * ((TIMEi - temps_ramp) / (temps_lin1 - temps_ramp)));
+FINS;
+* Linear 460-->466oC from x+130 min to x+240 min
+SI ((TIMEi '>' temps_lin1) ET (TIMEi '<EG' temps3));
+TKi = T_RAMP + DELTAT_LIN1 + 273.15 + (DELTAT_LIN2 * ((TIMEi - temps_lin1) / (temps3 - temps_lin1)));
+FINS;
+* Thermal radiator turned off after x+240 min
+SI (TIMEi '>' temps3);
+TKi    = TK_E;
+FINS;
+    PRO_TK = PRO_TK ET (PROG TKi);
+    N1 = N1 + 1;
+FIN BOU_TE;
+
+EVTK1 = 'EVOL' 'MANU'  LTP_TOT  PRO_TK;
+*DESS EVTK1 'XBOR' temps3 temps4;
+
+* PLOT THERMAL RAMP IN CELSIUS (Accident and cooling phases)
+L_TIME = EXTR EVTK1 'ABSC' ;
+L_TEMP = EXTR EVTK1 'ORDO' ;
+L_TIME_MIN = (L_TIME - (PROG (DIME L_TIME) * temps2)) / 60. ;
+L_TEMP_C   = L_TEMP - (PROG (DIME L_TEMP) * 273.15) ;
+EV_PLOT = EVOL 'ROUG' 'MANU' 'Time (min)' L_TIME_MIN 'Temp (C)' L_TEMP_C ;
+
+DESS EV_PLOT 'XBOR' 0. 650. 'XGRA' 50. 
+             'YBOR' 0. 500. 'YGRA' 50. 
+             'GRIL' 'POIN' 'GRIS'
+             TITRE 'Thermal Loading Curve - Kalifa HPC M100' ;
+
+* --- Hot face: convection + radiation (T_inf = T_rad) ---
+CHTK1 = 'MANU' 'CHPO'  CONTT1 1 'T'  1. 'NATURE' 'DISCRETE';
+CGTK1 = ('CHAR' 'TECO'  CHTK1    EVTK1) ET
+        ('CHAR' 'TERA'  CHTK1    EVTK1);
+
+* --- Cold face: convection only (T_inf = T_room = const) ---
+EVTC1 = 'EVOL' 'MANU' ('PROG' 0. temps4) ('PROG' TK_0 TK_0);
+CHTK2 = 'MANU' 'CHPO' CONTT2 1 'T' 1. 'NATURE' 'DISCRETE';
+CGTK2 = 'CHAR' 'TECO' CHTK2 EVTC1;
+
+
+* PC: hygral convection ( qw = hcv * (RGW_s - RGW_ext)n ) - Both faces
+N1      = 1   ;
+PRO_RGW = PROG;
+REPETER BOU_RGW (DIME LTP_TOT);
+    EXTR N1 LTP_TOT;
+    TIMEi        = EXTR N1 LTP_TOT;
+    TKi          = EXTR N1 PRO_TK ;
+    PVSe_i XX YY ZZ KK JJ 
+           = @PVSAT ZERO1 ZERO1 (MANU 'CHPO' MAIL1 'T' TKi);
+    PVSe_i       = MAXI PVSe_i;
+    FGPGW0 = (MMGW1 / RGP1 )* (1./TKi) ;
+       SI (TIMEi '<' temps1);
+       PGWe_i  = HR_E1 * PVSe_i;
+       FINS;
+       SI (TIMEi '>EG' temps1);
+       HR_i = HR_E1-(((TIMEi-temps1)/(temps2a-temps1))*(HR_E1-HR_E2));
+       PGWe_i  = HR_i * PVSe_i;
+       FINS;
+       SI (TIMEi '>' temps2a);
+       PGWe_i  = HR_E2 * PVSe_i;
+       FINS;
+       SI (TIMEi '>' temps2);
+       PGWe_i  = 1300.;
+       FINS;
+    RGWi    = FGPGW0 * PGWe_i ;
+    PRO_RGW = PRO_RGW ET (PROG RGWi);
+    N1 = N1 + 1;
+FIN BOU_RGW;
+EVPC1   = 'EVOL' 'MANU' LTP_TOT  PRO_RGW;
+*DESS EVPC1;
+CHPC1   = 'MANU' 'CHPO' CONTH  1  'SCAL'  1. 'NATURE' 'DISCRETE';
+CGPC1   = 'CHAR' 'TECO' CHPC1  EVPC1 ;
+*---------------------------------------------------------------------
+
+*---------------------------------------------------------------------*
+*VI. Resolution PASAPAS : Early age (sealed)
+*---------------------------------------------------------------------
+TAB0                         = 'TABL' ;
+TAB0 . 'MODELE'              = MOD_TOT ;
+TAB0 . 'CARACTERISTIQUES'    = MAT_TOT ;
+TAB0 . 'BLOCAGES_THERMIQUES' = CLPGT ;
+TAB0 . 'CHARGEMENT'          = CGPG1 ET CGPG2 ET CGTK1 ET CGTK2;
+TAB0 . 'TEMPS_CALCULES'      = LTP_HYDR ;
+TAB0 . 'TEMPS_SAUVES'        = LSA_HYDR ;
+TAB0 . 'PROCEDURE_THERMIQUE' = 'NONLINEAIRE' ;
+TAB0 . 'RELAXATION_THETA'    = 1. ;
+TAB0 . 'MOVA'                = 'D' ;
+
+*--Vapor convection (managed by the CHARTHM procedure)
+TAB0 . 'MO_CONVECTION_VAPEUR'     = TABLE;
+TAB0 . 'MO_CONVECTION_VAPEUR' . 1 = MODCOH ;
+TAB0 . 'MA_CONVECTION_VAPEUR'     = TABLE  ;
+TAB0 . 'MA_CONVECTION_VAPEUR' . 1 = MATCOH ;
+TAB0 . 'CH_CONVECTION_VAPEUR'     = TABLE  ; 
+TAB0 . 'CH_CONVECTION_VAPEUR' . 1 = CGPC1  ;
+*---------------------------------------------------------------------
+TAB0 . 'THM_PARAMETRES'      = MATTHC ;
+TAB0 . 'TEMPERATURES'        = 'TABL' ;
+TAB0 . 'TEMPERATURES' . 0    = CI_TH ;
+TAB0 . 'HYDRATATION'         = 'TABL' ;
+TAB0 . 'HYDRATATION' .  0    = MANU CHML MODTHC 'SCAL' HY_0;
+TAB0 . 'DCH'                 = 'TABL' ;
+TAB0 . 'DCH' .  0            = MANU CHML MODTHC 'SCAL' HY_0;
+*---------------------------------------------------------------------
+PASAPAS TAB0;
+
+* --- Check the total number of saved steps
+NTOT = DIME TAB0.'TEMPERATURES';
+MESS '--- Total saved steps = ' NTOT;
+
+* --- Visualization of the T, PG, PC field at the last saved time step (end of early aging)
+CHMT = EXCO 'T' TAB0 . 'TEMPERATURES' . (NTOT - 1);
+CHPG = EXCO 'PG' TAB0 . 'TEMPERATURES' . (NTOT - 1);
+CHPC = EXCO 'PC' TAB0 . 'TEMPERATURES' . (NTOT - 1);
+*TRAC CHMT MODTHC MAIL1;
+*TRAC CHPG MODTHC MAIL1;
+*TRAC CHPC MODTHC MAIL1;
+
+
+*---------------------------------------------------------------------
+* DRYING AND AGING
+*---------------------------------------------------------------------
+MATCOH  = 'MATE' MODCOH   'H'  0.002;
+
+*  Recalculation resumed
+TAB0 . 'MA_CONVECTION_VAPEUR' . 1 = MATCOH ;
+TAB0 . 'TEMPS_CALCULES'           = LTP_AGIN ;
+TAB0 . 'TEMPS_SAUVES'             = LSA_AGIN ;
+PASAPAS TAB0;
+*---------------------------------------------------------------------
+
+* --- Check the total number of saved steps
+NTOT = DIME TAB0.'TEMPERATURES';
+MESS '--- Total saved steps = ' NTOT;
+
+* --- Visualization of the T, PG, PC field at the last saved time step (end of aging)
+CHMT = EXCO 'T' TAB0 . 'TEMPERATURES' . (NTOT - 1);
+CHPG = EXCO 'PG' TAB0 . 'TEMPERATURES' . (NTOT - 1);
+CHPC = EXCO 'PC' TAB0 . 'TEMPERATURES' . (NTOT - 1);
+*TRAC CHMT MODTHC MAIL1;
+*TRAC CHPG MODTHC MAIL1;
+*TRAC CHPC MODTHC MAIL1;
+
+*---------------------------------------------------------------------
+opti SAUV 'EXAMPLE1D_HAA1_2024_PHASE1';
+SAUV;
+*---------------------------------------------------------------------
+
+*---------------------------------------------------------------------
+opti REST 'EXAMPLE1D_HAA1_2024_PHASE1';
+REST;
+*---------------------------------------------------------------------
+
+
+*---------------------------------------------------------------------
+* ACCIDENT
+*---------------------------------------------------------------------
+OPTI ECHO 0;
+DEBP PARATHER ;
+  'ARGUMENT' TABTHER*'TABLE' INST*'FLOTTANT' ;
+* (ENG) TABTHER is the input table of the PASAPAS procedur
+*       INST is the current calculation time
+* (ENG) The loading must be updated in the TABTHER.'WTABLE' table !
+* (ENG) The 'THER_COURANT' indice is containing the current iteration
+*       temperature field. The loading is updated to have TS = T.
+
+*'MESS' 'ENTRA PARATHER';
+
+WTABLE = TABTHER .'WTABLE' ;
+
+SI ( (INST '>' temps2) ET (INST '<EG' temps3) );
+   MATCOT1 = 'MATE' MODCOT1   'H'    8. ;
+   MATCOT2 = 'MATE' MODCOT2   'H'    8.3 ;
+   MATRAY  = 'MATE' MODRAY   'EMIS'  0.35  ;
+   WTABLE.'MAT_TOT' = MATTHC et MATCOT1 et MATRAY et MATCOT2; 
+FINS;
+
+FINP;
+*---------------------------------------------------------------------
+
+MATCOH  = 'MATE' MODCOH   'H'     0.018 ;
+
+* Reprise du calcul
+TAB0 . 'PROCEDURE_PARATHER'    = VRAI ;
+TAB0 . 'CONVECTION_VAPEUR'        = 2 ;
+TAB0 . 'MA_CONVECTION_VAPEUR' . 1 = MATCOH ;
+TAB0 . 'TEMPS_CALCULES'           = LTP_ACCI ;
+TAB0 . 'TEMPS_SAUVES'             = LSA_ACCI ;
+PASAPAS TAB0;
+*---------------------------------------------------------------------
+
+* --- Check the total number of saved steps
+NTOT = DIME TAB0.'TEMPERATURES';
+MESS '--- Total saved steps = ' NTOT;
+
+* --- Visualization of the T, PG, PC field at the last saved time step (end of aging)
+CHMT = EXCO 'T' TAB0 . 'TEMPERATURES' . (NTOT - 1);
+CHPG = EXCO 'PG' TAB0 . 'TEMPERATURES' . (NTOT - 1);
+CHPC = EXCO 'PC' TAB0 . 'TEMPERATURES' . (NTOT - 1);
+TRAC CHMT MODTHC MAIL1;
+TRAC CHPG MODTHC MAIL1;
+TRAC CHPC MODTHC MAIL1;
+
+*---------------------------------------------------------------------
+* COOLING
+*---------------------------------------------------------------------
+MATCOH  = 'MATE' MODCOH   'H'  0.002;
+
+*  Recalculation resumed
+TAB0 . 'MA_CONVECTION_VAPEUR' . 1 = MATCOH ;
+TAB0 . 'TEMPS_CALCULES'           = LTP_COOL ;
+TAB0 . 'TEMPS_SAUVES'             = LSA_COOL ;
+PASAPAS TAB0;
+*---------------------------------------------------------------------
+
+* --- Check the total number of saved steps
+NTOT = DIME TAB0.'TEMPERATURES';
+MESS '--- Total saved steps = ' NTOT;
+
+* --- Visualization of the T, PG, PC field at the last saved time step (end of aging)
+CHMT = EXCO 'T' TAB0 . 'TEMPERATURES' . (NTOT - 1);
+CHPG = EXCO 'PG' TAB0 . 'TEMPERATURES' . (NTOT - 1);
+CHPC = EXCO 'PC' TAB0 . 'TEMPERATURES' . (NTOT - 1);
+TRAC CHMT MODTHC MAIL1;
+TRAC CHPG MODTHC MAIL1;
+TRAC CHPC MODTHC MAIL1;
+
+*===================================================================*
+* KHỞI TẠO TRỤC THỜI GIAN CHUNG (ĐỔI SANG PHÚT & RESET VỀ 0 TẠI TEMPS2)
+*===================================================================*
+EVT_INIT = EVOL 'BLAN' 'TEMP' TAB0 'TEMPERATURES' 'T' PO_00;
+LT_SEC   = EXTR EVT_INIT 'ABSC' ;
+LT_MIN   = (LT_SEC - (PROG (DIME LT_SEC) * temps2)) / 60. ;
+
+*===================================================================*
+*********** GIAI ĐOẠN: TEMPERATURE (°C & min) ***********************
+*===================================================================*
+* 1. Trích xuất dữ liệu gốc từ bảng kết quả (đơn vị Kelvin)
+EVT_00_O  = EVOL 'BLAN' 'TEMP' TAB0 'TEMPERATURES' 'T'  PO_00;
+EVT_10_O  = EVOL 'BLEU' 'TEMP' TAB0 'TEMPERATURES' 'T'  PO_10;
+EVT_20_O  = EVOL 'VERT' 'TEMP' TAB0 'TEMPERATURES' 'T'  PO_20;
+EVT_30_O  = EVOL 'ROUG' 'TEMP' TAB0 'TEMPERATURES' 'T'  PO_30;
+EVT_40_O  = EVOL 'TURQ' 'TEMP' TAB0 'TEMPERATURES' 'T'  PO_40;
+EVT_50_O  = EVOL 'ROSE' 'TEMP' TAB0 'TEMPERATURES' 'T'  PO_50;
+EVT_120_O = EVOL 'JAUN' 'TEMP' TAB0 'TEMPERATURES' 'T'  PO_120;
+
+* 2. Trừ đi 273.15 để đổi sang độ C
+LY_00   = (EXTR EVT_00_O  'ORDO') - (PROG (DIME LT_MIN) * 273.15);
+LY_10   = (EXTR EVT_10_O  'ORDO') - (PROG (DIME LT_MIN) * 273.15);
+LY_20   = (EXTR EVT_20_O  'ORDO') - (PROG (DIME LT_MIN) * 273.15);
+LY_30   = (EXTR EVT_30_O  'ORDO') - (PROG (DIME LT_MIN) * 273.15);
+LY_40   = (EXTR EVT_40_O  'ORDO') - (PROG (DIME LT_MIN) * 273.15);
+LY_50   = (EXTR EVT_50_O  'ORDO') - (PROG (DIME LT_MIN) * 273.15);
+LY_120  = (EXTR EVT_120_O 'ORDO') - (PROG (DIME LT_MIN) * 273.15);
+
+* 3. Định nghĩa lại các đường Evolution theo hệ trục mới (min và °C)
+EVT_00  = EVOL 'BLAN' 'MANU' 'Time (min)' LT_MIN 'Temperature (C)' LY_00;
+EVT_10  = EVOL 'BLEU' 'MANU' 'Time (min)' LT_MIN 'Temperature (C)' LY_10;
+EVT_20  = EVOL 'VERT' 'MANU' 'Time (min)' LT_MIN 'Temperature (C)' LY_20;
+EVT_30  = EVOL 'ROUG' 'MANU' 'Time (min)' LT_MIN 'Temperature (C)' LY_30;
+EVT_40  = EVOL 'TURQ' 'MANU' 'Time (min)' LT_MIN 'Temperature (C)' LY_40;
+EVT_50  = EVOL 'ROSE' 'MANU' 'Time (min)' LT_MIN 'Temperature (C)' LY_50;
+EVT_120 = EVOL 'JAUN' 'MANU' 'Time (min)' LT_MIN 'Temperature (C)' LY_120;
+
+* 4. Vẽ đồ thị nhiệt độ chia vạch 50 đơn vị hoàn chỉnh
+DESS (EVT_00 ET EVT_10 ET EVT_20 ET EVT_30 ET EVT_40 ET EVT_50 ET EVT_120)
+     'XBOR' 0. 650. 'XGRA' 50.
+     'YBOR' 0. 500. 'YGRA' 50.
+     'GRIL' 'POIN' 'GRIS'
+     TITRE 'Temperature Evolution at Measurement Points' ;
+
+*===================================================================*
+*********** GIAI ĐOẠN: GAS PRESSURE (Pa & min) *********************
+*===================================================================*
+* 1. Trích xuất dữ liệu gốc
+EVPG_10_O = EVOL 'BLEU' 'TEMP' TAB0 'TEMPERATURES' 'PG' PO_10;
+EVPG_20_O = EVOL 'VERT' 'TEMP' TAB0 'TEMPERATURES' 'PG' PO_20;
+EVPG_30_O = EVOL 'ROUG' 'TEMP' TAB0 'TEMPERATURES' 'PG' PO_30;
+EVPG_40_O = EVOL 'TURQ' 'TEMP' TAB0 'TEMPERATURES' 'PG' PO_40;
+EVPG_50_O = EVOL 'ROSE' 'TEMP' TAB0 'TEMPERATURES' 'PG' PO_50;
+
+* 2. Gán lại trục hoành mới LT_MIN (Áp suất giữ nguyên đơn vị gốc Pa)
+EVPG_10 = EVOL 'BLEU' 'MANU' 'Time (min)' LT_MIN 'Gas Pressure (Pa)' (EXTR EVPG_10_O 'ORDO');
+EVPG_20 = EVOL 'VERT' 'MANU' 'Time (min)' LT_MIN 'Gas Pressure (Pa)' (EXTR EVPG_20_O 'ORDO');
+EVPG_30 = EVOL 'ROUG' 'MANU' 'Time (min)' LT_MIN 'Gas Pressure (Pa)' (EXTR EVPG_30_O 'ORDO');
+EVPG_40 = EVOL 'TURQ' 'MANU' 'Time (min)' LT_MIN 'Gas Pressure (Pa)' (EXTR EVPG_40_O 'ORDO');
+EVPG_50 = EVOL 'ROSE' 'MANU' 'Time (min)' LT_MIN 'Gas Pressure (Pa)' (EXTR EVPG_50_O 'ORDO');
+
+* 3. Vẽ đồ thị áp suất khí (Trục X đồng bộ từ 0 đến 600 min, trục Y tự động scale)
+DESS (EVPG_10 ET EVPG_20 ET EVPG_30 ET EVPG_40 ET EVPG_50)
+     'XBOR' 0. 650. 'XGRA' 50.
+     'GRIL' 'POIN' 'GRIS'
+     TITRE 'Gas Pressure Evolution at Measurement Points' ;
+
+
+*===================================================================*
+*********** GIAI ĐOẠN: CAPILLARY PRESSURE (Pa & min) ***************
+*===================================================================*
+* 1. Trích xuất dữ liệu gốc
+EVPC_10_O = EVOL 'BLEU' 'TEMP' TAB0 'TEMPERATURES' 'PC' PO_10;
+EVPC_20_O = EVOL 'VERT' 'TEMP' TAB0 'TEMPERATURES' 'PC' PO_20;
+EVPC_30_O = EVOL 'ROUG' 'TEMP' TAB0 'TEMPERATURES' 'PC' PO_30;
+EVPC_40_O = EVOL 'TURQ' 'TEMP' TAB0 'TEMPERATURES' 'PC' PO_40;
+EVPC_50_O = EVOL 'ROSE' 'TEMP' TAB0 'TEMPERATURES' 'PC' PO_50;
+
+* 2. Gán lại trục hoành mới LT_MIN
+EVPC_10 = EVOL 'BLEU' 'MANU' 'Time (min)' LT_MIN 'Capillary Pressure (Pa)' (EXTR EVPC_10_O 'ORDO');
+EVPC_20 = EVOL 'VERT' 'MANU' 'Time (min)' LT_MIN 'Capillary Pressure (Pa)' (EXTR EVPC_20_O 'ORDO');
+EVPC_30 = EVOL 'ROUG' 'MANU' 'Time (min)' LT_MIN 'Capillary Pressure (Pa)' (EXTR EVPC_30_O 'ORDO');
+EVPC_40 = EVOL 'TURQ' 'MANU' 'Time (min)' LT_MIN 'Capillary Pressure (Pa)' (EXTR EVPC_40_O 'ORDO');
+EVPC_50 = EVOL 'ROSE' 'MANU' 'Time (min)' LT_MIN 'Capillary Pressure (Pa)' (EXTR EVPC_50_O 'ORDO');
+
+* 3. Vẽ đồ thị áp suất mao dẫn
+DESS (EVPC_10 ET EVPC_20 ET EVPC_30 ET EVPC_40 ET EVPC_50)
+     'XBOR' 0. 650. 'XGRA' 50.
+     'GRIL' 'POIN' 'GRIS'
+     TITRE 'Capillary Pressure Evolution at Measurement Points' ;
