@@ -27,7 +27,7 @@ CPGA1    = 1005.7 ;
 *---------------------------------------------------------------------
 'OPTI' 'DIME' 2 'MODE' PLAN CONT 'ELEM' QUA4;
 
-* OPTION 1: REGTANGULAR MESH 24X24 ELEMENTS (Original mesh used in the paper is 28x28)
+* OPTION 1: REGTANGULAR MESH 24X24 ELEMENTS (Original mesh used in Dauti's thesis is 28x28)
 p1  = 0.0   0.0;
 p2  = 0.12  0.0;
 p3  = 0.12  0.12;
@@ -337,7 +337,7 @@ L_TIME_MIN = (L_TIME - (PROG (DIME L_TIME) * temps2)) / 60. ;
 L_TEMP_C   = L_TEMP - (PROG (DIME L_TEMP) * 273.15) ;
 EV_PLOT = EVOL 'ROUG' 'MANU' 'Time (min)' L_TIME_MIN 'Temp (C)' L_TEMP_C ;
 
-DESS EV_PLOT 'XBOR' 0. 650. 'XGRA' 50. 
+DESS EV_PLOT 'XBOR' 0. 600. 'XGRA' 50. 
              'YBOR' 0. 500. 'YGRA' 50. 
              'GRIL' 'POIN' 'GRIS'
              TITRE 'Thermal Loading Curve - Kalifa HPC M100' ;
@@ -422,11 +422,17 @@ PASAPAS TAB0;
 *---------------------------------------------------------------------
 opti SAUV 'KALIFA_PHASE1';
 SAUV;
+
+opti SAUV 'FORMAT' 'D:\castem\KALIFA_PHASE1';
+SAUV 'FORMAT';
 *---------------------------------------------------------------------
 
 *---------------------------------------------------------------------
 opti REST 'KALIFA_PHASE1';
 REST;
+
+*opti REST 'FORMAT' 'D:\castem\KALIFA_PHASE1';
+*REST 'FORMAT';
 *---------------------------------------------------------------------
 
 * --- Check the total number of saved steps
@@ -455,11 +461,17 @@ PASAPAS TAB0;
 *---------------------------------------------------------------------
 opti SAUV 'KALIFA_PHASE2';
 SAUV;
+
+opti SAUV 'FORMAT' 'D:\castem\KALIFA_PHASE2';
+SAUV 'FORMAT';
 *---------------------------------------------------------------------
 
 *---------------------------------------------------------------------
 opti REST 'KALIFA_PHASE2';
 REST;
+
+*opti REST 'FORMAT' 'D:\castem\KALIFA_PHASE2';
+*REST 'FORMAT';
 *---------------------------------------------------------------------
 
 * --- Check the total number of saved steps
@@ -517,11 +529,17 @@ PASAPAS TAB0;
 *---------------------------------------------------------------------
 opti SAUV 'KALIFA_PHASE3';
 SAUV;
+
+opti SAUV 'FORMAT' 'D:\castem\KALIFA_PHASE3';
+SAUV 'FORMAT';
 *---------------------------------------------------------------------
 
 *---------------------------------------------------------------------
 opti REST 'KALIFA_PHASE3';
 REST;
+
+*opti REST 'FORMAT' 'D:\castem\KALIFA_PHASE3';
+*REST 'FORMAT';
 *---------------------------------------------------------------------
 
 * --- Check the total number of saved steps
@@ -567,11 +585,17 @@ PASAPAS TAB0;
 *---------------------------------------------------------------------
 opti SAUV 'KALIFA_PHASE4';
 SAUV;
+
+opti SAUV 'FORMAT' 'D:\castem\KALIFA_PHASE4';
+SAUV 'FORMAT';
 *---------------------------------------------------------------------
 
 *---------------------------------------------------------------------
 opti REST 'KALIFA_PHASE4';
 REST;
+
+*opti REST 'FORMAT' 'D:\castem\KALIFA_PHASE4';
+*REST 'FORMAT';
 *---------------------------------------------------------------------
 
 * --- Check the total number of saved steps
@@ -625,7 +649,7 @@ EVT_120 = EVOL 'BLAN' 'MANU' 'Time (min)' LT_MIN 'Temperature (C)' LY_120;
 
 * 4. Draw a complete temperature graph with 50-unit divisions.
 DESS (EVT_00 ET EVT_10 ET EVT_20 ET EVT_30 ET EVT_40 ET EVT_50 ET EVT_120)
-     'XBOR' 0. 650. 'XGRA' 50.
+     'XBOR' 0. 600. 'XGRA' 50.
      'YBOR' 0. 500. 'YGRA' 50.
      'GRIL' 'POIN' 'GRIS'
      TITRE 'Temperature Evolution at Measurement Points' ;
@@ -649,7 +673,7 @@ EVPG_50 = EVOL 'VERT' 'MANU' 'Time (min)' LT_MIN 'Gas Pressure (Pa)' (EXTR EVPG_
 
 * 3. Draw the gas pressure graph (X-axis synchronized from 0 to 600 min, Y-axis auto-scaled)
 DESS (EVPG_10 ET EVPG_20 ET EVPG_30 ET EVPG_40 ET EVPG_50)
-     'XBOR' 0. 650. 'XGRA' 50.
+     'XBOR' 0. 600. 'XGRA' 50.
      'GRIL' 'POIN' 'GRIS'
      TITRE 'Gas Pressure Evolution at Measurement Points' ;
 
@@ -673,8 +697,188 @@ EVPC_50 = EVOL 'VERT' 'MANU' 'Time (min)' LT_MIN 'Capillary Pressure (Pa)' (EXTR
 
 * 3. Draw the capillary pressure graph
 DESS (EVPC_10 ET EVPC_20 ET EVPC_30 ET EVPC_40 ET EVPC_50)
-     'XBOR' 0. 650. 'XGRA' 50.
+     'XBOR' 0. 600. 'XGRA' 50.
      'GRIL' 'POIN' 'GRIS'
      TITRE 'Capillary Pressure Evolution at Measurement Points' ;
 
-    
+
+
+*===================================================================*
+* CHECK TRƯỜNG HYDRATATION TẠI BƯỚC THỜI GIAN CUỐI CÙNG
+*===================================================================*
+* 1. Tính toán chỉ số cuối cùng (Last index) của bảng dữ liệu
+N_LAST = (DIME (TAB0 . 'HYDRATATION')) - 1 ;
+
+* 2. Trích xuất trường dữ liệu HYDR tại bước cuối cùng
+CHAM_HYDR_LAST = TAB0 . 'HYDRATATION' . N_LAST ;
+
+* 3. In nhanh giá trị Nhỏ nhất và Lớn nhất ra màn hình MESS
+MESS '=== HYDRATION DEGREE AT THE FINAL TIME STEP ===' ;
+MESS 'Min HYDR = ' (MINI CHAM_HYDR_LAST) ;
+MESS 'Max HYDR = ' (MAXI CHAM_HYDR_LAST) ;
+
+* 4. Vẽ đồ thị phân bố không gian (Contour plot) trên lưới mẫu bê tông
+* Lưu ý: Vì HYDR được lưu dạng MCHAML, ta chuyển sang CHPOINT để lệnh TRAC chạy mượt mà
+CHPO_HYDR_LAST = CHAN 'CHPO' CHAM_HYDR_LAST MODTHC ;
+TRAC CHPO_HYDR_LAST MODTHC MAIL1 TITRE 'Hydration Degree Field at Final Step' ;
+
+
+*===================================================================*
+* BIỂU ĐỒ LÝ THUYẾT: ĐỘ THẨM THẤU (K) THEO ĐỘ THỦY HÓA (HYDR) VÀ AK
+*===================================================================*
+* Khai báo thông số gốc
+KK0_VAL = 2.0E-19 ;
+* Lưu ý: Ta bỏ qua hệ số Klinkenberg để xem xét bản chất thuần túy của AK
+
+* 1. Khai báo mảng HYDR (Trục hoành từ 0.0 đến 1.0)
+L_HYDR = PROG 0. PAS 0.02 1.0 ;
+N_P = DIME L_HYDR ;
+
+* 2. Khởi tạo mảng K trống cho 4 kịch bản AK khác nhau
+L_K3 = PROG ;
+L_K4 = PROG ;
+L_K5 = PROG ;
+L_K7 = PROG ;
+
+* Khai báo giới hạn F_MAX giống hệt trong Procedure của bạn
+F_MAX = 100. ;
+
+N = 1 ;
+REPETER BOU_K (N_P) ;
+   H_I = EXTR L_HYDR N ;
+   
+* Tính hệ số nhân HYEFF cho từng AK
+   HYEFF_3 = EXP (2.302585 * 3.0 * (1. - H_I)) ;
+   HYEFF_4 = EXP (2.302585 * 4.0 * (1. - H_I)) ;
+   HYEFF_5 = EXP (2.302585 * 5.0 * (1. - H_I)) ;
+   HYEFF_7 = EXP (2.302585 * 7.0 * (1. - H_I)) ;
+   
+* LỆNH CHẶN NGỌN (Mô phỏng chính xác những gì code gốc đã làm)
+   SI (HYEFF_3 '>' F_MAX) ; HYEFF_3 = F_MAX ; FINS ;
+   SI (HYEFF_4 '>' F_MAX) ; HYEFF_4 = F_MAX ; FINS ;
+   SI (HYEFF_5 '>' F_MAX) ; HYEFF_5 = F_MAX ; FINS ;
+   SI (HYEFF_7 '>' F_MAX) ; HYEFF_7 = F_MAX ; FINS ;
+   
+* Nhân với K_0 ban đầu
+   L_K3 = L_K3 ET (PROG (KK0_VAL * HYEFF_3)) ;
+   L_K4 = L_K4 ET (PROG (KK0_VAL * HYEFF_4)) ;
+   L_K5 = L_K5 ET (PROG (KK0_VAL * HYEFF_5)) ;
+   L_K7 = L_K7 ET (PROG (KK0_VAL * HYEFF_7)) ;
+   
+   N = N + 1 ;
+FIN BOU_K ;
+
+* 4. Gán màu và tạo các đường Evolution (Legend)
+* AK = 3 (Xanh lam - Kịch bản bạn đang dùng để chạy mượt)
+EV_K3 = EVOL 'BLEU' 'MANU' 'Hydration (HYDR)' L_HYDR 'K (m2)' L_K3 ;
+
+* AK = 4 (Xanh lá)
+EV_K4 = EVOL 'VERT' 'MANU' 'Hydration (HYDR)' L_HYDR 'K (m2)' L_K4 ;
+
+* AK = 5 (Cam)
+EV_K5 = EVOL 'ORAN' 'MANU' 'Hydration (HYDR)' L_HYDR 'K (m2)' L_K5 ;
+
+* AK = 7 (Đỏ - Kịch bản gốc gây Diverge)
+EV_K7 = EVOL 'ROUG' 'MANU' 'Hydration (HYDR)' L_HYDR 'K (m2)' L_K7 ;
+
+* 5. Vẽ đồ thị (Trục tung dùng YLOG vì giá trị tăng hàng triệu lần)
+* Đồ thị được giới hạn X từ 0 đến 1, chia vạch mỗi 0.1
+DESS (EV_K3 ET EV_K4 ET EV_K5 ET EV_K7) 
+     'XBOR' 0. 1. 'XGRA' 0.1
+     'XLIN' 'YLOG'
+     'GRIL' 
+     TITRE 'Influence of AK on Permeability vs Dehydration' ;    
+
+
+*===================================================================*
+* CALIBRATION: SO SÁNH K_NEW (AK) VÀ K_OLD (GAWIN 1999)
+* Áp dụng hệ màu chuẩn theo Legend của người dùng
+*===================================================================*
+AK_VAL  = 7.0 ;       
+KK0_VAL = 2.0E-19 ;   
+P_ATM   = 101325. ;   
+T_0     = 293.15 ;    
+A_T     = 0.005 ;     
+A_P     = 0.368 ;   
+
+* Khởi tạo mảng thời gian
+EVT_INIT = EVOL 'BLAN' 'TEMP' TAB0 'TEMPERATURES' 'T' PO_00;
+LT_SEC   = EXTR EVT_INIT 'ABSC' ;
+LT_MIN   = (LT_SEC - (PROG (DIME LT_SEC) * temps2)) / 60. ;
+
+* Khởi tạo các mảng chứa kết quả K
+PK_NEW_10 = PROG; 
+PK_NEW_20 = PROG; 
+PK_NEW_30 = PROG;
+PK_OLD_10 = PROG; 
+PK_OLD_20 = PROG; 
+PK_OLD_30 = PROG;
+
+N_STEP = 0 ;
+REPETER BOU_CALIB (DIME TAB0 . 'TEMPERATURES') ;
+   HYDR_CHPO = CHAN 'CHPO' (TAB0 . 'HYDRATATION' . N_STEP) MODTHC ;
+   TEMP_CHPO = TAB0 . 'TEMPERATURES' . N_STEP ;
+
+* --- TÍNH TOÁN CHO ĐIỂM 10mm ---
+   H_10  = EXTR HYDR_CHPO 'SCAL' PO_10 ;
+   T_10  = EXTR TEMP_CHPO 'T' PO_10 ;
+   PG_10 = EXTR TEMP_CHPO 'PG' PO_10 ;
+   
+* 1. Tính K_new (Công thức AK)
+   HYEFF_10 = EXP (2.302585 * AK_VAL * (1. - H_10)) ;
+   PK_NEW_10 = PK_NEW_10 ET (PROG (KK0_VAL * HYEFF_10)) ;
+   
+* 2. Tính K_old (Công thức Gawin 1999)
+* Sử dụng EXP(2.302585 * X) thay cho 10^X trong Cast3M
+   K_OLD_10 = KK0_VAL * (EXP (2.302585 * A_T * (T_10 - T_0))) * ((PG_10 / P_ATM)**A_P) ;
+   PK_OLD_10 = PK_OLD_10 ET (PROG K_OLD_10) ;
+
+* --- TÍNH TOÁN CHO ĐIỂM 20mm ---
+   H_20 = EXTR HYDR_CHPO 'SCAL' PO_20 ; 
+   T_20 = EXTR TEMP_CHPO 'T' PO_20 ;
+   PG_20 = EXTR TEMP_CHPO 'PG' PO_20 ;
+   HYEFF_20 = EXP (2.302585 * AK_VAL * (1. - H_20)) ;
+   PK_NEW_20 = PK_NEW_20 ET (PROG (KK0_VAL * HYEFF_20)) ;
+   K_OLD_20 = KK0_VAL * (EXP (2.302585 * A_T * (T_20 - T_0))) * ((PG_20 / P_ATM)**A_P) ;
+   PK_OLD_20 = PK_OLD_20 ET (PROG K_OLD_20) ;
+
+* --- TÍNH TOÁN CHO ĐIỂM 30mm ---
+   H_30 = EXTR HYDR_CHPO 'SCAL' PO_30 ; 
+   T_30 = EXTR TEMP_CHPO 'T' PO_30 ; 
+   PG_30 = EXTR TEMP_CHPO 'PG' PO_30 ;
+   HYEFF_30 = EXP (2.302585 * AK_VAL * (1. - H_30)) ;
+   PK_NEW_30 = PK_NEW_30 ET (PROG (KK0_VAL * HYEFF_30)) ;
+   K_OLD_30 = KK0_VAL * (EXP (2.302585 * A_T * (T_30 - T_0))) * ((PG_30 / P_ATM)**A_P) ;
+   PK_OLD_30 = PK_OLD_30 ET (PROG K_OLD_30) ;
+
+   N_STEP = N_STEP + 1 ;
+FIN BOU_CALIB ;
+
+* 4. Tạo các đường Evolution (Chỉ khai báo màu, KHÔNG dùng TIRR ở đây)
+* Đường K_new (Công thức AK)
+EV_N_10 = EVOL 'BLEU' 'MANU' 'Time' LT_MIN 'K_new (10mm)' PK_NEW_10 ;
+EV_N_20 = EVOL 'TURQ' 'MANU' 'Time' LT_MIN 'K_new (20mm)' PK_NEW_20 ;
+EV_N_30 = EVOL 'VERT' 'MANU' 'Time' LT_MIN 'K_new (30mm)' PK_NEW_30 ;
+
+* Đường K_old (Công thức Gawin 1999)
+EV_O_10 = EVOL 'BLEU' 'MANU' 'Time' LT_MIN 'K_old (10mm)' PK_OLD_10 ;
+EV_O_20 = EVOL 'TURQ' 'MANU' 'Time' LT_MIN 'K_old (20mm)' PK_OLD_20 ;
+EV_O_30 = EVOL 'VERT' 'MANU' 'Time' LT_MIN 'K_old (30mm)' PK_OLD_30 ;
+
+* 5. Khai báo BẢNG KIỂU NÉT VẼ (Table of styles) cho DESSIN
+TAB_DESS = TABLE ;
+* 3 đường đầu tiên (K_new) dùng nét liền: 'LIGN'
+TAB_DESS . 1 = 'LIGN ' ;
+TAB_DESS . 2 = 'LIGN ' ;
+TAB_DESS . 3 = 'LIGN ' ;
+* 3 đường tiếp theo (K_old) dùng nét đứt: 'TIRR' (Tiret)
+TAB_DESS . 4 = 'TIRR ' ;
+TAB_DESS . 5 = 'TIRR ' ;
+TAB_DESS . 6 = 'TIRR ' ;
+
+* 6. Lệnh hiển thị đồ thị (Gọi bảng TAB_DESS vào)
+DESS (EV_N_10 ET EV_N_20 ET EV_N_30 ET EV_O_10 ET EV_O_20 ET EV_O_30)
+     TAB_DESS
+     'XBOR' 0. 600. 'XGRA' 50.
+     'XLIN' 'YLOG' 'GRIL'
+     TITRE 'Permeability Calibration: AK formulation vs Gawin 1999' ;
