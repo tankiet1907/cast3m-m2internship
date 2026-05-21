@@ -510,7 +510,7 @@ WTABLE = TABTHER .'WTABLE' ;
 
 SI ( (INST '>' temps2) ET (INST '<EG' temps3) );
    MATCOT1 = 'MATE' MODCOT1   'H'    11. ;
-   MATCOT2 = 'MATE' MODCOT2   'H'    8.3 ;
+   MATCOT2 = 'MATE' MODCOT2   'H'    4. ;
    MATRAY  = 'MATE' MODRAY   'EMIS'  0.6  ;
    WTABLE.'MAT_TOT' = MATTHC et MATCOT1 et MATRAY et MATCOT2; 
 FINS;
