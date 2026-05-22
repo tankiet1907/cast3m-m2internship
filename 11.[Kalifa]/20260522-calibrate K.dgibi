@@ -97,7 +97,7 @@ EAR1 = 5369.  ;
 lat1 = 114.3e6 ;
 
 * INTRINSIC PERMEABILITY
-KINT = 2.E-20 ;
+KINT = 2.E-19 ;
 *KINT = 7.5E-20 ;
 
 * THERMAL PARAMETERS
@@ -107,14 +107,13 @@ KS   = 1.38   ;
 *KS   = 1.67   ;
 
 * DESORPTION ISOTHERME MODEL PARAMETERS
-a1   =  46.9364E6 ;
-b1   =  1.9433    ;
+*a1   =  46.9364E6 ;
+*b1   =  1.9433    ;
 *c1   =  0.4854    ;
-c1 = 1.;
 
-*a1   =  18.6E6 ;
-*b1   =  2.27    ;
-*c1   =  1.5     ;
+a1   =  18.6E6 ;
+b1   =  2.27    ;
+c1   =  1.5     ;
 
 * VISUALAIZATION OF THE RETENTION CURVE
 LPC = PROG 1.E5 PAS 1.E6 1.E9 ;
@@ -149,7 +148,7 @@ MOD_TOT = MODTHC ET MODCOT1 ET MODCOT2 ET MODRAY ;
 *---------------------------------------------------------------------
 WINF GAM0 POR1 APOR = @POWERS cem aggr wc sc;
 MATTHC = 'MATE' MODTHC 'CS'  CS    'KS'   KS   'GAM0' GAM0 'WINF' WINF
-'VGA' a1   'VGB'  b1   'VGC' c1    'K1' KINT  'AK'   5.  'BK'   1. 
+'VGA' a1   'VGB'  b1   'VGC' c1    'K1' KINT  'AK'   3.  'BK'   1. 
 'KLI1' 20000.  'AKLI'   1.  'BKLI' 1. 'POR1' POR1 'APOR' APOR 
 'AFF1' Ai  'AFF2' Ap   'AFF3' GAMP 'AFF4' ALFA 'EAR'  EAR1 'QLAT' lat1;
 MATCOT1  = 'MATE'  MODCOT1   'H'     10.;
