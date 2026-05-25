@@ -24,7 +24,7 @@ if len(t_dauti_00mm) < len(time_dauti):
 # =====================================================================
 # 2. ĐỌC DỮ LIỆU MÔ PHỎNG TỪ FILE CSV (XUẤT TỪ CAST3M)
 # =====================================================================
-csv_file = "simulation_results.csv"  # Thay bằng tên file thực tế của bạn
+csv_file = r"D:\castem\Temperature_5min_Intervals.csv"  # Thay bằng tên file thực tế của bạn
 
 try:
     df_sim = pd.read_csv(csv_file)
