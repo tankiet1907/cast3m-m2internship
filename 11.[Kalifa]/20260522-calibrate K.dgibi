@@ -603,6 +603,82 @@ TRAC CHPG MODTHC MAIL1 TITRE 'Gas pressure after accident phase';
 *TRAC CHPC MODTHC MAIL1 TITRE 'Capillary pressure after accident phase';
 
 
+
+
+* =========================================================
+* 1. TÍNH TOÁN MASS LOSS (%)
+* =========================================================
+L_TIME_ML   = PROG ;
+L_ML_PCT    = PROG ;
+MASS_0      = 0.0 ;
+
+* --- ĐỊNH NGHĨA HẰNG SỐ ---
+PORO  = 0.1 ; 
+RHOW  = 1000.0 ;
+W_INF = winf ; 
+
+N1 = 0 ;
+REPETER BOU_ML (DIME TAB0 . 'TEMPERATURES') ;
+* Trích xuất các trường tại bước N1
+    CHTKi = EXCO 'T' TAB0 . 'TEMPERATURES' . N1 ;
+    CHPCi = EXCO 'PC' TAB0 . 'TEMPERATURES' . N1 ;
+    CHPGi = EXCO 'PG' TAB0 . 'TEMPERATURES' . N1 ;
+    HYDRi = CHAN CHPO (TAB0 . 'HYDRATATION' . N1) MODTHC ;
+
+* Tính SW và Mật độ hơi nước RHOGW
+    CHPVSATi CHPGWSCi RHOGWi XX YY ZZ = @PVSAT CHPGi CHPCi CHTKi ;
+    SWi = @SATURA CHPCi CHTKi HYDRi cha1 chb1 chc1 chgam0 ;
+
+* Tính tổng nước (Lỏng + Hơi + Liên kết) [kg/m3]
+    W_LIQ   = SWi * (PORO * RHOW) ;
+    CH_SG   = (MANU CHPO MAIL1 1 'SCAL' 1.0) - SWi ;
+    W_VAP   = CH_SG * RHOGWi * PORO ;
+    W_BOUND = HYDRi * W_INF ;
+    W_TOT   = W_LIQ + W_VAP + W_BOUND ;
+
+* Tích phân trên toàn thể tích => Khối lượng [kg]
+    CHAM_W = CHAN 'CHAM' W_TOT MODTHC ;
+    MASS_I = INTG MODTHC CHAM_W ;
+
+* Lưu khối lượng ban đầu tại t=0
+    SI (N1 EGA 0) ;
+        MASS_0 = MASS_I ;
+    FINSI ;
+
+* Tính Mass Loss theo %
+* Kiểm tra MASS_0 để tránh chia cho 0
+    SI (MASS_0 NEG 0.0) ;
+        M_LOSS_PCT = ((MASS_0 - MASS_I) / MASS_0) * 100.0 ;
+    SINON ;
+        M_LOSS_PCT = 0.0 ;
+    FINSI ;
+    
+* Đưa vào mảng
+    T_I = TAB0 . 'TEMPS' . N1 ;
+    L_TIME_ML   = L_TIME_ML ET (PROG (T_I / 60.)) ; 
+    L_ML_PCT    = L_ML_PCT ET (PROG M_LOSS_PCT) ;
+
+    N1 = N1 + 1 ;
+FIN BOU_ML ;
+
+* Đóng gói đồ thị Full Time
+EV_ML_FULL = EVOL 'MANU' 'Time (min)' L_TIME_ML 'Mass Loss (%)' L_ML_PCT ;
+
+* =========================================================
+* 2. CẮT VÀ VẼ ĐỒ THỊ TRONG VÙNG 240 PHÚT
+* =========================================================
+L_MIN_240 = PROG 0. PAS 5. 240. ;
+L_ML_240  = IPOL L_MIN_240 EV_ML_FULL ;
+
+* Tạo đối tượng đồ thị cuối cùng
+EV_ML_240 = EVOL 'ROUG' 'MANU' 'Time (min)' L_MIN_240 'Mass Loss (%)' L_ML_240 ;
+
+* Vẽ ra màn hình
+DESS EV_ML_240 ;
+
+
+
+
 *===================================================================*
 * INITIALIZE THE GENERAL TIME AXIS (CONVERT TO MINUTES & RESET TO 0 AT TEMPS2)
 *===================================================================*

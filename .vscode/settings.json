@@ -43,5 +43,6 @@
     }
   ],
 
-  "latex-workshop.latex.recipe.default": "pdflatex → biber → makeindex → pdflatex ×2"
+  "latex-workshop.latex.recipe.default": "pdflatex → biber → makeindex → pdflatex ×2",
+  "python-envs.defaultEnvManager": "ms-python.python:venv"
 }
