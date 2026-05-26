@@ -126,9 +126,7 @@ REPETER BOU1 (DIME LPC);
 FIN BOU1 ;
 
 EVO1 = EVOL 'BLEU' MANU 'Pc (Pa)' LPC 'Sw' LSW ;
-DESS EVO1     
-     'XBOR' 0. 1000000000. 'XGRA' 100000000.
-     'YBOR' 0. 1. 'YGRA' 0.1
+*DESS EVO1 XLOG YLIN 
       'GRIL' 'POIN' 'GRIS'
       TITRE 'Desorption Isotherm HPC M100' ;
 
@@ -534,56 +532,17 @@ PASAPAS TAB0;
 opti SAUV 'KALIFA_PHASE3';
 SAUV;
 
-opti SAUV 'FORMAT' 'D:\castem\KALIFA_PHASE3';
-SAUV 'FORMAT';
+*opti SAUV 'FORMAT' 'D:\castem\KALIFA_PHASE3';
+*SAUV 'FORMAT';
 *---------------------------------------------------------------------
 
 *---------------------------------------------------------------------
 opti REST 'KALIFA_PHASE3';
 REST;
 
-opti REST 'FORMAT' 'D:\castem\KALIFA_PHASE3';
-REST 'FORMAT';
+*opti REST 'FORMAT' 'D:\castem\KALIFA_PHASE3';
+*REST 'FORMAT';
 *---------------------------------------------------------------------
-
-
-*===================================================================*
-*********** EXPORT GAS PRESSURE EVERY 5 MINUTES **************
-*===================================================================*
-
-* 1. Initialize the Cast3M base timeline (starting from temps2)
-* Dùng PO_10 làm mốc trích xuất thời gian ban đầu vì đã bỏ PO_00
-EVP_INIT = EVOL 'BLAN' 'TEMP' TAB0 'TEMPERATURES' 'PG' PO_10 ;
-LT_SEC   = EXTR EVP_INIT 'ABSC' ;
-LT_MIN   = (LT_SEC - (PROG (DIME LT_SEC) * temps2)) / 60. ;
-
-* 2. Initialize the target time axis: From 0 to 240 minutes, step size 5 minutes
-L_MIN_5  = PROG 0. PAS 5. 240. ;
-
-* 3. Extract, convert to MPa (divide by 1.E6), and interpolate (IPOL) in a single line
-* IPOL syntax: IPOL [new X-axis] [original graph]
-LPG_10_5  = IPOL L_MIN_5 (EVOL 'MANU' LT_MIN ((EXTR (EVOL 'TEMP' TAB0 'TEMPERATURES' 'PG' PO_10)  'ORDO') / 1.E6)) ;
-LPG_20_5  = IPOL L_MIN_5 (EVOL 'MANU' LT_MIN ((EXTR (EVOL 'TEMP' TAB0 'TEMPERATURES' 'PG' PO_20)  'ORDO') / 1.E6)) ;
-LPG_30_5  = IPOL L_MIN_5 (EVOL 'MANU' LT_MIN ((EXTR (EVOL 'TEMP' TAB0 'TEMPERATURES' 'PG' PO_30)  'ORDO') / 1.E6)) ;
-LPG_40_5  = IPOL L_MIN_5 (EVOL 'MANU' LT_MIN ((EXTR (EVOL 'TEMP' TAB0 'TEMPERATURES' 'PG' PO_40)  'ORDO') / 1.E6)) ;
-LPG_50_5  = IPOL L_MIN_5 (EVOL 'MANU' LT_MIN ((EXTR (EVOL 'TEMP' TAB0 'TEMPERATURES' 'PG' PO_50)  'ORDO') / 1.E6)) ;
-LPG_120_5 = IPOL L_MIN_5 (EVOL 'MANU' LT_MIN ((EXTR (EVOL 'TEMP' TAB0 'TEMPERATURES' 'PG' PO_120) 'ORDO') / 1.E6)) ;
-
-* 4. Package into new graph objects to prepare for export.
-EV_PG_10  = EVOL 'MANU' 'Time(min)' L_MIN_5 'PG_10mm(MPa)'  LPG_10_5 ;
-EV_PG_20  = EVOL 'MANU' 'Time(min)' L_MIN_5 'PG_20mm(MPa)'  LPG_20_5 ;
-EV_PG_30  = EVOL 'MANU' 'Time(min)' L_MIN_5 'PG_30mm(MPa)'  LPG_30_5 ;
-EV_PG_40  = EVOL 'MANU' 'Time(min)' L_MIN_5 'PG_40mm(MPa)'  LPG_40_5 ;
-EV_PG_50  = EVOL 'MANU' 'Time(min)' L_MIN_5 'PG_50mm(MPa)'  LPG_50_5 ;
-EV_PG_120 = EVOL 'MANU' 'Time(min)' L_MIN_5 'PG_120mm(MPa)' LPG_120_5 ;
-
-* Combine everything into one data package
-EV_EXPORT_PG = EV_PG_10 ET EV_PG_20 ET EV_PG_30 ET EV_PG_40 ET EV_PG_50 ET EV_PG_120 ;
-
-* 5. Export to CSV/TXT file
-OPTI 'SORT' 'D:\castem\GasPressure_5min_Intervals.csv' ;
-SORT 'EXCE' EV_EXPORT_PG ;
-
 
 *---------------------------------------------------------------------
 * VISUALIZATION
@@ -598,85 +557,9 @@ CHMT = EXCO 'T' TAB0 . 'TEMPERATURES' . (NTOT - 1);
 CHPG = EXCO 'PG' TAB0 . 'TEMPERATURES' . (NTOT - 1);
 CHPC = EXCO 'PC' TAB0 . 'TEMPERATURES' . (NTOT - 1);
 
-*TRAC CHMT MODTHC MAIL1 TITRE 'Temperature after accident phase';
-TRAC CHPG MODTHC MAIL1 TITRE 'Gas pressure after accident phase';
+TRAC CHMT MODTHC MAIL1 TITRE 'Temperature after accident phase';
+*TRAC CHPG MODTHC MAIL1 TITRE 'Gas pressure after accident phase';
 *TRAC CHPC MODTHC MAIL1 TITRE 'Capillary pressure after accident phase';
-
-
-
-
-* =========================================================
-* 1. TÍNH TOÁN MASS LOSS (%)
-* =========================================================
-L_TIME_ML   = PROG ;
-L_ML_PCT    = PROG ;
-MASS_0      = 0.0 ;
-
-* --- ĐỊNH NGHĨA HẰNG SỐ ---
-PORO  = 0.1 ; 
-RHOW  = 1000.0 ;
-W_INF = winf ; 
-
-N1 = 0 ;
-REPETER BOU_ML (DIME TAB0 . 'TEMPERATURES') ;
-* Trích xuất các trường tại bước N1
-    CHTKi = EXCO 'T' TAB0 . 'TEMPERATURES' . N1 ;
-    CHPCi = EXCO 'PC' TAB0 . 'TEMPERATURES' . N1 ;
-    CHPGi = EXCO 'PG' TAB0 . 'TEMPERATURES' . N1 ;
-    HYDRi = CHAN CHPO (TAB0 . 'HYDRATATION' . N1) MODTHC ;
-
-* Tính SW và Mật độ hơi nước RHOGW
-    CHPVSATi CHPGWSCi RHOGWi XX YY ZZ = @PVSAT CHPGi CHPCi CHTKi ;
-    SWi = @SATURA CHPCi CHTKi HYDRi cha1 chb1 chc1 chgam0 ;
-
-* Tính tổng nước (Lỏng + Hơi + Liên kết) [kg/m3]
-    W_LIQ   = SWi * (PORO * RHOW) ;
-    CH_SG   = (MANU CHPO MAIL1 1 'SCAL' 1.0) - SWi ;
-    W_VAP   = CH_SG * RHOGWi * PORO ;
-    W_BOUND = HYDRi * W_INF ;
-    W_TOT   = W_LIQ + W_VAP + W_BOUND ;
-
-* Tích phân trên toàn thể tích => Khối lượng [kg]
-    CHAM_W = CHAN 'CHAM' W_TOT MODTHC ;
-    MASS_I = INTG MODTHC CHAM_W ;
-
-* Lưu khối lượng ban đầu tại t=0
-    SI (N1 EGA 0) ;
-        MASS_0 = MASS_I ;
-    FINSI ;
-
-* Tính Mass Loss theo %
-* Kiểm tra MASS_0 để tránh chia cho 0
-    SI (MASS_0 NEG 0.0) ;
-        M_LOSS_PCT = ((MASS_0 - MASS_I) / MASS_0) * 100.0 ;
-    SINON ;
-        M_LOSS_PCT = 0.0 ;
-    FINSI ;
-    
-* Đưa vào mảng
-    T_I = TAB0 . 'TEMPS' . N1 ;
-    L_TIME_ML   = L_TIME_ML ET (PROG (T_I / 60.)) ; 
-    L_ML_PCT    = L_ML_PCT ET (PROG M_LOSS_PCT) ;
-
-    N1 = N1 + 1 ;
-FIN BOU_ML ;
-
-* Đóng gói đồ thị Full Time
-EV_ML_FULL = EVOL 'MANU' 'Time (min)' L_TIME_ML 'Mass Loss (%)' L_ML_PCT ;
-
-* =========================================================
-* 2. CẮT VÀ VẼ ĐỒ THỊ TRONG VÙNG 240 PHÚT
-* =========================================================
-L_MIN_240 = PROG 0. PAS 5. 240. ;
-L_ML_240  = IPOL L_MIN_240 EV_ML_FULL ;
-
-* Tạo đối tượng đồ thị cuối cùng
-EV_ML_240 = EVOL 'ROUG' 'MANU' 'Time (min)' L_MIN_240 'Mass Loss (%)' L_ML_240 ;
-
-* Vẽ ra màn hình
-DESS EV_ML_240 ;
-
-
 
 
 *===================================================================*
@@ -685,202 +568,6 @@ DESS EV_ML_240 ;
 EVT_INIT = EVOL 'BLAN' 'TEMP' TAB0 'TEMPERATURES' 'T' PO_00;
 LT_SEC   = EXTR EVT_INIT 'ABSC' ;
 LT_MIN   = (LT_SEC - (PROG (DIME LT_SEC) * temps2)) / 60. ;
-
-*===================================================================*
-*********** STAGE: GAS PRESSURE (Pa & min) *********************
-*===================================================================*
-* 1. Extract original data from the results table
-EVPG_10_O = EVOL 'BLEU' 'TEMP' TAB0 'TEMPERATURES' 'PG' PO_10;
-EVPG_20_O = EVOL 'ORAN' 'TEMP' TAB0 'TEMPERATURES' 'PG' PO_20;
-EVPG_30_O = EVOL 'JAUN' 'TEMP' TAB0 'TEMPERATURES' 'PG' PO_30;
-EVPG_40_O = EVOL 'ROSE' 'TEMP' TAB0 'TEMPERATURES' 'PG' PO_40;
-EVPG_50_O = EVOL 'VERT' 'TEMP' TAB0 'TEMPERATURES' 'PG' PO_50;
-
-* 2. Redefine the horizontal axis to LT_MIN and convert Gas pressure to MPa (Pa / 1.E6)
-EVPG_10 = EVOL 'BLEU' 'MANU' 'Time (min)' LT_MIN 'Gas Pressure (MPa)' ((EXTR EVPG_10_O 'ORDO') / 1.E6);
-EVPG_20 = EVOL 'ORAN' 'MANU' 'Time (min)' LT_MIN 'Gas Pressure (MPa)' ((EXTR EVPG_20_O 'ORDO') / 1.E6);
-EVPG_30 = EVOL 'JAUN' 'MANU' 'Time (min)' LT_MIN 'Gas Pressure (MPa)' ((EXTR EVPG_30_O 'ORDO') / 1.E6);
-EVPG_40 = EVOL 'ROSE' 'MANU' 'Time (min)' LT_MIN 'Gas Pressure (MPa)' ((EXTR EVPG_40_O 'ORDO') / 1.E6);
-EVPG_50 = EVOL 'VERT' 'MANU' 'Time (min)' LT_MIN 'Gas Pressure (MPa)' ((EXTR EVPG_50_O 'ORDO') / 1.E6);
-
-* 3. Draw the gas pressure graph (X-axis synchronized from 0 to 240 min)
-* DESS (EVPG_10 ET EVPG_20 ET EVPG_30 ET EVPG_40 ET EVPG_50)
-     'XBOR' 0. 240. 'XGRA' 10.
-     'YBOR' 0. 4. 'YGRA' 0.25
-     'GRIL' 'POIN' 'GRIS'
-     TITRE 'Gas Pressure Evolution at Measurement Points' ;
-
-
-*===================================================================*
-* 3. NHẬP DỮ LIỆU ÁP SUẤT KHÍ (GAS PRESSURE) DAUTI
-*===================================================================*
-* Khởi tạo mảng thời gian từ 0 đến 240 phút (bước nhảy 5)
-L_MIN_DAUTI = PROG 0. PAS 5. 240. ;
-
-* Mảng dữ liệu áp suất khí Dauti (được làm tròn 4 chữ số thập phân)
-* Pg_10mm
-LPG_DA_10 = PROG 0.1 0.1515 0.5455 1.0152 1.3535 1.6414 1.8687 2.0354 2.1414 2.1414 2.1061
-                 2.0606 2.0152 1.9697 1.9293 1.8838 1.8485 1.8131 1.7778 1.7475 1.7172
-                 1.6919 1.6667 1.6414 1.6162 1.5960 1.5758 1.5556 1.5303 1.5152 1.4949
-                 1.4798 1.4646 1.4495 1.4394 1.4242 1.4141 1.3990 1.3939 1.3838 1.3737
-                 1.3586 1.3485 1.3333 1.3283 1.3182 1.3030 1.2879 1.2828 ;
-
-* Pg_20mm
-LPG_DA_20 = PROG 0.1 0.0606 0.1212 0.2980 0.5606 0.9192 1.1869 1.4343 1.6364 1.7980 1.9697
-                 2.1010 2.2475 2.3788 2.4899 2.5455 2.5556 2.5303 2.5051 2.4697 2.4394
-                 2.4040 2.3737 2.3434 2.3081 2.2828 2.2576 2.2323 2.1970 2.1768 2.1515
-                 2.1263 2.1061 2.0808 2.0657 2.0455 2.0253 2.0101 1.9899 1.9747 1.9596
-                 1.9394 1.9192 1.9040 1.8889 1.8687 1.8535 1.8333 1.8131 ;
-
-* Pg_30mm
-LPG_DA_30 = PROG 0.1 0.0909 0.0606 0.0960 0.1616 0.3081 0.4899 0.7525 0.9949 1.1970 1.3838
-                 1.5404 1.6717 1.8030 1.9293 2.0505 2.1616 2.2828 2.4091 2.5253 2.6414
-                 2.7424 2.8081 2.8283 2.8283 2.8131 2.7929 2.7778 2.7525 2.7222 2.6970
-                 2.6667 2.6414 2.6162 2.5909 2.5707 2.5455 2.5253 2.5000 2.4798 2.4596
-                 2.4343 2.4091 2.3889 2.3687 2.3434 2.3182 2.2980 2.2778 ;
-
-* Pg_40mm
-LPG_DA_40 = PROG 0.1 0.1010 0.0657 0.0556 0.0758 0.1162 0.1768 0.2778 0.4192 0.5909 0.7778
-                 0.9697 1.1465 1.2929 1.4343 1.5556 1.6717 1.7828 1.8889 1.9899 2.0960
-                 2.1919 2.2980 2.4040 2.5051 2.6212 2.7374 2.8485 2.9646 3.0404 3.0808
-                 3.0909 3.0859 3.0657 3.0455 3.0253 3.0000 2.9747 2.9495 2.9242 2.9040
-                 2.8788 2.8535 2.8283 2.7980 2.7727 2.7475 2.7222 2.6919 ;
-
-* Pg_50mm
-LPG_DA_50 = PROG 0.1 0.1010 0.0960 0.0606 0.0505 0.0606 0.0808 0.1263 0.1768 0.2424 0.3384
-                 0.4596 0.6061 0.7576 0.9091 1.0556 1.2020 1.3232 1.4444 1.5556 1.6717
-                 1.7727 1.8687 1.9697 2.0606 2.1465 2.2475 2.3384 2.4343 2.5404 2.6465
-                 2.7475 2.8586 2.9646 3.0606 3.1566 3.2323 3.2778 3.2980 3.2929 3.2778
-                 3.2576 3.2374 3.2121 3.1869 3.1616 3.1313 3.1010 3.0707 ;
-
-* Tạo các đường EVOL cho Áp suất khí Dauti
-* Ghi chú: Có thể điều chỉnh màu tùy theo quy ước bạn đang dùng trong báo cáo
-EVPGD_10 = EVOL 'BLEU' 'MANU' 'Time (min)' L_MIN_DAUTI 'Pg_Da_10' LPG_DA_10 ;
-EVPGD_20 = EVOL 'ORAN' 'MANU' 'Time (min)' L_MIN_DAUTI 'Pg_Da_20' LPG_DA_20 ;
-EVPGD_30 = EVOL 'JAUN' 'MANU' 'Time (min)' L_MIN_DAUTI 'Pg_Da_30' LPG_DA_30 ;
-EVPGD_40 = EVOL 'ROSE' 'MANU' 'Time (min)' L_MIN_DAUTI 'Pg_Da_40' LPG_DA_40 ;
-EVPGD_50 = EVOL 'VERT' 'MANU' 'Time (min)' L_MIN_DAUTI 'Pg_Da_50' LPG_DA_50 ;
-
-
-*===================================================================*
-* 2. NHẬP DỮ LIỆU ÁP SUẤT KHÍ (GAS PRESSURE) TỪ THỰC NGHIỆM
-*===================================================================*
-* Khởi tạo mảng thời gian từ 5 đến 240 phút (bước nhảy 5)
-L_MIN_EXP = PROG 5. PAS 5. 240. ;
-
-* Mảng dữ liệu áp suất khí (được làm tròn 4 chữ số thập phân)
-* P10mm
-LPGE_10 = PROG 0.0442 0.1125 0.3040 0.5271 0.8036 1.1488 1.4976 1.8497 2.0802 1.8728
-              1.3952 1.1615 0.9911 0.9317 0.8685 0.8429 0.8174 0.7919 0.7664 0.7408
-              0.7153 0.6922 0.6700 0.6495 0.6309 0.6123 0.5963 0.5831 0.5699 0.5568
-              0.5436 0.5278 0.5111 0.4943 0.4776 0.4609 0.4441 0.4274 0.4107 0.3950
-              0.3817 0.3683 0.3549 0.3415 0.3281 0.3148 0.3012 0.2869 ;
-
-* P20mm
-LPGE_20 = PROG 0.0255 0.0510 0.0766 0.1702 0.2833 0.4639 0.6643 0.8896 1.1589 1.4350
-              1.7111 2.0132 2.3404 2.6461 2.8814 2.9006 2.3996 2.1459 2.0572 2.0344
-              2.0171 1.9998 1.9847 1.9695 1.9543 1.9392 1.9240 1.9074 1.8567 1.8061
-              1.7554 1.7047 1.6539 1.6029 1.5519 1.5009 1.4499 1.3989 1.3479 1.2987
-              1.2510 1.2034 1.1557 1.1080 1.0604 1.0127 0.9650 0.9174 ;
-
-* P30mm
-LPGE_30 = PROG 0.0188 0.0334 0.0480 0.0626 0.0773 0.1221 0.2200 0.3406 0.4776 0.6246
-              0.7715 0.9298 1.1326 1.3354 1.5067 1.6779 1.8324 1.9252 2.0179 2.1107
-              2.1752 2.1974 2.2197 2.2160 2.2105 2.2051 2.1811 2.1500 2.1190 2.0879
-              2.0509 2.0136 1.9763 1.9389 1.9016 1.8643 1.8185 1.7708 1.7231 1.6754
-              1.6277 1.5800 1.5323 1.4846 1.4369 1.3892 1.3405 1.2782 ;
-
-* P40mm
-LPGE_40 = PROG 0.0074 0.0142 0.0209 0.0277 0.0418 0.0688 0.1149 0.1622 0.2336 0.3450
-              0.4564 0.6312 0.8171 1.0503 1.2947 1.5536 1.8125 2.0577 2.2622 2.4667
-              2.6453 2.7939 2.9425 3.0897 3.2260 3.2645 3.2388 3.1999 3.1611 3.1062
-              3.0448 2.9835 2.9222 2.8609 2.7808 2.6938 2.6068 2.5198 2.4327 2.3457
-              2.2587 2.1717 2.0846 1.9976 1.9106 1.8251 1.7474 1.6696 ;
-
-* P50mm
-LPGE_50 = PROG 0.0068 0.0137 0.0205 0.0386 0.0583 0.0779 0.0976 0.1362 0.1826 0.2291
-              0.2755 0.3462 0.4485 0.5507 0.6529 0.7551 0.8763 1.0770 1.2778 1.4785
-              1.6793 1.8801 2.0808 2.2801 2.4755 2.6653 2.7772 2.8891 3.0010 3.1129
-              3.1897 3.2612 3.3326 3.4009 3.4529 3.5048 3.5567 3.6085 3.6600 3.6646
-              3.6153 3.4466 3.1950 2.9832 2.7869 2.6043 2.4752 2.3461 ;
-
-* Tạo các đường EVOL cho Áp suất khí thực nghiệm (Sử dụng P thay vì T ở tiền tố)
-EVPGE_10 = EVOL 'BLEU' 'MANU' 'Time (min)' L_MIN_EXP 'Pg_Exp_10' LPGE_10 ;
-EVPGE_20 = EVOL 'ORAN' 'MANU' 'Time (min)' L_MIN_EXP 'Pg_Exp_20' LPGE_20 ;
-EVPGE_30 = EVOL 'JAUN' 'MANU' 'Time (min)' L_MIN_EXP 'Pg_Exp_30' LPGE_30 ;
-EVPGE_40 = EVOL 'ROSE' 'MANU' 'Time (min)' L_MIN_EXP 'Pg_Exp_40' LPGE_40 ;
-EVPGE_50 = EVOL 'VERT' 'MANU' 'Time (min)' L_MIN_EXP 'Pg_Exp_50' LPGE_50 ;
-
-
-*===================================================================*
-* 2. THIẾT LẬP BẢNG KIỂU NÉT VẼ (TABLE DE DESSIN)
-*===================================================================*
-TAB_DESS = TABLE ;
-
-* Nhóm 1: 5 đường nét liền ('LIGN') cho kết quả mô phỏng của bạn
-TAB_DESS . 1 = 'LIGN' ; TAB_DESS . 2 = 'LIGN' ; TAB_DESS . 3 = 'LIGN' ;
-TAB_DESS . 4 = 'LIGN' ; TAB_DESS . 5 = 'LIGN' ; 
-
-* Nhóm 2: 5 đường nét đứt ('TIRR') cho kết quả tham chiếu của Dauti
-TAB_DESS . 6  = 'TIRR' ; TAB_DESS . 7  = 'TIRR' ; TAB_DESS . 8 = 'TIRR' ;
-TAB_DESS . 9 = 'TIRR' ; TAB_DESS . 10 = 'TIRR' ; 
-
-* Nhóm 3: Thực nghiệm 5 đường nét chấm - TIRC
-TAB_DESS . 11 = 'TIRC' ; TAB_DESS . 12 = 'TIRC' ; TAB_DESS . 13 = 'TIRC' ;
-TAB_DESS . 14 = 'TIRC' ; TAB_DESS . 15 = 'TIRC' ; 
-
-*===================================================================*
-* 3. HIỂN THỊ ĐỒ THỊ SO SÁNH TRỰC QUAN (DOUBLE-LAYER CALIBRATION MY CODE VS DAUTI)
-*===================================================================*
-DESS (EVPG_10 ET EVPG_20 ET EVPG_30 ET EVPG_40 ET EVPG_50
-   ET EVPGD_10 ET EVPGD_20 ET EVPGD_30 ET EVPGD_40 ET EVPGD_50)
-     TAB_DESS
-     'XBOR' 0. 240. 'XGRA' 10.
-     'YBOR' 0. 4. 'YGRA' 0.25
-     'GRIL' 'POIN' 'GRIS'
-     TITRE 'Temperature Calibration: Current Model (Solid) vs Dauti (Dashed)' ;
-
-*===================================================================*
-* 3. HIỂN THỊ ĐỒ THỊ SO SÁNH TRỰC QUAN (DOUBLE-LAYER CALIBRATION MY CODE VS EXPERIMENT)
-*===================================================================*
-*DESS (EVPG_10 ET EVPG_20 ET EVPG_30 ET EVPG_40 ET EVPG_50
-   ET EVPGE_10 ET EVPGE_20 ET EVPGE_30 ET EVPGE_40 ET EVPGE_50)
-     TAB_DESS
-     'XBOR' 0. 240. 'XGRA' 10.
-     'YBOR' 0. 4. 'YGRA' 0.25
-     'GRIL' 'POIN' 'GRIS'
-     TITRE 'Temperature Calibration: Current Model (Solid) vs Exp (Dotted)' ;
-
-*===================================================================*
-* 3. HIỂN THỊ ĐỒ THỊ SO SÁNH 3 LỚP (TRIPLE-LAYER CALIBRATION)
-*===================================================================*
-DESS (EVPG_10 ET EVPG_20 ET EVPG_30 ET EVPG_40 ET EVPG_50
-   ET EVPGD_10 ET EVPGD_20 ET EVPGD_30 ET EVPGD_40 ET EVPGD_50
-   ET EVPGE_10 ET EVPGE_20 ET EVPGE_30 ET EVPGE_40 ET EVPGE_50)
-     TAB_DESS
-     'XBOR' 0. 240. 'XGRA' 10.
-     'YBOR' 0. 4. 'YGRA' 0.25
-     'GRIL' 'POIN' 'GRIS'
-     TITRE 'Calibration: Current (Solid) vs Dauti (Dashed) vs Exp (Dotted)' ;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 *===================================================================*
 *********** STAGE: TEMPERATURE (°C & min) ***********************
@@ -913,7 +600,7 @@ EVT_50  = EVOL 'TURQ' 'MANU' 'Time (min)' LT_MIN 'Temperature (C)' LY_50;
 EVT_120 = EVOL 'BLAN' 'MANU' 'Time (min)' LT_MIN 'Temperature (C)' LY_120;
 
 * 4. Draw a complete temperature graph with 50-unit divisions.
-DESS (EVT_00 ET EVT_10 ET EVT_20 ET EVT_30 ET EVT_40 ET EVT_50 ET EVT_120)
+*DESS (EVT_00 ET EVT_10 ET EVT_20 ET EVT_30 ET EVT_40 ET EVT_50 ET EVT_120)
      'XBOR' 0. 240. 'XGRA' 10.
      'YBOR' 0. 500. 'YGRA' 25.
      'GRIL' 'POIN' 'GRIS'
@@ -963,12 +650,12 @@ LTD_50 = PROG 20.0  20.3  25.2  33.6  42.7  53.1  63.6  72.7  82.5  92.3
               256.6 259.4 262.2 265.7 268.5 271.3 273.4 276.2 279.0 ;
 
 * Tạo các đường EVOL cho Dauti (Sử dụng CÙNG MÀU với các đường kết quả của bạn)
-EVTD_00 = EVOL 'BLEU' 'MANU' 'Time (min)' L_MIN_DAUTI 'T_Da_00' LTD_00 ;
-EVTD_10 = EVOL 'ORAN' 'MANU' 'Time (min)' L_MIN_DAUTI 'T_Da_10' LTD_10 ;
-EVTD_20 = EVOL 'JAUN' 'MANU' 'Time (min)' L_MIN_DAUTI 'T_Da_20' LTD_20 ;
-EVTD_30 = EVOL 'ROSE' 'MANU' 'Time (min)' L_MIN_DAUTI 'T_Da_30' LTD_30 ;
-EVTD_40 = EVOL 'VERT' 'MANU' 'Time (min)' L_MIN_DAUTI 'T_Da_40' LTD_40 ;
-EVTD_50 = EVOL 'TURQ' 'MANU' 'Time (min)' L_MIN_DAUTI 'T_Da_50' LTD_50 ;
+EVD_00 = EVOL 'BLEU' 'MANU' 'Time (min)' L_MIN_DAUTI 'T_Da_00' LTD_00 ;
+EVD_10 = EVOL 'ORAN' 'MANU' 'Time (min)' L_MIN_DAUTI 'T_Da_10' LTD_10 ;
+EVD_20 = EVOL 'JAUN' 'MANU' 'Time (min)' L_MIN_DAUTI 'T_Da_20' LTD_20 ;
+EVD_30 = EVOL 'ROSE' 'MANU' 'Time (min)' L_MIN_DAUTI 'T_Da_30' LTD_30 ;
+EVD_40 = EVOL 'VERT' 'MANU' 'Time (min)' L_MIN_DAUTI 'T_Da_40' LTD_40 ;
+EVD_50 = EVOL 'TURQ' 'MANU' 'Time (min)' L_MIN_DAUTI 'T_Da_50' LTD_50 ;
 
 *===================================================================*
 * 1. NHẬP DỮ LIỆU NHIỆT ĐỘ EXPERIMENTAL TỪ BẢNG EXCEL (MỖI 5 PHÚT)
@@ -1021,13 +708,43 @@ LTE_120 = PROG 22.6  24.6  29.6  34.5  39.5  44.4  49.3  54.4  59.5  64.5
               162.4 163.5 164.6 165.8 166.9 168.0 169.1 170.3 ;
 
 * Tạo các đường EVOL cho Dauti (Sử dụng CÙNG MÀU với các đường kết quả của bạn)
-EVTE_00 = EVOL 'BLEU' 'MANU' 'Time (min)' L_MIN_DAUTI 'T_Exp_00' LTE_00 ;
-EVTE_10 = EVOL 'ORAN' 'MANU' 'Time (min)' L_MIN_DAUTI 'T_Exp_10' LTE_10 ;
-EVTE_20 = EVOL 'JAUN' 'MANU' 'Time (min)' L_MIN_DAUTI 'T_Exp_20' LTE_20 ;
-EVTE_30 = EVOL 'ROSE' 'MANU' 'Time (min)' L_MIN_DAUTI 'T_Exp_30' LTE_30 ;
-EVTE_40 = EVOL 'VERT' 'MANU' 'Time (min)' L_MIN_DAUTI 'T_Exp_40' LTE_40 ;
-EVTE_50 = EVOL 'TURQ' 'MANU' 'Time (min)' L_MIN_DAUTI 'T_Exp_50' LTE_50 ;
-EVTE_120 = EVOL 'BLAN' 'MANU' 'Time (min)' L_MIN_DAUTI 'T_Exp_120' LTE_120 ;
+EVE_00 = EVOL 'BLEU' 'MANU' 'Time (min)' L_MIN_EXP 'T_Ex_00' LTE_00 ;
+EVE_10 = EVOL 'ORAN' 'MANU' 'Time (min)' L_MIN_EXP 'T_Ex_10' LTE_10 ;
+EVE_20 = EVOL 'JAUN' 'MANU' 'Time (min)' L_MIN_EXP 'T_Ex_20' LTE_20 ;
+EVE_30 = EVOL 'ROSE' 'MANU' 'Time (min)' L_MIN_EXP 'T_Ex_30' LTE_30 ;
+EVE_40 = EVOL 'VERT' 'MANU' 'Time (min)' L_MIN_EXP 'T_Ex_40' LTE_40 ;
+EVE_50 = EVOL 'TURQ' 'MANU' 'Time (min)' L_MIN_EXP 'T_Ex_50' LTE_50 ;
+EVE_120 = EVOL 'BLAN' 'MANU' 'Time (min)' L_MIN_EXP 'T_Ex_120' LTE_120 ;
+
+
+*===================================================================*
+* 2. THIẾT LẬP BẢNG KIỂU NÉT VẼ (TABLE DE DESSIN)
+*===================================================================*
+TAB_DESS = TABLE ;
+
+* Nhóm 1: 7 đường nét liền ('LIGN') cho kết quả mô phỏng của bạn
+TAB_DESS . 1 = 'LIGN' ; TAB_DESS . 2 = 'LIGN' ; TAB_DESS . 3 = 'LIGN' ;
+TAB_DESS . 4 = 'LIGN' ; TAB_DESS . 5 = 'LIGN' ; TAB_DESS . 6 = 'LIGN' ;
+TAB_DESS . 7 = 'LIGN' ; 
+
+* Nhóm 2: Thực nghiệm (7 đường nét chấm - TIRC)
+TAB_DESS . 8 = 'TIRC' ; TAB_DESS . 9 = 'TIRC' ; TAB_DESS . 10 = 'TIRC' ;
+TAB_DESS . 11 = 'TIRC' ; TAB_DESS . 12 = 'TIRC' ; TAB_DESS . 13 = 'TIRC' ;
+TAB_DESS . 14 = 'TIRC' ;
+
+*===================================================================*
+* 3. HIỂN THỊ ĐỒ THỊ SO SÁNH TRỰC QUAN (DOUBLE-LAYER CALIBRATION MY CODE VS EXPERIMENT)
+*===================================================================*
+DESS (EVT_00 ET EVT_10 ET EVT_20 ET EVT_30 ET EVT_40 ET EVT_50 ET EVT_120
+   ET EVE_00 ET EVE_10 ET EVE_20 ET EVE_30 ET EVE_40 ET EVE_50 ET EVE_120)
+     TAB_DESS
+     'XBOR' 0. 240. 'XGRA' 10.
+     'YBOR' 0. 500. 'YGRA' 25.
+     'GRIL' 'POIN' 'GRIS'
+     TITRE 'Temperature Calibration: Current Model (Solid) vs Exp (Dotted)' ;
+
+
+
 
 
 *===================================================================*
@@ -1051,7 +768,7 @@ TAB_DESS . 16 = 'TIRC' ; TAB_DESS . 17 = 'TIRC' ; TAB_DESS . 18 = 'TIRC' ;
 * 3. HIỂN THỊ ĐỒ THỊ SO SÁNH TRỰC QUAN (DOUBLE-LAYER CALIBRATION MY CODE VS DAUTI)
 *===================================================================*
 *DESS (EVT_00 ET EVT_10 ET EVT_20 ET EVT_30 ET EVT_40 ET EVT_50
-   ET EVTD_00 ET EVTD_10 ET EVTD_20 ET EVTD_30 ET EVTD_40 ET EVTD_50)
+   ET EVD_00 ET EVD_10 ET EVD_20 ET EVD_30 ET EVD_40 ET EVD_50)
      TAB_DESS
      'XBOR' 0. 240. 'XGRA' 10.
      'YBOR' 0. 500. 'YGRA' 25.
@@ -1062,7 +779,7 @@ TAB_DESS . 16 = 'TIRC' ; TAB_DESS . 17 = 'TIRC' ; TAB_DESS . 18 = 'TIRC' ;
 * 3. HIỂN THỊ ĐỒ THỊ SO SÁNH TRỰC QUAN (DOUBLE-LAYER CALIBRATION MY CODE VS EXPERIMENT)
 *===================================================================*
 *DESS (EVT_00 ET EVT_10 ET EVT_20 ET EVT_30 ET EVT_40 ET EVT_50
-   ET EVTE_00 ET EVTE_10 ET EVTE_20 ET EVTE_30 ET EVTE_40 ET EVTE_50)
+   ET EVE_00 ET EVE_10 ET EVE_20 ET EVE_30 ET EVE_40 ET EVE_50)
      TAB_DESS
      'XBOR' 0. 240. 'XGRA' 10.
      'YBOR' 0. 500. 'YGRA' 25.
@@ -1072,11 +789,19 @@ TAB_DESS . 16 = 'TIRC' ; TAB_DESS . 17 = 'TIRC' ; TAB_DESS . 18 = 'TIRC' ;
 *===================================================================*
 * 3. HIỂN THỊ ĐỒ THỊ SO SÁNH 3 LỚP (TRIPLE-LAYER CALIBRATION)
 *===================================================================*
-DESS (EVT_00 ET EVT_10 ET EVT_20 ET EVT_30 ET EVT_40 ET EVT_50
-   ET EVTD_00 ET EVTD_10 ET EVTD_20 ET EVTD_30 ET EVTD_40 ET EVTD_50
-   ET EVTE_00 ET EVTE_10 ET EVTE_20 ET EVTE_30 ET EVTE_40 ET EVTE_50)
+*DESS (EVT_00 ET EVT_10 ET EVT_20 ET EVT_30 ET EVT_40 ET EVT_50
+   ET EVD_00 ET EVD_10 ET EVD_20 ET EVD_30 ET EVD_40 ET EVD_50
+   ET EVE_00 ET EVE_10 ET EVE_20 ET EVE_30 ET EVE_40 ET EVE_50)
      TAB_DESS
      'XBOR' 0. 240. 'XGRA' 10.
      'YBOR' 0. 500. 'YGRA' 25.
      'GRIL' 'POIN' 'GRIS'
      TITRE 'Calibration: Current (Solid) vs Dauti (Dashed) vs Exp (Dotted)' ;
+
+
+
+
+
+
+
+
