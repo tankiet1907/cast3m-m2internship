@@ -50,7 +50,7 @@ colors = {
 plt.figure(figsize=(10, 8))
 
 # Cập nhật lại đường dẫn file CSV của bạn nếu cần thiết
-csv_file = r'D:\castem\Temperature_5min_Intervals.csv'
+csv_file = r'D:\cast3m-m2internship\02.Simulation\02.Results\Temperature_5min_Intervals.csv'
 
 try:
     df_castem = pd.read_csv(csv_file, sep=';')
@@ -119,6 +119,6 @@ plt.legend(loc='center left', bbox_to_anchor=(1, 0.5), fontsize=9, ncol=2)
 plt.tight_layout()
 
 # Lưu thành file chất lượng cao (tuỳ chọn)
-plt.savefig(r'D:\cast3m-m2internship\01.Report\figures\plots\Temperature_results_Comparison.png', dpi=300)
+#plt.savefig(r'D:\cast3m-m2internship\01.Report\figures\plots\Temperature_results_Comparison.png', dpi=300)
 
 plt.show()

@@ -40,7 +40,7 @@ colors = {
 plt.figure(figsize=(10, 8))
 
 # Đường dẫn file CSV kết quả Gas Pressure (sửa lại theo tên file thực tế của bạn)
-csv_file = r'D:\castem\GasPressure_5min_Intervals.csv'
+csv_file = r'D:\cast3m-m2internship\02.Simulation\02.Results\GasPressure_5min_Intervals.csv'
 
 try:
     # Đọc file CSV
