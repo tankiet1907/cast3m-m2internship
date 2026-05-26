@@ -787,6 +787,12 @@ EV_ML_240 = EVOL 'ROUG' 'MANU' 'Time (min)' L_MIN_240 'Mass Loss (%)' L_ML_240 ;
 * Vẽ ra màn hình
 DESS EV_ML_240 ;
 
+* =========================================================
+* 3. XUẤT DỮ LIỆU RA FILE CSV
+* =========================================================
+OPTI 'SORT' 'D:\cast3m-m2internship\02.Simulation\02.Results\MassLoss_1min_Intervals.csv' ;
+SORT 'EXCE' EV_ML_240 ;
+
 
 
 
