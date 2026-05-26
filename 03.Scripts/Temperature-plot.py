@@ -35,7 +35,7 @@ LTE_120 = [22.6, 24.6, 29.6, 34.5, 39.5, 44.4, 49.3, 54.4, 59.5, 64.5, 69.6, 74.
 # Màu sắc map theo Castem
 colors = {
     '00': 'blue',       # BLEU
-    '10': 'red',     # ORAN
+    '10': 'red',        # ORAN
     '20': 'gold',       # JAUN
     '30': 'deeppink',   # ROSE
     '40': 'green',      # VERT
@@ -50,11 +50,11 @@ colors = {
 plt.figure(figsize=(10, 8))
 
 # Cập nhật lại đường dẫn file CSV của bạn nếu cần thiết
-csv_file = r'D:\cast3m-m2internship\02.Simulation\02.Results\Temperature_5min_Intervals.csv'
+csv_file = r'D:\cast3m-m2internship\02.Simulation\02.Results\Temperature_1min_Intervals.csv'
 
 try:
     df_castem = pd.read_csv(csv_file, sep=';')
-    time_sim = time_dauti 
+    time_sim = df_castem.iloc[:, 0]
     
     # Vẽ mô phỏng (Nét liền)
     plt.plot(time_sim, df_castem.iloc[:, 1], color=colors['00'], linestyle='-', label='Sim 00mm')
@@ -119,6 +119,6 @@ plt.legend(loc='center left', bbox_to_anchor=(1, 0.5), fontsize=9, ncol=2)
 plt.tight_layout()
 
 # Lưu thành file chất lượng cao (tuỳ chọn)
-#plt.savefig(r'D:\cast3m-m2internship\01.Report\figures\plots\Temperature_results_Comparison.png', dpi=300)
+plt.savefig(r'D:\cast3m-m2internship\01.Report\figures\plots\Temperature_results_Comparison.png', dpi=300)
 
 plt.show()

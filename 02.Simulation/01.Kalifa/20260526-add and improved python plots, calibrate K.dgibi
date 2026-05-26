@@ -488,10 +488,10 @@ CHPG = EXCO 'PG' TAB0 . 'TEMPERATURES' . (NTOT - 1);
 CHPC = EXCO 'PC' TAB0 . 'TEMPERATURES' . (NTOT - 1);
 
 L_ISO_T = PROG 292. PAS 1. 294. ;
-*TRAC CHMT MODTHC MAIL1 L_ISO_T TITRE 'Temperature after aging phase - before accident';
+TRAC CHMT MODTHC MAIL1 L_ISO_T TITRE 'Temperature after aging phase - before accident';
 L_ISO_PG = PROG 1.00E5 PAS 1000. 1.02E5 ;
-*TRAC CHPG MODTHC MAIL1 L_ISO_PG TITRE 'Gas pressure after aging phase - before accident';
-*TRAC CHPC MODTHC MAIL1 TITRE 'Capillary pressure after aging phase - before accident';
+TRAC CHPG MODTHC MAIL1 L_ISO_PG TITRE 'Gas pressure after aging phase - before accident';
+TRAC CHPC MODTHC MAIL1 TITRE 'Capillary pressure after aging phase - before accident';
 
 
 *---------------------------------------------------------------------
@@ -552,47 +552,48 @@ REST 'FORMAT';
 *---------------------------------------------------------------------
 * EXPORTATION OF THE RESULTS
 *---------------------------------------------------------------------
-*===================================================================
-*********** EXPORT TEMPERATURE EVERY 5 MINUTES **************
-*===================================================================
 
+*===================================================================
+*********** EXPORT TEMPERATURE EVERY 1 MINUTE **************
+*===================================================================
 * 1. Initialize the Cast3M base timeline (starting from temps2)
 EVT_INIT = EVOL 'BLAN' 'TEMP' TAB0 'TEMPERATURES' 'T' PO_00 ;
 LT_SEC   = EXTR EVT_INIT 'ABSC' ;
 LT_MIN   = (LT_SEC - (PROG (DIME LT_SEC) * temps2)) / 60. ;
 
-* 2. Initialize the target time axis: From 0 to 240 minutes, step size 5 minutes
-L_MIN_5  = PROG 0. PAS 5. 240. ;
+* 2. Initialize the target time axis: From 0 to 240 minutes, step size 1 minute
+L_MIN_1  = PROG 0. PAS 1. 240. ;
 
 * 3. Extract, convert to Celsius, and interpolate (IPOL) in a single line
 * IPOL syntax: IPOL [new X-axis] [original graph]
-LT_00_5 = IPOL L_MIN_5 (EVOL 'MANU' LT_MIN ((EXTR (EVOL 'TEMP' TAB0 'TEMPERATURES' 'T' PO_00) 'ORDO') - 273.15)) ;
-LT_10_5 = IPOL L_MIN_5 (EVOL 'MANU' LT_MIN ((EXTR (EVOL 'TEMP' TAB0 'TEMPERATURES' 'T' PO_10) 'ORDO') - 273.15)) ;
-LT_20_5 = IPOL L_MIN_5 (EVOL 'MANU' LT_MIN ((EXTR (EVOL 'TEMP' TAB0 'TEMPERATURES' 'T' PO_20) 'ORDO') - 273.15)) ;
-LT_30_5 = IPOL L_MIN_5 (EVOL 'MANU' LT_MIN ((EXTR (EVOL 'TEMP' TAB0 'TEMPERATURES' 'T' PO_30) 'ORDO') - 273.15)) ;
-LT_40_5 = IPOL L_MIN_5 (EVOL 'MANU' LT_MIN ((EXTR (EVOL 'TEMP' TAB0 'TEMPERATURES' 'T' PO_40) 'ORDO') - 273.15)) ;
-LT_50_5 = IPOL L_MIN_5 (EVOL 'MANU' LT_MIN ((EXTR (EVOL 'TEMP' TAB0 'TEMPERATURES' 'T' PO_50) 'ORDO') - 273.15)) ;
-LT_120_5 = IPOL L_MIN_5 (EVOL 'MANU' LT_MIN ((EXTR (EVOL 'TEMP' TAB0 'TEMPERATURES' 'T' PO_120) 'ORDO') - 273.15)) ;
+LT_00_1 = IPOL L_MIN_1 (EVOL 'MANU' LT_MIN ((EXTR (EVOL 'TEMP' TAB0 'TEMPERATURES' 'T' PO_00) 'ORDO') - 273.15)) ;
+LT_10_1 = IPOL L_MIN_1 (EVOL 'MANU' LT_MIN ((EXTR (EVOL 'TEMP' TAB0 'TEMPERATURES' 'T' PO_10) 'ORDO') - 273.15)) ;
+LT_20_1 = IPOL L_MIN_1 (EVOL 'MANU' LT_MIN ((EXTR (EVOL 'TEMP' TAB0 'TEMPERATURES' 'T' PO_20) 'ORDO') - 273.15)) ;
+LT_30_1 = IPOL L_MIN_1 (EVOL 'MANU' LT_MIN ((EXTR (EVOL 'TEMP' TAB0 'TEMPERATURES' 'T' PO_30) 'ORDO') - 273.15)) ;
+LT_40_1 = IPOL L_MIN_1 (EVOL 'MANU' LT_MIN ((EXTR (EVOL 'TEMP' TAB0 'TEMPERATURES' 'T' PO_40) 'ORDO') - 273.15)) ;
+LT_50_1 = IPOL L_MIN_1 (EVOL 'MANU' LT_MIN ((EXTR (EVOL 'TEMP' TAB0 'TEMPERATURES' 'T' PO_50) 'ORDO') - 273.15)) ;
+LT_120_1 = IPOL L_MIN_1 (EVOL 'MANU' LT_MIN ((EXTR (EVOL 'TEMP' TAB0 'TEMPERATURES' 'T' PO_120) 'ORDO') - 273.15)) ;
 
 * 4. Package into new graph objects to prepare for export.
-EV_EX_00 = EVOL 'MANU' 'Time(min)' L_MIN_5 'T_00mm' LT_00_5 ;
-EV_EX_10 = EVOL 'MANU' 'Time(min)' L_MIN_5 'T_10mm' LT_10_5 ;
-EV_EX_20 = EVOL 'MANU' 'Time(min)' L_MIN_5 'T_20mm' LT_20_5 ;
-EV_EX_30 = EVOL 'MANU' 'Time(min)' L_MIN_5 'T_30mm' LT_30_5 ;
-EV_EX_40 = EVOL 'MANU' 'Time(min)' L_MIN_5 'T_40mm' LT_40_5 ;
-EV_EX_50 = EVOL 'MANU' 'Time(min)' L_MIN_5 'T_50mm' LT_50_5 ;
-EV_EX_120 = EVOL 'MANU' 'Time(min)' L_MIN_5 'T_120mm' LT_120_5 ;
+EV_EX_00 = EVOL 'MANU' 'Time(min)' L_MIN_1 'T_00mm' LT_00_1 ;
+EV_EX_10 = EVOL 'MANU' 'Time(min)' L_MIN_1 'T_10mm' LT_10_1 ;
+EV_EX_20 = EVOL 'MANU' 'Time(min)' L_MIN_1 'T_20mm' LT_20_1 ;
+EV_EX_30 = EVOL 'MANU' 'Time(min)' L_MIN_1 'T_30mm' LT_30_1 ;
+EV_EX_40 = EVOL 'MANU' 'Time(min)' L_MIN_1 'T_40mm' LT_40_1 ;
+EV_EX_50 = EVOL 'MANU' 'Time(min)' L_MIN_1 'T_50mm' LT_50_1 ;
+EV_EX_120 = EVOL 'MANU' 'Time(min)' L_MIN_1 'T_120mm' LT_120_1 ;
 
 * Combine everything into one data package
 EV_EXPORT_TEMP = EV_EX_00 ET EV_EX_10 ET EV_EX_20 ET EV_EX_30 ET EV_EX_40 ET EV_EX_50 ET EV_EX_120 ;
+*DESS EV_EXPORT_TEMP;
 
 * 5. Export to CSV/TXT file
-OPTI 'SORT' 'D:\cast3m-m2internship\02.Simulation\02.Results\Temperature_5min_Intervals.csv' ;
+OPTI 'SORT' 'D:\cast3m-m2internship\02.Simulation\02.Results\Temperature_1min_Intervals.csv' ;
 SORT 'EXCE' EV_EXPORT_TEMP ;
 
 
 *===================================================================
-*********** EXPORT GAS PRESSURE EVERY 5 MINUTES **************
+*********** EXPORT GAS PRESSURE EVERY 1 MINUTE **************
 *===================================================================
 
 * 1. Initialize the Cast3M base timeline (starting from temps2)
@@ -601,28 +602,33 @@ EVP_INIT = EVOL 'BLAN' 'TEMP' TAB0 'TEMPERATURES' 'PG' PO_10 ;
 
 * 3. Extract, convert to MPa (divide by 1.E6), and interpolate (IPOL) in a single line
 * IPOL syntax: IPOL [new X-axis] [original graph]
-LPG_10_5  = IPOL L_MIN_5 (EVOL 'MANU' LT_MIN ((EXTR (EVOL 'TEMP' TAB0 'TEMPERATURES' 'PG' PO_10)  'ORDO') / 1.E6)) ;
-LPG_20_5  = IPOL L_MIN_5 (EVOL 'MANU' LT_MIN ((EXTR (EVOL 'TEMP' TAB0 'TEMPERATURES' 'PG' PO_20)  'ORDO') / 1.E6)) ;
-LPG_30_5  = IPOL L_MIN_5 (EVOL 'MANU' LT_MIN ((EXTR (EVOL 'TEMP' TAB0 'TEMPERATURES' 'PG' PO_30)  'ORDO') / 1.E6)) ;
-LPG_40_5  = IPOL L_MIN_5 (EVOL 'MANU' LT_MIN ((EXTR (EVOL 'TEMP' TAB0 'TEMPERATURES' 'PG' PO_40)  'ORDO') / 1.E6)) ;
-LPG_50_5  = IPOL L_MIN_5 (EVOL 'MANU' LT_MIN ((EXTR (EVOL 'TEMP' TAB0 'TEMPERATURES' 'PG' PO_50)  'ORDO') / 1.E6)) ;
+LPG_00_1  = IPOL L_MIN_1 (EVOL 'MANU' LT_MIN ((EXTR (EVOL 'TEMP' TAB0 'TEMPERATURES' 'PG' PO_00)  'ORDO') / 1.E6)) ;
+LPG_10_1  = IPOL L_MIN_1 (EVOL 'MANU' LT_MIN ((EXTR (EVOL 'TEMP' TAB0 'TEMPERATURES' 'PG' PO_10)  'ORDO') / 1.E6)) ;
+LPG_20_1  = IPOL L_MIN_1 (EVOL 'MANU' LT_MIN ((EXTR (EVOL 'TEMP' TAB0 'TEMPERATURES' 'PG' PO_20)  'ORDO') / 1.E6)) ;
+LPG_30_1  = IPOL L_MIN_1 (EVOL 'MANU' LT_MIN ((EXTR (EVOL 'TEMP' TAB0 'TEMPERATURES' 'PG' PO_30)  'ORDO') / 1.E6)) ;
+LPG_40_1  = IPOL L_MIN_1 (EVOL 'MANU' LT_MIN ((EXTR (EVOL 'TEMP' TAB0 'TEMPERATURES' 'PG' PO_40)  'ORDO') / 1.E6)) ;
+LPG_50_1  = IPOL L_MIN_1 (EVOL 'MANU' LT_MIN ((EXTR (EVOL 'TEMP' TAB0 'TEMPERATURES' 'PG' PO_50)  'ORDO') / 1.E6)) ;
+LPG_120_1  = IPOL L_MIN_1 (EVOL 'MANU' LT_MIN ((EXTR (EVOL 'TEMP' TAB0 'TEMPERATURES' 'PG' PO_120)  'ORDO') / 1.E6)) ;
 
 * 4. Package into new graph objects to prepare for export.
-EV_PG_10  = EVOL 'MANU' 'Time(min)' L_MIN_5 'PG_10mm(MPa)'  LPG_10_5 ;
-EV_PG_20  = EVOL 'MANU' 'Time(min)' L_MIN_5 'PG_20mm(MPa)'  LPG_20_5 ;
-EV_PG_30  = EVOL 'MANU' 'Time(min)' L_MIN_5 'PG_30mm(MPa)'  LPG_30_5 ;
-EV_PG_40  = EVOL 'MANU' 'Time(min)' L_MIN_5 'PG_40mm(MPa)'  LPG_40_5 ;
-EV_PG_50  = EVOL 'MANU' 'Time(min)' L_MIN_5 'PG_50mm(MPa)'  LPG_50_5 ;
+EV_PG_00  = EVOL 'MANU' 'Time(min)' L_MIN_1 'PG_00mm(MPa)'  LPG_00_1 ;
+EV_PG_10  = EVOL 'MANU' 'Time(min)' L_MIN_1 'PG_10mm(MPa)'  LPG_10_1 ;
+EV_PG_20  = EVOL 'MANU' 'Time(min)' L_MIN_1 'PG_20mm(MPa)'  LPG_20_1 ;
+EV_PG_30  = EVOL 'MANU' 'Time(min)' L_MIN_1 'PG_30mm(MPa)'  LPG_30_1 ;
+EV_PG_40  = EVOL 'MANU' 'Time(min)' L_MIN_1 'PG_40mm(MPa)'  LPG_40_1 ;
+EV_PG_50  = EVOL 'MANU' 'Time(min)' L_MIN_1 'PG_50mm(MPa)'  LPG_50_1 ;
+EV_PG_120  = EVOL 'MANU' 'Time(min)' L_MIN_1 'PG_120mm(MPa)'  LPG_120_1 ;
 
 * Combine everything into one data package
-EV_EXPORT_PG = EV_PG_10 ET EV_PG_20 ET EV_PG_30 ET EV_PG_40 ET EV_PG_50;
+EV_EXPORT_PG = EV_PG_00 ET EV_PG_10 ET EV_PG_20 ET EV_PG_30 ET EV_PG_40 ET EV_PG_50 ET EV_PG_120;
+*DESS EV_EXPORT_PG;
 
 * 5. Export to CSV/TXT file
-OPTI 'SORT' 'D:\cast3m-m2internship\02.Simulation\02.Results\GasPressure_5min_Intervals.csv' ;
+OPTI 'SORT' 'D:\cast3m-m2internship\02.Simulation\02.Results\GasPressure_1min_Intervals.csv' ;
 SORT 'EXCE' EV_EXPORT_PG ;
 
 *===================================================================
-*********** EXPORT CAPILLARY PRESSURE EVERY 5 MINUTES **************
+*********** EXPORT CAPILLARY PRESSURE EVERY 1 MINUTE **************
 *===================================================================
 
 * 1. Initialize the Cast3M base timeline (starting from temps2)
@@ -630,72 +636,30 @@ EVP_INIT = EVOL 'BLAN' 'TEMP' TAB0 'TEMPERATURES' 'PC' PO_10 ;
 
 * 3. Extract, convert to MPa (divide by 1.E6), and interpolate (IPOL) in a single line
 * IPOL syntax: IPOL [new X-axis] [original graph]
-LPC_10_5  = IPOL L_MIN_5 (EVOL 'MANU' LT_MIN ((EXTR (EVOL 'TEMP' TAB0 'TEMPERATURES' 'PC' PO_10)  'ORDO') / 1.E6)) ;
-LPC_20_5  = IPOL L_MIN_5 (EVOL 'MANU' LT_MIN ((EXTR (EVOL 'TEMP' TAB0 'TEMPERATURES' 'PC' PO_20)  'ORDO') / 1.E6)) ;
-LPC_30_5  = IPOL L_MIN_5 (EVOL 'MANU' LT_MIN ((EXTR (EVOL 'TEMP' TAB0 'TEMPERATURES' 'PC' PO_30)  'ORDO') / 1.E6)) ;
-LPC_40_5  = IPOL L_MIN_5 (EVOL 'MANU' LT_MIN ((EXTR (EVOL 'TEMP' TAB0 'TEMPERATURES' 'PC' PO_40)  'ORDO') / 1.E6)) ;
-LPC_50_5  = IPOL L_MIN_5 (EVOL 'MANU' LT_MIN ((EXTR (EVOL 'TEMP' TAB0 'TEMPERATURES' 'PC' PO_50)  'ORDO') / 1.E6)) ;
+LPC_10_1  = IPOL L_MIN_1 (EVOL 'MANU' LT_MIN ((EXTR (EVOL 'TEMP' TAB0 'TEMPERATURES' 'PC' PO_10)  'ORDO') / 1.E6)) ;
+LPC_20_1  = IPOL L_MIN_1 (EVOL 'MANU' LT_MIN ((EXTR (EVOL 'TEMP' TAB0 'TEMPERATURES' 'PC' PO_20)  'ORDO') / 1.E6)) ;
+LPC_30_1  = IPOL L_MIN_1 (EVOL 'MANU' LT_MIN ((EXTR (EVOL 'TEMP' TAB0 'TEMPERATURES' 'PC' PO_30)  'ORDO') / 1.E6)) ;
+LPC_40_1  = IPOL L_MIN_1 (EVOL 'MANU' LT_MIN ((EXTR (EVOL 'TEMP' TAB0 'TEMPERATURES' 'PC' PO_40)  'ORDO') / 1.E6)) ;
+LPC_50_1  = IPOL L_MIN_1 (EVOL 'MANU' LT_MIN ((EXTR (EVOL 'TEMP' TAB0 'TEMPERATURES' 'PC' PO_50)  'ORDO') / 1.E6)) ;
 
 * 4. Package into new graph objects to prepare for export.
-EV_PC_10  = EVOL 'MANU' 'Time(min)' L_MIN_5 'PC_10mm(MPa)'  LPC_10_5 ;
-EV_PC_20  = EVOL 'MANU' 'Time(min)' L_MIN_5 'PC_20mm(MPa)'  LPC_20_5 ;
-EV_PC_30  = EVOL 'MANU' 'Time(min)' L_MIN_5 'PC_30mm(MPa)'  LPC_30_5 ;
-EV_PC_40  = EVOL 'MANU' 'Time(min)' L_MIN_5 'PC_40mm(MPa)'  LPC_40_5 ;
-EV_PC_50  = EVOL 'MANU' 'Time(min)' L_MIN_5 'PC_50mm(MPa)'  LPC_50_5 ;
+EV_PC_10  = EVOL 'MANU' 'Time(min)' L_MIN_1 'PC_10mm(MPa)'  LPC_10_1 ;
+EV_PC_20  = EVOL 'MANU' 'Time(min)' L_MIN_1 'PC_20mm(MPa)'  LPC_20_1 ;
+EV_PC_30  = EVOL 'MANU' 'Time(min)' L_MIN_1 'PC_30mm(MPa)'  LPC_30_1 ;
+EV_PC_40  = EVOL 'MANU' 'Time(min)' L_MIN_1 'PC_40mm(MPa)'  LPC_40_1 ;
+EV_PC_50  = EVOL 'MANU' 'Time(min)' L_MIN_1 'PC_50mm(MPa)'  LPC_50_1 ;
 
 * Combine everything into one data package
 EV_EXPORT_PC = EV_PC_10 ET EV_PC_20 ET EV_PC_30 ET EV_PC_40 ET EV_PC_50;
+*DESS EV_EXPORT_PC;
 
 * 5. Export to CSV file
-OPTI 'SORT' 'D:\cast3m-m2internship\02.Simulation\02.Results\CapillaryPressure_5min_Intervals.csv' ;
+OPTI 'SORT' 'D:\cast3m-m2internship\02.Simulation\02.Results\CapillaryPressure_1min_Intervals.csv' ;
 SORT 'EXCE' EV_EXPORT_PC ;
 
 
-
-
-
-
-*---------------------------------------------------------------------
-* VISUALIZATION
-*---------------------------------------------------------------------
-
-* --- Check the total number of saved steps
-NTOT = DIME TAB0.'TEMPERATURES';
-MESS '--- Total saved steps = ' NTOT;
-
-* --- Visualization of the T, PG, PC field at the last saved time step (end of aging)
-CHMT = EXCO 'T' TAB0 . 'TEMPERATURES' . (NTOT - 1);
-CHPG = EXCO 'PG' TAB0 . 'TEMPERATURES' . (NTOT - 1);
-CHPC = EXCO 'PC' TAB0 . 'TEMPERATURES' . (NTOT - 1);
-
-*TRAC CHMT MODTHC MAIL1 TITRE 'Temperature after accident phase';
-*TRAC CHPG MODTHC MAIL1 TITRE 'Gas pressure after accident phase';
-*TRAC CHPC MODTHC MAIL1 TITRE 'Capillary pressure after accident phase';
-
 *===================================================================*
-* CHECK HYDRATATION FIELD AT THE FINAL TIME STEP
-*===================================================================*
-
-N_LAST = (DIME (TAB0 . 'HYDRATATION')) - 1 ;
-CHAM_HYDR_LAST = TAB0 . 'HYDRATATION' . N_LAST ;
-
-MESS '=== HYDRATION DEGREE AT THE FINAL TIME STEP ===' ;
-MESS 'Min HYDR = ' (MINI CHAM_HYDR_LAST) ;
-MESS 'Max HYDR = ' (MAXI CHAM_HYDR_LAST) ;
-
-CHPO_HYDR_LAST = CHAN 'CHPO' CHAM_HYDR_LAST MODTHC ;
-*TRAC CHPO_HYDR_LAST MODTHC MAIL1 TITRE 'Hydration Degree Field at Final Step' ;
-
-
-*===================================================================*
-* INITIALIZE THE GENERAL TIME AXIS (CONVERT TO MINUTES & RESET TO 0 AT TEMPS2)
-*===================================================================*
-EVT_INIT = EVOL 'BLAN' 'TEMP' TAB0 'TEMPERATURES' 'T' PO_00;
-LT_SEC   = EXTR EVT_INIT 'ABSC' ;
-LT_MIN   = (LT_SEC - (PROG (DIME LT_SEC) * temps2)) / 60. ;
-
-*===================================================================*
-*********** STAGE: HYDRATION DEGREE (0-->1) ***********************
+*********** EXPORT HYDRATION DEGREE (0-->1) EVERY 1 MINUTE ***********
 *===================================================================*
 
 * 1. Initialize empty data arrays 
@@ -724,21 +688,144 @@ REPETER BOU_HY (DIME TAB0 . 'HYDRATATION') ;
    N_STEP = N_STEP + 1 ;
 FIN BOU_HY ;
 
-*3. Combine the LT_MIN timeline and data array to create a graph.
-EV_HY00 = EVOL 'BLEU' 'MANU' 'Time (min)' LT_MIN 'HYDR' LHY_00 ;
-EV_HY10 = EVOL 'ORAN' 'MANU' 'Time (min)' LT_MIN 'HYDR' LHY_10 ;
-EV_HY20 = EVOL 'JAUN' 'MANU' 'Time (min)' LT_MIN 'HYDR' LHY_20 ;
-EV_HY30 = EVOL 'ROSE' 'MANU' 'Time (min)' LT_MIN 'HYDR' LHY_30 ;
-EV_HY40 = EVOL 'VERT' 'MANU' 'Time (min)' LT_MIN 'HYDR' LHY_40 ;
-EV_HY50 = EVOL 'TURQ' 'MANU' 'Time (min)' LT_MIN 'HYDR' LHY_50 ;
-EV_HY120 = EVOL 'BLAN' 'MANU' 'Time (min)' LT_MIN 'HYDR' LHY_120 ;
+* 4. Nội suy dữ liệu về mốc 1 phút bằng IPOL
+* Cú pháp: IPOL [Trục X mới] (EVOL 'MANU' [Trục X cũ] [Giá trị Y cũ])
+LHY_00_1 = IPOL L_MIN_1 (EVOL 'MANU' LT_MIN 'HYD' LHY_00) ;
+LHY_10_1 = IPOL L_MIN_1 (EVOL 'MANU' LT_MIN 'HYD' LHY_10) ;
+LHY_20_1 = IPOL L_MIN_1 (EVOL 'MANU' LT_MIN 'HYD' LHY_20) ;
+LHY_30_1 = IPOL L_MIN_1 (EVOL 'MANU' LT_MIN 'HYD' LHY_30) ;
+LHY_40_1 = IPOL L_MIN_1 (EVOL 'MANU' LT_MIN 'HYD' LHY_40) ;
+LHY_50_1 = IPOL L_MIN_1 (EVOL 'MANU' LT_MIN 'HYD' LHY_50) ;
+LHY_120_1 = IPOL L_MIN_1 (EVOL 'MANU' LT_MIN 'HYD' LHY_120) ;
 
-* 4. Draw the graph
-DESS (EV_HY00 ET EV_HY10 ET EV_HY20 ET EV_HY30 ET EV_HY40 ET EV_HY50 ET EV_HY120)
-     'XBOR' 0. 240. 'XGRA' 10.
-     'YBOR' 0. 1. 'YGRA' 0.05
-     'GRIL' 'POIN' 'GRIS'
-     TITRE 'Evolution of Hydration Degree at Measurement Points' ;
+* 5. Tạo đối tượng EVOL với trục thời gian mới
+EV_HYDR_00 = EVOL 'MANU' 'Time (min)' L_MIN_1 'Hyd_00mm' LHY_00_1 ;
+EV_HYDR_10 = EVOL 'MANU' 'Time (min)' L_MIN_1 'Hyd_10mm' LHY_10_1 ;
+EV_HYDR_20 = EVOL 'MANU' 'Time (min)' L_MIN_1 'Hyd_20mm' LHY_20_1 ;
+EV_HYDR_30 = EVOL 'MANU' 'Time (min)' L_MIN_1 'Hyd_30mm' LHY_30_1 ;
+EV_HYDR_40 = EVOL 'MANU' 'Time (min)' L_MIN_1 'Hyd_40mm' LHY_40_1 ;
+EV_HYDR_50 = EVOL 'MANU' 'Time (min)' L_MIN_1 'Hyd_50mm' LHY_50_1 ;
+EV_HYDR_120 = EVOL 'MANU' 'Time (min)' L_MIN_1 'Hyd_120mm' LHY_120_1 ;
+
+* 4. Combine everything into one data package
+EV_EXPORT_HYDR = EV_HYDR_00 ET EV_HYDR_10 ET EV_HYDR_20 ET EV_HYDR_30 ET EV_HYDR_40 ET EV_HYDR_50 ET EV_HYDR_120;
+*DESS EV_EXPORT_HYDR;
+
+* 5. Export to CSV file
+OPTI 'SORT' 'D:\cast3m-m2internship\02.Simulation\02.Results\HydrationDegree_1min_Intervals.csv' ;
+SORT 'EXCE' EV_EXPORT_HYDR ;
+
+
+* =========================================================
+* 1. TÍNH TOÁN MASS LOSS (%)
+* =========================================================
+L_TIME_ML   = PROG ;
+L_ML_PCT    = PROG ;
+MASS_0      = 0.0 ;
+
+* --- ĐỊNH NGHĨA HẰNG SỐ ---
+PORO  = 0.1 ; 
+RHOW  = 1000.0 ;
+W_INF = winf ; 
+
+N1 = 0 ;
+REPETER BOU_ML (DIME TAB0 . 'TEMPERATURES') ;
+* Trích xuất các trường tại bước N1
+    CHTKi = EXCO 'T' TAB0 . 'TEMPERATURES' . N1 ;
+    CHPCi = EXCO 'PC' TAB0 . 'TEMPERATURES' . N1 ;
+    CHPGi = EXCO 'PG' TAB0 . 'TEMPERATURES' . N1 ;
+    HYDRi = CHAN CHPO (TAB0 . 'HYDRATATION' . N1) MODTHC ;
+
+* Tính SW và Mật độ hơi nước RHOGW
+    CHPVSATi CHPGWSCi RHOGWi XX YY ZZ = @PVSAT CHPGi CHPCi CHTKi ;
+    SWi = @SATURA CHPCi CHTKi HYDRi cha1 chb1 chc1 chgam0 ;
+
+* Tính tổng nước (Lỏng + Hơi + Liên kết) [kg/m3]
+    W_LIQ   = SWi * (PORO * RHOW) ;
+    CH_SG   = (MANU CHPO MAIL1 1 'SCAL' 1.0) - SWi ;
+    W_VAP   = CH_SG * RHOGWi * PORO ;
+    W_BOUND = HYDRi * W_INF ;
+    W_TOT   = W_LIQ + W_VAP + W_BOUND ;
+
+* Tích phân trên toàn thể tích => Khối lượng [kg]
+    CHAM_W = CHAN 'CHAM' W_TOT MODTHC ;
+    MASS_I = INTG MODTHC CHAM_W ;
+
+* Lưu khối lượng ban đầu tại t=0
+    SI (N1 EGA 0) ;
+        MASS_0 = MASS_I ;
+    FINSI ;
+
+* Tính Mass Loss theo %
+* Kiểm tra MASS_0 để tránh chia cho 0
+    SI (MASS_0 NEG 0.0) ;
+        M_LOSS_PCT = ((MASS_0 - MASS_I) / MASS_0) * 100.0 ;
+    SINON ;
+        M_LOSS_PCT = 0.0 ;
+    FINSI ;
+    
+* Đưa vào mảng
+    T_I = TAB0 . 'TEMPS' . N1 ;
+    L_TIME_ML   = L_TIME_ML ET (PROG (T_I / 60.)) ; 
+    L_ML_PCT    = L_ML_PCT ET (PROG M_LOSS_PCT) ;
+
+    N1 = N1 + 1 ;
+FIN BOU_ML ;
+
+* Đóng gói đồ thị Full Time
+EV_ML_FULL = EVOL 'MANU' 'Time (min)' L_TIME_ML 'Mass Loss (%)' L_ML_PCT ;
+
+* =========================================================
+* 2. CẮT VÀ VẼ ĐỒ THỊ TRONG VÙNG 240 PHÚT
+* =========================================================
+L_MIN_240 = PROG 0. PAS 5. 240. ;
+L_ML_240  = IPOL L_MIN_240 EV_ML_FULL ;
+
+* Tạo đối tượng đồ thị cuối cùng
+EV_ML_240 = EVOL 'ROUG' 'MANU' 'Time (min)' L_MIN_240 'Mass Loss (%)' L_ML_240 ;
+
+* Vẽ ra màn hình
+DESS EV_ML_240 ;
+
+
+
+
+*---------------------------------------------------------------------
+* VISUALIZATION
+*---------------------------------------------------------------------
+
+* --- Check the total number of saved steps
+NTOT = DIME TAB0.'TEMPERATURES';
+MESS '--- Total saved steps = ' NTOT;
+
+*===================================================================*
+* T, PG, PC FIELD AT THE FINAL TIME STEP - last saved time step (end of aging)
+*===================================================================*
+CHMT = EXCO 'T' TAB0 . 'TEMPERATURES' . (NTOT - 1);
+CHPG = EXCO 'PG' TAB0 . 'TEMPERATURES' . (NTOT - 1);
+CHPC = EXCO 'PC' TAB0 . 'TEMPERATURES' . (NTOT - 1);
+
+TRAC CHMT MODTHC MAIL1 TITRE 'Temperature after accident phase';
+TRAC CHPG MODTHC MAIL1 TITRE 'Gas pressure after accident phase';
+TRAC CHPC MODTHC MAIL1 TITRE 'Capillary pressure after accident phase';
+
+*===================================================================*
+* HYDRATATION FIELD AT THE FINAL TIME STEP - last saved time step (end of aging)
+*===================================================================*
+
+N_LAST = (DIME (TAB0 . 'HYDRATATION')) - 1 ;
+CHAM_HYDR_LAST = TAB0 . 'HYDRATATION' . N_LAST ;
+
+MESS '=== HYDRATION DEGREE AT THE FINAL TIME STEP ===' ;
+MESS 'Min HYDR = ' (MINI CHAM_HYDR_LAST) ;
+MESS 'Max HYDR = ' (MAXI CHAM_HYDR_LAST) ;
+
+CHPO_HYDR_LAST = CHAN 'CHPO' CHAM_HYDR_LAST MODTHC ;
+TRAC CHPO_HYDR_LAST MODTHC MAIL1 TITRE 'Hydration Degree Field at Final Step' ;
+
+
+
+
 
 
 

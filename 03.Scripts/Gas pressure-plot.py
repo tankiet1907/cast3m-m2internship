@@ -26,11 +26,13 @@ LPGE_50 = [0.0068, 0.0137, 0.0205, 0.0386, 0.0583, 0.0779, 0.0976, 0.1362, 0.182
 
 # Màu sắc map theo Castem
 colors = {
-    '10': 'blue',       # BLEU
-    '20': 'red',     # ORAN
-    '30': 'gold',       # JAUN
-    '40': 'deeppink',   # ROSE
-    '50': 'green'       # VERT
+    '00': 'blue',       # BLEU
+    '10': 'red',        # ORAN
+    '20': 'gold',       # JAUN
+    '30': 'deeppink',   # ROSE
+    '40': 'green',      # VERT
+    '50': 'cyan',       # TURQ
+    '120': 'black'      # Dùng Đen/Xám để dễ nhìn trên nền trắng thay vì BLAN (trắng)
 }
 
 # ===================================================================
@@ -40,22 +42,22 @@ colors = {
 plt.figure(figsize=(10, 8))
 
 # Đường dẫn file CSV kết quả Gas Pressure (sửa lại theo tên file thực tế của bạn)
-csv_file = r'D:\cast3m-m2internship\02.Simulation\02.Results\GasPressure_5min_Intervals.csv'
+csv_file = r'D:\cast3m-m2internship\02.Simulation\02.Results\GasPressure_1min_Intervals.csv'
 
 try:
     # Đọc file CSV
     df_castem = pd.read_csv(csv_file, sep=';')
-    time_sim = time_dauti 
+    time_sim = df_castem.iloc[:, 0]
     
     # Vẽ mô phỏng (Nét liền). 
-    # Lưu ý: Vì không có 0mm, nếu bạn chỉ export 5 đường (10,20,30,40,50), 
-    # thì index các cột giá trị Y sẽ là 1, 3, 5, 7, 9. 
     # Bạn hãy kiểm tra lại cấu trúc file CSV nếu code bị lỗi out-of-bounds nhé!
-    plt.plot(time_sim, df_castem.iloc[:, 1], color=colors['10'], linestyle='-', label='Sim Pg 10mm')
-    plt.plot(time_sim, df_castem.iloc[:, 3], color=colors['20'], linestyle='-', label='Sim Pg 20mm')
-    plt.plot(time_sim, df_castem.iloc[:, 5], color=colors['30'], linestyle='-', label='Sim Pg 30mm')
-    plt.plot(time_sim, df_castem.iloc[:, 7], color=colors['40'], linestyle='-', label='Sim Pg 40mm')
-    plt.plot(time_sim, df_castem.iloc[:, 9], color=colors['50'], linestyle='-', label='Sim Pg 50mm')
+    #plt.plot(time_sim, df_castem.iloc[:, 1], color=colors['00'], linestyle='-', label='Sim Pg 0mm')
+    plt.plot(time_sim, df_castem.iloc[:, 3], color=colors['10'], linestyle='-', label='Sim Pg 10mm')
+    plt.plot(time_sim, df_castem.iloc[:, 5], color=colors['20'], linestyle='-', label='Sim Pg 20mm')
+    plt.plot(time_sim, df_castem.iloc[:, 7], color=colors['30'], linestyle='-', label='Sim Pg 30mm')
+    plt.plot(time_sim, df_castem.iloc[:, 9], color=colors['40'], linestyle='-', label='Sim Pg 40mm')
+    plt.plot(time_sim, df_castem.iloc[:, 11], color=colors['50'], linestyle='-', label='Sim Pg 50mm')
+    #plt.plot(time_sim, df_castem.iloc[:, 13], color=colors['120'], linestyle='-', label='Sim Pg 120mm')
 
 except FileNotFoundError:
     print(f"Không tìm thấy file: {csv_file}. Vui lòng kiểm tra lại đường dẫn!")
@@ -86,18 +88,15 @@ plt.plot(time_exp, LPGE_50, color=colors['50'], linestyle=':', linewidth=2, labe
 
 plt.title('Gas Pressure: Current (Solid) vs Dauti (Dashed) vs Exp (Dotted)', fontsize=14, fontweight='bold')
 plt.xlabel('Time (min)', fontsize=12)
-plt.ylabel('Gas Pressure (MPa or bar)', fontsize=12)
+plt.ylabel('Gas Pressure (MPa)', fontsize=12)
 
 # Thiết lập giới hạn trục toạ độ (theo đúng XBOR và YBOR của Castem)
 plt.xlim(0, 240)
 plt.ylim(0, 4.0)
 
 # Thiết lập bước nhảy (Tick steps) - theo XGRA 10. và YGRA 0.25
-plt.xticks(np.arange(0, 241, 10))
+plt.xticks(np.arange(0, 241, 20))
 plt.yticks(np.arange(0, 4.25, 0.25))
-
-# Xoay nhãn trục X 45 độ nếu bước nhảy 10 làm các số sát nhau khó nhìn
-plt.xticks(rotation=45)
 
 plt.grid(True, which='both', linestyle='-', color='lightgrey')
 

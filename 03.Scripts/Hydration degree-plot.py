@@ -23,8 +23,8 @@ colors = {
 
 plt.figure(figsize=(10, 8))
 
-# Đường dẫn file CSV kết quả Capillary Pressure
-csv_file = r'D:\cast3m-m2internship\02.Simulation\02.Results\CapillaryPressure_1min_Intervals.csv'
+# Đường dẫn file CSV kết quả Hydration Degree
+csv_file = r'D:\cast3m-m2internship\02.Simulation\02.Results\HydrationDegree_1min_Intervals.csv'
 
 try:
     # Đọc file CSV (Cast3M xuất ngăn cách bằng dấu chấm phẩy)
@@ -32,12 +32,13 @@ try:
     time_sim = df_castem.iloc[:, 0]
     
     # Vẽ kết quả mô phỏng (Nét liền - Solid lines)
-    # Lấy các cột giá trị Y tương ứng ở index lẻ: 1, 3, 5, 7, 9
-    plt.plot(time_sim, df_castem.iloc[:, 1], color=colors['10'], linestyle='-', linewidth=2, label='Sim Pc 10mm')
-    plt.plot(time_sim, df_castem.iloc[:, 3], color=colors['20'], linestyle='-', linewidth=2, label='Sim Pc 20mm')
-    plt.plot(time_sim, df_castem.iloc[:, 5], color=colors['30'], linestyle='-', linewidth=2, label='Sim Pc 30mm')
-    plt.plot(time_sim, df_castem.iloc[:, 7], color=colors['40'], linestyle='-', linewidth=2, label='Sim Pc 40mm')
-    plt.plot(time_sim, df_castem.iloc[:, 9], color=colors['50'], linestyle='-', linewidth=2, label='Sim Pc 50mm')
+    plt.plot(time_sim, df_castem.iloc[:, 1], color=colors['00'], linestyle='-', label='Sim 00mm')
+    plt.plot(time_sim, df_castem.iloc[:, 3], color=colors['10'], linestyle='-', label='Sim 10mm')
+    plt.plot(time_sim, df_castem.iloc[:, 5], color=colors['20'], linestyle='-', label='Sim 20mm')
+    plt.plot(time_sim, df_castem.iloc[:, 7], color=colors['30'], linestyle='-', label='Sim 30mm')
+    plt.plot(time_sim, df_castem.iloc[:, 9], color=colors['40'], linestyle='-', label='Sim 40mm')
+    plt.plot(time_sim, df_castem.iloc[:, 11], color=colors['50'], linestyle='-', label='Sim 50mm')
+    #plt.plot(time_sim, df_castem.iloc[:, 13], color=colors['120'], linestyle='-', label='Sim 120mm')
 
 except FileNotFoundError:
     print(f"Không tìm thấy file: {csv_file}. Vui lòng kiểm tra lại đường dẫn!")
@@ -48,14 +49,14 @@ except Exception as e:
 # 3. TÙY CHỈNH GIAO DIỆN ĐỒ THỊ
 # ===================================================================
 
-plt.title('Capillary Pressure Evolution (Simulation Results)', fontsize=14, fontweight='bold')
+plt.title('Hydration Degree Evolution (Simulation Results)', fontsize=14, fontweight='bold')
 plt.xlabel('Time (min)', fontsize=12)
-plt.ylabel('Capillary Pressure (MPa)', fontsize=12)
+plt.ylabel('Hydration Degree (0-1)', fontsize=12)
 
 # Thiết lập giới hạn trục X
 plt.xlim(0, 240)
 
-# Thiết lập bước nhảy trục X là 10 phút
+# Thiết lập bước nhảy trục X là 20 phút
 plt.xticks(np.arange(0, 241, 20), rotation=0)
 
 # (Tùy chọn) Trục Y để Matplotlib tự động scale (do PC có biên độ lớn). 
@@ -71,7 +72,7 @@ plt.legend(loc='center left', bbox_to_anchor=(1, 0.5), fontsize=10, ncol=1)
 plt.tight_layout()
 
 # LƯU ẢNH (BẮT BUỘC TRƯỚC LỆNH PLT.SHOW)
-output_img = r'D:\cast3m-m2internship\01.Report\figures\plots\Capillary_pressure_Simulation.png'
+output_img = r'D:\cast3m-m2internship\01.Report\figures\plots\Hydration_degree_Simulation.png'
 plt.savefig(output_img, dpi=300, bbox_inches='tight')
 
 # HIỂN THỊ ĐỒ THỊ LÊN MÀN HÌNH
