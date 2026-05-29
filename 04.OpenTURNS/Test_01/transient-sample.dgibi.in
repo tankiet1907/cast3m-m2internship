@@ -1,35 +1,3 @@
-*==============================================================================
-*AUTHOR:  Tan Kiet HONG
-*DATE:    2026-03-23
-*DESCRIPTION: This is a sample of a nonlinear transient thermic problem C(T)dT+K(T)T=F, developed from the code 2b thermique K(T)T=F
-
-*GEOMETRY: A rectangular cantilever beam of length 3 m and height 0.5 m.
-*BOUNDARY CONDITIONS:
-* - Imposed heat flux of 100 W/m² on the right edge (LDROITE).
-* - Convection with a coefficient of 100 W/m²K on the top edge (LHAUT) and ambient temperature of 25 °C.
-* - The left edge (LGAUCHE) is thermally insulated (no heat flux and has no imposed temperature) and fixed in space (no mechanical displacement).
-
-*INPUTS:
-* - K THERMAL CONDUCTIVITY K: 
-*   K = KD*(1+4*(SL*PHI*RHO_L)/((1-PHI)*RHO_S))
-*   KD(T)=KD0(1+A_K (T-T0))
-*   WITH KD0=2, A_K=0.005, T0=20
-
-*   SL = 0.2; PHI = 0.18; RHO_L = 1000.; RHO_S = 2500.;
-
-* - C HEAT CAPACITY
-*   CPS(T) = CPS0(1+A_C(T-T0))
-*   WITH CPS0 = 948; A_C = 0.00037
-
-* - CONVECTION COEFFICIENT: HCONVEC = 10.
-* - AMBIENT TEMPERATURE: TLIBRE = 25.
-* - IMPOSED HEAT FLUX: FLUXIMPOSE = 500.
-
-*OUTPUTS:
-* - TEMPERATURE FIELD T
-*==============================================================================
-
-*OPTIONS
 OPTI ECHO 0;
 OPTI 'DIME' 2 'ELEM' QUA4;
 
@@ -69,16 +37,16 @@ LDROITE  = LBC;
 LGAUCHE  = LDA;
 
 *MATERIAL PROPERTY DEFINITION
-KD0     = 2.;
-A_K     = 0.005;
+KD0   = @KD0@ ;
+CPS0  = @CPS0@ ;
+SL    = @SL@ ;
+PHI   = @PHI@ ;
 
-CPS0    = 948;
+A_K     = 0.005;
 A_C     = 0.00037;
 
 T0      = 20.;
 
-SL      = 0.2;
-PHI     = 0.18;
 RHO_L   = 1000.;
 RHO_S   = 2500.;
 
@@ -181,3 +149,31 @@ TAB1.RELAXATION_THETA    = 0.57;
 TAB1.TEMPS_CALCULES      = LTEMPS1;
 
 PASAPAS TAB1;
+
+* ==============================================================================
+* 4) POST-PROCESSING: GET MAXIMUM AND MINUM TEMPERATURES AND EXPORT TO CSV
+* ==============================================================================
+* Get the last time step
+N_STEP = (DIME TAB1.TEMPERATURES) - 1;
+
+T_LAST = TAB1.TEMPERATURES . N_STEP;
+
+* Find the highest and lowest temperatures across the entire model
+T_MAX MOT1 = MAXI T_LAST 'T';
+T_MIN MOT2 = MINI T_LAST 'T';
+
+* Create a list of X-axis (points 1 and 2) and Y-axis (containing T_MAX and T_MIN values)
+L_X = PROG 1. 2.;
+L_Y = PROG T_MAX T_MIN;
+
+* Create EVOL data for output
+EV_OUT = EVOL 'MANU' 'Index' L_X 'Temperature' L_Y;
+
+* Overwrite the absolute path (Rename the CSV file to temp_results.csv)
+OPTI 'SORT' '@CSV_NAME@';
+SORT 'EXCE' EV_OUT ;
+
+MESS 'T_MAX:' T_MAX;
+MESS 'T_MIN:' T_MIN;
+* Force Cast3M to close automatically so Python can continue running
+fin;

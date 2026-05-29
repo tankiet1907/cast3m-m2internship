@@ -1,0 +1,179 @@
+OPTI ECHO 0;
+OPTI 'DIME' 2 'ELEM' QUA4;
+
+*==============================================================================
+* 1) GEOMETRY AND MESH DEFINITION
+
+*GEOMETRY DEFINITION
+LONG    = 3.;
+HAUT    = 0.5;
+
+*NUMBER OF MESH SEGMENT
+NLONG   = 35;
+NHAUT   = 5;
+
+*POINTS CREATION
+PA      = 0. 0.;
+PB      = LONG 0.;
+PC      = LONG HAUT;
+PD      = 0. HAUT;
+
+*MESH LINES CREATION
+LAB     = DROI NLONG PA PB;
+LBC     = DROI NHAUT PB PC;
+LCD     = DROI NLONG PC PD;
+LDA     = DROI NHAUT PD PA;
+
+*MESH SURFACE CREATION
+MAIL1   = DALL LAB LBC LCD LDA;
+
+*==============================================================================
+* 2) PHYSICAL PROBLEM DEFINITION
+
+*LINE DEFINITION FOR APPLYING BOUNDARY CONDITIONS
+LHAUT    = LCD;
+LBAS     = LAB;
+LDROITE  = LBC;
+LGAUCHE  = LDA;
+
+*MATERIAL PROPERTY DEFINITION
+KD0   = 1.6911206117493207 ;
+CPS0  = 1010.5656943261342 ;
+SL    = 0.11039444031969962 ;
+PHI   = 0.1966133977547591 ;
+
+A_K     = 0.005;
+A_C     = 0.00037;
+
+T0      = 20.;
+
+RHO_L   = 1000.;
+RHO_S   = 2500.;
+
+HCONVEC  = 10.;
+TLIBRE   = 25.;
+FLUXIMPOSE = 500.;
+
+*==============================================================================
+* 2A) CAPACITY C(T) CALCULATION
+* Formula: CPS(T) = CPS0(1+A_C(T-T0))
+* Range: T = 0 to 100 with a step of 1
+
+* Temperature list for building C(T) curves (0° to 100°, step 1°)
+tXT = PROG 0. PAS 1. 150.;
+tYC = PROG;
+
+* Build C(T) curve
+REPE BOUCLE (DIME tXT);
+  tT_i = EXTR tXT &BOUCLE;
+  tCPT_i = CPS0 * (1. + (A_C * (tT_i - T0)));
+  tYC = tYC ET (PROG tCPT_i);
+FIN BOUCLE;
+
+C_EVOL = EVOL MANU 'T' tXT 'C' tYC;
+*DESS C_EVOL;
+
+*==============================================================================
+* 2B) CONDUCTIVITY K(T) CALCULATION
+* Formula: K(T) = KD(T) * [1 + 4 * (SL * PHI * RHO_L) / ((1 - PHI) * RHO_S)]
+* KD(T)=KD0(1+A_K (T-T0))
+* Range: T = 0 to 100 with a step of 1
+
+* Step-by-step calculation of the liquid phase multiplier (FEAU) to ensure mathematical operator priority in Cast3M
+* FEAU = [1 + 4 * (SL * PHI * RHO_L) / ((1 - PHI) * RHO_S)]
+temps1    = SL * PHI * RHO_L;
+temps2  = (1. - PHI) * RHO_S;
+FEAU    = 1. + (4. * temps1 / temps2);
+
+* Temperature list for building K(T) curves (0° to 100°, step 1°)
+tXT = PROG 0. PAS 1. 150.;
+tYK = PROG;
+
+* Build K(T) curve
+REPE BOUCLE (DIME tXT);
+  tT_i = EXTR tXT &BOUCLE;
+  tKD_i = KD0 * (1. + (A_K * (tT_i - T0)));
+  tKT_i = tKD_i * FEAU;
+  tYK = tYK ET (PROG tKT_i);
+FIN BOUCLE;
+
+K_EVOL = EVOL MANU 'T' tXT 'K' tYK;
+*DESS K_EVOL;
+
+*MODEL DEFINITION
+MOD1     = MODE MAIL1 THERMIQUE ISOTROPE;
+MOD2     = MODE LHAUT THERMIQUE CONVECTION;
+MOD_TOT  = MOD1 ET MOD2;
+
+*==============================================================================
+*CHANGE C_EVOL TO CPS0 to change from C(T) to C=const
+
+*MATERIAL DEFINITION
+MAT1     = MATE MOD1 'C' C_EVOL 'K' K_EVOL 'RHO' RHO_S;
+MAT2     = MATE MOD2 'H' HCONVEC;
+MAT_TOT = MAT1 ET MAT2;
+
+*==============================================================================
+* 2C) TIME DISCRETIZATION
+* Pseudo-transient: PASAPAS requires time steps even for steady-state problems
+* TFIN and dt are artificial — only the final converged state matters
+TFIN    = 1000.;
+LTEMPS1 = PROG 0. PAS 100. TFIN;
+
+* INITIAL CONDITION (for every mesh node at initital temperature)
+T_INI   = T0;
+T0_CHPO = MANU 'CHPO' MAIL1 'T' T_INI;
+
+*==============================================================================
+* 3) RESOLUTION (PASAPAS NONLINEAR SOLVER)
+
+*IMPOSED HEAT FLUX on LDROITE 
+EV_FLUX = EVOL MANU 'TEMPS' (PROG 0. TFIN) 'T' (PROG 1. 1.);
+FLT2_0  = FLUX MOD1 LDROITE FLUXIMPOSE;
+FLT2    = CHAR 'Q' FLT2_0 EV_FLUX;
+*CONVECTION LOAD VECTOR on LHAUT
+CONV1   = MANU 'CHPO' LHAUT 1 'T' TLIBRE 'NATURE' 'DISCRETE';
+EV_CONV = EVOL MANU 'TEMPS' (PROG 0. TFIN) 'T' (PROG 1. 1.);
+CHAR_CV = CHAR 'TECO' CONV1 EV_CONV;
+CHAR_TOT = FLT2 ET CHAR_CV;
+
+*RESOLUTION PASAPAS (nonlinear thermal)
+TAB1 = TABLE;
+TAB1.TEMPERATURES        = TABLE;
+TAB1.TEMPERATURES.0      = T0_CHPO;
+TAB1.MODELE              = MOD_TOT;
+TAB1.CARACTERISTIQUES    = MAT_TOT;
+TAB1.CHARGEMENT          = CHAR_TOT;
+TAB1.PROCEDURE_THERMIQUE = NONLINEAIRE;
+TAB1.RELAXATION_THETA    = 0.57;
+TAB1.TEMPS_CALCULES      = LTEMPS1;
+
+PASAPAS TAB1;
+
+* ==============================================================================
+* 4) POST-PROCESSING: GET MAXIMUM AND MINUM TEMPERATURES AND EXPORT TO CSV
+* ==============================================================================
+* Get the last time step
+N_STEP = (DIME TAB1.TEMPERATURES) - 1;
+
+T_LAST = TAB1.TEMPERATURES . N_STEP;
+
+* Find the highest and lowest temperatures across the entire model
+T_MAX MOT1 = MAXI T_LAST 'T';
+T_MIN MOT2 = MINI T_LAST 'T';
+
+* Create a list of X-axis (points 1 and 2) and Y-axis (containing T_MAX and T_MIN values)
+L_X = PROG 1. 2.;
+L_Y = PROG T_MAX T_MIN;
+
+* Create EVOL data for output
+EV_OUT = EVOL 'MANU' 'Index' L_X 'Temperature' L_Y;
+
+* Overwrite the absolute path (Rename the CSV file to temp_results.csv)
+OPTI 'SORT' 'D:\cast3m-m2internship\04.OpenTURNS\Test_01\temp_results_no_5.csv';
+SORT 'EXCE' EV_OUT ;
+
+MESS 'T_MAX:' T_MAX;
+MESS 'T_MIN:' T_MIN;
+* Force Cast3M to close automatically so Python can continue running
+fin;
