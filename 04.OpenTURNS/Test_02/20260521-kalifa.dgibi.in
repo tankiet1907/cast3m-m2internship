@@ -83,10 +83,15 @@ PO_120 = MAIL1 POIN 'PROC' (0.06 0.000);
 *---------------------------------------------------------------------
 
 * MIX DATA
-cem  = 350.   ;
-aggr = 1920.  ;
-wc   = 0.32   ;
-sc   = 0.108  ;
+*cem  = 350.   ;
+*aggr = 1920.  ;
+*wc   = 0.32   ;
+*sc   = 0.108  ;
+
+cem  = @CEM@   ;
+aggr = @AGG@   ;
+wc   = @WC@   ;
+sc   = @SC@  ;
 
 * HYDRATION PROCESS DATA (affinity. activation energy. hydration heat)
 AI   = 6    ;
@@ -679,7 +684,7 @@ EV_EXPORT_TEMP = EV_EX_00 ET EV_EX_10 ET EV_EX_20 ET EV_EX_30 ET EV_EX_40 ET EV_
      TITRE 'Temperature Evolution at Measurement Points' ;
 
 * 5. Export to CSV/TXT file
-*OPTI 'SORT' 'D:\cast3m-m2internship\02.Simulation\02.Results\Temperature_1min_Intervals.csv' ;
+OPTI 'SORT' '@CSV_TEMP@' ;
 SORT 'EXCE' EV_EXPORT_TEMP ;
 
 
@@ -719,5 +724,5 @@ EV_EXPORT_PG = EV_PG_00 ET EV_PG_10 ET EV_PG_20 ET EV_PG_30 ET EV_PG_40 ET EV_PG
      TITRE 'Gas Pressure Evolution at Measurement Points' ;
 
 * 5. Export to CSV/TXT file
-*OPTI 'SORT' 'D:\cast3m-m2internship\02.Simulation\02.Results\GasPressure_1min_Intervals.csv' ;
+OPTI 'SORT' '@CSV_PG@' ;
 SORT 'EXCE' EV_EXPORT_PG ;
