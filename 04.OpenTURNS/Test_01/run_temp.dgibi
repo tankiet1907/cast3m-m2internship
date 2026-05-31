@@ -37,10 +37,10 @@ LDROITE  = LBC;
 LGAUCHE  = LDA;
 
 *MATERIAL PROPERTY DEFINITION
-KD0   = 1.6911206117493207 ;
-CPS0  = 1010.5656943261342 ;
-SL    = 0.11039444031969962 ;
-PHI   = 0.1966133977547591 ;
+KD0   = 2.485702074238025 ;
+CPS0  = 930.6322282732906 ;
+SL    = 0.1673829955269001 ;
+PHI   = 0.16828027227172654 ;
 
 A_K     = 0.005;
 A_C     = 0.00037;
@@ -170,7 +170,7 @@ L_Y = PROG T_MAX T_MIN;
 EV_OUT = EVOL 'MANU' 'Index' L_X 'Temperature' L_Y;
 
 * Overwrite the absolute path (Rename the CSV file to temp_results.csv)
-OPTI 'SORT' 'D:\cast3m-m2internship\04.OpenTURNS\Test_01\temp_results_no_5.csv';
+OPTI 'SORT' 'D:\cast3m-m2internship\04.OpenTURNS\Test_01\temp_results_no_1.csv';
 SORT 'EXCE' EV_OUT ;
 
 MESS 'T_MAX:' T_MAX;
