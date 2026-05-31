@@ -2,6 +2,10 @@ import openturns as ot
 import os
 import subprocess
 import glob
+import matplotlib.pyplot as plt
+import numpy as np
+
+working_dir = r"D:\cast3m-m2internship\04.OpenTURNS\Test_01"
 
 # =========================================================
 # 1. HÀM WRAPPER ĐỂ OPENTURNS GỌI CAST3M
@@ -13,8 +17,7 @@ def run_cast3m(X, run_number):
     # Các thư mục cấu hình
     castem_bat = r"C:\Cast3M\PCW_24\bin\castem24.bat"
     start_in_dir = r"C:\Cast3M\PCW_24\sources"
-    working_dir = r"D:\cast3m-m2internship\04.OpenTURNS\Test_01"
-    
+        
     template_file = os.path.join(working_dir, "transient-sample.dgibi.in") # Template file with placeholders
     run_file = os.path.join(working_dir, "run_temp.dgibi")
     # 2. Tạo tên file động theo ý bạn: temp_results-no[1].csv
@@ -203,7 +206,8 @@ if __name__ == "__main__":
         axes[i].grid(True, linestyle='--', alpha=0.5)
 
     plt.tight_layout()
-    plt.savefig("Scatter_Plots_Tmax.png", dpi=300)
+    scatter_path = os.path.join(working_dir, "Scatter_Plots_Tmax.png")
+    plt.savefig(scatter_path, dpi=300)
     plt.show() # Bỏ comment nếu bạn muốn biểu đồ hiện lên ngay lập tức
 
     # ---------------------------------------------------------
@@ -245,7 +249,8 @@ if __name__ == "__main__":
         ax.grid(axis='y', linestyle='--', alpha=0.7)
         
         plt.tight_layout()
-        plt.savefig("Sobol_Sensitivity_Tmax.png", dpi=300)
+        sobol1_path = os.path.join(working_dir, "Sobol_Sensitivity_Tmax.png")
+        plt.savefig(sobol1_path, dpi=300)
         plt.show() # Bỏ comment nếu bạn muốn biểu đồ hiện lên ngay lập tức
         # ---------------------------------------------------------
         # 4.2.B. SECOND-ORDER SOBOL' INDICES (Phân tích Tương tác)
@@ -305,7 +310,8 @@ if __name__ == "__main__":
         
         fig.colorbar(cax, ax=ax, label='Tỷ lệ đóng góp phương sai (%)')
         plt.tight_layout()
-        plt.savefig("Sobol_SecondOrder_Heatmap.png", dpi=300)
+        heatmap_path = os.path.join(working_dir, "Sobol_SecondOrder_Heatmap.png")
+        plt.savefig(heatmap_path, dpi=300)
         plt.show()
 
         # ---------------------------------------------------------
