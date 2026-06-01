@@ -83,10 +83,10 @@ PO_120 = MAIL1 POIN 'PROC' (0.06 0.000);
 *---------------------------------------------------------------------
 
 * MIX DATA
-cem  = 350.   ;
+cem  = 377.   ;
 aggr = 1920.  ;
-wc   = 0.32   ;
-sc   = 0.108  ;
+wc   = 0.34   ;
+sc   = 0.1  ;
 
 * HYDRATION PROCESS DATA (affinity. activation energy. hydration heat)
 AI   = 6    ;
