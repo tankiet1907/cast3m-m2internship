@@ -21,7 +21,8 @@ def run_cast3m(X, run_number):
     
     castem_bat = r"C:\Cast3M\PCW_24\bin\castem24.bat"
     start_in_dir = r"C:\Cast3M\PCW_24\sources"
-        
+
+    # make sure the dgibi has fin; at the end and turn off trac and dess to avoid hanging.    
     template_file = os.path.join(working_dir, "20260521-kalifa.dgibi.in") 
     run_file = os.path.join(working_dir, "run_temp.dgibi")
     
@@ -32,24 +33,36 @@ def run_cast3m(X, run_number):
         if os.path.exists(f_path):
             os.remove(f_path)
     
-    with open(template_file, 'r') as file:
+    with open(template_file, 'r', encoding='utf-8') as file:
         template = file.read()
         
     content = template.replace('@CEM@', str(cem)).replace('@AGG@', str(aggr))\
                       .replace('@WC@', str(wc)).replace('@SC@', str(sc))\
                       .replace('@CSV_TEMP@', csv_temp).replace('@CSV_PG@', csv_pg)
-    
-    with open(run_file, 'w') as file:
+
+    with open(run_file, 'w', encoding='utf-8') as file:
         file.write(content)
-        
-    command = [castem_bat, run_file]
     
-    print(f"\n[Run {run_number}] Nạp: CEM={cem:.1f}, AGG={aggr:.1f}, WC={wc:.3f}, SC={sc:.3f}")
+    print(f"\n[Running loop no {run_number}] Loading: CEM={cem:.1f}, AGG={aggr:.1f}, WC={wc:.3f}, SC={sc:.3f}")
     
+    # ====================================================================
+    # CALL CAST3M BY "COPY-PASTE" THE FILE INTO STDIN (Exactly like the < command in CMD)
+    # cd /d "C:\Cast3M\PCW_24\sources" 
+    # call "C:\Cast3M\PCW_24\bin\castem24.bat" < "D:\cast3m-m2internship\04.OpenTURNS\Test_02\run_temp.dgibi" --> THIS IS THE EXACT COMMAND WE ARE SIMULATING IN PYTHON BELO (COPY AND PASTE THE CONTENT OF THE .dgibi INTO CASTEM'S STDIN)
+    # call "C:\Cast3M\PCW_24\bin\castem24.bat" "D:\cast3m-m2internship\04.OpenTURNS\Test_02\run_temp.dgibi" --> THIS IS NOT WORKING WHEN RUNNING DIRECTLY IN PYTHON, CASTEM CANNOT RUN THE CUSTOM VERSION.
+    # ====================================================================
     try:
-        subprocess.run(command, cwd=start_in_dir, shell=False)
+        # Open the newly created .dgibi file to read it.
+        with open(run_file, 'r', encoding='utf-8') as f_in:
+            subprocess.run(
+                [castem_bat],          
+                cwd=start_in_dir,      # Start in: sources
+                stdin=f_in,            # <-- Simulate the "copy-paste" by feeding the .dgibi content into Cast3M's stdin. (< run_temp.dgibi)
+                shell=True             
+            )
+            
     except Exception as e:
-        print(f"Lỗi hệ thống: {e}") 
+        print(f"System Error: {e}")
 
     # ====================================================================
     # WRAPPER FUNCTION TO READ CSV: Extract Max at a Specific Column (Depth)
@@ -57,7 +70,7 @@ def run_cast3m(X, run_number):
     def read_max_from_column(csv_path, col_index):
         max_val = -9999.0
         if not os.path.exists(csv_path):
-            print(f"[CRASH] Không tìm thấy file {csv_path}.")
+            print(f"[CRASH] File not found {csv_path}.")
             return max_val
             
         try:
@@ -107,21 +120,21 @@ def run_cast3m(X, run_number):
 # 2. ESTABLISHING OPENTURNS AND RUNNING LOOPS
 # =========================================================
 if __name__ == "__main__":
-    print("Khởi tạo môi trường OpenTURNS...")
+    print("Initialize the OpenTURNS environment...")
     
     # 1. Define the distribution for the four input variables Kalifa.
     # (Established around reference values: cem=377, aggr=1920, wc=0.34, sc=0.1)
     dist_CEM  = ot.Normal(377.0, 15.0)     # Mean=377, Std=15
     dist_AGGR = ot.Normal(1920.0, 50.0)    # Mean=1920, Std=50
-    dist_WC   = ot.Uniform(0.30, 0.38)     # Khung +/- ~10%
-    dist_SC   = ot.Uniform(0.08, 0.12)     # Khung +/- ~20%
+    dist_WC   = ot.Uniform(0.30, 0.38)     # Mean +/- ~10%
+    dist_SC   = ot.Uniform(0.08, 0.12)     # Mean +/- ~20%
     
     my_distribution = ot.JointDistribution([dist_CEM, dist_AGGR, dist_WC, dist_SC])
     
-    # Hàm có 4 Input và 2 Output
+    # The function has 4 inputs and 2 outputs.
     my_model = ot.PythonFunction(4, 2, run_cast3m)
     
-    # Lấy mẫu ngẫu nhiên LHS
+    # Random sampling with Latin Hypercube Sampling (LHS) to create input sets for Cast3M.
     N_loops = 30
     experiment = ot.LHSExperiment(my_distribution, N_loops)
     input_sample = experiment.generate()
@@ -192,7 +205,7 @@ if __name__ == "__main__":
 
     plt.tight_layout()
     plt.savefig(os.path.join(working_dir, f"Scatter_Plots_{target_name}.png"), dpi=300)
-    plt.show()
+    #plt.show()
 
     # ---------------------------------------------------------
     # 4.2. METAMODEL & SOBOL' INDICES
@@ -231,7 +244,7 @@ if __name__ == "__main__":
         
         plt.tight_layout()
         plt.savefig(os.path.join(working_dir, f"Sobol_Sensitivity_{target_name}.png"), dpi=300)
-        plt.show()
+        #plt.show()
         
         # ---------------------------------------------------------
         # SECOND-ORDER SOBOL' INDICES 
@@ -279,7 +292,7 @@ if __name__ == "__main__":
         fig.colorbar(cax, ax=ax, label='Contribution Rate (%)')
         plt.tight_layout()
         plt.savefig(os.path.join(working_dir, f"Sobol_SecondOrder_Heatmap_{target_name}.png"), dpi=300)
-        plt.show()
+        #plt.show()
 
     # ---------------------------------------------------------
     # 4.3. RELIABILITY ANALYSIS
