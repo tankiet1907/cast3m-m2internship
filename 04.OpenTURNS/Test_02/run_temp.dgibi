@@ -82,10 +82,10 @@ PO_120 = MAIL1 POIN 'PROC' (0.06 0.000);
 *---------------------------------------------------------------------
 
 * MIX DATA
-cem  = 378.18950156182353;
-aggr = 1938.7780622985247;
-wc   = 0.3285752798975006;
-sc   = 0.0876672395179399;
+cem  = 370.71217088875534;
+aggr = 2015.0687687454276;
+wc   = 0.37937785154106934;
+sc   = 0.08293265730901496;
 
 * HYDRATION PROCESS DATA (affinity. activation energy. hydration heat)
 AI   = 6    ;
@@ -673,7 +673,7 @@ EV_EX_120 = EVOL 'BLAN' 'MANU' 'Time(min)' L_MIN_1 'T_120mm' LT_120_1 ;
 EV_EXPORT_TEMP = EV_EX_00 ET EV_EX_10 ET EV_EX_20 ET EV_EX_30 ET EV_EX_40 ET EV_EX_50 ET EV_EX_120 ;
 
 * 5. Export to CSV/TXT file
-OPTI 'SORT' 'D:\cast3m-m2internship\04.OpenTURNS\Test_02\CSV\temp_results_no_2.csv' ;
+OPTI 'SORT' 'D:\cast3m-m2internship\04.OpenTURNS\Test_02\CSV\temp_results_no_30.csv' ;
 SORT 'EXCE' EV_EXPORT_TEMP ;
 
 
@@ -708,7 +708,7 @@ EV_PG_120  = EVOL 'BLAN' 'MANU' 'Time(min)' L_MIN_1 'PG_120mm(MPa)'  LPG_120_1 ;
 EV_EXPORT_PG = EV_PG_00 ET EV_PG_10 ET EV_PG_20 ET EV_PG_30 ET EV_PG_40 ET EV_PG_50 ET EV_PG_120;
 
 * 5. Export to CSV/TXT file
-OPTI 'SORT' 'D:\cast3m-m2internship\04.OpenTURNS\Test_02\CSV\pg_results_no_2.csv' ;
+OPTI 'SORT' 'D:\cast3m-m2internship\04.OpenTURNS\Test_02\CSV\pg_results_no_30.csv' ;
 SORT 'EXCE' EV_EXPORT_PG ;
 
 FIN;
