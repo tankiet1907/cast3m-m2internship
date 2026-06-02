@@ -8,6 +8,7 @@ import glob
 # 1. CẤU HÌNH ĐƯỜNG DẪN VÀ THÔNG SỐ
 # =========================================================
 csv_dir = r'D:\cast3m-m2internship\04.OpenTURNS\Test_02\CSV'
+working_dir = r"D:\cast3m-m2internship\04.OpenTURNS\Test_02"
 N_loops = 30
 
 # MỚI: Đường dẫn đến file kết quả gốc (Baseline)
@@ -127,7 +128,7 @@ def plot_confidence_intervals(time_array, data_matrix_dict, baseline_file, colum
     plt.grid(True, linestyle=':', alpha=0.7)
     plt.tight_layout() 
     
-    save_path = os.path.join(csv_dir, save_name)
+    save_path = os.path.join(working_dir, save_name)
     plt.savefig(save_path, dpi=300)
     print(f"-> Đã lưu biểu đồ tại: {save_path}")
     # plt.show()
