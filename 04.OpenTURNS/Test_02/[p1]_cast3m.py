@@ -100,16 +100,14 @@ def run_cast3m(X, run_number):
         return max_val
 
     # EXTRACT MAXIMUM QUANTITIES (Assuming based on column index in your CSV file)
-    # Temperature File (T): Time(0), T00(1), T10(2), T20(3), T30(4), T40(5), T50(6), T120(7)
     T_00_max = read_max_from_column(csv_temp, 1)
-    T_10_max = read_max_from_column(csv_temp, 2)
-    T_20_max = read_max_from_column(csv_temp, 3)
-    T_30_max = read_max_from_column(csv_temp, 4)
-    T_40_max = read_max_from_column(csv_temp, 5)
-    T_50_max = read_max_from_column(csv_temp, 6)
-    T_120_max = read_max_from_column(csv_temp, 7)
+    T_10_max = read_max_from_column(csv_temp, 3)
+    T_20_max = read_max_from_column(csv_temp, 5)
+    T_30_max = read_max_from_column(csv_temp, 7)
+    T_40_max = read_max_from_column(csv_temp, 9)
+    T_50_max = read_max_from_column(csv_temp, 11)
+    T_120_max = read_max_from_column(csv_temp, 13)
 
-    # Gas Pressure File (Pg): Time(0), Pg00(1), Pg10(3), Pg20(5), Pg30(7), Pg40(9), Pg50(11)
     Pg_10_max = read_max_from_column(csv_pg, 3) 
     Pg_20_max = read_max_from_column(csv_pg, 5)
     Pg_30_max = read_max_from_column(csv_pg, 7)
