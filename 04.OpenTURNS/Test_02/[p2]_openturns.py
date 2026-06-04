@@ -267,45 +267,11 @@ for target_name in output_names:
     mc_algo.run()
     pf_mc = mc_algo.getResult().getProbabilityEstimate()
 
-    # --- 2. TÍNH BẰNG FORM ---
-    print("   [Đang tính bằng FORM...]")
-    starting_point = my_distribution.getMean()
-    solver = ot.Cobyla()
-    pf_form = 0.0 # Giá trị mặc định nếu FORM thất bại
-    try:
-        algo_FORM = ot.FORM(solver, event, my_distribution.getMean())
-        algo_FORM.run()
-        pf_form = algo_FORM.getResult().getEventProbability()
-    except Exception as e:
-        print(f"   [CẢNH BÁO FORM] Thuật toán FORM không hội tụ. Lý do: Xác suất xảy ra quá thấp (hầu như bằng 0) hoặc bề mặt quá phức tạp. Bỏ qua FORM cho biến này.")
-        pf_form = 0.0 # Đặt xác suất = 0
-
-    # --- 3. TÍNH BẰNG SORM ---
-    print("   [Đang tính bằng SORM...]")
-    pf_sorm = None
-    try:
-        # SORM lấy kết quả từ FORM làm điểm khởi đầu (Design Point)
-        algo_SORM = ot.SORM(solver, event, starting_point)
-        algo_SORM.run()
-        result_SORM = algo_SORM.getResult()
-        
-        # Sử dụng phương pháp Hohenbichler cho SORM
-        beta_sorm_hohen = result_SORM.getGeneralisedReliabilityIndexHohenbichler()
-        dist_norm = ot.Normal()
-        pf_sorm = dist_norm.computeComplementaryCDF(beta_sorm_hohen)
-    except Exception as e:
-        print(f"      [LỖI SORM] Bề mặt có thể quá gồ ghề: {e}")
-
     # In kết quả tổng hợp ra terminal
     print(f"=========================================================")
     print(f" RELIABILITY ANALYSIS RESULTS")
     print(f" Threshold: {CURRENT_THRESHOLD} {unit}")
     print(f" Monte Carlo Pf : {pf_mc * 100:.4f} %")
-    print(f" FORM Pf        : {pf_form * 100:.4f} %")
-    if pf_sorm is not None:
-        print(f" SORM Pf        : {pf_sorm * 100:.4f} %")
-    else:
-        print(f" SORM Pf        : N/A")
     print(f"=========================================================")
 
     # =========================================================
@@ -329,17 +295,18 @@ for target_name in output_names:
     
     # Tạo nội dung chú thích cho vùng phá hủy
     legend_text = (f'Failure Region (>{CURRENT_THRESHOLD} {unit})\n'
-                   f'MC Pf   : {pf_mc*100:.4f}%\n'
-                   f'FORM Pf : {pf_form*100:.4f}%')
-    if pf_sorm is not None:
-        legend_text += f'\nSORM Pf : {pf_sorm*100:.4f}%'
-        
+                   f'Failure Prob (Pf) : {pf_mc * 100:.2f}%')
+    # Tô màu đỏ cho vùng phá hủy    
     ax2.fill_between(x_tail, y_tail, color='red', alpha=0.4, label=legend_text)
+    # Vẽ đường thẳng đứt nét ngay tại vị trí Threshold
     ax2.axvline(x=CURRENT_THRESHOLD, color='black', linestyle='--', linewidth=2, label=f'Threshold: {CURRENT_THRESHOLD} {unit}')
     
+    # Trang trí đồ thị
     ax2.set_title(f'Probability Density & Failure Probability for {target_name}', fontsize=12, fontweight='bold')
     ax2.set_xlabel(f'Values ({unit})', fontsize=11)
     ax2.set_ylabel('Density', fontsize=11)
+
+    # Hiển thị Legend gọn gàng
     ax2.legend(loc='upper right', fontsize=9)
     ax2.grid(True, linestyle=':', alpha=0.6)
     
