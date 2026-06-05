@@ -111,9 +111,9 @@ KS   = 1.38   ;
 *b1   =  1.9433    ;
 *c1   =  1.5     ;
 
-a1   =  8.53E6  ;
-b1   =  2.    ;
-c1   =  2.5   ;
+a1   =  18.6E6 ;
+b1   =  2.27    ;
+c1   =  1.5     ;
 
 
 *---------------------------------------------------------------------
@@ -286,7 +286,7 @@ CGPG2 = 'CHAR' 'TIMP' CHPG2 EV_PG;
 * T: Thermal convection and radiation
 * --- Temperature loading curve ---
 
-T_RAMP      = 300. ;
+T_RAMP      = 400. ;
 DELTAT_RAMP = T_RAMP - TC_0;
 DELTAT_LIN1 = 60.;
 DELTAT_LIN2 = 6.;
@@ -497,6 +497,19 @@ CHPO_HYDR_LAST = CHAN 'CHPO' CHAM_HYDR_LAST MODTHC ;
 TRAC CHPO_HYDR_LAST MODTHC MAIL1 TITRE 'Hydration Degree Field at Final Step' ;
 
 *===================================================================*
+* DEHYDRATION FIELD AT THE FINAL TIME STEP - last saved time step (end of aging)
+
+CHAM_DCH_LAST = TAB0 . 'DCH' . N_LAST ;
+
+MESS '=== DEHYDRATION DEGREE AT THE FINAL TIME STEP ===' ;
+MESS 'Min DCH = ' (MINI CHAM_DCH_LAST) ;
+MESS 'Max DCH = ' (MAXI CHAM_DCH_LAST) ;
+
+CHPO_DCH_LAST = CHAN 'CHPO' CHAM_DCH_LAST MODTHC ;
+TRAC CHPO_DCH_LAST MODTHC MAIL1 TITRE 'Dehydration Degree Field at Final Step' ;
+*===================================================================*
+
+*===================================================================*
 * SATURATION DEGREE AND HR AT THE FINAL TIME STEP - last saved time step (end of aging)
 
 * Calcul humidité relative (Loi de Clapeyron) et SW
@@ -587,7 +600,7 @@ MESS '--- Total saved steps = ' NTOT;
 MESS '--- Final saved steps = ' N_LAST;
 
 *===================================================================*
-* T, PG, PC field at the last saved time step (end of aging)
+* T, PG, PC field at the last saved time step (end of accident)
 
 CHMT = EXCO 'T' TAB0 . 'TEMPERATURES' . N_LAST;
 CHPG = EXCO 'PG' TAB0 . 'TEMPERATURES' . N_LAST;
@@ -608,6 +621,19 @@ MESS 'Max HYDR = ' (MAXI CHAM_HYDR_LAST) ;
 
 CHPO_HYDR_LAST = CHAN 'CHPO' CHAM_HYDR_LAST MODTHC ;
 TRAC CHPO_HYDR_LAST MODTHC MAIL1 TITRE 'Hydration Degree Field at Final Step' ;
+
+*===================================================================*
+* DEHYDRATION FIELD AT THE FINAL TIME STEP - last saved time step (accident phase)
+
+CHAM_DCH_LAST = TAB0 . 'DCH' . N_LAST ;
+
+MESS '=== DEHYDRATION DEGREE AT THE FINAL TIME STEP ===' ;
+MESS 'Min DCH = ' (MINI CHAM_DCH_LAST) ;
+MESS 'Max DCH = ' (MAXI CHAM_DCH_LAST) ;
+
+CHPO_DCH_LAST = CHAN 'CHPO' CHAM_DCH_LAST MODTHC ;
+TRAC CHPO_DCH_LAST MODTHC MAIL1 TITRE 'Dehydration Degree Field at Final Step' ;
+*===================================================================*
 
 *===================================================================*
 * SATURATION DEGREE AND HR AT THE FINAL TIME STEP - last saved time step (end of accident)
@@ -750,6 +776,73 @@ DESS EV_EXPORT_PC
      'XBOR' 0. 240. 'XGRA' 10.
      'GRIL' 'POIN' 'GRIS'
      TITRE 'Capillary Pressure Evolution at Measurement Points' ;
+
+* 5. Export to CSV/TXT file
+OPTI 'SORT' 'D:\cast3m-m2internship\02.Simulation\02.Results\CapillaryPressure_1min_Intervals.csv' ;
+SORT 'EXCE' EV_EXPORT_PC ;
+
+
+*===================================================================*
+*********** EXPORT DEHYDRATION DEGREE (0-->1) EVERY 1 MINUTE ***********
+*===================================================================*
+
+* 1. Initialize empty data arrays 
+LDHY_00 = PROG ; 
+LDHY_10 = PROG ; 
+LDHY_20 = PROG ; 
+LDHY_30 = PROG ;
+LDHY_40 = PROG ; 
+LDHY_50 = PROG ;
+LDHY_120 = PROG ;
+
+* 2. Type Casting and Extraction Loops (Optimizing nested code writing)
+N_STEP = 0 ;
+REPETER BOU_HY (DIME TAB0 . 'DCH') ;
+* Read MCHAML and immediately convert to CHPOINT
+   HY_CHPO = CHAN 'CHPO' (TAB0 . 'DCH' . N_STEP) MODTHC ;
+
+* Extract values ​​and append them directly to the array (without creating intermediate variables)
+   LDHY_00 = LDHY_00 ET (PROG (EXTR HY_CHPO 'SCAL' PO_00)) ;
+   LDHY_10 = LDHY_10 ET (PROG (EXTR HY_CHPO 'SCAL' PO_10)) ;
+   LDHY_20 = LDHY_20 ET (PROG (EXTR HY_CHPO 'SCAL' PO_20)) ;
+   LDHY_30 = LDHY_30 ET (PROG (EXTR HY_CHPO 'SCAL' PO_30)) ;
+   LDHY_40 = LDHY_40 ET (PROG (EXTR HY_CHPO 'SCAL' PO_40)) ;
+   LDHY_50 = LDHY_50 ET (PROG (EXTR HY_CHPO 'SCAL' PO_50)) ;
+   LDHY_120 = LDHY_120 ET (PROG (EXTR HY_CHPO 'SCAL' PO_120)) ;
+   N_STEP = N_STEP + 1 ;
+FIN BOU_HY ;
+
+* 4. Nội suy dữ liệu về mốc 1 phút bằng IPOL
+* Cú pháp: IPOL [Trục X mới] (EVOL 'MANU' [Trục X cũ] [Giá trị Y cũ])
+LDHY_00_1 = IPOL L_MIN_1 (EVOL 'MANU' LT_MIN 'HYD' LDHY_00) ;
+LDHY_10_1 = IPOL L_MIN_1 (EVOL 'MANU' LT_MIN 'HYD' LDHY_10) ;
+LDHY_20_1 = IPOL L_MIN_1 (EVOL 'MANU' LT_MIN 'HYD' LDHY_20) ;
+LDHY_30_1 = IPOL L_MIN_1 (EVOL 'MANU' LT_MIN 'HYD' LDHY_30) ;
+LDHY_40_1 = IPOL L_MIN_1 (EVOL 'MANU' LT_MIN 'HYD' LDHY_40) ;
+LDHY_50_1 = IPOL L_MIN_1 (EVOL 'MANU' LT_MIN 'HYD' LDHY_50) ;
+LDHY_120_1 = IPOL L_MIN_1 (EVOL 'MANU' LT_MIN 'HYD' LDHY_120) ;
+
+* 5. Tạo đối tượng EVOL với trục thời gian mới
+EV_DHYDR_00 = EVOL 'BLEU' 'MANU' 'Time (min)' L_MIN_1 'DHyd_00mm' LDHY_00_1 ;
+EV_DHYDR_10 = EVOL 'ORAN' 'MANU' 'Time (min)' L_MIN_1 'DHyd_10mm' LDHY_10_1 ;
+EV_DHYDR_20 = EVOL 'JAUN' 'MANU' 'Time (min)' L_MIN_1 'DHyd_20mm' LDHY_20_1 ;
+EV_DHYDR_30 = EVOL 'ROSE' 'MANU' 'Time (min)' L_MIN_1 'DHyd_30mm' LDHY_30_1 ;
+EV_DHYDR_40 = EVOL 'VERT' 'MANU' 'Time (min)' L_MIN_1 'DHyd_40mm' LDHY_40_1 ;
+EV_DHYDR_50 = EVOL 'TURQ' 'MANU' 'Time (min)' L_MIN_1 'DHyd_50mm' LDHY_50_1 ;
+EV_DHYDR_120 = EVOL 'BLAN' 'MANU' 'Time (min)' L_MIN_1 'DHyd_120mm' LDHY_120_1 ;
+
+* 4. Combine everything into one data package
+EV_EXPORT_DHYDR = EV_DHYDR_00 ET EV_DHYDR_10 ET EV_DHYDR_20 ET EV_DHYDR_30 ET EV_DHYDR_40 ET EV_DHYDR_50 ET EV_DHYDR_120;
+DESS EV_EXPORT_DHYDR
+     'XBOR' 0. 240. 'XGRA' 10.
+     'YBOR' 0. 1. 'YGRA' 0.1
+     'GRIL' 'POIN' 'GRIS'
+     TITRE 'Dehydration degree Evolution at Measurement Points' ;
+
+* 5. Export to CSV file
+OPTI 'SORT' 'D:\cast3m-m2internship\02.Simulation\02.Results\DehydrationDegree_1min_Intervals.csv' ;
+SORT 'EXCE' EV_EXPORT_DHYDR ;
+
 
 
 *===================================================================*
