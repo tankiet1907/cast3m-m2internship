@@ -162,18 +162,20 @@ day1     = 86400.      ;
 year1    = 360 * day1  ;
 
 * Duration of diferent phases
-early_time =   3 * day1   ;
-age_time   =   180 * day1  ;
+early_time =   180*day1   ;
+ramp0_time  =   1*hours1 ;
+constant_time = 1*hours1 ;
+age_time   =   early_time + ramp0_time + constant_time; 
 
 * Accident phase duration 
 * x = 10 mins (original paper is 0 mins but we need some time for the ramp to reach 400oC)
 * Ramp:    0    -->x min     (20oC --> 400oC)
 * Linear1: x    -->x+130 min (400oC --> 460oC)
 * Linear2: x+130-->x+240 min (460oC --> 466oC)
-ramp_time   = 1 * minute1; 
-lin1_time   = 130 * minute1 - ramp_time;
+ramp1_time   = 1 * minute1; 
+lin1_time   = 130 * minute1 - ramp1_time;
 lin2_time   = 110 * minute1;
-acc_time    = ramp_time + lin1_time + lin2_time;
+acc_time    = ramp1_time + lin1_time + lin2_time;
 
 ramp2_time  = 1 * minute1;
 cool_time   = 360 * minute1;
@@ -181,11 +183,11 @@ cool_time   = 360 * minute1;
 * Time markers for the different phases
 temps1       =  early_time ;
 
-temps2a      =  early_time + (3 * day1) ;   
+temps2a      =  early_time + ramp0_time ;   
 temps2       =  age_time   ;
 
-temps_ramp   = age_time  + ramp_time ;
-temps_lin1   = age_time  + ramp_time + lin1_time ;
+temps_ramp   = age_time  + ramp1_time ;
+temps_lin1   = age_time  + ramp1_time + lin1_time ;
 temps3       = age_time  + acc_time ;
 
 temps_ramp2  = temps3 + ramp2_time ;
@@ -193,10 +195,10 @@ temps4       = temps3 + cool_time ;
 
 
 * Time steps for the different phases
-DT01     =  600.;
+DT01     = 1*hours1;
 
-DT12a    =  600.;
-DT2a2    =  3 * day1;
+DT12a    =  60.;
+DT2a2    =  60.;
 
 DT_RAMP  =   5.; 
 DT_LIN1  =   15. ; 
@@ -231,7 +233,7 @@ HY_0   = 0.            ;
 TC_0   = 20.           ;
 TK_0   = 273.15 + TC_0 ;
 PG_0   = 101325.       ;
-HR_0   = 0.99995       ;
+HR_0   = 0.99995      ;
 
 ZERO1  = MANU 'CHPO' MAIL1 'SCAL' 0.       ;
 CHTK_0 = MANU 'CHPO' MAIL1 'T' TK_0        ;
@@ -270,7 +272,7 @@ CI_TH  = ('MANU' 'CHPO' MAIL1 2 'PG' PG_0 'T' TK_0)  +  PC_0;
 TK_E  = TK_0;
 PG_E  = PG_0;
 HR_E1 = 0.95;
-HR_E2 = 0.95;
+HR_E2 = 0.5;
 
 * PG: imposed gas pressure at the top and bottom faces (PG_ext = p_atm)
 EV_PG = 'EVOL' 'MANU' 'TEMPS'  ('PROG' 0.  temps4) ('PROG' 1. 1.);
@@ -436,6 +438,17 @@ CHPC = EXCO 'PC' TAB0 . 'TEMPERATURES' . N_LAST;
 *TRAC CHPG MODTHC MAIL1 TITRE 'Gas pressure after early age phase';
 *TRAC CHPC MODTHC MAIL1 TITRE 'Capillary pressure after early age phase';
 
+* HYDRATATION FIELD AT THE FINAL TIME STEP - last saved time step (end of early aging)
+
+CHAM_HYDR_LAST = TAB0 . 'HYDRATATION' . N_LAST ;
+
+MESS '=== HYDRATION DEGREE AT THE FINAL TIME STEP ===' ;
+MESS 'Min HYDR = ' (MINI CHAM_HYDR_LAST) ;
+MESS 'Max HYDR = ' (MAXI CHAM_HYDR_LAST) ;
+
+CHPO_HYDR_LAST = CHAN 'CHPO' CHAM_HYDR_LAST MODTHC ;
+*TRAC CHPO_HYDR_LAST MODTHC MAIL1 TITRE 'Hydration Degree Field at Final Step' ;
+
 *---------------------------------------------------------------------
 * DRYING AND AGING
 *---------------------------------------------------------------------
@@ -485,7 +498,7 @@ CHPC = EXCO 'PC' TAB0 . 'TEMPERATURES' . N_LAST;
 *TRAC CHPC MODTHC MAIL1 TITRE 'Capillary pressure after aging phase - before accident';
 
 *===================================================================*
-* HYDRATATION FIELD AT THE FINAL TIME STEP - last saved time step (end of aging)
+* HYDRATATION FIELD AT THE FINAL TIME STEP - last saved time step (before accident)
 
 CHAM_HYDR_LAST = TAB0 . 'HYDRATATION' . N_LAST ;
 
@@ -494,7 +507,7 @@ MESS 'Min HYDR = ' (MINI CHAM_HYDR_LAST) ;
 MESS 'Max HYDR = ' (MAXI CHAM_HYDR_LAST) ;
 
 CHPO_HYDR_LAST = CHAN 'CHPO' CHAM_HYDR_LAST MODTHC ;
-TRAC CHPO_HYDR_LAST MODTHC MAIL1 TITRE 'Hydration Degree Field at Final Step' ;
+*TRAC CHPO_HYDR_LAST MODTHC MAIL1 TITRE 'Hydration Degree Field at Final Step' ;
 
 *===================================================================*
 * DEHYDRATION FIELD AT THE FINAL TIME STEP - last saved time step (end of aging)
@@ -506,7 +519,7 @@ MESS 'Min DCH = ' (MINI CHAM_DCH_LAST) ;
 MESS 'Max DCH = ' (MAXI CHAM_DCH_LAST) ;
 
 CHPO_DCH_LAST = CHAN 'CHPO' CHAM_DCH_LAST MODTHC ;
-TRAC CHPO_DCH_LAST MODTHC MAIL1 TITRE 'Dehydration Degree Field at Final Step' ;
+*TRAC CHPO_DCH_LAST MODTHC MAIL1 TITRE 'Dehydration Degree Field at Final Step' ;
 *===================================================================*
 
 *===================================================================*
@@ -553,7 +566,7 @@ DEBP PARATHER ;
 WTABLE = TABTHER .'WTABLE' ;
 
 SI ( (INST '>' temps2) ET (INST '<EG' temps3) );
-   MATCOT1 = 'MATE' MODCOT1   'H'    11. ;
+   MATCOT1 = 'MATE' MODCOT1   'H'    8. ;
    MATCOT2 = 'MATE' MODCOT2   'H'    8.3 ;
    MATRAY  = 'MATE' MODRAY   'EMIS'  0.6  ;
    WTABLE.'MAT_TOT' = MATTHC et MATCOT1 et MATRAY et MATCOT2; 
@@ -590,7 +603,7 @@ REST 'FORMAT';
 
 
 *===================================================================*
-* VISUALIZATION OF THE FIELDS AT THE END OF AGING PHASE (last saved time step)
+* VISUALIZATION OF THE FIELDS AT THE END OF ACCIDENT PHASE (last saved time step)
 *===================================================================*
 
 * --- Check the total number of saved steps
@@ -705,7 +718,7 @@ DESS EV_EXPORT_TEMP
      TITRE 'Temperature Evolution at Measurement Points' ;
 
 * 5. Export to CSV/TXT file
-OPTI 'SORT' 'D:\cast3m-m2internship\02.Simulation\02.Results\Temperature_1min_Intervals.csv' ;
+*OPTI 'SORT' 'D:\cast3m-m2internship\02.Simulation\02.Results\Temperature_1min_Intervals.csv' ;
 SORT 'EXCE' EV_EXPORT_TEMP ;
 
 
@@ -745,7 +758,7 @@ DESS EV_EXPORT_PG
      TITRE 'Gas Pressure Evolution at Measurement Points' ;
 
 * 5. Export to CSV/TXT file
-OPTI 'SORT' 'D:\cast3m-m2internship\02.Simulation\02.Results\GasPressure_1min_Intervals.csv' ;
+*OPTI 'SORT' 'D:\cast3m-m2internship\02.Simulation\02.Results\GasPressure_1min_Intervals.csv' ;
 SORT 'EXCE' EV_EXPORT_PG ;
 
 *===================================================================
@@ -778,7 +791,7 @@ DESS EV_EXPORT_PC
      TITRE 'Capillary Pressure Evolution at Measurement Points' ;
 
 * 5. Export to CSV/TXT file
-OPTI 'SORT' 'D:\cast3m-m2internship\02.Simulation\02.Results\CapillaryPressure_1min_Intervals.csv' ;
+*OPTI 'SORT' 'D:\cast3m-m2internship\02.Simulation\02.Results\CapillaryPressure_1min_Intervals.csv' ;
 SORT 'EXCE' EV_EXPORT_PC ;
 
 
@@ -840,7 +853,7 @@ DESS EV_EXPORT_DHYDR
      TITRE 'Dehydration degree Evolution at Measurement Points' ;
 
 * 5. Export to CSV file
-OPTI 'SORT' 'D:\cast3m-m2internship\02.Simulation\02.Results\DehydrationDegree_1min_Intervals.csv' ;
+*OPTI 'SORT' 'D:\cast3m-m2internship\02.Simulation\02.Results\DehydrationDegree_1min_Intervals.csv' ;
 SORT 'EXCE' EV_EXPORT_DHYDR ;
 
 
@@ -903,7 +916,7 @@ DESS EV_EXPORT_HYDR
      TITRE 'Hydration degree Evolution at Measurement Points' ;
 
 * 5. Export to CSV file
-OPTI 'SORT' 'D:\cast3m-m2internship\02.Simulation\02.Results\HydrationDegree_1min_Intervals.csv' ;
+*OPTI 'SORT' 'D:\cast3m-m2internship\02.Simulation\02.Results\HydrationDegree_1min_Intervals.csv' ;
 SORT 'EXCE' EV_EXPORT_HYDR ;
 
 

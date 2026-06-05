@@ -248,7 +248,7 @@ HY_0   = 0.            ;
 TC_0   = 20.           ;
 TK_0   = 273.15 + TC_0 ;
 PG_0   = 101325.       ;
-HR_0   = 0.5       ;
+HR_0   = 0.99995        ;
 
 ZERO1  = MANU 'CHPO' MAIL1 'SCAL' 0.       ;
 CHTK_0 = MANU 'CHPO' MAIL1 'T' TK_0        ;
