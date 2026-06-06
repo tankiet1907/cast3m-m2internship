@@ -1,24 +1,23 @@
-import openturns as ot
 import os
 import subprocess
 import glob
+import itertools
+import csv
+
+# CALIBRATION OF THE PERMEABILITY PARAMETERS (KINT, AK) FOR HPC M100
 
 # =========================================================
 # ESTABLISHING PROJECT PATHWAYS
 # =========================================================
-working_dir = r"D:\cast3m-m2internship\04.OpenTURNS\Test_02"
-csv_dir = r"D:\cast3m-m2internship\04.OpenTURNS\Test_02\CSV"
+working_dir = r"D:\cast3m-m2internship\05.Calibration\Test_01"
+csv_dir = r"D:\cast3m-m2internship\05.Calibration\Test_01\CSV"
 os.makedirs(csv_dir, exist_ok=True)
-
-# Summarized OpenTurns inputs and outputs file paths for Script 1 and Script 2 to share data
-input_csv_file = os.path.join(working_dir, "OpenTURNS_Inputs_X.csv")
-output_csv_file = os.path.join(working_dir, "OpenTURNS_Outputs_Y.csv")
 
 # =========================================================
 # 1. WRAPPER FUNCTION TO OPENTURNS CALL CAST3M
 # =========================================================
 def run_cast3m(X, run_number):
-    cem, aggr, wc, sc = X
+    kint, ak = X
     
     castem_bat = r"C:\Cast3M\PCW_24\bin\castem24.bat"
     start_in_dir = r"C:\Cast3M\PCW_24\sources"
@@ -27,23 +26,28 @@ def run_cast3m(X, run_number):
     template_file = os.path.join(working_dir, "20260521-kalifa.dgibi.in") 
     run_file = os.path.join(working_dir, "run_temp.dgibi")
     
-    csv_temp = os.path.join(csv_dir, f"temp_results_no_{run_number}.csv")
-    csv_pg = os.path.join(csv_dir, f"pg_results_no_{run_number}.csv")
+    kint_name = f"{kint:.1e}"
+    csv_temp = os.path.join(csv_dir, f"temp_results_no_{run_number}_KINT_{kint_name}_AK_{ak}.csv")
+    csv_pg = os.path.join(csv_dir, f"pg_results_no_{run_number}_KINT_{kint_name}_AK_{ak}.csv")
     
     for f_path in [csv_temp, csv_pg]:
         if os.path.exists(f_path): os.remove(f_path)
     
     with open(template_file, 'r', encoding='utf-8') as file:
         template = file.read()
+    
+    kint_str = f"{kint:E}" 
+    ak_str = str(ak)
         
-    content = template.replace('@CEM@', str(cem)).replace('@AGG@', str(aggr))\
-                      .replace('@WC@', str(wc)).replace('@SC@', str(sc))\
-                      .replace('@CSV_TEMP@', csv_temp).replace('@CSV_PG@', csv_pg)
+    content = template.replace('@KINT@', kint_str)\
+                      .replace('@AK@', ak_str)\
+                      .replace('@CSV_TEMP@', csv_temp)\
+                      .replace('@CSV_PG@', csv_pg)
 
     with open(run_file, 'w', encoding='utf-8') as file:
         file.write(content)
     
-    print(f"\n[Running loop no {run_number}] Loading: CEM={cem:.1f}, AGG={aggr:.1f}, WC={wc:.3f}, SC={sc:.3f}")
+    print(f"\n[Running loop no {run_number}] Loading: KINT={kint:.2e}, AK={ak:.2e}")
     
     # ====================================================================
     # CALL CAST3M BY "COPY-PASTE" THE FILE INTO STDIN (Exactly like the < command in CMD)
@@ -129,41 +133,39 @@ def run_cast3m(X, run_number):
 # 2. ESTABLISHING OPENTURNS AND RUNNING LOOPS + SAVING DATA
 # =========================================================
 if __name__ == "__main__":
-    print("Initialize OpenTURNS environment to generate LHS samples...")
+    print("Khởi tạo danh sách các tổ hợp thông số KINT và AK...")
     
-    # 1. Define the distribution for the four input variables Kalifa.
-    # (Established around reference values: cem=377, aggr=1920, wc=0.34, sc=0.1)
-    dist_CEM  = ot.Normal(377.0, 15.0)     # Mean=377, Std=15
-    dist_AGGR = ot.Normal(1920.0, 50.0)    # Mean=1920, Std=50
-    dist_WC   = ot.Uniform(0.30, 0.38)     # Mean +/- ~10%
-    dist_SC   = ot.Uniform(0.08, 0.12)     # Mean +/- ~20%   
+    # 1. Khai báo các giá trị muốn thử (Bạn có thể thêm/bớt tùy ý)
+    KINT_values = [1e-20, 5e-20, 8e-20, 1e-19, 2e-19]
+    AK_values = [1.0, 1.5, 2.0, 2.5, 3.0]
     
-    my_distribution = ot.JointDistribution([dist_CEM, dist_AGGR, dist_WC, dist_SC])
-    my_distribution.setDescription(['CEM', 'AGGR', 'WC', 'SC'])
-
-    # Random sampling with Latin Hypercube Sampling (LHS) to create input sets for Cast3M.    
-    N_loops = 30
-    experiment = ot.LHSExperiment(my_distribution, N_loops)
-    input_sample = experiment.generate()
-    print(f"{N_loops} parameter set has been created. Start running Cast3M automatically.")
+    # Tạo tất cả các tổ hợp có thể có (25 tổ hợp)
+    # Mỗi phần tử trong parameter_sets sẽ là một tuple: ví dụ (1e-20, 1.0)
+    parameter_sets = list(itertools.product(KINT_values, AK_values))
+    N_loops = len(parameter_sets)
     
-    # IMPORTANT STEP: Save the Openturns Inputs to a file so that Script 2 can read them again.
-    input_sample.exportToCSVFile(input_csv_file, ";")
-    print(f"-> Saved Input Samples to: {input_csv_file}")
+    print(f"Đã tạo {N_loops} bộ thông số. Bắt đầu chạy Cast3M tự động.")
     
+    # 3. Chạy vòng lặp Cast3M
     final_results = []
-    for i in range(N_loops):
-        res = run_cast3m(input_sample[i], i + 1)
+    for i, X in enumerate(parameter_sets):
+        run_number = i + 1
+        # Truyền bộ thông số X vào hàm run_cast3m
+        res = run_cast3m(X, run_number)
         final_results.append(res)
 
-    # IMPORTANT STEP: Save the Openturns Outputs to a file so that Script 2 can read them again.
-    output_sample = ot.Sample(final_results)
-    # Name the columns for the CSV output
-    output_sample.setDescription([
-        "T_00_Max", "T_10_Max", "T_20_Max", "T_30_Max", "T_40_Max", "T_50_Max", "T_120_Max",
-        "Pg_10_Max", "Pg_20_Max", "Pg_30_Max", "Pg_40_Max", "Pg_50_Max"
-    ])
-    output_sample.exportToCSVFile(output_csv_file, ";")
-    print(f"-> Saved Output Samples to: {output_csv_file}")
-   
-    print("\n[SCRIPT 1 FINISHED RUNNING] You can now close this file and run Script 2!")
+    # 3. Ghi gộp Input và Output ra MỘT file CSV duy nhất
+    combined_csv_file = os.path.join(working_dir, "combined_samples.csv")
+    with open(combined_csv_file, mode='w', newline='', encoding='utf-8') as f:
+        writer = csv.writer(f, delimiter=';')
+        
+        # Viết dòng tiêu đề (Header): Gộp tên cột Input và Output
+        headers = [
+            "KINT", "AK", 
+            "T_00_Max", "T_10_Max", "T_20_Max", "T_30_Max", "T_40_Max", "T_50_Max", "T_120_Max",
+            "Pg_10_Max", "Pg_20_Max", "Pg_30_Max", "Pg_40_Max", "Pg_50_Max"
+        ]
+        writer.writerow(headers)
+                
+    print(f"-> Đã lưu Combined Samples tại: {combined_csv_file}")
+    print("\n[VÒNG LẶP ĐÃ CHẠY XONG] Bạn có thể kiểm tra kết quả!")
