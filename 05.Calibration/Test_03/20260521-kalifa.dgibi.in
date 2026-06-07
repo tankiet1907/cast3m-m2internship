@@ -97,7 +97,7 @@ EAR1 = 5369.  ;
 lat1 = 114.3e6 ;
 
 * INTRINSIC PERMEABILITY
-KINT = 2.000000E-21;
+KINT = @KINT@;
 AK   = 3.;
 
 * THERMAL PARAMETERS
@@ -672,7 +672,7 @@ EV_EX_120 = EVOL 'BLAN' 'MANU' 'Time(min)' L_MIN_1 'T_120mm' LT_120_1 ;
 EV_EXPORT_TEMP = EV_EX_00 ET EV_EX_10 ET EV_EX_20 ET EV_EX_30 ET EV_EX_40 ET EV_EX_50 ET EV_EX_120 ;
 
 * 5. Export to CSV/TXT file
-OPTI 'SORT' 'D:\cast3m-m2internship\05.Calibration\Test_03\CSV\temp_results_no_10_KINT_2.0e-21.csv' ;
+OPTI 'SORT' '@CSV_TEMP@' ;
 SORT 'EXCE' EV_EXPORT_TEMP ;
 
 
@@ -707,7 +707,7 @@ EV_PG_120  = EVOL 'BLAN' 'MANU' 'Time(min)' L_MIN_1 'PG_120mm(MPa)'  LPG_120_1 ;
 EV_EXPORT_PG = EV_PG_00 ET EV_PG_10 ET EV_PG_20 ET EV_PG_30 ET EV_PG_40 ET EV_PG_50 ET EV_PG_120;
 
 * 5. Export to CSV/TXT file
-OPTI 'SORT' 'D:\cast3m-m2internship\05.Calibration\Test_03\CSV\pg_results_no_10_KINT_2.0e-21.csv' ;
+OPTI 'SORT' '@CSV_PG@' ;
 SORT 'EXCE' EV_EXPORT_PG ;
 
 FIN;

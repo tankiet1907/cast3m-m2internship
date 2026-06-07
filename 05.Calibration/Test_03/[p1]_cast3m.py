@@ -5,6 +5,35 @@ import csv
 
 # CALIBRATION OF THE PERMEABILITY PARAMETERS (KINT) WITH OLD FORMULA (DAUTI'S) FOR HPC M100
 
+#*--------------------- PERMEABILITE INTRINSEQUE ----------------------*
+#** --> commented out to use the old formula. 
+##*  --> default commented out.
+#**F_MAX   = 100.;
+#**HYEFF_K = EXP (2.302585 * AK * (1. - HYDR))   ;
+#**HYEFF_K = BORN HYEFF_K 'SCAL' 'MAXIMUM' F_MAX ;
+
+#**Thermal damage
+#T0_REF   = 293.15 ;
+#AT0      = 0.005 ;
+#TEM_EFF  = 'EXP' (('LOG' 10.) * AT0 * (CHTKSC0 - T0_REF)) ;
+
+#**Pressure damage
+#P_ATM    = 101325.;
+#CHPG_SAFE = 'BORNER' CHPGSC0 'SCAL' 'MINIMUM' 1.0 ;
+#PG_EFF    = (CHPG_SAFE * (1. / P_ATM)) ** 0.36848 ;
+#**PG_EFF   = (CHPGSC0 * (1./P_ATM))**0.36848;
+
+#* Water permeability
+#*KINTL    = KK0 * HYEFF_K * PG_EFF;
+#**KINTL    = KK0 * HYEFF_K;
+#KINTL    = KK0 * TEM_EFF * PG_EFF ;
+
+#* Gas permeability (with Klinkemberg effect, b [Pa])
+#BKLI  = 100000.;
+#*KINTG = KK0  * HYEFF_K * (1. + (BKLI * (CHPGSC0**-1.))) * PG_EFF;
+#**KINTG = KK0  * HYEFF_K * (1. + (BKLI * (CHPGSC0**-1.)));
+#KINTG = KK0 * TEM_EFF * (1. + (BKLI * (CHPGSC0 ** -1.))) * PG_EFF ;
+
 # =========================================================
 # ESTABLISHING PROJECT PATHWAYS
 # =========================================================
@@ -132,7 +161,7 @@ if __name__ == "__main__":
     print("Khởi tạo danh sách các tổ hợp thông số KINT")
     
     # 1. Khai báo các giá trị muốn thử (Bạn có thể thêm/bớt tùy ý)
-    KINT_values = [2e-19, 7.5e-20]
+    KINT_values = [1e-19, 2e-19, 5e-19, 7.5e-19, 1e-20, 5e-20, 7.5e-20, 8.5e-20, 1e-21, 2e-21]
     
     # 3. Chạy vòng lặp Cast3M
     final_results = []
