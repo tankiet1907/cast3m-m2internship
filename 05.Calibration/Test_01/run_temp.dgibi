@@ -97,7 +97,7 @@ EAR1 = 5369.  ;
 lat1 = 114.3e6 ;
 
 * INTRINSIC PERMEABILITY
-KINT = 3.000000E-21;
+KINT = 8.500000E-20;
 AK   = 8.0;
 
 * THERMAL PARAMETERS
@@ -613,6 +613,8 @@ CHPO_HYDR_LAST = CHAN 'CHPO' CHAM_HYDR_LAST MODTHC ;
 * Calculation of relative humidity (Clapeyron Law) and SW
 TAB0 . 'HR' = TABLE;
 TAB0 . 'SW' = TABLE;
+TAB0 . 'DCH_CHPO' = TABLE;
+TAB0 . 'HYDR_CHPO' = TABLE;
 *
 N1 = 0;
 REPETER BOU_HR NTOT;
@@ -620,18 +622,19 @@ REPETER BOU_HR NTOT;
    CHPCi = EXCO 'PC' TAB0 . 'TEMPERATURES' . N1;
    CHPGi = EXCO 'PG' TAB0 . 'TEMPERATURES' . N1;
    HYDRi = CHAN CHPO TAB0 . 'HYDRATATION' . N1  MODTHC;
+   DCHi = CHAN CHPO TAB0 . 'DCH' . N1  MODTHC;
    CHPVSATi CHPGWSCi RHOGWi XX YY ZZ = @PVSAT CHPGi CHPCi CHTKi;
    SWi = @SATURA CHPCi CHTKi HYDRi cha1 chb1 chc1 chgam0;
    HRi   =   CHPGWSCi * (CHPVSATi**-1);
    TAB0 . 'HR' . N1 = HRi;
    TAB0 . 'SW' . N1 = SWi;
+   TAB0 . 'DCH_CHPO' . N1 = DCHi;
+   TAB0 . 'HYDR_CHPO' . N1 = HYDRi;
    N1 = N1 + 1;
 FIN BOU_HR;
 
 CH_SW_LAST= TAB0 . 'SW' . N_LAST ;
 CH_HR_LAST= TAB0 . 'HR' . N_LAST ;
-*TRAC CH_SW_LAST MAIL1 'TITR' 'Saturation Degree (SW) at Final Time Step' ;
-*TRAC CH_HR_LAST MAIL1 'TITR' 'Relative Humidity (HR) at Final Time Step' ;
 
 
 *---------------------------------------------------------------------
@@ -672,7 +675,7 @@ EV_EX_120 = EVOL 'BLAN' 'MANU' 'Time(min)' L_MIN_1 'T_120mm' LT_120_1 ;
 EV_EXPORT_TEMP = EV_EX_00 ET EV_EX_10 ET EV_EX_20 ET EV_EX_30 ET EV_EX_40 ET EV_EX_50 ET EV_EX_120 ;
 
 * 5. Export to CSV/TXT file
-OPTI 'SORT' 'D:\cast3m-m2internship\05.Calibration\Test_01\CSV\temp_results_no_36_KINT_3.0e-21_AK_8.0.csv' ;
+OPTI 'SORT' 'D:\cast3m-m2internship\05.Calibration\Test_01\CSV\temp_results_no_36_KINT_8.5e-20_AK_8.0.csv' ;
 SORT 'EXCE' EV_EXPORT_TEMP ;
 
 
@@ -707,7 +710,159 @@ EV_PG_120  = EVOL 'BLAN' 'MANU' 'Time(min)' L_MIN_1 'PG_120mm(MPa)'  LPG_120_1 ;
 EV_EXPORT_PG = EV_PG_00 ET EV_PG_10 ET EV_PG_20 ET EV_PG_30 ET EV_PG_40 ET EV_PG_50 ET EV_PG_120;
 
 * 5. Export to CSV/TXT file
-OPTI 'SORT' 'D:\cast3m-m2internship\05.Calibration\Test_01\CSV\pg_results_no_36_KINT_3.0e-21_AK_8.0.csv' ;
+OPTI 'SORT' 'D:\cast3m-m2internship\05.Calibration\Test_01\CSV\pg_results_no_36_KINT_8.5e-20_AK_8.0.csv' ;
 SORT 'EXCE' EV_EXPORT_PG ;
+
+
+*===================================================================
+*********** EXPORT SATURATION DEGREE (SW) EVERY 1 MINUTE ***********
+*===================================================================
+
+* 1. Tạo các đối tượng EVOL cơ sở cho SW dọc theo các điểm đo (Từ bảng TAB0.'SW')
+* Lưu ý: Trục thời gian của các EVOL này (LT_MIN) đã được định nghĩa ở phần xuất nhiệt độ
+EV_SW_00  = EVOL 'BLEU' 'TEMP' TAB0 'SW' PO_00 ;
+EV_SW_10  = EVOL 'ORAN' 'TEMP' TAB0 'SW' PO_10 ;
+EV_SW_20  = EVOL 'JAUN' 'TEMP' TAB0 'SW' PO_20 ;
+EV_SW_30  = EVOL 'ROSE' 'TEMP' TAB0 'SW' PO_30 ;
+EV_SW_40  = EVOL 'VERT' 'TEMP' TAB0 'SW' PO_40 ;
+EV_SW_50  = EVOL 'TURQ' 'TEMP' TAB0 'SW' PO_50 ;
+EV_SW_120 = EVOL 'BLAN' 'TEMP' TAB0 'SW' PO_120 ;
+
+* 2. Nội suy (IPOL) giá trị SW theo trục thời gian chuẩn 1 phút (L_MIN_1)
+LSW_00_1  = IPOL L_MIN_1 (EVOL 'MANU' LT_MIN (EXTR EV_SW_00 'ORDO')) ;
+LSW_10_1  = IPOL L_MIN_1 (EVOL 'MANU' LT_MIN (EXTR EV_SW_10 'ORDO')) ;
+LSW_20_1  = IPOL L_MIN_1 (EVOL 'MANU' LT_MIN (EXTR EV_SW_20 'ORDO')) ;
+LSW_30_1  = IPOL L_MIN_1 (EVOL 'MANU' LT_MIN (EXTR EV_SW_30 'ORDO')) ;
+LSW_40_1  = IPOL L_MIN_1 (EVOL 'MANU' LT_MIN (EXTR EV_SW_40 'ORDO')) ;
+LSW_50_1  = IPOL L_MIN_1 (EVOL 'MANU' LT_MIN (EXTR EV_SW_50 'ORDO')) ;
+LSW_120_1 = IPOL L_MIN_1 (EVOL 'MANU' LT_MIN (EXTR EV_SW_120 'ORDO')) ;
+
+* 3. Đóng gói lại thành các EVOL mới với nhãn mác rõ ràng để xuất CSV
+EV_EX_SW_00  = EVOL 'BLEU' 'MANU' 'Time(min)' L_MIN_1 'SW_00mm'  LSW_00_1 ;
+EV_EX_SW_10  = EVOL 'ORAN' 'MANU' 'Time(min)' L_MIN_1 'SW_10mm'  LSW_10_1 ;
+EV_EX_SW_20  = EVOL 'JAUN' 'MANU' 'Time(min)' L_MIN_1 'SW_20mm'  LSW_20_1 ;
+EV_EX_SW_30  = EVOL 'ROSE' 'MANU' 'Time(min)' L_MIN_1 'SW_30mm'  LSW_30_1 ;
+EV_EX_SW_40  = EVOL 'VERT' 'MANU' 'Time(min)' L_MIN_1 'SW_40mm'  LSW_40_1 ;
+EV_EX_SW_50  = EVOL 'TURQ' 'MANU' 'Time(min)' L_MIN_1 'SW_50mm'  LSW_50_1 ;
+EV_EX_SW_120 = EVOL 'BLAN' 'MANU' 'Time(min)' L_MIN_1 'SW_120mm' LSW_120_1 ;
+
+* 4. Gộp và xuất ra file CSV
+EV_EXPORT_SW = EV_EX_SW_00 ET EV_EX_SW_10 ET EV_EX_SW_20 ET EV_EX_SW_30 ET EV_EX_SW_40 ET EV_EX_SW_50 ET EV_EX_SW_120 ;
+
+OPTI 'SORT' 'D:\cast3m-m2internship\05.Calibration\Test_01\CSV\sw_results_no_36_KINT_8.5e-20_AK_8.0.csv' ;
+SORT 'EXCE' EV_EXPORT_SW ;
+
+
+*===================================================================
+*********** EXPORT RELATIVE HUMIDITY (HR) EVERY 1 MINUTE ***********
+*===================================================================
+
+* 1. Tạo các đối tượng EVOL cơ sở cho HR dọc theo các điểm đo (Từ bảng TAB0.'HR')
+EV_HR_00  = EVOL 'BLEU' 'TEMP' TAB0 'HR' PO_00 ;
+EV_HR_10  = EVOL 'ORAN' 'TEMP' TAB0 'HR' PO_10 ;
+EV_HR_20  = EVOL 'JAUN' 'TEMP' TAB0 'HR' PO_20 ;
+EV_HR_30  = EVOL 'ROSE' 'TEMP' TAB0 'HR' PO_30 ;
+EV_HR_40  = EVOL 'VERT' 'TEMP' TAB0 'HR' PO_40 ;
+EV_HR_50  = EVOL 'TURQ' 'TEMP' TAB0 'HR' PO_50 ;
+EV_HR_120 = EVOL 'BLAN' 'TEMP' TAB0 'HR' PO_120 ;
+
+* 2. Nội suy (IPOL) giá trị HR theo trục thời gian chuẩn 1 phút (L_MIN_1)
+LHR_00_1  = IPOL L_MIN_1 (EVOL 'MANU' LT_MIN (EXTR EV_HR_00 'ORDO')) ;
+LHR_10_1  = IPOL L_MIN_1 (EVOL 'MANU' LT_MIN (EXTR EV_HR_10 'ORDO')) ;
+LHR_20_1  = IPOL L_MIN_1 (EVOL 'MANU' LT_MIN (EXTR EV_HR_20 'ORDO')) ;
+LHR_30_1  = IPOL L_MIN_1 (EVOL 'MANU' LT_MIN (EXTR EV_HR_30 'ORDO')) ;
+LHR_40_1  = IPOL L_MIN_1 (EVOL 'MANU' LT_MIN (EXTR EV_HR_40 'ORDO')) ;
+LHR_50_1  = IPOL L_MIN_1 (EVOL 'MANU' LT_MIN (EXTR EV_HR_50 'ORDO')) ;
+LHR_120_1 = IPOL L_MIN_1 (EVOL 'MANU' LT_MIN (EXTR EV_HR_120 'ORDO')) ;
+
+* 3. Đóng gói lại thành các EVOL mới với nhãn mác rõ ràng để xuất CSV
+EV_EX_HR_00  = EVOL 'BLEU' 'MANU' 'Time(min)' L_MIN_1 'HR_00mm'  LHR_00_1 ;
+EV_EX_HR_10  = EVOL 'ORAN' 'MANU' 'Time(min)' L_MIN_1 'HR_10mm'  LHR_10_1 ;
+EV_EX_HR_20  = EVOL 'JAUN' 'MANU' 'Time(min)' L_MIN_1 'HR_20mm'  LHR_20_1 ;
+EV_EX_HR_30  = EVOL 'ROSE' 'MANU' 'Time(min)' L_MIN_1 'HR_30mm'  LHR_30_1 ;
+EV_EX_HR_40  = EVOL 'VERT' 'MANU' 'Time(min)' L_MIN_1 'HR_40mm'  LHR_40_1 ;
+EV_EX_HR_50  = EVOL 'TURQ' 'MANU' 'Time(min)' L_MIN_1 'HR_50mm'  LHR_50_1 ;
+EV_EX_HR_120 = EVOL 'BLAN' 'MANU' 'Time(min)' L_MIN_1 'HR_120mm' LHR_120_1 ;
+
+* 4. Gộp và xuất ra file CSV
+EV_EXPORT_HR = EV_EX_HR_00 ET EV_EX_HR_10 ET EV_EX_HR_20 ET EV_EX_HR_30 ET EV_EX_HR_40 ET EV_EX_HR_50 ET EV_EX_HR_120 ;
+
+OPTI 'SORT' 'D:\cast3m-m2internship\05.Calibration\Test_01\CSV\hr_results_no_36_KINT_8.5e-20_AK_8.0.csv' ;
+SORT 'EXCE' EV_EXPORT_HR ;
+
+*===================================================================
+*********** EXPORT EFFECTIVE DEHYDRATION (DCH) EVERY 1 MINUTE ******
+*===================================================================
+
+* 1. Tạo các đối tượng EVOL cơ sở cho DCH dọc theo các điểm đo
+EV_DCH_00  = EVOL 'BLEU' 'TEMP' TAB0 'DCH_CHPO' PO_00 ;
+EV_DCH_10  = EVOL 'ORAN' 'TEMP' TAB0 'DCH_CHPO' PO_10 ;
+EV_DCH_20  = EVOL 'JAUN' 'TEMP' TAB0 'DCH_CHPO' PO_20 ;
+EV_DCH_30  = EVOL 'ROSE' 'TEMP' TAB0 'DCH_CHPO' PO_30 ;
+EV_DCH_40  = EVOL 'VERT' 'TEMP' TAB0 'DCH_CHPO' PO_40 ;
+EV_DCH_50  = EVOL 'TURQ' 'TEMP' TAB0 'DCH_CHPO' PO_50 ;
+EV_DCH_120 = EVOL 'BLAN' 'TEMP' TAB0 'DCH_CHPO' PO_120 ;
+
+* 2. Nội suy (IPOL) giá trị DCH theo trục thời gian chuẩn 1 phút (L_MIN_1)
+LDCH_00_1  = IPOL L_MIN_1 (EVOL 'MANU' LT_MIN (EXTR EV_DCH_00 'ORDO')) ;
+LDCH_10_1  = IPOL L_MIN_1 (EVOL 'MANU' LT_MIN (EXTR EV_DCH_10 'ORDO')) ;
+LDCH_20_1  = IPOL L_MIN_1 (EVOL 'MANU' LT_MIN (EXTR EV_DCH_20 'ORDO')) ;
+LDCH_30_1  = IPOL L_MIN_1 (EVOL 'MANU' LT_MIN (EXTR EV_DCH_30 'ORDO')) ;
+LDCH_40_1  = IPOL L_MIN_1 (EVOL 'MANU' LT_MIN (EXTR EV_DCH_40 'ORDO')) ;
+LDCH_50_1  = IPOL L_MIN_1 (EVOL 'MANU' LT_MIN (EXTR EV_DCH_50 'ORDO')) ;
+LDCH_120_1 = IPOL L_MIN_1 (EVOL 'MANU' LT_MIN (EXTR EV_DCH_120 'ORDO')) ;
+
+* 3. Đóng gói lại thành các EVOL mới với nhãn mác rõ ràng để xuất CSV
+EV_EX_DCH_00  = EVOL 'BLEU' 'MANU' 'Time(min)' L_MIN_1 'DCH_00mm'  LDCH_00_1 ;
+EV_EX_DCH_10  = EVOL 'ORAN' 'MANU' 'Time(min)' L_MIN_1 'DCH_10mm'  LDCH_10_1 ;
+EV_EX_DCH_20  = EVOL 'JAUN' 'MANU' 'Time(min)' L_MIN_1 'DCH_20mm'  LDCH_20_1 ;
+EV_EX_DCH_30  = EVOL 'ROSE' 'MANU' 'Time(min)' L_MIN_1 'DCH_30mm'  LDCH_30_1 ;
+EV_EX_DCH_40  = EVOL 'VERT' 'MANU' 'Time(min)' L_MIN_1 'DCH_40mm'  LDCH_40_1 ;
+EV_EX_DCH_50  = EVOL 'TURQ' 'MANU' 'Time(min)' L_MIN_1 'DCH_50mm'  LDCH_50_1 ;
+EV_EX_DCH_120 = EVOL 'BLAN' 'MANU' 'Time(min)' L_MIN_1 'DCH_120mm' LDCH_120_1 ;
+
+* 4. Gộp và xuất ra file CSV
+EV_EXPORT_DCH = EV_EX_DCH_00 ET EV_EX_DCH_10 ET EV_EX_DCH_20 ET EV_EX_DCH_30 ET EV_EX_DCH_40 ET EV_EX_DCH_50 ET EV_EX_DCH_120 ;
+
+OPTI 'SORT' 'D:\cast3m-m2internship\05.Calibration\Test_01\CSV\dch_results_no_36_KINT_8.5e-20_AK_8.0.csv' ;
+SORT 'EXCE' EV_EXPORT_DCH ;
+
+*===================================================================
+*********** EXPORT HYDRATION DEGREE (HYDR) EVERY 1 MINUTE **********
+*===================================================================
+
+* 1. Tạo các đối tượng EVOL cơ sở cho HYDR dọc theo các điểm đo nút cố định
+EV_HYD_00  = EVOL 'BLEU' 'TEMP' TAB0 'HYDR_CHPO' PO_00 ;
+EV_HYD_10  = EVOL 'ORAN' 'TEMP' TAB0 'HYDR_CHPO' PO_10 ;
+EV_HYD_20  = EVOL 'JAUN' 'TEMP' TAB0 'HYDR_CHPO' PO_20 ;
+EV_HYD_30  = EVOL 'ROSE' 'TEMP' TAB0 'HYDR_CHPO' PO_30 ;
+EV_HYD_40  = EVOL 'VERT' 'TEMP' TAB0 'HYDR_CHPO' PO_40 ;
+EV_HYD_50  = EVOL 'TURQ' 'TEMP' TAB0 'HYDR_CHPO' PO_50 ;
+EV_HYD_120 = EVOL 'BLAN' 'TEMP' TAB0 'HYDR_CHPO' PO_120 ;
+
+* 2. Nội suy (IPOL) giá trị HYDR theo trục thời gian chuẩn 1 phút (L_MIN_1)
+LHYD_00_1  = IPOL L_MIN_1 (EVOL 'MANU' LT_MIN (EXTR EV_HYD_00 'ORDO')) ;
+LHYD_10_1  = IPOL L_MIN_1 (EVOL 'MANU' LT_MIN (EXTR EV_HYD_10 'ORDO')) ;
+LHYD_20_1  = IPOL L_MIN_1 (EVOL 'MANU' LT_MIN (EXTR EV_HYD_20 'ORDO')) ;
+LHYD_30_1  = IPOL L_MIN_1 (EVOL 'MANU' LT_MIN (EXTR EV_HYD_30 'ORDO')) ;
+LHYD_40_1  = IPOL L_MIN_1 (EVOL 'MANU' LT_MIN (EXTR EV_HYD_40 'ORDO')) ;
+LHYD_50_1  = IPOL L_MIN_1 (EVOL 'MANU' LT_MIN (EXTR EV_HYD_50 'ORDO')) ;
+LHYD_120_1 = IPOL L_MIN_1 (EVOL 'MANU' LT_MIN (EXTR EV_HYD_120 'ORDO')) ;
+
+* 3. Đóng gói lại thành các EVOL mới có nhãn tiêu đề rõ ràng
+EV_EX_HYD_00  = EVOL 'BLEU' 'MANU' 'Time(min)' L_MIN_1 'HYD_00mm'  LHYD_00_1 ;
+EV_EX_HYD_10  = EVOL 'ORAN' 'MANU' 'Time(min)' L_MIN_1 'HYD_10mm'  LHYD_10_1 ;
+EV_EX_HYD_20  = EVOL 'JAUN' 'MANU' 'Time(min)' L_MIN_1 'HYD_20mm'  LHYD_20_1 ;
+EV_EX_HYD_30  = EVOL 'ROSE' 'MANU' 'Time(min)' L_MIN_1 'HYD_30mm'  LHYD_30_1 ;
+EV_EX_HYD_40  = EVOL 'VERT' 'MANU' 'Time(min)' L_MIN_1 'HYD_40mm'  LHYD_40_1 ;
+EV_EX_HYD_50  = EVOL 'TURQ' 'MANU' 'Time(min)' L_MIN_1 'HYD_50mm'  LHYD_50_1 ;
+EV_EX_HYD_120 = EVOL 'BLAN' 'MANU' 'Time(min)' L_MIN_1 'HYD_120mm' LHYD_120_1 ;
+
+* 4. Gộp toàn bộ các đường đo lại thành một gói dữ liệu tổng hợp
+EV_EXPORT_HYD = EV_EX_HYD_00 ET EV_EX_HYD_10 ET EV_EX_HYD_20 ET EV_EX_HYD_30 ET EV_EX_HYD_40 ET EV_EX_HYD_50 ET EV_EX_HYD_120 ;
+
+* 5. Xuất file CSV ra bộ nhớ máy tính
+OPTI 'SORT' 'D:\cast3m-m2internship\05.Calibration\Test_01\CSV\hyd_results_no_36_KINT_8.5e-20_AK_8.0.csv' ;
+SORT 'EXCE' EV_EXPORT_HYD ;
 
 FIN;

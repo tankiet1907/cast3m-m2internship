@@ -473,6 +473,14 @@ EVPG3= EVOL 'ROUG' 'CHPO' tab0.temperatures.NN3 'PG'  l12;
 dess (EVPG1 ET EVPG2 ET EVPG3);
 ************
 
+CHMT = EXCO 'T' TAB0 . 'TEMPERATURES' . 370;
+CHPG = EXCO 'PG' TAB0 . 'TEMPERATURES' . 370;
 
-TRAC   TAB0 . 'DCH' .  370   MODTHC;  
+TRAC  CHMT  MODTHC MAIL1 TITRE 'Temperature field at the final time step' ;
+TRAC  CHPG  MODTHC MAIL1 TITRE 'Gas Pressure field at the final time step' ;
+TRAC   TAB0 . 'SW' . 370   MODTHC TITRE 'Saturation degree field at the final time step' ;
+TRAC   TAB0 . 'SW' . 190   MODTHC TITRE 'Saturation degree field at the final time step' ;
+TRAC   TAB0 . 'HR' . 370   MODTHC TITRE 'Relative Humidity field at the final time step' ;
+TRAC   TAB0 . 'HR' . 190   MODTHC TITRE 'Relative Humidity field at the final time step' ;
+TRAC   TAB0 . 'DCH' .  370   MODTHC TITRE 'DCH field at the final time step' ;  
 

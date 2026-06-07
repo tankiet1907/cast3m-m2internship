@@ -71,22 +71,35 @@ def plot_and_save(file_list, plot_type):
             plt.xticks(np.arange(0, 241, 20), rotation=45, fontsize=10) 
             plt.xlabel("Time (min)", fontsize=12)
 
-            # Trục tung (Nhiệt độ / Áp suất)
+            # Trục tung (Nhiệt độ / Áp suất / Dehydration / Saturation)
             if plot_type == "Temp":
                 plt.ylabel("Temperature (°C)", fontsize=12)
                 plt.ylim(0, 500)
-                plt.yticks(np.arange(0, 501, 50))  # Từ 0 đến 500, cách 50
+                plt.yticks(np.arange(0, 501, 50))
+                plt.legend(loc="upper left", fontsize=10)
                 
             elif plot_type == "Pg":
                 plt.ylabel("Gas Pressure (MPa)", fontsize=12)
                 plt.ylim(0, 4.0)
-                plt.yticks(np.arange(0, 4.1, 0.5)) # Từ 0 đến 4.0, cách 0.5
+                plt.yticks(np.arange(0, 4.1, 0.5))
+                plt.legend(loc="upper right", fontsize=10)
+                
+            elif plot_type == "Dch":
+                plt.ylabel("Dehydration Degree", fontsize=12)
+                plt.ylim(0, 1.0)
+                plt.yticks(np.arange(0, 1.1, 0.1))
+                plt.legend(loc="upper left", fontsize=10) # DCH tăng lên nên để chú thích góc trên trái
+                
+            elif plot_type == "Sw": # <--- THÊM MỚI CHO ĐỘ BÃO HÒA (SATURATION)
+                plt.ylabel("Liquid Saturation ($S_w$)", fontsize=12)
+                plt.ylim(0, 1.0)
+                plt.yticks(np.arange(0, 1.1, 0.1))
+                plt.legend(loc="upper right", fontsize=10) # Sw giảm dần nên để chú thích góc trên phải
             # ---------------------------------------------------------
             
             # Làm đẹp đồ thị
             plt.title(title, fontsize=14, fontweight='bold')
             plt.grid(True, linestyle='--', alpha=0.6)
-            plt.legend(loc="upper right", fontsize=10)
             
             save_path = os.path.join(output_dir, save_name)
             plt.savefig(save_path, dpi=150, bbox_inches='tight')
@@ -102,14 +115,25 @@ def plot_and_save(file_list, plot_type):
 # =========================================================
 if __name__ == "__main__":
     temp_files = glob.glob(os.path.join(csv_dir, "temp_results_no_*.csv"))
-    pg_files = glob.glob(os.path.join(csv_dir, "pg_results_no_*.csv"))
+    pg_files   = glob.glob(os.path.join(csv_dir, "pg_results_no_*.csv"))
+    dch_files  = glob.glob(os.path.join(csv_dir, "dch_results_no_*.csv")) 
+    
+    # THÊM TÌM KIẾM CHO SATURATION
+    # Giả định file CSV xuất ra có tên bắt đầu bằng "sw_results_no_"
+    sw_files   = glob.glob(os.path.join(csv_dir, "sw_results_no_*.csv")) 
 
-    print(f"Tìm thấy {len(temp_files)} file Nhiệt độ và {len(pg_files)} file Áp suất.\n")
+    print(f"Tìm thấy: {len(temp_files)} Temp, {len(pg_files)} Pg, {len(dch_files)} Dch, {len(sw_files)} Sw.\n")
 
     print("--- BẮT ĐẦU VẼ ĐỒ THỊ NHIỆT ĐỘ ---")
     plot_and_save(temp_files, "Temp")
 
     print("\n--- BẮT ĐẦU VẼ ĐỒ THỊ ÁP SUẤT ---")
     plot_and_save(pg_files, "Pg")
+    
+    print("\n--- BẮT ĐẦU VẼ ĐỒ THỊ DEHYDRATION ---")
+    plot_and_save(dch_files, "Dch")
+
+    print("\n--- BẮT ĐẦU VẼ ĐỒ THỊ SATURATION ---")
+    plot_and_save(sw_files, "Sw")
 
     print(f"\n[HOÀN TẤT] Bạn hãy vào thư mục '{output_dir}' để kiểm tra thành quả!")

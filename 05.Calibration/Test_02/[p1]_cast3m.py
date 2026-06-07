@@ -140,8 +140,8 @@ if __name__ == "__main__":
     print("Khởi tạo danh sách các tổ hợp thông số HR0 và HRE2...")
     
     # 1. Khai báo các giá trị muốn thử (Bạn có thể thêm/bớt tùy ý)
-    HR0_values = [0.5]
-    HRE2_values = [0.5,0.7,0.8]
+    HR0_values = [0.5,0.7,0.8,0.9,0.98]
+    HRE2_values = [0.5,0.7,0.8,0.9]
     
     # Tạo tất cả các tổ hợp có thể có (25 tổ hợp)
     # Mỗi phần tử trong parameter_sets sẽ là một tuple: ví dụ (1e-20, 1.0)
