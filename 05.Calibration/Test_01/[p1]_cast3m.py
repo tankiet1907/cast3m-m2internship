@@ -136,8 +136,8 @@ if __name__ == "__main__":
     print("Khởi tạo danh sách các tổ hợp thông số KINT và AK...")
     
     # 1. Khai báo các giá trị muốn thử (Bạn có thể thêm/bớt tùy ý)
-    KINT_values = [1e-20, 5e-20, 8e-20, 1e-19, 2e-19]
-    AK_values = [1.0, 1.5, 2.0, 2.5, 3.0]
+    KINT_values = [6e-20, 7.5e-20, 8.5e-20, 1e-21, 2e-21, 3e-21]
+    AK_values = [3.0,4.0,5.0,6.0,7.0,8.0]
     
     # Tạo tất cả các tổ hợp có thể có (25 tổ hợp)
     # Mỗi phần tử trong parameter_sets sẽ là một tuple: ví dụ (1e-20, 1.0)
@@ -166,6 +166,17 @@ if __name__ == "__main__":
             "Pg_10_Max", "Pg_20_Max", "Pg_30_Max", "Pg_40_Max", "Pg_50_Max"
         ]
         writer.writerow(headers)
+        # Duyệt qua từng vòng lặp và ghi thẳng kết quả trả về vào file
+        for i in range(N_loops):
+            params = parameter_sets[i]
+            res = final_results[i]
+                
+            kint_str = f"{params[0]:.1e}"
+            ak_val = params[1]
+                
+            # Ghép mảng thông số nạp với mảng kết quả trích xuất và ghi dòng
+            row_data = [kint_str, ak_val] + list(res)
+            writer.writerow(row_data)
                 
     print(f"-> Đã lưu Combined Samples tại: {combined_csv_file}")
     print("\n[VÒNG LẶP ĐÃ CHẠY XONG] Bạn có thể kiểm tra kết quả!")
