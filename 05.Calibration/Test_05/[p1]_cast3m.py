@@ -4,12 +4,12 @@ import glob
 import itertools
 import csv
 
-# CCALIBRATION OF THE INITIAL CONDITIONS (SW AND HR) FOR HPC M100
+# REMOVE DRYING AND AGING FOR KALIFA
 
 # =========================================================
 # ESTABLISHING PROJECT PATHWAYS
 # =========================================================
-working_dir = r"D:\cast3m-m2internship\05.Calibration\Test_02"
+working_dir = r"D:\cast3m-m2internship\05.Calibration\Test_05"
 csv_dir = os.path.join(working_dir, "CSV")
 os.makedirs(csv_dir, exist_ok=True)
 
@@ -17,7 +17,7 @@ os.makedirs(csv_dir, exist_ok=True)
 # 1. WRAPPER FUNCTION TO OPENTURNS CALL CAST3M
 # =========================================================
 def run_cast3m(X, run_number):
-    hr0, hre2 = X
+    hr0, hre1 = X
     
     castem_bat = r"C:\Cast3M\PCW_24\bin\castem24.bat"
     start_in_dir = r"C:\Cast3M\PCW_24\sources"
@@ -26,12 +26,12 @@ def run_cast3m(X, run_number):
     template_file = os.path.join(working_dir, "20260521-kalifa.dgibi.in") 
     run_file = os.path.join(working_dir, "run_temp.dgibi")
     
-    csv_temp = os.path.join(csv_dir, f"temp_results_no_{run_number}_HR0_{hr0}_HRE2_{hre2}.csv")
-    csv_pg = os.path.join(csv_dir, f"pg_results_no_{run_number}_HR0_{hr0}_HRE2_{hre2}.csv")
-    csv_sw = os.path.join(csv_dir, f"sw_results_no_{run_number}_HR0_{hr0}_HRE2_{hre2}.csv")
-    csv_hr = os.path.join(csv_dir, f"hr_results_no_{run_number}_HR0_{hr0}_HRE2_{hre2}.csv")
-    csv_dch = os.path.join(csv_dir, f"dch_results_no_{run_number}_HR0_{hr0}_HRE2_{hre2}.csv")
-    csv_hyd = os.path.join(csv_dir, f"hyd_results_no_{run_number}_HR0_{hr0}_HRE2_{hre2}.csv")
+    csv_temp = os.path.join(csv_dir, f"temp_results_no_{run_number}_HR0_{hr0}_HRE1_{hre1}.csv")
+    csv_pg = os.path.join(csv_dir, f"pg_results_no_{run_number}_HR0_{hr0}_HRE1_{hre1}.csv")
+    csv_sw = os.path.join(csv_dir, f"sw_results_no_{run_number}_HR0_{hr0}_HRE1_{hre1}.csv")
+    csv_hr = os.path.join(csv_dir, f"hr_results_no_{run_number}_HR0_{hr0}_HRE1_{hre1}.csv")
+    csv_dch = os.path.join(csv_dir, f"dch_results_no_{run_number}_HR0_{hr0}_HRE1_{hre1}.csv")
+    csv_hyd = os.path.join(csv_dir, f"hyd_results_no_{run_number}_HR0_{hr0}_HRE1_{hre1}.csv")
     
     for f_path in [csv_temp, csv_pg, csv_sw, csv_hr, csv_dch, csv_hyd]:
         if os.path.exists(f_path): os.remove(f_path)
@@ -40,7 +40,7 @@ def run_cast3m(X, run_number):
         template = file.read()
         
     content = template.replace('@HR0@', str(hr0))\
-                      .replace('@HRE2@', str(hre2))\
+                      .replace('@HRE1@', str(hre1))\
                       .replace('@CSV_TEMP@', csv_temp)\
                       .replace('@CSV_PG@', csv_pg)\
                       .replace('@CSV_SW@', csv_sw)\
@@ -51,7 +51,7 @@ def run_cast3m(X, run_number):
     with open(run_file, 'w', encoding='utf-8') as file:
         file.write(content)
     
-    print(f"\n[Running loop no {run_number}] Loading: HR0={hr0}, HRE2={hre2}")
+    print(f"\n[Running loop no {run_number}] Loading: HR0={hr0}, HRE1={hre1}")
     
     # ====================================================================
     # CALL CAST3M BY "COPY-PASTE" THE FILE INTO STDIN (Exactly like the < command in CMD)
@@ -137,15 +137,15 @@ def run_cast3m(X, run_number):
 # 2. ESTABLISHING OPENTURNS AND RUNNING LOOPS + SAVING DATA
 # =========================================================
 if __name__ == "__main__":
-    print("Khởi tạo danh sách các tổ hợp thông số HR0 và HRE2...")
+    print("Khởi tạo danh sách các tổ hợp thông số HR0 và HRE1...")
     
     # 1. Khai báo các giá trị muốn thử (Bạn có thể thêm/bớt tùy ý)
-    HR0_values = [0.5,0.7,0.8,0.9,0.98]
-    HRE2_values = [0.5,0.7,0.8,0.9]
+    HR0_values = [0.5,0.98]
+    HRE1_values = [0.95]
     
     # Tạo tất cả các tổ hợp có thể có (25 tổ hợp)
     # Mỗi phần tử trong parameter_sets sẽ là một tuple: ví dụ (1e-20, 1.0)
-    parameter_sets = list(itertools.product(HR0_values, HRE2_values))
+    parameter_sets = list(itertools.product(HR0_values, HRE1_values))
     N_loops = len(parameter_sets)
     
     print(f"Đã tạo {N_loops} bộ thông số. Bắt đầu chạy Cast3M tự động.")
@@ -165,7 +165,7 @@ if __name__ == "__main__":
         
         # Viết dòng tiêu đề (Header): Gộp tên cột Input và Output
         headers = [
-            "HR0", "HRE2", 
+            "HR0", "HRE1", 
             "T_00_Max", "T_10_Max", "T_20_Max", "T_30_Max", "T_40_Max", "T_50_Max", "T_120_Max",
             "Pg_10_Max", "Pg_20_Max", "Pg_30_Max", "Pg_40_Max", "Pg_50_Max"
         ]
@@ -176,10 +176,10 @@ if __name__ == "__main__":
             res = final_results[i]
                 
             hr0_val = params[0]
-            hre2_val = params[1]
+            hre1_val = params[1]
                 
             # Ghép mảng thông số nạp với mảng kết quả trích xuất và ghi dòng
-            row_data = [hr0_val, hre2_val] + list(res)
+            row_data = [hr0_val, hre1_val] + list(res)
             writer.writerow(row_data)
                 
     print(f"-> Đã lưu Combined Samples tại: {combined_csv_file}")

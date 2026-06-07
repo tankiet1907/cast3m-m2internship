@@ -4,16 +4,16 @@ import glob
 import itertools
 import csv
 
-# CCALIBRATION OF THE INITIAL CONDITIONS (SW AND HR) FOR HPC M100
+# CCALIBRATION OF THE HYDRATION PROCESS FOR HPC M100
 
 # =========================================================
 # ESTABLISHING PROJECT PATHWAYS
 # =========================================================
-working_dir = r"D:\cast3m-m2internship\05.Calibration\Test_02"
+working_dir = r"D:\cast3m-m2internship\05.Calibration\Test_03"
 csv_dir = os.path.join(working_dir, "CSV")
 os.makedirs(csv_dir, exist_ok=True)
 
-# =========================================================s
+# =========================================================
 # 1. WRAPPER FUNCTION TO OPENTURNS CALL CAST3M
 # =========================================================
 def run_cast3m(X, run_number):
@@ -140,8 +140,8 @@ if __name__ == "__main__":
     print("Khởi tạo danh sách các tổ hợp thông số HR0 và HRE2...")
     
     # 1. Khai báo các giá trị muốn thử (Bạn có thể thêm/bớt tùy ý)
-    HR0_values = [0.5,0.7,0.8,0.9,0.98]
-    HRE2_values = [0.5,0.7,0.8,0.9]
+    HR0_values = [0.98]
+    HRE2_values = [0.5]
     
     # Tạo tất cả các tổ hợp có thể có (25 tổ hợp)
     # Mỗi phần tử trong parameter_sets sẽ là một tuple: ví dụ (1e-20, 1.0)

@@ -1,5 +1,5 @@
 *---------------------------------------------------------------------
-* CALIBRATION OF THE INITIAL CONDITIONS (SW AND HR) FOR HPC M100
+* REMOVE DRYING AND AGING FOR KALIFA CALIBRATION
 * ADIABATIC HYDRATION / AGING / ACCIDENT - COOLING OF KALIFA (2000) EXPERIMENT
 *---------------------------------------------------------------------
 * By: Tan Kiet HONG
@@ -106,7 +106,7 @@ KS   = 1.38   ;
 
 * DESORPTION ISOTHERME MODEL PARAMETERS
 *a1   =  46.9364E6 ;
-*b1   =  1.9433    ;
+*b1   =  2.0601    ;
 *c1   =  1.5     ;
 
 a1   =  18.6E6 ;
@@ -160,8 +160,9 @@ day1     = 86400.      ;
 year1    = 360 * day1  ;
 
 * Duration of diferent phases
-early_time =   3 * day1   ;
-age_time   =   1 * year1  ;
+early_time =   180 * day1   ;
+* remove ageing phase for kalifa
+age_time   =   early_time;
 
 * Accident phase duration 
 * x = 10 mins (original paper is 0 mins but we need some time for the ramp to reach 400oC)
@@ -177,9 +178,10 @@ ramp2_time  = 1 * minute1;
 cool_time   = 360 * minute1;
 
 * Time markers for the different phases
+temps1a      =  1 * day1 ;
 temps1       =  early_time ;
 
-temps2a      =  early_time + (3 * day1) ;   
+*temps2a      =  early_time + (3 * day1) ;   
 temps2       =  age_time   ;
 
 temps_ramp   = age_time  + ramp_time ;
@@ -192,6 +194,8 @@ temps4       = temps3 + cool_time ;
 
 * Time steps for the different phases
 DT01     =  600.;
+DT01a    =  600.;
+DT1a1   =  1*day1;
 
 DT12a    =  600.;
 DT2a2    =  3 * day1;
@@ -205,17 +209,17 @@ DT34     =   15.;
 
 * Calculation of the time steps for the different phases
 LTP_HYDR = PROG  0.              PAS DT01 temps1        ;  
-LTP_AGIN = PROG (temps1 + DT12a) PAS DT12a temps2a PAS DT2a2 temps2 ;
+*LTP_AGIN = PROG (temps1 + DT12a) PAS DT12a temps2a PAS DT2a2 temps2 ;
 LTP_ACCI = PROG (temps2 + DT_RAMP) PAS DT_RAMP temps_ramp PAS DT_LIN1 temps_lin1 PAS DT_LIN2 temps3;
-LTP_COOL = PROG (temps3 + DT_RAMP2) PAS DT_RAMP2 temps_ramp2 PAS DT34 temps4;
-LTP_TOT  = LTP_HYDR ET LTP_AGIN ET LTP_ACCI ET LTP_COOL;   
+*LTP_COOL = PROG (temps3 + DT_RAMP2) PAS DT_RAMP2 temps_ramp2 PAS DT34 temps4;
+LTP_TOT  = LTP_HYDR ET LTP_ACCI;   
 
 * Saved times
 LSA_HYDR = PROG  0.              PAS hours1 temps1; 
-LSA_AGIN = PROG (temps1 + DT2a2) PAS DT2a2  temps2;                    
+*LSA_AGIN = PROG (temps1 + DT2a2) PAS DT2a2  temps2;                    
 LSA_ACCI = PROG (temps2 + 60.)  PAS 60.   temps3; 
-LSA_COOL = PROG (temps3 + 60.)  PAS 60.   temps4; 
-LSA_TOT  = LSA_HYDR ET LSA_AGIN ET LSA_ACCI ET LSA_COOL;          
+*LSA_COOL = PROG (temps3 + 60.)  PAS 60.   temps4; 
+LSA_TOT  = LSA_HYDR ET LSA_ACCI;          
 *---------------------------------------------------------------------
 
 
@@ -230,7 +234,7 @@ DHY_0  = 0.            ;
 TC_0   = 20.           ;
 TK_0   = 273.15 + TC_0 ;
 PG_0   = 101325.       ;
-HR_0   = 0.98        ;
+HR_0   = @HR0@        ;
 
 ZERO1  = MANU 'CHPO' MAIL1 'SCAL' 0.       ;
 CHTK_0 = MANU 'CHPO' MAIL1 'T' TK_0        ;
@@ -268,8 +272,7 @@ CI_TH  = ('MANU' 'CHPO' MAIL1 2 'PG' PG_0 'T' TK_0)  +  PC_0;
 *---------------------------------------------------------------------*
 TK_E  = TK_0;
 PG_E  = PG_0;
-HR_E1 = 0.95;
-HR_E2 = 0.5;
+HR_E1 = @HRE1@;
 
 * PG: imposed gas pressure at the top and bottom faces (PG_ext = p_atm)
 EV_PG = 'EVOL' 'MANU' 'TEMPS'  ('PROG' 0.  temps4) ('PROG' 1. 1.);
@@ -353,14 +356,7 @@ REPETER BOU_RGW (DIME LTP_TOT);
        SI (TIMEi '<' temps1);
        PGWe_i  = HR_E1 * PVSe_i;
        FINS;
-       SI (TIMEi '>EG' temps1);
-       HR_i = HR_E1-(((TIMEi-temps1)/(temps2a-temps1))*(HR_E1-HR_E2));
-       PGWe_i  = HR_i * PVSe_i;
-       FINS;
-       SI (TIMEi '>' temps2a);
-       PGWe_i  = HR_E2 * PVSe_i;
-       FINS;
-       SI (TIMEi '>' temps2);
+       SI (TIMEi '>' temps1);
        PGWe_i  = 1300.;
        FINS;
     RGWi    = FGPGW0 * PGWe_i ;
@@ -414,67 +410,6 @@ SAUV;
 *---------------------------------------------------------------------
 opti REST 'KALIFA_PHASE1';
 REST;
-
-*---------------------------------------------------------------------
-* DRYING AND AGING
-*---------------------------------------------------------------------
-MATCOH  = 'MATE' MODCOH   'H'  0.002;
-
-*  Recalculation resumed
-TAB0 . 'MA_CONVECTION_VAPEUR' . 1 = MATCOH ;
-TAB0 . 'TEMPS_CALCULES'           = LTP_AGIN ;
-TAB0 . 'TEMPS_SAUVES'             = LSA_AGIN ;
-PASAPAS TAB0;
-
-*---------------------------------------------------------------------
-opti SAUV 'KALIFA_PHASE2';
-SAUV;
-
-*---------------------------------------------------------------------
-opti REST 'KALIFA_PHASE2';
-REST;
-
-
-*===================================================================*
-* VISUALIZATION OF THE FIELDS AT THE END OF AGING PHASE (last saved time step)
-*===================================================================*
-
-* --- Check the total number of saved steps
-NTOT = DIME TAB0.'TEMPERATURES';
-N_LAST = NTOT - 1 ;
-MESS '--- Total saved steps = ' NTOT;
-MESS '--- Final saved steps = ' N_LAST;
-
-*===================================================================*
-* SATURATION DEGREE AND HR AT THE FINAL TIME STEP - last saved time step (end of aging)
-
-* Calculation of relative humidity (Clapeyron Law) and SW
-TAB0 . 'HR' = TABLE;
-TAB0 . 'SW' = TABLE;
-TAB0 . 'DCH_CHPO' = TABLE;
-TAB0 . 'HYDR_CHPO' = TABLE;
-*
-N1 = 0;
-REPETER BOU_HR NTOT;
-   CHTKi = EXCO 'T'  TAB0 . 'TEMPERATURES' . N1;
-   CHPCi = EXCO 'PC' TAB0 . 'TEMPERATURES' . N1;
-   CHPGi = EXCO 'PG' TAB0 . 'TEMPERATURES' . N1;
-   HYDRi = CHAN CHPO TAB0 . 'HYDRATATION' . N1  MODTHC;
-   DCHi  = CHAN CHPO TAB0 . 'DCH'         . N1  MODTHC;
-   CHPVSATi CHPGWSCi RHOGWi XX YY ZZ = @PVSAT CHPGi CHPCi CHTKi;
-   SWi = @SATURA CHPCi CHTKi HYDRi cha1 chb1 chc1 chgam0;
-   HRi   =   CHPGWSCi * (CHPVSATi**-1);
-   TAB0 . 'HR' . N1 = HRi;
-   TAB0 . 'SW' . N1 = SWi;
-   TAB0 . 'DCH_CHPO' . N1 = DCHi;
-   TAB0 . 'HYDR_CHPO' . N1 = HYDRi;
-   N1 = N1 + 1;
-FIN BOU_HR;
-
-CH_SW_LAST= TAB0 . 'SW' . N_LAST ;
-CH_HR_LAST= TAB0 . 'HR' . N_LAST ;
-*TRAC CH_SW_LAST MAIL1 'TITR' 'Saturation Degree (SW) at Final Time Step' ;
-*TRAC CH_HR_LAST MAIL1 'TITR' 'Relative Humidity (HR) at Final Time Step' ;
 
 
 *---------------------------------------------------------------------
@@ -600,7 +535,7 @@ EV_EX_120 = EVOL 'BLAN' 'MANU' 'Time(min)' L_MIN_1 'T_120mm' LT_120_1 ;
 EV_EXPORT_TEMP = EV_EX_00 ET EV_EX_10 ET EV_EX_20 ET EV_EX_30 ET EV_EX_40 ET EV_EX_50 ET EV_EX_120 ;
 
 * 5. Export to CSV/TXT file
-OPTI 'SORT' 'D:\cast3m-m2internship\05.Calibration\Test_02\CSV\temp_results_no_2_HR0_0.98_HRE2_0.5.csv' ;
+OPTI 'SORT' '@CSV_TEMP@' ;
 SORT 'EXCE' EV_EXPORT_TEMP ;
 
 
@@ -635,7 +570,7 @@ EV_PG_120  = EVOL 'BLAN' 'MANU' 'Time(min)' L_MIN_1 'PG_120mm(MPa)'  LPG_120_1 ;
 EV_EXPORT_PG = EV_PG_00 ET EV_PG_10 ET EV_PG_20 ET EV_PG_30 ET EV_PG_40 ET EV_PG_50 ET EV_PG_120;
 
 * 5. Export to CSV/TXT file
-OPTI 'SORT' 'D:\cast3m-m2internship\05.Calibration\Test_02\CSV\pg_results_no_2_HR0_0.98_HRE2_0.5.csv' ;
+OPTI 'SORT' '@CSV_PG@' ;
 SORT 'EXCE' EV_EXPORT_PG ;
 
 *===================================================================
@@ -673,7 +608,7 @@ EV_EX_SW_120 = EVOL 'BLAN' 'MANU' 'Time(min)' L_MIN_1 'SW_120mm' LSW_120_1 ;
 * 4. Gộp và xuất ra file CSV
 EV_EXPORT_SW = EV_EX_SW_00 ET EV_EX_SW_10 ET EV_EX_SW_20 ET EV_EX_SW_30 ET EV_EX_SW_40 ET EV_EX_SW_50 ET EV_EX_SW_120 ;
 
-OPTI 'SORT' 'D:\cast3m-m2internship\05.Calibration\Test_02\CSV\sw_results_no_2_HR0_0.98_HRE2_0.5.csv' ;
+OPTI 'SORT' '@CSV_SW@' ;
 SORT 'EXCE' EV_EXPORT_SW ;
 
 
@@ -711,7 +646,7 @@ EV_EX_HR_120 = EVOL 'BLAN' 'MANU' 'Time(min)' L_MIN_1 'HR_120mm' LHR_120_1 ;
 * 4. Gộp và xuất ra file CSV
 EV_EXPORT_HR = EV_EX_HR_00 ET EV_EX_HR_10 ET EV_EX_HR_20 ET EV_EX_HR_30 ET EV_EX_HR_40 ET EV_EX_HR_50 ET EV_EX_HR_120 ;
 
-OPTI 'SORT' 'D:\cast3m-m2internship\05.Calibration\Test_02\CSV\hr_results_no_2_HR0_0.98_HRE2_0.5.csv' ;
+OPTI 'SORT' '@CSV_HR@' ;
 SORT 'EXCE' EV_EXPORT_HR ;
 
 *===================================================================
@@ -748,7 +683,7 @@ EV_EX_DCH_120 = EVOL 'BLAN' 'MANU' 'Time(min)' L_MIN_1 'DCH_120mm' LDCH_120_1 ;
 * 4. Gộp và xuất ra file CSV
 EV_EXPORT_DCH = EV_EX_DCH_00 ET EV_EX_DCH_10 ET EV_EX_DCH_20 ET EV_EX_DCH_30 ET EV_EX_DCH_40 ET EV_EX_DCH_50 ET EV_EX_DCH_120 ;
 
-OPTI 'SORT' 'D:\cast3m-m2internship\05.Calibration\Test_02\CSV\dch_results_no_2_HR0_0.98_HRE2_0.5.csv' ;
+OPTI 'SORT' '@CSV_DCH@' ;
 SORT 'EXCE' EV_EXPORT_DCH ;
 
 *===================================================================
@@ -786,7 +721,7 @@ EV_EX_HYD_120 = EVOL 'BLAN' 'MANU' 'Time(min)' L_MIN_1 'HYD_120mm' LHYD_120_1 ;
 EV_EXPORT_HYD = EV_EX_HYD_00 ET EV_EX_HYD_10 ET EV_EX_HYD_20 ET EV_EX_HYD_30 ET EV_EX_HYD_40 ET EV_EX_HYD_50 ET EV_EX_HYD_120 ;
 
 * 5. Xuất file CSV ra bộ nhớ máy tính
-OPTI 'SORT' 'D:\cast3m-m2internship\05.Calibration\Test_02\CSV\hyd_results_no_2_HR0_0.98_HRE2_0.5.csv' ;
+OPTI 'SORT' '@CSV_HYD@' ;
 SORT 'EXCE' EV_EXPORT_HYD ;
 
 FIN;
