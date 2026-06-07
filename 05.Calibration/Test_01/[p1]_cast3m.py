@@ -29,8 +29,12 @@ def run_cast3m(X, run_number):
     kint_name = f"{kint:.1e}"
     csv_temp = os.path.join(csv_dir, f"temp_results_no_{run_number}_KINT_{kint_name}_AK_{ak}.csv")
     csv_pg = os.path.join(csv_dir, f"pg_results_no_{run_number}_KINT_{kint_name}_AK_{ak}.csv")
+    csv_sw = os.path.join(csv_dir, f"sw_results_no_{run_number}_KINT_{kint_name}_AK_{ak}.csv")
+    csv_hr = os.path.join(csv_dir, f"hr_results_no_{run_number}_KINT_{kint_name}_AK_{ak}.csv")
+    csv_dch = os.path.join(csv_dir, f"dch_results_no_{run_number}_KINT_{kint_name}_AK_{ak}.csv")
+    csv_hyd = os.path.join(csv_dir, f"hyd_results_no_{run_number}_KINT_{kint_name}_AK_{ak}.csv")
     
-    for f_path in [csv_temp, csv_pg]:
+    for f_path in [csv_temp, csv_pg, csv_sw, csv_hr, csv_dch, csv_hyd]:
         if os.path.exists(f_path): os.remove(f_path)
     
     with open(template_file, 'r', encoding='utf-8') as file:
@@ -42,7 +46,11 @@ def run_cast3m(X, run_number):
     content = template.replace('@KINT@', kint_str)\
                       .replace('@AK@', ak_str)\
                       .replace('@CSV_TEMP@', csv_temp)\
-                      .replace('@CSV_PG@', csv_pg)
+                      .replace('@CSV_PG@', csv_pg)\
+                      .replace('@CSV_SW@', csv_sw)\
+                      .replace('@CSV_HR@', csv_hr)\
+                      .replace('@CSV_DCH@', csv_dch)\
+                      .replace('@CSV_HYD@', csv_hyd)
 
     with open(run_file, 'w', encoding='utf-8') as file:
         file.write(content)
@@ -136,7 +144,7 @@ if __name__ == "__main__":
     print("Khởi tạo danh sách các tổ hợp thông số KINT và AK...")
     
     # 1. Khai báo các giá trị muốn thử (Bạn có thể thêm/bớt tùy ý)
-    KINT_values = [6e-20, 7.5e-20, 8.5e-20, 1e-21, 2e-21, 3e-21]
+    KINT_values = [1e-19,2e-19,1e-20,5e-20,7.5e-20,8.5e-20]
     AK_values = [3.0,4.0,5.0,6.0,7.0,8.0]
     
     # Tạo tất cả các tổ hợp có thể có (25 tổ hợp)
