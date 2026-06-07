@@ -452,6 +452,7 @@ MESS '--- Final saved steps = ' N_LAST;
 TAB0 . 'HR' = TABLE;
 TAB0 . 'SW' = TABLE;
 TAB0 . 'DCH_CHPO' = TABLE;
+TAB0 . 'HYDR_CHPO' = TABLE;
 *
 N1 = 0;
 REPETER BOU_HR NTOT;
@@ -465,6 +466,8 @@ REPETER BOU_HR NTOT;
    HRi   =   CHPGWSCi * (CHPVSATi**-1);
    TAB0 . 'HR' . N1 = HRi;
    TAB0 . 'SW' . N1 = SWi;
+   TAB0 . 'DCH_CHPO' . N1 = DCHi;
+   TAB0 . 'HYDR_CHPO' . N1 = HYDRi;
    N1 = N1 + 1;
 FIN BOU_HR;
 

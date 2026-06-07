@@ -37,8 +37,8 @@ import csv
 # =========================================================
 # ESTABLISHING PROJECT PATHWAYS
 # =========================================================
-working_dir = r"D:\cast3m-m2internship\05.Calibration\Test_03"
-csv_dir = r"D:\cast3m-m2internship\05.Calibration\Test_03\CSV"
+working_dir = r"D:\cast3m-m2internship\05.Calibration\Test_101"
+csv_dir = r"D:\cast3m-m2internship\05.Calibration\Test_101\CSV"
 os.makedirs(csv_dir, exist_ok=True)
 
 # =========================================================

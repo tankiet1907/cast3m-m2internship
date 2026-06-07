@@ -8,8 +8,8 @@ import numpy as np
 # =========================================================
 # 1. THIẾT LẬP ĐƯỜNG DẪN THƯ MỤC
 # =========================================================
-working_dir = r"D:\cast3m-m2internship\05.Calibration\Test_03"
-csv_dir = r"D:\cast3m-m2internship\05.Calibration\Test_03\CSV"
+working_dir = r"D:\cast3m-m2internship\05.Calibration\Test_101"
+csv_dir = r"D:\cast3m-m2internship\05.Calibration\Test_101\CSV"
 output_dir = os.path.join(working_dir, "Plots")
 if not os.path.exists(output_dir):
     os.makedirs(output_dir)

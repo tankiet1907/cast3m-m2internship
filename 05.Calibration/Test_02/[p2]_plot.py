@@ -95,6 +95,11 @@ def plot_and_save(file_list, plot_type):
                 plt.ylim(0, 1.0)
                 plt.yticks(np.arange(0, 1.1, 0.1))
                 plt.legend(loc="upper right", fontsize=10) # Sw giảm dần nên để chú thích góc trên phải
+            elif plot_type == "Hr": 
+                plt.ylabel("Relative Humidity (HR)", fontsize=12)
+                plt.ylim(0, 1.0)
+                plt.yticks(np.arange(0, 1.1, 0.1))
+                plt.legend(loc="lower left", fontsize=10)
             # ---------------------------------------------------------
             
             # Làm đẹp đồ thị
@@ -121,8 +126,9 @@ if __name__ == "__main__":
     # THÊM TÌM KIẾM CHO SATURATION
     # Giả định file CSV xuất ra có tên bắt đầu bằng "sw_results_no_"
     sw_files   = glob.glob(os.path.join(csv_dir, "sw_results_no_*.csv")) 
+    hr_files   = glob.glob(os.path.join(csv_dir, "hr_results_no_*.csv")) 
 
-    print(f"Tìm thấy: {len(temp_files)} Temp, {len(pg_files)} Pg, {len(dch_files)} Dch, {len(sw_files)} Sw.\n")
+    print(f"Tìm thấy: {len(temp_files)} Temp, {len(pg_files)} Pg, {len(dch_files)} Dch, {len(sw_files)} Sw, {len(hr_files)} Hr.\n")
 
     print("--- BẮT ĐẦU VẼ ĐỒ THỊ NHIỆT ĐỘ ---")
     plot_and_save(temp_files, "Temp")
@@ -135,5 +141,8 @@ if __name__ == "__main__":
 
     print("\n--- BẮT ĐẦU VẼ ĐỒ THỊ SATURATION ---")
     plot_and_save(sw_files, "Sw")
+
+    print("\n--- BẮT ĐẦU VẼ ĐỒ THỊ RELATIVE HUMIDITY ---")
+    plot_and_save(hr_files, "Hr")
 
     print(f"\n[HOÀN TẤT] Bạn hãy vào thư mục '{output_dir}' để kiểm tra thành quả!")

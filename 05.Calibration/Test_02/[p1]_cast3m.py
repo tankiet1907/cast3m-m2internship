@@ -4,7 +4,7 @@ import glob
 import itertools
 import csv
 
-# CCALIBRATION OF THE INITIAL CONDITIONS (SW AND HR, WATER RETENTION) FOR HPC M100
+# CCALIBRATION OF THE INITIAL CONDITIONS (SW AND HR) FOR HPC M100
 
 # =========================================================
 # ESTABLISHING PROJECT PATHWAYS
