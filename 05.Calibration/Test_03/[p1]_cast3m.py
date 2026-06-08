@@ -4,7 +4,7 @@ import glob
 import itertools
 import csv
 
-# CCALIBRATION OF THE HYDRATION PROCESS FOR HPC M100
+# CALIBRATION OF THE HYDRATION PROCESS (OLD TH2 DATA) FOR HPC M100
 
 # =========================================================
 # ESTABLISHING PROJECT PATHWAYS

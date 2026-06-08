@@ -4,12 +4,12 @@ import glob
 import itertools
 import csv
 
-# CCALIBRATION OF THE DESORPTION ISOTHERM (a,b) FOR HPC M100
+# CALIBRATION OF THE FOR HPC M100
 
 # =========================================================
 # ESTABLISHING PROJECT PATHWAYS
 # =========================================================
-working_dir = r"D:\cast3m-m2internship\05.Calibration\Test_04"
+working_dir = r"D:\cast3m-m2internship\05.Calibration\Test_08"
 csv_dir = os.path.join(working_dir, "CSV")
 os.makedirs(csv_dir, exist_ok=True)
 
