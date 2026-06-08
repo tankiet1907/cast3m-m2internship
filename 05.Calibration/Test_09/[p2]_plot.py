@@ -8,7 +8,7 @@ import numpy as np
 # =========================================================
 # 1. THIẾT LẬP ĐƯỜNG DẪN THƯ MỤC
 # =========================================================
-working_dir = r"D:\cast3m-m2internship\05.Calibration\Test_08"
+working_dir = r"D:\cast3m-m2internship\05.Calibration\Test_09"
 csv_dir = os.path.join(working_dir, "CSV")
 output_dir = os.path.join(working_dir, "Plots")
 if not os.path.exists(csv_dir):
@@ -36,13 +36,13 @@ def plot_and_save(file_list, plot_type):
     for file_path in file_list:
         filename = os.path.basename(file_path)
         
-        # Trích xuất HR0 và HRE2 từ tên file bằng Regex
-        match = re.search(r'HR0_(.+)_HRE2_([0-9.]+)', filename)
+        # Trích xuất H_AGE và H_ACC từ tên file bằng Regex
+        match = re.search(r'H_AGE_(.+)_H_ACC_([0-9.]+)', filename)
         if match:
-            hr0_val = match.group(1)
-            hre2_val = match.group(2)
-            title = f"{plot_type} | HR0: {hr0_val} | HRE2: {hre2_val}"
-            save_name = f"{plot_type}_HR0_{hr0_val}_HRE2_{hre2_val}.png"
+            h_age_val = match.group(1)
+            h_acc_val = match.group(2)
+            title = f"{plot_type} | H_AGE: {h_age_val} | H_ACC: {h_acc_val}"
+            save_name = f"{plot_type}_H_AGE_{h_age_val}_H_ACC_{h_acc_val}.png"
         else:
             title = f"{plot_type} - {filename}"
             save_name = f"{filename}.png"
