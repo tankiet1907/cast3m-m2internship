@@ -230,7 +230,7 @@ DHY_0  = 0.            ;
 TC_0   = 20.           ;
 TK_0   = 273.15 + TC_0 ;
 PG_0   = 101325.       ;
-HR_0   = @HR0@        ;
+HR_0   = 0.98        ;
 
 ZERO1  = MANU 'CHPO' MAIL1 'SCAL' 0.       ;
 CHTK_0 = MANU 'CHPO' MAIL1 'T' TK_0        ;
@@ -269,7 +269,7 @@ CI_TH  = ('MANU' 'CHPO' MAIL1 2 'PG' PG_0 'T' TK_0)  +  PC_0;
 TK_E  = TK_0;
 PG_E  = PG_0;
 HR_E1 = 0.95;
-HR_E2 = @HRE2@;
+HR_E2 = 0.8;
 
 * PG: imposed gas pressure at the top and bottom faces (PG_ext = p_atm)
 EV_PG = 'EVOL' 'MANU' 'TEMPS'  ('PROG' 0.  temps4) ('PROG' 1. 1.);
@@ -600,7 +600,7 @@ EV_EX_120 = EVOL 'BLAN' 'MANU' 'Time(min)' L_MIN_1 'T_120mm' LT_120_1 ;
 EV_EXPORT_TEMP = EV_EX_00 ET EV_EX_10 ET EV_EX_20 ET EV_EX_30 ET EV_EX_40 ET EV_EX_50 ET EV_EX_120 ;
 
 * 5. Export to CSV/TXT file
-OPTI 'SORT' '@CSV_TEMP@' ;
+OPTI 'SORT' 'D:\cast3m-m2internship\05.Calibration\Test_08\CSV\temp_results_no_4_HR0_0.98_HRE2_0.8.csv' ;
 SORT 'EXCE' EV_EXPORT_TEMP ;
 
 
@@ -635,7 +635,7 @@ EV_PG_120  = EVOL 'BLAN' 'MANU' 'Time(min)' L_MIN_1 'PG_120mm(MPa)'  LPG_120_1 ;
 EV_EXPORT_PG = EV_PG_00 ET EV_PG_10 ET EV_PG_20 ET EV_PG_30 ET EV_PG_40 ET EV_PG_50 ET EV_PG_120;
 
 * 5. Export to CSV/TXT file
-OPTI 'SORT' '@CSV_PG@' ;
+OPTI 'SORT' 'D:\cast3m-m2internship\05.Calibration\Test_08\CSV\pg_results_no_4_HR0_0.98_HRE2_0.8.csv' ;
 SORT 'EXCE' EV_EXPORT_PG ;
 
 *===================================================================
@@ -673,7 +673,7 @@ EV_EX_SW_120 = EVOL 'BLAN' 'MANU' 'Time(min)' L_MIN_1 'SW_120mm' LSW_120_1 ;
 * 4. Gộp và xuất ra file CSV
 EV_EXPORT_SW = EV_EX_SW_00 ET EV_EX_SW_10 ET EV_EX_SW_20 ET EV_EX_SW_30 ET EV_EX_SW_40 ET EV_EX_SW_50 ET EV_EX_SW_120 ;
 
-OPTI 'SORT' '@CSV_SW@' ;
+OPTI 'SORT' 'D:\cast3m-m2internship\05.Calibration\Test_08\CSV\sw_results_no_4_HR0_0.98_HRE2_0.8.csv' ;
 SORT 'EXCE' EV_EXPORT_SW ;
 
 
@@ -711,7 +711,7 @@ EV_EX_HR_120 = EVOL 'BLAN' 'MANU' 'Time(min)' L_MIN_1 'HR_120mm' LHR_120_1 ;
 * 4. Gộp và xuất ra file CSV
 EV_EXPORT_HR = EV_EX_HR_00 ET EV_EX_HR_10 ET EV_EX_HR_20 ET EV_EX_HR_30 ET EV_EX_HR_40 ET EV_EX_HR_50 ET EV_EX_HR_120 ;
 
-OPTI 'SORT' '@CSV_HR@' ;
+OPTI 'SORT' 'D:\cast3m-m2internship\05.Calibration\Test_08\CSV\hr_results_no_4_HR0_0.98_HRE2_0.8.csv' ;
 SORT 'EXCE' EV_EXPORT_HR ;
 
 *===================================================================
@@ -748,7 +748,7 @@ EV_EX_DCH_120 = EVOL 'BLAN' 'MANU' 'Time(min)' L_MIN_1 'DCH_120mm' LDCH_120_1 ;
 * 4. Gộp và xuất ra file CSV
 EV_EXPORT_DCH = EV_EX_DCH_00 ET EV_EX_DCH_10 ET EV_EX_DCH_20 ET EV_EX_DCH_30 ET EV_EX_DCH_40 ET EV_EX_DCH_50 ET EV_EX_DCH_120 ;
 
-OPTI 'SORT' '@CSV_DCH@' ;
+OPTI 'SORT' 'D:\cast3m-m2internship\05.Calibration\Test_08\CSV\dch_results_no_4_HR0_0.98_HRE2_0.8.csv' ;
 SORT 'EXCE' EV_EXPORT_DCH ;
 
 *===================================================================
@@ -786,7 +786,7 @@ EV_EX_HYD_120 = EVOL 'BLAN' 'MANU' 'Time(min)' L_MIN_1 'HYD_120mm' LHYD_120_1 ;
 EV_EXPORT_HYD = EV_EX_HYD_00 ET EV_EX_HYD_10 ET EV_EX_HYD_20 ET EV_EX_HYD_30 ET EV_EX_HYD_40 ET EV_EX_HYD_50 ET EV_EX_HYD_120 ;
 
 * 5. Xuất file CSV ra bộ nhớ máy tính
-OPTI 'SORT' '@CSV_HYD@' ;
+OPTI 'SORT' 'D:\cast3m-m2internship\05.Calibration\Test_08\CSV\hyd_results_no_4_HR0_0.98_HRE2_0.8.csv' ;
 SORT 'EXCE' EV_EXPORT_HYD ;
 
 FIN;
