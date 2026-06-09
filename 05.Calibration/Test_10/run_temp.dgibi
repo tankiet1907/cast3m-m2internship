@@ -97,8 +97,8 @@ EAR1 = 5369.  ;
 lat1 = 114.3e6 ;
 
 * INTRINSIC PERMEABILITY
-KINT = 8.500000E-20;
-AK   = 8.0;
+KINT = 5.000000E-17;
+AK   = 3.0;
 
 * THERMAL PARAMETERS
 CS   = 960.   ;
@@ -675,7 +675,7 @@ EV_EX_120 = EVOL 'BLAN' 'MANU' 'Time(min)' L_MIN_1 'T_120mm' LT_120_1 ;
 EV_EXPORT_TEMP = EV_EX_00 ET EV_EX_10 ET EV_EX_20 ET EV_EX_30 ET EV_EX_40 ET EV_EX_50 ET EV_EX_120 ;
 
 * 5. Export to CSV/TXT file
-OPTI 'SORT' 'D:\cast3m-m2internship\05.Calibration\Test_10\CSV\temp_results_no_72_KINT_8.5e-20_AK_8.0.csv' ;
+OPTI 'SORT' 'D:\cast3m-m2internship\05.Calibration\Test_10\CSV\temp_results_no_18_KINT_5.0e-17_AK_3.0.csv' ;
 SORT 'EXCE' EV_EXPORT_TEMP ;
 
 
@@ -710,7 +710,7 @@ EV_PG_120  = EVOL 'BLAN' 'MANU' 'Time(min)' L_MIN_1 'PG_120mm(MPa)'  LPG_120_1 ;
 EV_EXPORT_PG = EV_PG_00 ET EV_PG_10 ET EV_PG_20 ET EV_PG_30 ET EV_PG_40 ET EV_PG_50 ET EV_PG_120;
 
 * 5. Export to CSV/TXT file
-OPTI 'SORT' 'D:\cast3m-m2internship\05.Calibration\Test_10\CSV\pg_results_no_72_KINT_8.5e-20_AK_8.0.csv' ;
+OPTI 'SORT' 'D:\cast3m-m2internship\05.Calibration\Test_10\CSV\pg_results_no_18_KINT_5.0e-17_AK_3.0.csv' ;
 SORT 'EXCE' EV_EXPORT_PG ;
 
 
@@ -749,7 +749,7 @@ EV_EX_SW_120 = EVOL 'BLAN' 'MANU' 'Time(min)' L_MIN_1 'SW_120mm' LSW_120_1 ;
 * 4. Gộp và xuất ra file CSV
 EV_EXPORT_SW = EV_EX_SW_00 ET EV_EX_SW_10 ET EV_EX_SW_20 ET EV_EX_SW_30 ET EV_EX_SW_40 ET EV_EX_SW_50 ET EV_EX_SW_120 ;
 
-OPTI 'SORT' 'D:\cast3m-m2internship\05.Calibration\Test_10\CSV\sw_results_no_72_KINT_8.5e-20_AK_8.0.csv' ;
+OPTI 'SORT' 'D:\cast3m-m2internship\05.Calibration\Test_10\CSV\sw_results_no_18_KINT_5.0e-17_AK_3.0.csv' ;
 SORT 'EXCE' EV_EXPORT_SW ;
 
 
@@ -787,7 +787,7 @@ EV_EX_HR_120 = EVOL 'BLAN' 'MANU' 'Time(min)' L_MIN_1 'HR_120mm' LHR_120_1 ;
 * 4. Gộp và xuất ra file CSV
 EV_EXPORT_HR = EV_EX_HR_00 ET EV_EX_HR_10 ET EV_EX_HR_20 ET EV_EX_HR_30 ET EV_EX_HR_40 ET EV_EX_HR_50 ET EV_EX_HR_120 ;
 
-OPTI 'SORT' 'D:\cast3m-m2internship\05.Calibration\Test_10\CSV\hr_results_no_72_KINT_8.5e-20_AK_8.0.csv' ;
+OPTI 'SORT' 'D:\cast3m-m2internship\05.Calibration\Test_10\CSV\hr_results_no_18_KINT_5.0e-17_AK_3.0.csv' ;
 SORT 'EXCE' EV_EXPORT_HR ;
 
 *===================================================================
@@ -824,7 +824,7 @@ EV_EX_DCH_120 = EVOL 'BLAN' 'MANU' 'Time(min)' L_MIN_1 'DCH_120mm' LDCH_120_1 ;
 * 4. Gộp và xuất ra file CSV
 EV_EXPORT_DCH = EV_EX_DCH_00 ET EV_EX_DCH_10 ET EV_EX_DCH_20 ET EV_EX_DCH_30 ET EV_EX_DCH_40 ET EV_EX_DCH_50 ET EV_EX_DCH_120 ;
 
-OPTI 'SORT' 'D:\cast3m-m2internship\05.Calibration\Test_10\CSV\dch_results_no_72_KINT_8.5e-20_AK_8.0.csv' ;
+OPTI 'SORT' 'D:\cast3m-m2internship\05.Calibration\Test_10\CSV\dch_results_no_18_KINT_5.0e-17_AK_3.0.csv' ;
 SORT 'EXCE' EV_EXPORT_DCH ;
 
 *===================================================================
@@ -862,7 +862,7 @@ EV_EX_HYD_120 = EVOL 'BLAN' 'MANU' 'Time(min)' L_MIN_1 'HYD_120mm' LHYD_120_1 ;
 EV_EXPORT_HYD = EV_EX_HYD_00 ET EV_EX_HYD_10 ET EV_EX_HYD_20 ET EV_EX_HYD_30 ET EV_EX_HYD_40 ET EV_EX_HYD_50 ET EV_EX_HYD_120 ;
 
 * 5. Xuất file CSV ra bộ nhớ máy tính
-OPTI 'SORT' 'D:\cast3m-m2internship\05.Calibration\Test_10\CSV\hyd_results_no_72_KINT_8.5e-20_AK_8.0.csv' ;
+OPTI 'SORT' 'D:\cast3m-m2internship\05.Calibration\Test_10\CSV\hyd_results_no_18_KINT_5.0e-17_AK_3.0.csv' ;
 SORT 'EXCE' EV_EXPORT_HYD ;
 
 FIN;

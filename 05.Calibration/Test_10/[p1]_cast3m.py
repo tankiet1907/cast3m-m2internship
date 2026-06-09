@@ -144,8 +144,8 @@ if __name__ == "__main__":
     print("Khởi tạo danh sách các tổ hợp thông số KINT và AK...")
     
     # 1. Khai báo các giá trị muốn thử (Bạn có thể thêm/bớt tùy ý)
-    KINT_values = [1e-18,2e-18,5e-18,1e-19,2e-19,1e-20,5e-20,7.5e-20,8.5e-20]
-    AK_values = [1.0,2.0,3.0,4.0,5.0,6.0,7.0,8.0]
+    KINT_values = [1e-16,2e-16,5e-16,1e-17,2e-17,5e-17]
+    AK_values = [1.0,2.0,3.0]
     
     # Tạo tất cả các tổ hợp có thể có (25 tổ hợp)
     # Mỗi phần tử trong parameter_sets sẽ là một tuple: ví dụ (1e-20, 1.0)
