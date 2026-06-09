@@ -354,6 +354,51 @@
       \verb C:\Users\thong\Zotero\storage\GRDNYWFY\Hamon - 2013 - Model of damage of MAZARS.pdf
       \endverb
     \endentry
+    \entry{kalifa2000}{article}{}{}
+      \name{author}{3}{}{%
+        {{hash=59171b442b50a843ba8e53be364eb5f1}{%
+           family={Kalifa},
+           familyi={K\bibinitperiod},
+           given={Pierre},
+           giveni={P\bibinitperiod}}}%
+        {{hash=5de011c306a6182b2b1ad9679dc90bd6}{%
+           family={Menneteau},
+           familyi={M\bibinitperiod},
+           given={François-Dominique},
+           giveni={F\bibinithyphendelim D\bibinitperiod}}}%
+        {{hash=dae1bbe40fcb812cf31e9ae9f9c9c7db}{%
+           family={Quenard},
+           familyi={Q\bibinitperiod},
+           given={Daniel},
+           giveni={D\bibinitperiod}}}%
+      }
+      \strng{namehash}{c6d0146e5d4a3f69eecae11d38bc5858}
+      \strng{fullhash}{c6d0146e5d4a3f69eecae11d38bc5858}
+      \strng{fullhashraw}{c6d0146e5d4a3f69eecae11d38bc5858}
+      \strng{bibnamehash}{c6d0146e5d4a3f69eecae11d38bc5858}
+      \strng{authorbibnamehash}{c6d0146e5d4a3f69eecae11d38bc5858}
+      \strng{authornamehash}{c6d0146e5d4a3f69eecae11d38bc5858}
+      \strng{authorfullhash}{c6d0146e5d4a3f69eecae11d38bc5858}
+      \strng{authorfullhashraw}{c6d0146e5d4a3f69eecae11d38bc5858}
+      \field{sortinit}{K}
+      \field{sortinithash}{c02bf6bff1c488450c352b40f5d853ab}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Cement and Concrete Research}
+      \field{month}{12}
+      \field{title}{Spalling and Pore Pressure in {{HPC}} at High Temperatures}
+      \field{volume}{30}
+      \field{year}{2000}
+      \field{dateera}{ce}
+      \field{pages}{1915\bibrangedash 1927}
+      \range{pages}{13}
+      \verb{doi}
+      \verb 10.1016/S0008-8846(00)00384-7
+      \endverb
+      \verb{file}
+      \verb C:\Users\thong\Zotero\storage\BZH2H5AK\Kalifa et al. - 2000 - Spalling and pore pressure in HPC at high temperatures.pdf
+      \endverb
+    \endentry
     \entry{liu2001}{article}{}{}
       \name{author}{3}{}{%
         {{hash=c98b8df825976ea7cb8362592da21cc7}{%
