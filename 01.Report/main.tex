@@ -89,6 +89,7 @@
 \tableofcontents
 
 % List of Figures
+\clearpage
 \phantomsection
 \addcontentsline{toc}{chapter}{\listfigurename}
 \listoffigures
@@ -133,6 +134,13 @@
 \clearpage
 \phantomsection
 \printbibliography[heading=bibintoc, title={Bibliography}]
+
+
+\appendix
+\addtocontents{toc}{\protect\value{tocdepth}=0}
+\include{appendices/appendixA}
+\include{appendices/appendixB}
+
 
 % #endregion
 

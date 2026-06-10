@@ -1,147 +1,37 @@
 %\cleardoublepage %already included in mainmatter 
-\chapter{Numerical implementation} \label{chapter3}
+\chapter{Experimental Reference and Numerical Model} \label{chapter3}
 
 \review{This chapter is currently empty and is intended to outline the proposed structure of the thesis.}
 
-This chapter describes the numerical solution of the THM governing equations developed in \cref{chapter2}. The implementation proceeds incrementally: the thermal, hydric, and mechanical models are first solved separately, then coupled to form the full THM system. All implementations are carried out in the finite element code Cast3M.
+\section{Kalifa Experiment}
 
-\section{Discretization}\label{sec:discretization}
+Specimen geometry
+Material properties
+Heating scenario
+Instrumentation
+Available measurements
 
-\subsection{Spatial discretization} \label{sec:spatial_discret}
+\subsection{Experimental tests and material properties}
+This section is currently under development and will be refined as the study progresses.
+\subsection{Thermal, hydraulic and mechanic loadings}
+This section is currently under development and will be refined as the study progresses.
+\subsection{Measured data}
+This section is currently under development and will be refined as the study progresses.
 
-\begin{reviewblock}
-The specific coupling method mentioned in \cref{sec:mechanical} between the TH and mechanical solvers has not yet been finalized and will be updated in \cref{chapter2} and \cref{chapter3} as the study progresses.
-\end{reviewblock}
-
-Applying the standard Galerkin finite element method to the three TH conservation equations (\cref{eq:final_air,eq:final_water,eq:final_energy}) yields the semi-discrete system \cite{dauti2018}:
-\begin{equation}
-    \mathbf{C}\,\dot{\mathbf{Y}} + \mathbf{K}\,\mathbf{Y} = \mathbf{f}
-    \label{eq:TH_matrix}
-\end{equation}
-where $\mathbf{Y} = \{\bar{p}_g,\, \bar{p}_c,\, \bar{T}\}$ is the vector of nodal TH unknowns. The operators $\mathbf{C}$ (capacity), $\mathbf{K}$(conductivity), and $\mathbf{f}$ (forcing) are $3\times3$ block matrices:
-\begin{equation}
-    \mathbf{K} = \begin{pmatrix}
-    K_{gg} & K_{gc} & K_{gt} \\
-    K_{cg} & K_{cc} & K_{ct} \\
-    K_{tg} & K_{tc} & K_{tt}
-    \end{pmatrix}, \quad
-    \mathbf{C} = \begin{pmatrix}
-    C_{gg} & C_{gc} & C_{gt} \\
-    0      & C_{cc} & C_{ct} \\
-    0      & C_{tc} & C_{tt}
-    \end{pmatrix}, \quad
-    \mathbf{f} = \begin{pmatrix}
-    f_g \\ f_c \\ f_t
-    \end{pmatrix}
-    \label{eq:TH_blocks}
-\end{equation}
-The off-diagonal entries $K_{ij}$, $C_{ij}$ ($i\neq j$) encode the coupling between the thermal and hydric fields. Detailed expressions of each block are given in \cite{dauti2018}, Appendix~A.
-
-The mechanical problem (\cref{eq:final_momentum}) is solved in a staggered manner: at each time step, the converged TH fields $\bar{T}$, $\bar{p}_g$, $\bar{p}_c$ enter as prescribed loading. The discrete equilibrium (\cref{eq:KMU_F}) reads:
-\begin{equation}
-    [\mathbf{K}_M]\{\mathbf{U}\} = \{\mathbf{F}\}
-    \label{eq:mech_matrix}
-\end{equation}
-where $\mathbf{K}_M$ (\cref{eq:KM_effective}) contains the damaged stiffness $(1-\mathcal{D})\,\mathbb{C}$ --- the displacement-dependent part that remains on the left-hand side --- and $\mathbf{F}$ (\cref{eq:F_full}) collects the TH-prescribed loads ($\boldsymbol{\varepsilon}^{th}$, $\boldsymbol{\varepsilon}^{sh}$, $\alpha\,p_s$) that do not depend on $\mathbf{U}$.
-
-\subsection{Temporal discretization} \label{sec:temporal_discret}
-\review{This section is currently under development and will be refined as the study progresses.}
-
-The time integration of \cref{eq:TH_matrix} is carried out using the Wilson-$\theta$ method \cite{lewis1998,zienkiewicz2013}, which evaluates the equation at an intermediate time $t_{n+\theta} = t_n + \theta\,\Delta t$ with $\theta \in [0,1]$. This transforms the semi-discrete system into a fully discrete algebraic system at each time step:
-\begin{equation}
-    \tilde{\mathbf{K}}\,\Delta\mathbf{Y}^{n+1} 
-    + \mathbf{K}\,\mathbf{Y}^{n} 
-    = \mathbf{f}^{n+\theta}
-    \label{eq:theta_method}
-\end{equation}
-where:
-\begin{equation}
-    \Delta\mathbf{Y}^{n+1} = \mathbf{Y}^{n+1} 
-    - \mathbf{Y}^{n}, \qquad
-    \tilde{\mathbf{K}} = \frac{\mathbf{C}}{\Delta t} 
-    + \theta\,\mathbf{K}
-    \label{eq:theta_Ktilde}
-\end{equation}
-The parameter $\theta$ controls the scheme: $\theta=0$ gives the explicit forward Euler method, $\theta=1$ the fully implicit backward Euler, and $\theta=0.5$ the Crank-Nicolson scheme. In practice, $\theta=1$ is used for unconditional stability.
-
-Since the capacity and conductivity matrices depend nonlinearly on the unknowns ($\mathbf{C} = \mathbf{C}(\mathbf{Y})$, $\mathbf{K} = \mathbf{K}(\mathbf{Y})$), \cref{eq:theta_method} is solved iteratively using the Newton-Raphson method within each time step.
-
-\subsection{Solution strategy} \label{sec:solution_strategy}
-\review{This section is currently under development and will be refined as the study progresses.}
-
-The TH subsystem (\cref{eq:theta_method}) is solved \textit{monolithically}: all three unknowns $p_g$, $p_c$, $T$ are updated simultaneously within a single Newton-Raphson loop at each time step.
-
-The mechanical problem (\cref{eq:mech_matrix}) is solved in a \textit{staggered} manner: at each time step, the converged TH solution provides $\bar{T}$, $\bar{p}_g$, $\bar{p}_c$, which are used to assemble $\mathbf{F}$ (\cref{eq:F_full}) and solve for $\mathbf{U}$. The damage variable $\mathcal{D}$ computed from the Mazars model feeds back to the intrinsic permeability via \cref{eq:perm_damage}, creating a weak M$\to$H coupling updated at the next time step.
-
-\section{Model description and parameters} \label{sec:model_description}
+\section{Numerical model} \label{sec:model_description}
+Model description and parameters 
 
 This geometry is chosen as a representative benchmark for validating the THM implementation against the experimental results presented in \cref{chapter4}, obtained from an experimental campaign conducted under the supervision of S. Dal Pont. The model geometry, material properties, and boundary conditions are described in the following subsections.
 
 \subsection{Geometry}
 This section is currently under development and will be refined as the study progresses.
 
-Sample mesh code:
-
-\begin{cast3m}
-OPTI ECHO 0;
-OPTI 'DIME' 2 'ELEM' 'QUA4' ;    
-
-* 1) GEOMETRY AND MESH DEFINITION
-
-*GEOMETRY DEFINITION
-LONG    = 3.;
-HAUT    = 0.5;
-
-*NUMBER OF MESH SEGMENT
-NLONG   = 35;
-NHAUT   = 5;
-
-*POINTS CREATION
-PA      = 0. 0.;
-PB      = LONG 0.;
-PC      = LONG HAUT;
-PD      = 0. HAUT;
-TRAC (PA ET PB ET PC ET PD);
-
-*MESH LINES CREATION
-LAB     = DROI NLONG PA PB;
-LBC     = DROI NHAUT PB PC;
-LCD     = DROI NLONG PC PD;
-LDA     = DROI NHAUT PD PA;
-
-*MESH SURFACE CREATION
-MAIL1   = DALL LAB LBC LCD LDA;
-TRAC MAIL1;
-\end{cast3m}
-
 \subsection{Material properties}
 
 \subsection{Boundary conditions and loadings}
 This section is currently under development and will be refined as the study progresses.
 
-\section{Implementation of the thermal model}
-\subsection{Stationary linear thermal analysis}
-This section is currently under development and will be refined as the study progresses.
-\subsection{Transient linear and non-linear thermal analysis}
-This section is currently under development and will be refined as the study progresses.
-
-\section{Implementation of the hydric model}
-\subsection{Drying}
-This section is currently under development and will be refined as the study progresses.
-\subsection{Shrinkage}
-This section is currently under development and will be refined as the study progresses.
-
-\section{Implementation of the mechanical model}
-\subsection{Elastic linear mechanical model}
-This section is currently under development and will be refined as the study progresses.
-\subsection{Mazars model}
-This section is currently under development and will be refined as the study progresses.
 
 \section{Implementation of the TH coupled model} \label{sec:TH_implementation}
 This section is currently under development and will be refined as the study progresses.
 
-\section{Implementation of the THM coupled model}
-This section is currently under development and will be refined as the study progresses.
-
-\section{Numerical results}
-This section is currently under development and will be refined as the study progresses.
