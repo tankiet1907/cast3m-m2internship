@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex 2026.3.4)  10 JUN 2026 16:16
+This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex 2026.3.4)  12 JUN 2026 15:59
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -1486,12 +1486,12 @@ LaTeX Font Info:    Font shape `T1/cmtt/bx/n' in size <12> not available
 LaTeX Warning: Citation 'baldeweck1999' on page 55 undefined on input line 364.
 
 [55]) [56]
-<CV/CV.pdf, id=1183, 597.50829pt x 845.0471pt>
+<CV/CV.pdf, id=1187, 597.50829pt x 845.0471pt>
 File: CV/CV.pdf Graphic file (type pdf)
 <use CV/CV.pdf>
 Package pdftex.def Info: CV/CV.pdf  used on input line 148.
 (pdftex.def)             Requested size: 597.50682pt x 845.04504pt.
-<CV/CV.pdf, id=1185, page=1, 597.50829pt x 845.0471pt>
+<CV/CV.pdf, id=1189, page=1, 597.50829pt x 845.0471pt>
 File: CV/CV.pdf Graphic file (type pdf)
 <use CV/CV.pdf, page 1>
 Package pdftex.def Info: CV/CV.pdf , page1 used on input line 148.
@@ -1518,7 +1518,7 @@ Package pdftex.def Info: CV/CV.pdf , page1 used on input line 148.
 
 
  <./CV/CV.pdf>]
-<CV/CV.pdf, id=1234, page=2, 597.50829pt x 845.0471pt>
+<CV/CV.pdf, id=1238, page=2, 597.50829pt x 845.0471pt>
 File: CV/CV.pdf Graphic file (type pdf)
 <use CV/CV.pdf, page 2>
 Package pdftex.def Info: CV/CV.pdf , page2 used on input line 148.
@@ -1551,18 +1551,18 @@ Package logreq Info: Writing requests to 'main.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 37711 strings out of 467525
- 733392 string characters out of 5423210
- 1604373 words of memory out of 5000000
- 65625 multiletter control sequences out of 15000+600000
+ 37715 strings out of 467525
+ 733543 string characters out of 5423210
+ 1604429 words of memory out of 5000000
+ 65628 multiletter control sequences out of 15000+600000
  645474 words of font info for 83 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 115i,17n,110p,1661b,1527s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 115i,17n,110p,1661b,1533s stack positions out of 10000i,1000n,20000p,200000b,200000s
 <c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx8.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmmib10.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy6.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/symbols/msam10.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/cm-super/sfbx1200.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/cm-super/sfbx1440.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/cm-super/sfbx1728.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/cm-super/sfbx2488.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/cm-super/sfcc1200.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/cm-super/sfrm0800.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/cm-super/sfrm1095.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/cm-super/sfrm1200.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/cm-super/sfti1200.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/cm-super/sftt1200.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/cm-super/sftt1440.pfb>
-Output written on main.pdf (68 pages, 844845 bytes).
+Output written on main.pdf (68 pages, 849548 bytes).
 PDF statistics:
- 1449 PDF objects out of 1728 (max. 8388607)
- 1279 compressed objects within 13 object streams
- 383 named destinations out of 1000 (max. 500000)
+ 1453 PDF objects out of 1728 (max. 8388607)
+ 1283 compressed objects within 13 object streams
+ 384 named destinations out of 1000 (max. 500000)
  760 words of extra memory for PDF output out of 10000 (max. 10000000)
 

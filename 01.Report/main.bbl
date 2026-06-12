@@ -481,6 +481,49 @@
       \verb C:\Users\thong\Zotero\storage\ZPEZUUW4\Matheron - 1973 - The intrinsic random functions and their applications.pdf
       \endverb
     \endentry
+    \entry{sciume2024}{article}{}{}
+      \name{author}{3}{}{%
+        {{hash=e4f49bba5a977ecd5f63275b95c1db7f}{%
+           family={Sciumè},
+           familyi={S\bibinitperiod},
+           given={Giuseppe},
+           giveni={G\bibinitperiod}}}%
+        {{hash=7c0770463e58db59f7eb0f070dce164f}{%
+           family={Moreira},
+           familyi={M\bibinitperiod},
+           given={Murilo},
+           giveni={M\bibinitperiod}}}%
+        {{hash=612cba7e4e060464aeae380c060ac9d3}{%
+           family={Dal\bibnamedelima Pont},
+           familyi={D\bibinitperiod\bibinitdelim P\bibinitperiod},
+           given={Stefano},
+           giveni={S\bibinitperiod}}}%
+      }
+      \strng{namehash}{df48e49ae4223db668156aa5156b1ce4}
+      \strng{fullhash}{df48e49ae4223db668156aa5156b1ce4}
+      \strng{fullhashraw}{df48e49ae4223db668156aa5156b1ce4}
+      \strng{bibnamehash}{df48e49ae4223db668156aa5156b1ce4}
+      \strng{authorbibnamehash}{df48e49ae4223db668156aa5156b1ce4}
+      \strng{authornamehash}{df48e49ae4223db668156aa5156b1ce4}
+      \strng{authorfullhash}{df48e49ae4223db668156aa5156b1ce4}
+      \strng{authorfullhashraw}{df48e49ae4223db668156aa5156b1ce4}
+      \field{sortinit}{S}
+      \field{sortinithash}{b164b07b29984b41daf1e85279fbc5ab}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Materials and Structures}
+      \field{month}{9}
+      \field{title}{Thermo-hygro-chemical Model of Concrete: From Curing to High Temperature Behavior}
+      \field{volume}{57}
+      \field{year}{2024}
+      \field{dateera}{ce}
+      \verb{doi}
+      \verb 10.1617/s11527-024-02454-3
+      \endverb
+      \verb{file}
+      \verb C:\Users\thong\Zotero\storage\UYVQ4TCR\Sciumè et al. - 2024 - Thermo‐hygro‐chemical model of concrete from curing to high temperature behavior.pdf
+      \endverb
+    \endentry
     \entry{sudret2003}{inproceedings}{}{}
       \name{author}{2}{}{%
         {{hash=2abed76f47b747f79ac23afd26cf6fc1}{%
