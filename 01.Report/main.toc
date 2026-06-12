@@ -5,83 +5,84 @@
 \contentsline {chapter}{\numberline {1}Introduction}{1}{chapter.1}%
 \contentsline {section}{\numberline {1.1}Context and problem statement}{1}{section.1.1}%
 \contentsline {subsection}{\numberline {1.1.1}Concrete behaviour under high temperature}{1}{subsection.1.1.1}%
-\contentsline {subsection}{\numberline {1.1.2}Problem statement}{2}{subsection.1.1.2}%
-\contentsline {subsection}{\numberline {1.1.3}Limitations of existing THM models}{2}{subsection.1.1.3}%
-\contentsline {section}{\numberline {1.2}Objectives and scope of the thesis}{2}{section.1.2}%
-\contentsline {section}{\numberline {1.3}Research enviroment and Computational tools}{3}{section.1.3}%
-\contentsline {subsection}{\numberline {1.3.1}3SR Laboratory}{3}{subsection.1.3.1}%
-\contentsline {subsection}{\numberline {1.3.2}Finite element code - Cast3M}{3}{subsection.1.3.2}%
-\contentsline {subsection}{\numberline {1.3.3}Stochastic analysis tool - OpenTURNS}{3}{subsection.1.3.3}%
-\contentsline {subsection}{\numberline {1.3.4}Other: LaTEX, Python in Visual Studio Code}{4}{subsection.1.3.4}%
-\contentsline {chapter}{\numberline {2}Theoretical framework}{5}{chapter.2}%
-\contentsline {section}{\numberline {2.1}THM model and spalling}{5}{section.2.1}%
-\contentsline {subsection}{\numberline {2.1.1}Full THM governing formulation}{5}{subsection.2.1.1}%
-\contentsline {subsubsection}{Dry air conservation}{6}{section*.8}%
-\contentsline {subsubsection}{Water species conservation}{6}{section*.9}%
-\contentsline {subsubsection}{Energy conservation}{6}{section*.10}%
-\contentsline {subsubsection}{Momentum conservation}{6}{section*.11}%
-\contentsline {paragraph}{Remark:}{6}{section*.12}%
-\contentsline {subsection}{\numberline {2.1.2}Spalling mechanisms}{7}{subsection.2.1.2}%
-\contentsline {subsubsection}{Thermal gradient mechanism}{7}{section*.13}%
-\contentsline {subsubsection}{Pore pressure mechanism (moisture clog)}{8}{section*.14}%
-\contentsline {subsubsection}{Combined mechanism}{8}{section*.15}%
-\contentsline {section}{\numberline {2.2}Coupling mechanisms}{9}{section.2.2}%
-\contentsline {subsection}{\numberline {2.2.1}Thermo-Hydric (TH) coupling mechanisms}{9}{subsection.2.2.1}%
-\contentsline {subsubsection}{Temperature as a driver of hydric phenomena}{9}{section*.16}%
-\contentsline {subsubsection}{Energy conservation equation}{10}{section*.17}%
-\contentsline {subsection}{\numberline {2.2.2}Thermo-hydric input to the mechanical field}{11}{subsection.2.2.2}%
-\contentsline {subsubsection}{Strain decomposition}{11}{section*.18}%
-\contentsline {subsubsection}{Thermal dilation}{11}{section*.19}%
-\contentsline {subsubsection}{Capillary shrinkage}{12}{section*.20}%
-\contentsline {subsubsection}{Effective stress and pore pressure loading}{12}{section*.21}%
-\contentsline {section}{\numberline {2.3}Discretization}{13}{section.2.3}%
-\contentsline {subsection}{\numberline {2.3.1}Spatial discretization}{13}{subsection.2.3.1}%
-\contentsline {subsection}{\numberline {2.3.2}Temporal discretization}{13}{subsection.2.3.2}%
-\contentsline {subsection}{\numberline {2.3.3}Solution strategy}{14}{subsection.2.3.3}%
-\contentsline {chapter}{\numberline {3}Experimental Reference and Numerical Model}{15}{chapter.3}%
-\contentsline {section}{\numberline {3.1}Kalifa Experiment}{15}{section.3.1}%
-\contentsline {subsection}{\numberline {3.1.1}Experimental tests and material properties}{15}{subsection.3.1.1}%
-\contentsline {subsection}{\numberline {3.1.2}Thermal, hydraulic and mechanic loadings}{15}{subsection.3.1.2}%
-\contentsline {subsection}{\numberline {3.1.3}Measured data}{15}{subsection.3.1.3}%
-\contentsline {section}{\numberline {3.2}Numerical model}{16}{section.3.2}%
-\contentsline {subsection}{\numberline {3.2.1}Geometry}{16}{subsection.3.2.1}%
-\contentsline {subsection}{\numberline {3.2.2}Material properties}{16}{subsection.3.2.2}%
-\contentsline {subsection}{\numberline {3.2.3}Boundary conditions and loadings}{16}{subsection.3.2.3}%
-\contentsline {section}{\numberline {3.3}Implementation of the TH coupled model}{16}{section.3.3}%
-\contentsline {chapter}{\numberline {4}Model Calibration and Validation}{17}{chapter.4}%
-\contentsline {section}{\numberline {4.1}Calibration procedure}{17}{section.4.1}%
-\contentsline {section}{\numberline {4.2}Validation}{17}{section.4.2}%
-\contentsline {subsection}{\numberline {4.2.1}Comparison between numerical and experimental results}{17}{subsection.4.2.1}%
-\contentsline {subsection}{\numberline {4.2.2}Discussions on model performance}{17}{subsection.4.2.2}%
-\contentsline {chapter}{\numberline {5}Probabilistic analysis of the THM model}{18}{chapter.5}%
-\contentsline {section}{\numberline {5.1}Sources of uncertainty and concrete heterogeneity}{18}{section.5.1}%
-\contentsline {subsection}{\numberline {5.1.1}Motivation for probabilistic assessment}{18}{subsection.5.1.1}%
-\contentsline {subsection}{\numberline {5.1.2}Classification of uncertainties}{18}{subsection.5.1.2}%
-\contentsline {subsection}{\numberline {5.1.3}Concrete heterogeneity and material variability}{19}{subsection.5.1.3}%
-\contentsline {section}{\numberline {5.2}Sensitivity analysis}{19}{section.5.2}%
-\contentsline {subsection}{\numberline {5.2.1}Characterization of input parameters}{19}{subsection.5.2.1}%
-\contentsline {subsubsection}{Chosen Random variables}{20}{section*.22}%
-\contentsline {subsubsection}{Correlated vs uncorrelated parameters}{20}{section*.23}%
-\contentsline {subsubsection}{Physical correlations}{20}{section*.24}%
-\contentsline {subsection}{\numberline {5.2.2}Sensitivity indicators and ranking methods}{20}{subsection.5.2.2}%
-\contentsline {subsubsection}{Variance decomposition}{20}{section*.25}%
-\contentsline {subsubsection}{Variance-based sensitivity: Sobol indices}{20}{section*.26}%
-\contentsline {subsubsection}{Practical sensitivity approximation}{21}{section*.27}%
-\contentsline {subsection}{\numberline {5.2.3}Identification of dominant parameters}{22}{subsection.5.2.3}%
-\contentsline {subsubsection}{Ranking from most to least influential}{22}{section*.28}%
-\contentsline {subsubsection}{Comparison: Quadrature ranking vs Monte Carlo ranking}{22}{section*.29}%
-\contentsline {subsubsection}{Physical interpretation of dominant parameters}{22}{section*.30}%
-\contentsline {section}{\numberline {5.3}Reliability analysis}{22}{section.5.3}%
-\contentsline {subsection}{\numberline {5.3.1}Probability of failure and reliability index}{22}{subsection.5.3.1}%
-\contentsline {subsubsection}{Limit state function}{22}{section*.31}%
-\contentsline {subsubsection}{Probability of failure}{23}{section*.32}%
-\contentsline {subsubsection}{Reliability indices}{23}{section*.33}%
-\contentsline {paragraph}{Remark:}{23}{section*.34}%
-\contentsline {section}{\numberline {5.4}Effect of spatial heterogeneity on structural safety}{23}{section.5.4}%
-\contentsline {chapter}{\numberline {6}Conclusions and Perspectives}{25}{chapter.6}%
-\contentsline {section}{\numberline {6.1}Main findings}{25}{section.6.1}%
-\contentsline {section}{\numberline {6.2}Model limitations and possible improvements}{25}{section.6.2}%
-\contentsline {section}{\numberline {6.3}Perspectives for future research}{25}{section.6.3}%
+\contentsline {subsection}{\numberline {1.1.2}The initial hydro-chemical state of concrete}{2}{subsection.1.1.2}%
+\contentsline {subsection}{\numberline {1.1.3}Problem statement and limitations of existing models}{2}{subsection.1.1.3}%
+\contentsline {section}{\numberline {1.2}Objectives and scope of the thesis}{3}{section.1.2}%
+\contentsline {section}{\numberline {1.3}Research enviroment and Computational tools}{4}{section.1.3}%
+\contentsline {subsection}{\numberline {1.3.1}3SR Laboratory}{4}{subsection.1.3.1}%
+\contentsline {subsection}{\numberline {1.3.2}Finite element code - Cast3M}{4}{subsection.1.3.2}%
+\contentsline {subsection}{\numberline {1.3.3}Stochastic analysis tool - OpenTURNS}{4}{subsection.1.3.3}%
+\contentsline {subsection}{\numberline {1.3.4}Supporting tools}{4}{subsection.1.3.4}%
+\contentsline {section}{\numberline {1.4}Outline of the report}{4}{section.1.4}%
+\contentsline {chapter}{\numberline {2}Theoretical framework}{6}{chapter.2}%
+\contentsline {section}{\numberline {2.1}THM model and spalling}{6}{section.2.1}%
+\contentsline {subsection}{\numberline {2.1.1}Full THM governing formulation}{6}{subsection.2.1.1}%
+\contentsline {subsubsection}{Dry air conservation}{7}{section*.8}%
+\contentsline {subsubsection}{Water species conservation}{7}{section*.9}%
+\contentsline {subsubsection}{Energy conservation}{7}{section*.10}%
+\contentsline {subsubsection}{Momentum conservation}{7}{section*.11}%
+\contentsline {paragraph}{Remark:}{7}{section*.12}%
+\contentsline {subsection}{\numberline {2.1.2}Spalling mechanisms}{8}{subsection.2.1.2}%
+\contentsline {subsubsection}{Thermal gradient mechanism}{8}{section*.13}%
+\contentsline {subsubsection}{Pore pressure mechanism (moisture clog)}{9}{section*.14}%
+\contentsline {subsubsection}{Combined mechanism}{9}{section*.15}%
+\contentsline {section}{\numberline {2.2}Coupling mechanisms}{10}{section.2.2}%
+\contentsline {subsection}{\numberline {2.2.1}Thermo-Hydric (TH) coupling mechanisms}{10}{subsection.2.2.1}%
+\contentsline {subsubsection}{Temperature as a driver of hydric phenomena}{10}{section*.16}%
+\contentsline {subsubsection}{Energy conservation equation}{11}{section*.17}%
+\contentsline {subsection}{\numberline {2.2.2}Thermo-hydric input to the mechanical field}{12}{subsection.2.2.2}%
+\contentsline {subsubsection}{Strain decomposition}{12}{section*.18}%
+\contentsline {subsubsection}{Thermal dilation}{12}{section*.19}%
+\contentsline {subsubsection}{Capillary shrinkage}{13}{section*.20}%
+\contentsline {subsubsection}{Effective stress and pore pressure loading}{13}{section*.21}%
+\contentsline {section}{\numberline {2.3}Discretization}{14}{section.2.3}%
+\contentsline {subsection}{\numberline {2.3.1}Spatial discretization}{14}{subsection.2.3.1}%
+\contentsline {subsection}{\numberline {2.3.2}Temporal discretization}{14}{subsection.2.3.2}%
+\contentsline {subsection}{\numberline {2.3.3}Solution strategy}{15}{subsection.2.3.3}%
+\contentsline {chapter}{\numberline {3}Experimental Reference and Numerical Model}{16}{chapter.3}%
+\contentsline {section}{\numberline {3.1}Kalifa Experiment}{16}{section.3.1}%
+\contentsline {subsection}{\numberline {3.1.1}Experimental tests and material properties}{16}{subsection.3.1.1}%
+\contentsline {subsection}{\numberline {3.1.2}Thermal, hydraulic and mechanic loadings}{16}{subsection.3.1.2}%
+\contentsline {subsection}{\numberline {3.1.3}Measured data}{16}{subsection.3.1.3}%
+\contentsline {section}{\numberline {3.2}Numerical model}{17}{section.3.2}%
+\contentsline {subsection}{\numberline {3.2.1}Geometry}{17}{subsection.3.2.1}%
+\contentsline {subsection}{\numberline {3.2.2}Material properties}{17}{subsection.3.2.2}%
+\contentsline {subsection}{\numberline {3.2.3}Boundary conditions and loadings}{17}{subsection.3.2.3}%
+\contentsline {section}{\numberline {3.3}Implementation of the TH coupled model}{17}{section.3.3}%
+\contentsline {chapter}{\numberline {4}Model Calibration and Validation}{18}{chapter.4}%
+\contentsline {section}{\numberline {4.1}Calibration procedure}{18}{section.4.1}%
+\contentsline {section}{\numberline {4.2}Validation}{18}{section.4.2}%
+\contentsline {subsection}{\numberline {4.2.1}Comparison between numerical and experimental results}{18}{subsection.4.2.1}%
+\contentsline {subsection}{\numberline {4.2.2}Discussions on model performance}{18}{subsection.4.2.2}%
+\contentsline {chapter}{\numberline {5}Probabilistic analysis of the THM model}{19}{chapter.5}%
+\contentsline {section}{\numberline {5.1}Sources of uncertainty and concrete heterogeneity}{19}{section.5.1}%
+\contentsline {subsection}{\numberline {5.1.1}Motivation for probabilistic assessment}{19}{subsection.5.1.1}%
+\contentsline {subsection}{\numberline {5.1.2}Classification of uncertainties}{19}{subsection.5.1.2}%
+\contentsline {subsection}{\numberline {5.1.3}Concrete heterogeneity and material variability}{20}{subsection.5.1.3}%
+\contentsline {section}{\numberline {5.2}Sensitivity analysis}{20}{section.5.2}%
+\contentsline {subsection}{\numberline {5.2.1}Characterization of input parameters}{20}{subsection.5.2.1}%
+\contentsline {subsubsection}{Chosen Random variables}{21}{section*.22}%
+\contentsline {subsubsection}{Correlated vs uncorrelated parameters}{21}{section*.23}%
+\contentsline {subsubsection}{Physical correlations}{21}{section*.24}%
+\contentsline {subsection}{\numberline {5.2.2}Sensitivity indicators and ranking methods}{21}{subsection.5.2.2}%
+\contentsline {subsubsection}{Variance decomposition}{21}{section*.25}%
+\contentsline {subsubsection}{Variance-based sensitivity: Sobol indices}{21}{section*.26}%
+\contentsline {subsubsection}{Practical sensitivity approximation}{22}{section*.27}%
+\contentsline {subsection}{\numberline {5.2.3}Identification of dominant parameters}{23}{subsection.5.2.3}%
+\contentsline {subsubsection}{Ranking from most to least influential}{23}{section*.28}%
+\contentsline {subsubsection}{Comparison: Quadrature ranking vs Monte Carlo ranking}{23}{section*.29}%
+\contentsline {subsubsection}{Physical interpretation of dominant parameters}{23}{section*.30}%
+\contentsline {section}{\numberline {5.3}Reliability analysis}{23}{section.5.3}%
+\contentsline {subsection}{\numberline {5.3.1}Probability of failure and reliability index}{23}{subsection.5.3.1}%
+\contentsline {subsubsection}{Limit state function}{23}{section*.31}%
+\contentsline {subsubsection}{Probability of failure}{24}{section*.32}%
+\contentsline {subsubsection}{Reliability indices}{24}{section*.33}%
+\contentsline {paragraph}{Remark:}{24}{section*.34}%
+\contentsline {section}{\numberline {5.4}Effect of spatial heterogeneity on structural safety}{24}{section.5.4}%
+\contentsline {chapter}{\numberline {6}Conclusions and Perspectives}{26}{chapter.6}%
+\contentsline {section}{\numberline {6.1}Main findings}{26}{section.6.1}%
+\contentsline {section}{\numberline {6.2}Model limitations and possible improvements}{26}{section.6.2}%
+\contentsline {section}{\numberline {6.3}Perspectives for future research}{26}{section.6.3}%
 \contentsline {chapter}{Bibliography}{27}{chapter*.36}%
 \value {tocdepth}=0
 \contentsline {chapter}{\numberline {A}Thermo-Hydro-Mechanical behavior of Heated Concrete}{29}{appendix.A}%

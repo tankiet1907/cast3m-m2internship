@@ -1,79 +1,85 @@
 %\cleardoublepage %already included in mainmatter 
 \chapter{Introduction}
-
 \review{This chapter is currently a draft version and will undergo further review and revision.}
-
 \section{Context and problem statement}
 
 Concrete structures exposed to fire undergo a complex interplay of thermal, hydric, and mechanical phenomena that can lead to progressive degradation and, in the most severe cases, to \textit{spalling} --- the sudden detachment of concrete layers from the exposed surface. Several catastrophic tunnel fires have illustrated the severity of this phenomenon: the Channel Tunnel fire (1996), the Mont-Blanc tunnel fire (1999), and the St.~Gotthard tunnel fire (2001) all caused extensive spalling-induced structural damage \cite{dauti2018}. 
 
-In nuclear containment structures, where concrete is exposed to extreme temperatures during severe accidents, the consequences of spalling are particularly critical as they may compromise structural integrity and containment function.
+In nuclear containment structures, where concrete may be exposed to extreme temperatures during a severe accident, the consequences of spalling are particularly critical, as the loss of cover and cross-section can compromise both the load-bearing capacity and the containment function of the structure.
 
 \subsection{Concrete behaviour under high temperature} 
-When concrete is subjected to rapid heating, several coupled physical processes develop simultaneously:
+When concrete is heated rapidly, several coupled physical processes occur simultaneously:
 
 \begin{itemize}
-    \item \textbf{Thermal:} steep temperature gradients develop through the cross-section, driving differential thermal dilation and generating compressive stresses at the heated surface.
+    \item \textbf{Thermal:} Steep temperature gradients develop throughout the concrete's cross-section, causing differential thermal expansion and generating compressive stresses at the heated surface.
     
-    \item \textbf{Hydric:} free and chemically bound water evaporate and migrate through the pore network; in low-permeability concretes such as high-performance concrete (HPC), vapor cannot escape rapidly enough, leading to pore pressure build-up behind a quasi-saturated \textit{moisture clog}.
+    \item \textbf{Hydric:} Both free and chemically bound water evaporate and move through the pore network. In low-permeability concretes such as high-performance concrete (HPC), vapor cannot escape fast enough, resulting in  pore pressure build-up behind a quasi-saturated \textit{moisture clog}.
     
-    \item \textbf{Mechanical:} the combined action of thermal stresses and pore pressure loading on the solid skeleton can exceed the (temperature-degraded) tensile strength, initiating cracks parallel to the heated surface and potentially triggering explosive spalling.
+    \item \textbf{Mechanical:} The combined effects of thermal stresses and pore pressure loading on the solid skeleton can exceed the tensile strength, which is degraded by temperature. This initiate cracks parallel to the heated surface and potentially lead to explosive spalling.
 \end{itemize}
 
-Despite extensive experimental research, the mechanisms governing spalling remain incompletely understood and no general consensus has been reached \cite{dauti2018}.
+These three fields are not independent: they interact through a network of coupling mechanisms that any predictive model must reproduce. Despite extensive experimental work, the mechanisms governing spalling are still incompletely understood and no single, universally accepted theory has emerged \cite{dauti2018}.
 
-\subsection{Problem statement}
+\subsection{The initial hydro-chemical state of concrete}
+ 
+The response of concrete to fire does not depend only on the loading: it also depends strongly on the state of the material \emph{before} heating. The calcium--silicate--hydrates (C--S--H) formed during cement hydration control the strength, the porosity and the amount of chemically bound water that can later be released by dehydration. 
 
-Reliable prediction of spalling requires a consistent \textit{thermo-hydro-mechanical} (THM) framework capable of capturing:
+The degree to which hydration has progressed, together with the residual moisture content inherited from curing and drying, therefore conditions the transport and storage properties that govern pore pressure build-up. Accounting for this initial hydro-chemical state is the key idea behind recent thermo-hygro-chemical (THC) models \cite{sciume2024}, and it motivates the formulation adopted in this work.
+
+\subsection{Problem statement and limitations of existing models}
+
+A reliable prediction of spalling requires a consistent THM framework able to capture (i) the multi-physics coupling between the thermal, hydric and mechanical fields at high temperature, (ii) the temperature- and damage-dependent evolution of the transport and mechanical properties, and (iii) the inherent spatial variability of the material parameters (permeability, porosity, tensile strength) and its influence on where and when spalling initiates.
+
+Existing THM models present several limitations that this work seeks to address:
 \begin{itemize}
-    \item the multi-physics coupling between thermal, hydric, and mechanical fields under high temperature;
-    
-    \item the temperature- and damage-dependent evolution of transport properties, whereby microcracking alters permeability and redistributes  pore pressure;
-    
-    \item the inherent spatial variability of material parameters (permeability, porosity, tensile strength) and its influence on the onset and location of spalling.
-\end{itemize}
-
-\subsection{Limitations of existing THM models}
-Current THM models present several limitations that this work aims to address:
-\begin{itemize}
-    \item incomplete coupling between the damage state and transport properties, often neglecting the feedback of cracking on permeability;
-    
-    \item lack of consistent regularization for strain localization, leading to mesh-dependent solutions;
-    
+    \item the initial hydro-chemical state is often treated implicitly, through empirical functions of temperature only, rather than through an explicit hydration-degree description;
+    \item the gas-pressure response, although central to the pore-pressure spalling mechanism, remains difficult to reproduce and to validate against experiments;
     \item limited probabilistic assessment of parameter uncertainty: existing models typically treat material properties as homogeneous deterministic values, neglecting the spatial variability of concrete properties.
 \end{itemize}
 
 \section{Objectives and scope of the thesis}
-Main objectives of the thesis:
-\begin{itemize}
-    \item Understanding and Developing a THM model
-    \item Temperature- and damage-dependent evolution of stiffness and transport properties.
-    \item Numerical implementation and numerical validation.
-    \item Probabilistic sensitivity analysis: Evaluating parameter uncertainty and identifying the dominant physical parameters.
-\end{itemize}
+Main objectives of this internship are:
+\begin{enumerate}
+    \item to implement and document a coupled THM model of concrete at high temperature in the finite-element code \textsc{Cast3M}, reformulating the thermo-hydric transport and storage properties in terms of the hydration degree, following \cite{sciume2024} and extending the  framework of \cite{dauti2018};
+    \item to calibrate and validate the model against the experiment of \cite{kalifa2000}, reproducing the measured temperature and gas-pressure histories and critically discussing the agreement obtained;
+    \item to perform a stochastic assessment of the calibrated model with \textsc{OpenTURNS} --- a correlation and Sobol sensitivity analysis to rank the influential parameters, and a reliability analysis to quantify the probability of failure and the risk of spalling, including the effect of spatial heterogeneity.
+\end{enumerate}
 
-The scope of this work is limited to:
+The scope of the work is limited to:
 \begin{itemize}
-    \item Thermal boundaries limited by severe accident conditions.
-    \item Continuum-scale THM modelling by Cast3M.
-    \item Damage modelling including temperature-dependent stiffness and transport properties.
-    \item Probabilistic sensitivity analysis at the material parameter level.
+    \item thermal loadings representative of severe accident / fire conditions;
+    \item continuum-scale THM modelling in \textsc{Cast3M}, with a monolithic thermo-hydric solver and a staggered mechanical step;
+    \item a mechanical model combining linear elasticity with the \textsc{Mazars} isotropic damage law, with mesh-objectivity ensured by fracture-energy regularisation (creep is neglected);
+    \item a probabilistic analysis at the material-parameter level, comparing a random-variable description with a random-field description of the spatial variability.
 \end{itemize}
 
 \section{Research enviroment and Computational tools}
 
 \subsection{3SR Laboratory}
-The host institution providing the scientific environment, experimental data, and expertise in structural mechanics and risk analysis.
+This work was carried out at the \emph{Laboratoire Sols, Solides, Structures --Risques} (3SR), Universit\'e Grenoble Alpes, which provided the scientific environment, the experimental reference data and the expertise in structural mechanics, multiphysics modelling and risk analysis.
 
 \subsection{Finite element code - Cast3M}
-Cast3M (or Castem) is an open-source finite-element code developed at CEA, which is used to implement advanced constitutive laws and custom multiphysics formulations.  
+\textsc{Cast3M} (or Castem) is an open-source finite-element code developed at CEA, which is used in this work to implement the coupled THM constitutive laws and the custom multiphysics formulation.
 
-Compared with COMSOL Multiphysics, Cast3m typically offers greater transparency and control for implementing tightly coupled THM while COMSOL offers a user-friendly GUI for many built-in multiphysics interfaces.
+Compared with closed multiphysics platforms such as COMSOL Multiphysics, Cast3M typically offers greater transparency and control for implementing tightly coupled THM while COMSOL offers a user-friendly GUI for many built-in multiphysics interfaces.
 
 \subsection{Stochastic analysis tool - OpenTURNS}
+\textsc{OpenTURNS} is the open-source library used to manage the uncertainty in the material parameters: it generates the random samples, propagates them through the model and computes the sensitivity (Sobol) indices and the reliability measures
 
-Persalys is the computational tool dedicated to managing parameter uncertainty in material properties.
+\subsection{Supporting tools}
+\textsc{Python} (in Visual Studio Code) is used to automate the calibration workflow and to post-process the \textsc{Cast3M} results, and \LaTeX{} is used to typeset this report.
 
-It is used to perform the probabilistic sensitivity analysis, generate random sampling (e.g., Monte Carlo simulations), and rank the dominant THM parameters.
+\section{Outline of the report}
+\label{sec:intro-outline}
+ 
+The remainder of this report is organised as follows.
 
-\subsection{Other: LaTEX, Python in Visual Studio Code}
+Chapter 2 presents the thermo-hydro-mechanical model, from the governing equations and coupling mechanisms to the monolithic thermo-hydric matrix system and the staggered mechanical step, and details the hydration-degree reformulation \cite{sciume2024} that distinguishes the present approach from that of \cite{dauti2018}.
+
+Chapter 3 describes the reference experiment of \cite{kalifa2000} and its numerical implementation in \textsc{Cast3M} (geometry, mesh, material data, thermal loading and curing/drying conditions). 
+
+Chapter 4 reports the calibration of the temperature and gas-pressure responses, validates the model against the experimental and numerical references, and discusses the limits of the gas-pressure calibration.
+
+Chapter 5 presents the stochastic assessment: correlation and Sobol sensitivity analyses, reliability analysis and the effect of spatial heterogeneity on the risk of spalling.
+
+Chapter 6 summarises the main findings and outlines perspectives for future work. Detailed derivations are collected in

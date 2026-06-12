@@ -1,38 +1,38 @@
 [0] Config.pm:328> INFO - This is Biber 2.21
 [0] Config.pm:331> INFO - Logfile is 'main.blg'
-[113] biber-MSWIN64:342> INFO - === 
+[111] biber-MSWIN64:342> INFO - === 
 [153] Biber.pm:421> INFO - Reading 'main.bcf'
 [289] Biber.pm:1002> INFO - Found 37 citekeys in bib section 0
 [304] Biber.pm:4487> INFO - Processing section 0
 [316] Biber.pm:4678> INFO - Looking for bibtex file 'bibliography/zotero-m2internship.bib' for section 0
-[397] bibtex.pm:1713> INFO - LaTeX decoding ...
-[445] bibtex.pm:1519> INFO - Found BibTeX data source 'bibliography/zotero-m2internship.bib'
-[572] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'normalization = NFD' with 'normalization = prenormalized'
-[572] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'variable = shifted' with 'variable = non-ignorable'
-[572] Biber.pm:4307> INFO - Sorting list 'nty/global//global/global/global' of type 'entry' with template 'nty' and locale 'en-US'
-[572] Biber.pm:4313> INFO - No sort tailoring available for locale 'en-US'
-[592] bbl.pm:676> INFO - Writing 'main.bbl' with encoding 'UTF-8'
-[601] bbl.pm:779> INFO - Output to main.bbl
-[601] Biber.pm:132> WARN - I didn't find a database entry for 'lewis1998' (section 0)
-[601] Biber.pm:132> WARN - I didn't find a database entry for 'zienkiewicz2013' (section 0)
-[602] Biber.pm:132> WARN - I didn't find a database entry for 'sobol1993' (section 0)
-[602] Biber.pm:132> WARN - I didn't find a database entry for 'furbish1997' (section 0)
-[602] Biber.pm:132> WARN - I didn't find a database entry for 'harmathy1973' (section 0)
-[602] Biber.pm:132> WARN - I didn't find a database entry for 'baggio1993' (section 0)
-[602] Biber.pm:132> WARN - I didn't find a database entry for 'pesavento2000' (section 0)
-[602] Biber.pm:132> WARN - I didn't find a database entry for 'reid1987' (section 0)
-[602] Biber.pm:132> WARN - I didn't find a database entry for 'ashrae2001' (section 0)
-[602] Biber.pm:132> WARN - I didn't find a database entry for 'vangenuchten1980' (section 0)
-[602] Biber.pm:132> WARN - I didn't find a database entry for 'baroghel1999' (section 0)
-[602] Biber.pm:132> WARN - I didn't find a database entry for 'gawin1999' (section 0)
-[602] Biber.pm:132> WARN - I didn't find a database entry for 'gawin2002' (section 0)
-[602] Biber.pm:132> WARN - I didn't find a database entry for 'perre1990' (section 0)
-[602] Biber.pm:132> WARN - I didn't find a database entry for 'thomas1995' (section 0)
-[602] Biber.pm:132> WARN - I didn't find a database entry for 'schneider1989' (section 0)
-[602] Biber.pm:132> WARN - I didn't find a database entry for 'mazars1986' (section 0)
-[602] Biber.pm:132> WARN - I didn't find a database entry for 'bazant1976' (section 0)
-[602] Biber.pm:132> WARN - I didn't find a database entry for 'pijaudier1987' (section 0)
-[602] Biber.pm:132> WARN - I didn't find a database entry for 'giry2011' (section 0)
-[602] Biber.pm:132> WARN - I didn't find a database entry for 'hillerborg1976' (section 0)
-[603] Biber.pm:132> WARN - I didn't find a database entry for 'baldeweck1999' (section 0)
-[603] Biber.pm:134> INFO - WARNINGS: 22
+[393] bibtex.pm:1713> INFO - LaTeX decoding ...
+[447] bibtex.pm:1519> INFO - Found BibTeX data source 'bibliography/zotero-m2internship.bib'
+[569] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'normalization = NFD' with 'normalization = prenormalized'
+[569] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'variable = shifted' with 'variable = non-ignorable'
+[569] Biber.pm:4307> INFO - Sorting list 'nty/global//global/global/global' of type 'entry' with template 'nty' and locale 'en-US'
+[569] Biber.pm:4313> INFO - No sort tailoring available for locale 'en-US'
+[588] bbl.pm:676> INFO - Writing 'main.bbl' with encoding 'UTF-8'
+[597] bbl.pm:779> INFO - Output to main.bbl
+[597] Biber.pm:132> WARN - I didn't find a database entry for 'lewis1998' (section 0)
+[597] Biber.pm:132> WARN - I didn't find a database entry for 'zienkiewicz2013' (section 0)
+[597] Biber.pm:132> WARN - I didn't find a database entry for 'sobol1993' (section 0)
+[597] Biber.pm:132> WARN - I didn't find a database entry for 'furbish1997' (section 0)
+[597] Biber.pm:132> WARN - I didn't find a database entry for 'harmathy1973' (section 0)
+[598] Biber.pm:132> WARN - I didn't find a database entry for 'baggio1993' (section 0)
+[598] Biber.pm:132> WARN - I didn't find a database entry for 'pesavento2000' (section 0)
+[598] Biber.pm:132> WARN - I didn't find a database entry for 'reid1987' (section 0)
+[598] Biber.pm:132> WARN - I didn't find a database entry for 'ashrae2001' (section 0)
+[598] Biber.pm:132> WARN - I didn't find a database entry for 'vangenuchten1980' (section 0)
+[598] Biber.pm:132> WARN - I didn't find a database entry for 'baroghel1999' (section 0)
+[598] Biber.pm:132> WARN - I didn't find a database entry for 'gawin1999' (section 0)
+[598] Biber.pm:132> WARN - I didn't find a database entry for 'gawin2002' (section 0)
+[598] Biber.pm:132> WARN - I didn't find a database entry for 'perre1990' (section 0)
+[598] Biber.pm:132> WARN - I didn't find a database entry for 'thomas1995' (section 0)
+[598] Biber.pm:132> WARN - I didn't find a database entry for 'schneider1989' (section 0)
+[598] Biber.pm:132> WARN - I didn't find a database entry for 'mazars1986' (section 0)
+[598] Biber.pm:132> WARN - I didn't find a database entry for 'bazant1976' (section 0)
+[598] Biber.pm:132> WARN - I didn't find a database entry for 'pijaudier1987' (section 0)
+[598] Biber.pm:132> WARN - I didn't find a database entry for 'giry2011' (section 0)
+[598] Biber.pm:132> WARN - I didn't find a database entry for 'hillerborg1976' (section 0)
+[599] Biber.pm:132> WARN - I didn't find a database entry for 'baldeweck1999' (section 0)
+[599] Biber.pm:134> INFO - WARNINGS: 22
