@@ -1,5 +1,6 @@
 %\cleardoublepage %already included in mainmatter 
 \chapter{Introduction}
+\review{This chapter is under review and should be limited to 4 pages}
 \section{Context and problem statement}
 
 Concrete structures exposed to fire undergo a complex interplay of thermal, hydric, and mechanical phenomena that can lead to progressive degradation and, in the most severe cases, to \textit{spalling} --- the sudden detachment of concrete layers from the exposed surface. Several catastrophic tunnel fires have illustrated the severity of this phenomenon: the Channel Tunnel fire (1996), the Mont-Blanc tunnel fire (1999), and the St.~Gotthard tunnel fire (2001) all caused extensive spalling-induced structural damage \cite{dauti2018}. 
@@ -20,6 +21,7 @@ When concrete is heated rapidly, several coupled physical processes occur simult
 These three fields are not independent: they interact through a network of coupling mechanisms that any predictive model must reproduce. Despite extensive experimental work, the mechanisms governing spalling are still incompletely understood and no single, universally accepted theory has emerged \cite{dauti2018}.
 
 \subsection{The initial hydro-chemical state of concrete}
+\review{This section is under review.}
  
 The response of concrete to fire does not depend only on the loading: it also depends strongly on the state of the material \emph{before} heating. The calcium--silicate--hydrates (C--S--H) formed during cement hydration control the strength, the porosity and the amount of chemically bound water that can later be released by dehydration. 
 
@@ -27,6 +29,7 @@ The degree to which hydration has progressed, together with the residual moistur
 
 \subsection{Problem statement and limitations of existing models}
 \review{This section is under review.}
+
 A reliable prediction of spalling requires a consistent THM framework able to capture (i) the multi-physics coupling between the thermal, hydric and mechanical fields at high temperature, (ii) the temperature- and damage-dependent evolution of the transport and mechanical properties, and (iii) the inherent spatial variability of the material parameters (permeability, porosity, tensile strength) and its influence on where and when spalling initiates.
 
 Existing THM models present several limitations that this work seeks to address:
@@ -38,6 +41,7 @@ Existing THM models present several limitations that this work seeks to address:
 
 \section{Objectives and scope of the thesis}
 \review{This section is under review.}
+
 Main objectives of this internship are:
 \begin{enumerate}
     \item to implement and document a coupled THM model of concrete at high temperature in the finite-element code \textsc{Cast3M}, reformulating the thermo-hydric transport and storage properties in terms of the hydration degree, following \cite{sciume2024} and extending the  framework of \cite{dauti2018};
@@ -70,7 +74,8 @@ OpenTURNS is the open-source library used to manage the uncertainty in the mater
 Python (in Visual Studio Code) is used to automate the calibration workflow and to post-process the Cast3M results, and LaTeX is used to typeset this report.
 
 \section{Outline of the report}
- 
+\review{This section is under review.}
+
 The remainder of this report is organised as follows.
 
 Chapter 2 presents the thermo-hydro-mechanical model, from the governing equations and coupling mechanisms to the monolithic thermo-hydric matrix system and the staggered mechanical step, and details the hydration-degree reformulation \cite{sciume2024} that distinguishes the present approach from that of \cite{dauti2018}.
@@ -81,4 +86,4 @@ Chapter 4 reports the calibration of the temperature and gas-pressure responses,
 
 Chapter 5 presents the stochastic assessment: correlation and Sobol sensitivity analyses, reliability analysis and the effect of spatial heterogeneity on the risk of spalling.
 
-Chapter 6 summarises the main findings and outlines perspectives for future work. Detailed derivations are collected in
+Chapter 6 summarises the main findings and outlines perspectives for future work.

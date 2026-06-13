@@ -1,13 +1,37 @@
 %\cleardoublepage %already included in mainmatter 
 \chapter{Conclusions and Perspectives}
 
-\review{This chapter is currently empty and is intended to outline the proposed structure of the thesis.}
-
+\review{This chapter is under review and should be limited to 2 pages}
 \section{Main findings}
-This section is currently under development and will be refined as the study progresses.
+
+(1) THM model with hydration-degree implemented and runnable in Cast3M; 
+
+(2) temperature calibrated well, matching Kalifa and Dauti; 
+
+(3) gas pressure not calibrated accurately regardless of parameter adjustment --> raises questions about the nature of the measured quantity; 
+
+(4) sensitivity: indicates the dominant parameter group (via first and second order Sobol); 
+
+(5) reliability: quantifies the risk of spalling from the 10 mm gas pressure layer near the surface; 
+
+(6) spatial heterogeneity (random field) gives unfavorable results compared to the homogeneity assumption.
 
 \section{Model limitations and possible improvements}
-This section is currently under development and will be refined as the study progresses.
+
+The TH-->M model is one-dimensional (staggered, creep removed); 
+
+the random-field ALEA cannot yet be fully integrated into the THM model due to computational cost; gas pressure calibration is still open.
 
 \section{Perspectives for future research}
-This section is currently under development and will be refined as the study progresses.
+
+Notable points include: 
+
+(a) redesigning/re-proposing gas pressure measurements to verify actual measured values; 
+
+(b) full coupling of two-dimensional M-->H (damage→permeability); 
+
+(c) integrating random field directly into THM via surrogate/metamodel to reduce Monte Carlo costs; 
+
+(d) extending THC to full service life (curing-->aging-->accident) as in Sciumè 2024; 
+
+(e) verification on different concrete types/heating scenarios.
