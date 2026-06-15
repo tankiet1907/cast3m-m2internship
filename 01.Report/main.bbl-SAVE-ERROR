@@ -481,43 +481,6 @@
       \verb C:\Users\thong\Zotero\storage\ZPEZUUW4\Matheron - 1973 - The intrinsic random functions and their applications.pdf
       \endverb
     \endentry
-    \entry{mclaughlin2023}{article}{}{}
-      \name{author}{2}{}{%
-        {{hash=9779b2f4a098a06dc6c89bb3bb1cfa80}{%
-           family={McLaughlin},
-           familyi={M\bibinitperiod},
-           given={Kelly},
-           giveni={K\bibinitperiod}}}%
-        {{hash=45fb39d02a03147617b089a8fb013bc1}{%
-           family={McFall-Johnsen},
-           familyi={M\bibinithyphendelim J\bibinitperiod},
-           given={Morgan},
-           giveni={M\bibinitperiod}}}%
-      }
-      \strng{namehash}{ccf2439512a44ddcc74cdc53cd130a65}
-      \strng{fullhash}{ccf2439512a44ddcc74cdc53cd130a65}
-      \strng{fullhashraw}{ccf2439512a44ddcc74cdc53cd130a65}
-      \strng{bibnamehash}{ccf2439512a44ddcc74cdc53cd130a65}
-      \strng{authorbibnamehash}{ccf2439512a44ddcc74cdc53cd130a65}
-      \strng{authornamehash}{ccf2439512a44ddcc74cdc53cd130a65}
-      \strng{authorfullhash}{ccf2439512a44ddcc74cdc53cd130a65}
-      \strng{authorfullhashraw}{ccf2439512a44ddcc74cdc53cd130a65}
-      \field{sortinit}{M}
-      \field{sortinithash}{4625c616857f13d17ce56f7d4f97d451}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{day}{26}
-      \field{month}{4}
-      \field{title}{Photos Show {{SpaceX}}'s {{Starship}} Rocket Blew a Crater into Its Launchpad and Flung Concrete Chunks Hundreds of Feet during Liftoff}
-      \field{year}{2023}
-      \field{dateera}{ce}
-      \verb{urlraw}
-      \verb https://www.businessinsider.com/spacex-starship-rocket-crater-concrete-launchpad-upon-liftoff-2023-4
-      \endverb
-      \verb{url}
-      \verb https://www.businessinsider.com/spacex-starship-rocket-crater-concrete-launchpad-upon-liftoff-2023-4
-      \endverb
-    \endentry
     \entry{sciume2024}{article}{}{}
       \name{author}{3}{}{%
         {{hash=e4f49bba5a977ecd5f63275b95c1db7f}{%

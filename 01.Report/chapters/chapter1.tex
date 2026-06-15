@@ -1,11 +1,32 @@
 %\cleardoublepage %already included in mainmatter 
 \chapter{Introduction}
-\review{This chapter is under review and should be limited to 4 pages}
 \section{Context and problem statement}
 
-Concrete structures exposed to fire undergo a complex interplay of thermal, hydric, and mechanical phenomena that can lead to progressive degradation and, in the most severe cases, to \textit{spalling} --- the sudden detachment of concrete layers from the exposed surface. Several catastrophic tunnel fires have illustrated the severity of this phenomenon: the Channel Tunnel fire (1996), the Mont-Blanc tunnel fire (1999), and the St.~Gotthard tunnel fire (2001) all caused extensive spalling-induced structural damage \cite{dauti2018}. 
+Concrete structures exposed to extreme heat undergo a complex interpaly of thermal, hyric, and mechanical phenomena that con lead to progressive degradation, and in most severe cases, to \textit{spalling}, the sudden, explosive detachment of concrete layers from the exposed surface.
 
-In nuclear containment structures, where concrete may be exposed to extreme temperatures during a severe accident, the consequences of spalling are particularly critical, as the loss of cover and cross-section can compromise both the load-bearing capacity and the containment function of the structure.
+This phenomenon has been a critical concern for civil infrastructure such as nuclear containment buildings and tunnels, where the consequences of spalling as the loss of cover and cross-section can damage the load-bearing capacity and functions of the structure. 
+
+Recently, its catastrophic consequences are also relevent in aerospace engineering. In 2023, a SpaceX rocket test has failed due to the destructive power of concrete spalling \cite{mclaughlin2023}. As the rocket ignited on its concrete launch pad, the immense heat generated triggered explosive spalling. The debris seen flying around the launch site consisted of sharp concrete flakes. These flakes shot upwards, severely damaged the test field and the rocket itself, ultimately causing the rocket launch test to fail.
+
+\begin{figure}[htbp]
+    \centering
+    \begin{subfigure}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figures/chapter1/spacex_crater}
+        \caption{The crater in the launchpad after SpaceX's Starship took off.}
+        \label{fig:spacex_crater}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figures/chapter1/spacex_debris}
+        \caption{Debris litters the Starship launchpad, with damaged fuel tanks visible in the background.}
+        \label{fig:spacex_debris}
+    \end{subfigure}
+
+    \caption{Catastrophic consequences of explosive concrete spalling during the SpaceX Starship test flight.}
+    \label{fig:spacex_incident}
+\end{figure}
 
 \subsection{Concrete behaviour under high temperature} 
 When concrete is heated rapidly, several coupled physical processes occur simultaneously
@@ -15,75 +36,42 @@ When concrete is heated rapidly, several coupled physical processes occur simult
     
     \item \textbf{Hydric:} Both free and chemically bound water evaporate and move through the pore network. In low-permeability concretes such as high-performance concrete (HPC), vapor cannot escape fast enough, resulting in  pore pressure build-up behind a quasi-saturated \textit{moisture clog}.
     
-    \item \textbf{Mechanical:} The combined effects of thermal stresses and pore pressure loading on the solid skeleton can exceed the tensile strength, which is degraded by temperature. This initiate cracks parallel to the heated surface and potentially lead to explosive spalling.
+    \item \textbf{Mechanical:} The combined effects of thermal stresses and pore pressure build-up on the solid skeleton can exceed the tensile strength, which is degraded by temperature. This initiate cracks parallel to the heated surface and potentially lead to explosive spalling.
 \end{itemize}
 
 These three fields are not independent: they interact through a network of coupling mechanisms that any predictive model must reproduce. Despite extensive experimental work, the mechanisms governing spalling are still incompletely understood and no single, universally accepted theory has emerged \cite{dauti2018}.
 
 \subsection{The initial hydro-chemical state of concrete}
-\review{This section is under review.}
  
 The response of concrete to fire does not depend only on the loading: it also depends strongly on the state of the material \emph{before} heating. The calcium--silicate--hydrates (C--S--H) formed during cement hydration control the strength, the porosity and the amount of chemically bound water that can later be released by dehydration. 
 
 The degree to which hydration has progressed, together with the residual moisture content inherited from curing and drying, therefore conditions the transport and storage properties that govern pore pressure build-up. Accounting for this initial hydro-chemical state is the key idea behind recent thermo-hygro-chemical (THC) models \cite{sciume2024}, and it motivates the formulation adopted in this work.
 
-\subsection{Problem statement and limitations of existing models}
-\review{This section is under review.}
-
-A reliable prediction of spalling requires a consistent THM framework able to capture (i) the multi-physics coupling between the thermal, hydric and mechanical fields at high temperature, (ii) the temperature- and damage-dependent evolution of the transport and mechanical properties, and (iii) the inherent spatial variability of the material parameters (permeability, porosity, tensile strength) and its influence on where and when spalling initiates.
+\subsection{Limitations of existing models}
 
 Existing THM models present several limitations that this work seeks to address:
 \begin{itemize}
     \item The initial hydro-chemical state is often treated implicitly, through empirical functions of temperature only, rather than through an explicit hydration-degree description;
-    \item The gas-pressure response, although central to the pore-pressure spalling mechanism, remains difficult to reproduce and to validate against experiments;
-    \item Limited probabilistic assessment of parameter uncertainty: existing models typically treat material properties as homogeneous deterministic values, neglecting the spatial variability of concrete properties.
+    \item The uncertainty in the material parameters is rarely assessed: properties are typically taken as homogeneous, deterministic values, so the influence of their variability on the predicted response is left unquantified.
 \end{itemize}
 
-\section{Objectives and scope of the thesis}
-\review{This section is under review.}
+\section{Objectives and outline of the report}
 
-Main objectives of this internship are:
-\begin{enumerate}
-    \item to implement and document a coupled THM model of concrete at high temperature in the finite-element code \textsc{Cast3M}, reformulating the thermo-hydric transport and storage properties in terms of the hydration degree, following \cite{sciume2024} and extending the  framework of \cite{dauti2018};
-    \item to calibrate and validate the model against the experiment of \cite{kalifa2000}, reproducing the measured temperature and gas-pressure histories and critically discussing the agreement obtained;
-    \item to perform a stochastic assessment of the calibrated model with \textsc{OpenTURNS} --- a correlation and Sobol sensitivity analysis to rank the influential parameters, and a reliability analysis to quantify the probability of failure and the risk of spalling, including the effect of spatial heterogeneity.
-\end{enumerate}
-
-The scope of the work is limited to:
+Main objectives of this internship are structured in the remainder of the report as follow:
 \begin{itemize}
-    \item thermal loadings representative of severe accident / fire conditions;
-    \item continuum-scale THM modelling in \textsc{Cast3M}, with a monolithic thermo-hydric solver and a staggered mechanical step;
-    \item a mechanical model combining linear elasticity with the \textsc{Mazars} isotropic damage law, with mesh-objectivity ensured by fracture-energy regularisation (creep is neglected);
-    \item a probabilistic analysis at the material-parameter level, comparing a random-variable description with a random-field description of the spatial variability.
+    \item \cref{chapter2} presents the coupled THM model of concrete at high temperature, from the governing equations and coupling mechanisms to the monolithic thermo-hydric matrix system and the staggered mechanical step, and details the hydration-degree reformulation following \cite{sciume2024} and extending the framework of \cite{dauti2018}.
+    \item \cref{chapter3} describes the reference experiment of \cite{kalifa2000} and its numerical implementation in \textsc{Cast3M} (geometry, mesh, material data, thermal loading and curing/drying conditions). 
+    \item \cref{chapter4} reports the calibration of the temperature and gas-pressure responses, validates the model against the experimental and numerical references, and discusses the limits of the gas-pressure calibration.
+    \item \cref{chapter5} performs a stochastic assessment of the calibrated model with \textsc{OpenTURNS}: propagating the uncertainty in the material parameters through random sampling to rank the influential parameters (Sobol sensitivity analysis); quantify the probability of failure and the risk of spalling through reliability analysis and with a complementary look at the effect of spatial heterogeneity.
+    \item \cref{chapter6} summarizes the main findings and outlines perspectives for future work.
 \end{itemize}
 
 \section{Research enviroment and Computational tools}
 
-\subsection{3SR Laboratory}
-This work was carried out at the \emph{Laboratoire Sols, Solides, Structures --Risques} (3SR), Universit\'e Grenoble Alpes, which provided the scientific environment, the experimental reference data and the expertise in structural mechanics, multiphysics modelling and risk analysis.
+This work was carried out at the \emph{Laboratoire Sols, Solides, Structures -- Risques} (3SR), Universit\'e Grenoble Alpes, which provided the scientific environment and the expertise in multiphysics modelling and risk analysis.
+ 
+The coupled THM model is implemented in Cast3M, an open-source finite-element code developed at CEA. Compared with closed multiphysics platforms, COMSOL Multiphysics, Cast3M offers greater transparency and control for implemnting tightly coupled THM while COMSOL offers a more user-friendly GUI. 
 
-\subsection{Finite element code - Cast3M}
-Cast3M (or Castem) is an open-source finite-element code developed at CEA, which is used in this work to implement the coupled THM constitutive laws and the custom multiphysics formulation.
+The uncertainty quantification relies on OpenTURNS, an open-source library based on Python used to generate the random samples, propagate them through the model and compute the Sobol indices and reliability. 
 
-Compared with closed multiphysics platforms such as COMSOL Multiphysics, Cast3M typically offers greater transparency and control for implementing tightly coupled THM while COMSOL offers a user-friendly GUI for many built-in multiphysics interfaces.
-
-\subsection{Stochastic analysis tool - OpenTURNS}
-OpenTURNS is the open-source library used to manage the uncertainty in the material parameters: it generates the random samples, propagates them through the model and computes the sensitivity (Sobol) indices and the reliability measures
-
-\subsection{Supporting tools}
-Python (in Visual Studio Code) is used to automate the calibration workflow and to post-process the Cast3M results, and LaTeX is used to typeset this report.
-
-\section{Outline of the report}
-\review{This section is under review.}
-
-The remainder of this report is organised as follows.
-
-Chapter 2 presents the thermo-hydro-mechanical model, from the governing equations and coupling mechanisms to the monolithic thermo-hydric matrix system and the staggered mechanical step, and details the hydration-degree reformulation \cite{sciume2024} that distinguishes the present approach from that of \cite{dauti2018}.
-
-Chapter 3 describes the reference experiment of \cite{kalifa2000} and its numerical implementation in \textsc{Cast3M} (geometry, mesh, material data, thermal loading and curing/drying conditions). 
-
-Chapter 4 reports the calibration of the temperature and gas-pressure responses, validates the model against the experimental and numerical references, and discusses the limits of the gas-pressure calibration.
-
-Chapter 5 presents the stochastic assessment: correlation and Sobol sensitivity analyses, reliability analysis and the effect of spatial heterogeneity on the risk of spalling.
-
-Chapter 6 summarises the main findings and outlines perspectives for future work.
+Finally, Python (in Visual Studio Code) is also used to automate the calibration workflow and post-process the results, and LaTeX to typeset this report.
