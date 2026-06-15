@@ -1,26 +1,7 @@
 \chapter{Additional Results of Stochastic analysis} \label{appendixB}
 \review{This chapter is under review}
 
-\section{Stochastic finite element framework} \label{sec:stochastic-framework}
-
-In structural engineering, material properties such as the Young's modulus, permeability, or thermal conductivity are never perfectly known. As noted by \cite{delarrard2010}, even under strict quality control the compressive strength of high-performance concrete can range from 62 to~100~MPa. Two approaches exist to handle this uncertainty:
-
-\begin{enumerate}
-    \item A \emph{deterministic} analysis assigns a single fixed value to each parameter and produces a unique structural response; it cannot, by itself, quantify the likelihood that a design limit will be exceeded.
-    \item A \emph{stochastic} (probabilistic) analysis, on the other hand, treats uncertain parameters as random quantities, propagates this uncertainty through the model, and delivers statistical information---mean, variance, probability of failure---about the structural response.
-\end{enumerate}
-
-This work adopts the stochastic approach with two levels of description:
-
-\begin{enumerate}
-    \item \textbf{Random variable} (\cref{sec:random-variables}):
-          each uncertain property is described by a single distribution (mean, standard deviation) applied uniformly over the entire domain. Multiple random variables can be treated simultaneously.
-
-    \item \textbf{Random field} (\cref{sec:random-fields}):
-          the property varies from point to point, subject to a spatial correlation structure characterised by a correlation length $L_c$.
-\end{enumerate}
-
-The Gaussian Quadrature method (\cref{sec:quadrature}) propagates uncertainty at the random variable level, while Monte Carlo simulation (\cref{sec:monte-carlo}) handles the random field level.
+\section{Random variable and random field} \label{sec:rv-rf}
 
 \subsection{Random variables (PDF, CDF, moments, CoV)} \label{sec:random-variables}
 
@@ -194,7 +175,7 @@ To use a random field in a finite element model, one must \emph{generate} realis
 In this work, the TBM method, described in detail in \cref{sec:tbm}, is adopted because it is the method implemented in the Cast3M \texttt{ALEA} operator.
 
 \subsection{Summary: random variable versus random field}
-
+\review{This section is under review}
 \cref{tab:rv-vs-rf} summarises the key differences between the two levels of stochastic description and their implications for the numerical methods used in this work.
 
 \begin{table}[htbp]
@@ -329,11 +310,8 @@ For a predefined number of simulations $N_{simu}$, the global algorithm performs
     \item \textbf{Non-linear Resolution:} The \texttt{PASAPAS} procedure is invoked to solve the multi-physics THM problem from $t=0$ to the final time $t_{fin}$, utilizing the updated heterogeneous material properties.
 \end{enumerate}
 
-\subsubsection{Data extraction and post-processing}
-
-This section is currently under development and will be refined as the study progresses
-
 \begin{draftblock}
+\subsubsection{Data extraction and post-processing}
 Storing the complete output database (which includes nodal displacements, stress tensors, and internal damage variables for every time step) for hundreds of simulations would result in an unmanageable amount of data and exceed memory limits. Therefore, a selective data extraction strategy is implemented.
 
 Instead of saving the entire mesh history, a specific "Quantity of Interest" (QoI) is dynamically extracted at the end of each calculation loop. Depending on the targeted sensitivity analysis for the spalling risk, the QoI could be the maximum equivalent plastic strain, the peak pore pressure, or the maximum macroscopic damage variable $D$. 
@@ -414,3 +392,143 @@ where $\tilde{F}_G$ is the reconstructed CDF and $\Phi^{-1}$ the inverse standar
 \subsection{Computational cost} \label{sec:quad-cost}
 
 The total number of model evaluations is $K^N$, which grows exponentially with $N$. For the present study with $N = 2$ and $K = 3$, this gives only 9 runs---compared to thousands for Monte Carlo. However, for large $N$ (e.g.\ $3^{10} = 59{,}049$ runs), the cost becomes comparable to Monte Carlo. This \emph{curse of dimensionality} limits the method to problems with a small number of random variables ($N \lesssim 10$--$15$) \cite{sudret2003}.
+
+\section{Sensitivity indicators and ranking methods} \label{sec:sensitivity-indicators}
+\subsection{Variance decomposition} \label{sec:var-decomp}
+
+For a model $G = g(X_1, \ldots, X_N)$ with $N$ independent random inputs, Hoeffding's decomposition \cite{sobol1993} expresses $G$ as a sum of functions of increasing dimension:
+
+\begin{equation}
+    G \;=\; g_0
+    \;+\; \sum_{i=1}^{N} g_i(X_i)
+    \;+\; \sum_{i<j} g_{ij}(X_i, X_j)
+    \;+\; \cdots
+    \;+\; g_{1,\ldots,N}(X_1,\ldots,X_N),
+    \label{eq:hoeffding}
+\end{equation}
+
+where $g_0 = \mathbb{E}[G]$ is a constant and each term has zero mean. Taking the variance of both sides yields:
+
+\begin{equation}
+    \mathrm{Var}(G) \;=\;
+    \sum_{i=1}^{N} V_i
+    \;+\; \sum_{i<j} V_{ij}
+    \;+\; \cdots
+    \;+\; V_{1,\ldots,N},
+    \label{eq:var-decomp}
+\end{equation}
+
+where $V_i = \mathrm{Var}[g_i(X_i)]$ is the first-order variance (effect of $X_i$ alone) and $V_{ij} = \mathrm{Var}[g_{ij}(X_i,X_j)]$ is the second-order variance (interaction between $X_i$ and $X_j$).
+
+\subsection{Variance-based sensitivity: Sobol indices} \label{sec:sobol}
+
+Dividing each term in \cref{eq:var-decomp} by the total variance defines the \emph{Sobol indices} \cite{sobol1993}:
+
+\begin{equation}
+    S_i \;=\; \frac{V_i}{\mathrm{Var}(G)},
+    \qquad
+    S_{ij} \;=\; \frac{V_{ij}}{\mathrm{Var}(G)},
+    \label{eq:sobol-indices}
+\end{equation}
+
+where:
+
+\begin{itemize}
+    \item $S_i$ is the \textbf{first-order Sobol index}: fraction of the output variance due to $X_i$ alone.
+    \item $S_{ij}$ is the \textbf{second-order Sobol index}: fraction due to the interaction between $X_i$ and $X_j$, beyond their individual effects.
+\end{itemize}
+
+The \textbf{total-order Sobol index} captures the full effect of $X_i$, including all interactions:
+
+\begin{equation}
+    S_{T_i} \;=\; S_i
+    \;+\; \sum_{j \neq i} S_{ij}
+    \;+\; \cdots
+    \label{eq:sobol-total}
+\end{equation}
+
+By construction, the first-order indices sum to at most one ($\sum_i S_i \leq 1$), and the total-order indices sum to at least one ($\sum_i S_{T_i} \geq 1$). When the model is additive (no interactions), $S_{ij} = 0$ for all pairs and $S_i = S_{T_i}$.
+
+The first-order index $S_i$ can be expressed as a conditional variance:
+
+\begin{equation}
+    S_i \;=\;
+    \frac{\mathrm{Var}_{X_i}\bigl[
+          \mathbb{E}_{X_{\sim i}}(G \mid X_i)\bigr]}
+         {\mathrm{Var}(G)},
+    \label{eq:sobol-cond}
+\end{equation}
+
+where $X_{\sim i}$ denotes all variables except $X_i$. Intuitively, $\mathbb{E}(G \mid X_i)$ averages out all other variables: if this conditional mean varies a lot with $X_i$, then $X_i$ is influential.
+
+A variable with a large $S_i$ (or $S_{T_i}$) is a \emph{dominant parameter}: it drives most of the output uncertainty and should be characterised with care. A variable with a small index could be treated as deterministic without significant loss of accuracy.
+
+\subsection{Practical sensitivity approximation}
+
+Computing exact Sobol indices requires a large number of model evaluations. A simpler approach, used by the the expansion of Englishquadrature method (\cref{sec:quadrature}), estimates the contribution of each variable one at a time:
+
+\begin{enumerate}
+    \item Fix all variables at their mean except $X_i$.
+    \item Run the model at each quadrature point of $X_i$ to obtain the marginal variance $\hat{\sigma}_i^2$.
+    \item Repeat for every variable.
+\end{enumerate}
+
+The \textbf{contribution} of $X_i$ to the total output variability is then:
+
+\begin{equation}
+    C_i \;=\;
+    \frac{\hat{\sigma}_i^2}{\displaystyle\sum_{j=1}^{N}
+    \hat{\sigma}_j^2} \times 100\,\%
+    \;\approx\; S_i
+    \quad \text{when } S_{ij} \approx 0.
+    \label{eq:contribution-approx}
+\end{equation}
+
+A variable with $C_i \approx 0\,\%$ has negligible influence and could be treated as deterministic. This approximation is valid when variables are uncorrelated and interaction effects are small. The detailed results are presented in \cref{sec:dominant-params}.
+
+\section{Probability of failure and reliability index} \label{sec:pf-beta}
+
+\subsection{Limit state function} \label{sec:limit-state}
+
+In the sensitivity analysis (\cref{sec:sensitivity}), $G = g(X_1, \ldots, X_N)$ denoted the model output without any notion of safety or failure. In reliability analysis, the same symbol $G$ is given an additional meaning: its \emph{sign} now defines whether the structure is safe or has failed.
+
+Specifically, $G$ is rewritten as a \textbf{performance function} (also called limit-state function or safety margin) \cite{baroth2011}. A simple example: if $R$ is the material resistance and $S$ is the applied load, then $G = R - S$. The structure is safe when $G > 0$ and fails when $G \leq 0$:
+
+\begin{equation}
+    G(\mathbf{X}) > 0
+    \;\Rightarrow\; \text{safety domain } D_s,
+    \qquad
+    G(\mathbf{X}) \leq 0
+    \;\Rightarrow\; \text{failure domain } D_f.
+    \label{eq:limit-state}
+\end{equation}
+
+In the simple case of a resistance $R$ and a load effect $S$, the performance function writes $G(R,S) = R - S$ \cite{baroth2011}.
+
+\subsection{Probability of failure}
+
+The probability of failure is defined as \cite{baroth2011}:
+
+\begin{equation}
+    P_f \;=\; \mathrm{Prob}\bigl[G(\mathbf{X}) \leq 0\bigr]
+        \;=\; \int_{D_f} f_{\mathbf{X}}(\mathbf{x})
+              \,\mathrm{d}\mathbf{x},
+    \label{eq:pf}
+\end{equation}
+
+where $f_{\mathbf{X}}$ is the joint PDF of the random input vector. This integral is generally intractable for complex systems, which motivates the use of reliability indices.
+
+\subsection{Reliability indices}
+
+Given $P_f$ from \cref{eq:pf}, the \emph{generalized reliability index} is defined as \cite{sudret2003}:
+
+\begin{equation}
+    \hat{\beta} \;=\;
+    -\Phi^{-1}\bigl(\hat{P}_f\bigr),
+    \label{eq:beta-generalized}
+\end{equation}
+
+where $\Phi$ is the standard normal CDF. This definition applies to both the quadrature method (where $\hat{P}_f$ is obtained from the reconstructed CDF, \cref{sec:quad-pdf}) and Monte Carlo simulation (where $\hat{P}_f$ is the empirical failure ratio, \cref{sec:monte-carlo}).
+
+\paragraph{Remark:} Classical reliability theory also defines the Cornell index $\beta_C = \mu_G / \sigma_G$ and the
+Hasofer--Lind index $\beta_{HL}$ (minimum distance to the failure surface in the standard normal space) \cite{baroth2011,baroth2023}. The Cornell index is exact only for linear limit states; the Hasofer--Lind index is used in FORM/SORM methods. Neither is employed in this work; for details, the reader is referred to \cite{baroth2011,baroth2023}.
