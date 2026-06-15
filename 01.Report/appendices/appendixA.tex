@@ -1,5 +1,5 @@
-\chapter{Thermo-Hydro-Mechanical behavior of Heated Concrete}
-
+\chapter{Thermo-Hydro-Mechanical behavior of Heated Concrete} \label{appendixA}
+\review{This chapter is under review}
 \section{Thermal behavior}
 
 \subsection{Conduction, convection and radiation}
@@ -613,6 +613,273 @@ Assuming $A_t \approx 1$ (brittle tension), the post-peak stress simplifies to $
 \end{equation}
 This ensures that every element dissipates exactly $G_f$ regardless of mesh size, making the global response objective with respect to spatial discretization.
 
+\section{Coupling mechanisms} \label{sec:coupling}
+
+The thermal, hydric, and mechanical behaviors presented in the previous sections are not independent: they interact through a network of coupling mechanisms. This section identifies and formulates the two main coupling paths that govern the response of concrete exposed to fire.
+
+\subsection{Thermo-Hydric (TH) coupling mechanisms} \label{sec:TH_coupling}
+
+The thermal and hydric fields are coupled in both directions: temperature drives phase changes and modifies transport properties, while fluid flow and phase changes affect the energy balance.
+
+\subsubsection{Temperature as a driver of hydric phenomena}
+
+Temperature enters the hydric conservation equations (\cref{eq:water_species,eq:dry_air}) through two pathways:
+
+\begin{itemize}
+    \item \textbf{Mass source terms:} evaporation and dehydration (\cref{sec:evap_dehyd}) are thermally activated processes that inject vapor into the pore network, appearing as source terms $\dot{m}_{vap}$ and $\dot{m}_{dehyd}$ in the mass balance equations;
+    
+    \item \textbf{Transport coefficients:} most constitutive parameters are temperature-dependent --- permeability $K(T)$, porosity $\phi(T)$, fluid viscosities $\mu(T)$, saturating vapor pressure $p_{vs}(T)$, and diffusivity $D(T)$ --- so the coefficients of the mass conservation equations evolve as the thermal field changes.
+\end{itemize}
+
+\subsubsection{Energy conservation equation}
+
+The energy conservation equation governs the temperature field within the porous medium. Similar to the heat equation in \cref{sec:heat_equation}, it includes a storage term, a conductive flux, and additionally accounts for advective heat transport and phase-change energy terms \cite{dauti2018}:
+
+\begin{equation}
+    \rho C_p \frac{\partial T}{\partial t} + \underbrace{\left(m_l C_l \mathbf{v}_{l-s} + m_g C_g \mathbf{v}_{g-s}\right) \cdot \nabla T}_{\text{advection}} + \nabla \cdot (-\lambda \cdot \nabla T) = \underbrace{-H_{vap}\,\dot{m}_{vap} + H_{dehyd}\,\dot{m}_{dehyd}}_{\text{phase-change energy}}
+    \label{eq:energy_TH}
+\end{equation}
+
+Compared to the classical heat equation \cref{eq:heat} $\rho C_p \frac{\partial T}{\partial t} - \nabla \cdot (\lambda \nabla T) = 0$, two additional contributions appear:
+
+\begin{itemize}
+    \item \textbf{Advective heat transport:} The bulk flow of liquid water and gas, driven by pressure gradients, transport enthalpy through the material. This term redistributes energy along the flow paths and can be significant when permeability and pressure gradients are large.
+    
+    \item \textbf{Phase-change energy (right-hand side):} Concrete does not self-generate heat; these terms represent energy consumed by evaporation ($-H_{vap}\,\dot{m}_{vap}$, heat sink since $\dot{m}_{vap}>0$) and dehydration ($+H_{dehyd}\,\dot{m}_{dehyd}$, also a heat sink since $\dot{m}_{dehyd}<0$). Both locally slow the temperature rise.
+\end{itemize}
+
+After replacing the mass fluxes by Darcy's law (\cref{eq:darcy_l,eq:darcy_g}), the energy conservation takes its final coupled form:
+\begin{equation}
+\begin{split}
+    \rho C_p \frac{\partial T}{\partial t} - K\left(C_l \frac{\rho_l k_{rl}}{\mu_l} \left(\nabla p_g - \nabla p_c\right) + C_g \frac{\rho_g k_{rg}}{\mu_g} \nabla p_g\right) \cdot \nabla T \\ - \nabla \cdot (\lambda \cdot \nabla T) = -H_{vap}\,\dot{m}_{vap} + H_{dehyd}\,\dot{m}_{dehyd}
+\end{split}
+\label{eq:energy_final}
+\end{equation}
+
+where the overall heat capacity $\rho C_p$ (\cref{eq:rhoCp}) and thermal conductivity $\lambda$ (\cref{eq:lambda}) are defined in \cref{sec:thermal_properties}.
+
+Thus, the thermal and hydric fields are \textit{strongly coupled}: temperature modifies the source terms and transport coefficients in the moisture equation, while moisture content and fluid flow modify the heat capacity, conductivity, and introduce latent heat and advection terms in the energy equation.
+
+\subsection{Thermo-hydric input to the mechanical field} \label{sec:THM_coupling}
+
+The mechanical behaviour of heated concrete is driven by the thermal and hydric fields. The coupling is \textit{one-way}: the converged TH fields ($T$, $p_g$, $p_c$) serve as prescribed loading to the mechanical problem at each time step. The feedback from mechanics to TH through damage-enhanced permeability is discussed in \cref{sec:THM_model}.
+
+The TH fields enter the mechanical problem through two mechanisms: free strains and pore pressure loading, detailed in the following subsections.
+
+\subsubsection{Strain decomposition}
+
+When a mechanically loaded concrete element is exposed to high temperature, the total strain is decomposed as a superposition of components of different origins \cite{dauti2018}:
+\begin{equation}
+    \boldsymbol{\varepsilon} = \boldsymbol{\varepsilon}_\sigma + \boldsymbol{\varepsilon}_{th} + \boldsymbol{\varepsilon}_{sh}
+    \label{eq:strain_decomp}
+\end{equation}
+where:
+\begin{itemize}
+    \item $\boldsymbol{\varepsilon}_\sigma$ represents the 
+    \textit{mechanical strains} induced by external loading 
+    (elastic strain, creep strain, etc.);
+    \item $\boldsymbol{\varepsilon}_{th}$ represents the 
+    \textit{thermal dilation strain}, driven by the 
+    temperature field;
+    \item $\boldsymbol{\varepsilon}_{sh}$ represents the 
+    \textit{capillary shrinkage strain}, driven by the 
+    capillary pressure field.
+\end{itemize}
+
+In general, the mechanical strain includes elastic and creep contributions:
+\begin{equation}
+    \boldsymbol{\varepsilon}_\sigma = \boldsymbol{\varepsilon}_{el} + \boldsymbol{\varepsilon}_{creep}
+    \label{eq:eps_sigma_decomp}
+\end{equation}
+Since creep is neglected in this work, $\boldsymbol{\varepsilon}_{creep} = \mathbf{0}$ and thus $\boldsymbol{\varepsilon}_\sigma = \boldsymbol{\varepsilon}_{el}$ 
+
+\subsubsection{Thermal dilation}
+
+The thermal dilation strain is isotropic and produces a uniform expansion of the material, which is expressed in incremental form as \cite{dauti2018}:
+
+\begin{equation}
+    d\boldsymbol{\varepsilon}_{th} = 
+    \beta_s(T)\,dT\,\mathbf{I}
+    \label{eq:eps_th}
+\end{equation}
+where $\mathbf{I}$ is the second-order identity tensor and $\beta_s(T)$ is the thermal dilation coefficient, which for concrete can be approximated as a linear function of temperature:
+\begin{equation}
+    \beta_s(T) = A_{B1}\,(T - T_0) + A_{B0}
+    \label{eq:beta_s}
+\end{equation}
+with $A_{B0}$ and $A_{B1}$ being material constants.
+
+\subsubsection{Capillary shrinkage}
+
+The drying process modifies the pore pressure state, which in turn induces a volumetric deformation of the solid skeleton. The capillary shrinkage strain is expressed as \cite{dauti2018}:
+
+\begin{equation}
+    d\boldsymbol{\varepsilon}_{sh} = 
+    \frac{\alpha}{K_T}\,\frac{d p_s}{d t}\,\mathbf{I}
+    \label{eq:eps_sh}
+\end{equation}
+where $\alpha$ is the Biot coefficient, $K_T$ is the bulk modulus of the drained skeleton, and $p_s$ is the average pore pressure acting on the solid skeleton, defined as:
+\begin{equation}
+    p_s = p_g - S_l\,p_c = S_g\,p_g + S_l\,p_l
+    \label{eq:ps_shrinkage}
+\end{equation}
+
+This expression represents the saturation-weighted average of the gas and liquid pressures. Since $p_g$ and $p_c$ are direct outputs of the TH problem, $p_s$ is entirely determined by the TH solution.
+
+\subsubsection{Effective stress and pore pressure loading}
+
+For a porous medium saturated by multiple fluids, the total stress is decomposed into the part carried  by the solid skeleton and the part carried by the pore fluids. Following \cite{lewis1998,dauti2018}, the effective stress is defined as:
+\begin{equation}
+    \boldsymbol{\sigma}' = \boldsymbol{\sigma}^{Total} 
+    + \alpha\,p_s\,\mathbf{I}
+    \label{eq:eff_stress}
+\end{equation}
+where $\boldsymbol{\sigma}^{Total}$ is the total  stress tensor, $\alpha$ is Biot's coefficient, and  $p_s$ is the average pore pressure (\cref{eq:ps_shrinkage}).
+
+The effective stress $\boldsymbol{\sigma}'$ is the  stress that governs the mechanical behaviour of the  skeleton. In the finite element implementation, this relation is not applied directly; instead, the pore  pressure term $\alpha\,p_s$ enters the load vector as an external loading (\cref{eq:F_full}), and the effective stress is recovered from the elastic strain after solving for displacements:
+\begin{equation}
+    \boldsymbol{\sigma}' = (1-\mathcal{D})\,
+    \mathbb{C}\,\boldsymbol{\varepsilon}_{el}
+    \label{eq:sigma_eff_FE}
+\end{equation}
+where $\boldsymbol{\varepsilon}_{el} = \boldsymbol{\varepsilon} - \boldsymbol{\varepsilon}_{th} - \boldsymbol{\varepsilon}_{sh}$ (\cref{eq:eps_elastic}). This effective stress is the input to the Mazars damage criterion (\cref{sec:mazars}). In heated concrete, the build-up of gas pressure (\cref{sec:pore_pressure}) increases $p_s$ in the load vector, which shifts $\boldsymbol{\sigma}'$ toward tension and promotes damage when $f_t$ is exceeded.
+
+
+\section{THM model and spalling}
+
+This section assembles the governing equations of the thermo-hydro-mechanical (THM) model from the conservation laws and constitutive relations developed in the previous sections. The coupled system is then used to explain how spalling arises from the interaction between thermal, hydric, and mechanical fields.
+
+\subsection{Full THM governing formulation} \label{sec:THM_model}
+
+The state of concrete at high temperature is described by four primary variables \cite{dauti2018}:
+\begin{equation}
+    \mathcal{U} = \left\{p_g,\; p_c,\; T,\; \mathbf{u}\right\}
+    \label{eq:primary_vars}
+\end{equation}
+where $p_g$ is the gas pressure, $p_c$ is the capillary pressure, $T$ is the temperature, and $\mathbf{u}$ is the displacement vector.
+
+The model consists of four conservation equations, each associated with one primary variable. Their final forms, after substitution of Darcy's law, Fick's law, and the constitutive relations, are as follows.
+
+\subsubsection{Dry air conservation}
+
+\begin{equation}
+\begin{split}
+    &\phi(1-S_l)\left(\frac{\partial \rho_a}{\partial T}\frac{\partial T}{\partial t}
+    + \frac{\partial \rho_a}{\partial p_c}\frac{\partial p_c}{\partial t}
+    + \frac{\partial \rho_a}{\partial p_g}\frac{\partial p_g}{\partial t}\right)
+    + (1-S_l)\rho_a\frac{\partial \phi}{\partial T}\frac{\partial T}{\partial t} \\
+    &- \phi\rho_a\left(\frac{\partial S_l}{\partial p_c}\frac{\partial p_c}{\partial t}
+    + \frac{\partial S_l}{\partial T}\frac{\partial T}{\partial t}\right)
+    - \nabla\cdot\left(\frac{K\rho_a k_{rg}}{\mu_g}\nabla p_g\right)
+    - \nabla\cdot\left(D\rho_g\frac{M_v M_a}{M_g^2}\nabla\frac{p_a}{p_g}\right) = 0
+\end{split}
+\label{eq:final_air}
+\end{equation}
+
+\subsubsection{Water species conservation}
+
+\begin{equation}
+\begin{split}
+    &(S_l\rho_l - (1-S_l)\rho_v)\frac{\partial \phi}{\partial T}\frac{\partial T}{\partial t}
+    + S_l\phi\frac{\partial \rho_l}{\partial T}\frac{\partial T}{\partial t}
+    + \phi(\rho_l - \rho_v)\left(\frac{\partial S_l}{\partial T}\frac{\partial T}{\partial t}
+    + \frac{\partial S_l}{\partial p_c}\frac{\partial p_c}{\partial t}\right) \\
+    &+ (1-S_l)\phi\left(\frac{\partial \rho_v}{\partial T}\frac{\partial T}{\partial t}
+    + \frac{\partial \rho_v}{\partial p_c}\frac{\partial p_c}{\partial t}
+    + \frac{\partial \rho_v}{\partial p_g}\frac{\partial p_g}{\partial t}\right) \\
+    &- \nabla\cdot\left(\frac{K\rho_l k_{rl}}{\mu_l}(\nabla p_g - \nabla p_c)\right)- \nabla\cdot\left(\frac{K\rho_v k_{rg}}{\mu_g}\nabla p_g\right)
+    - \nabla\cdot\left(D\rho_g\frac{M_v M_a}{M_g^2}\nabla\frac{p_v}{p_g}\right) = -\dot{m}_{dehyd}
+\end{split}
+\label{eq:final_water}
+\end{equation}
+
+\subsubsection{Energy conservation}
+
+\begin{equation}
+\begin{split}
+    \rho C_p\frac{\partial T}{\partial t}- K\left(C_l\frac{\rho_l k_{rl}}{\mu_l}(\nabla p_g - \nabla p_c)
+    + C_g\frac{\rho_v k_{rg}}{\mu_g}\nabla p_g\right)\cdot\nabla T
+    - \nabla\cdot(\lambda\cdot\nabla T) \\
+    = -H_{vap}\,\dot{m}_{vap} 
+    + H_{dehyd}\,\dot{m}_{dehyd}
+\end{split}
+\label{eq:final_energy}
+\end{equation}
+
+\subsubsection{Momentum conservation}
+
+By neglecting inertial forces:
+\begin{equation}
+    \nabla\cdot\boldsymbol{\sigma}^{Total} + \rho\,\mathbf{g} = \mathbf{0}
+    \label{eq:final_momentum}
+\end{equation}
+where $\mathbf{g}$ is the gravitational acceleration and the total density is:
+\begin{equation}
+    \rho = (1-\phi)\rho_s + \phi\left(S_l\rho_l + (1-S_l)\rho_g\right)
+    \label{eq:rho_total}
+\end{equation}
+
+The total stress $\boldsymbol{\sigma}^{Total}$ is related to the effective stress via Bishop's relation (\cref{eq:eff_stress}), which in turn depends on the primary variables $p_g$ and $p_c$. 
+
+The discretisation of this equation into the global system $[\mathbf{K}_M]\{\mathbf{U}\} = \{\mathbf{F}\}$ is presented in \cref{sec:mechanical}.
+
+\paragraph{Remark:} The governing equations presented in this chapter --- dry air conservation, water species conservation, energy conservation, and momentum conservation --- together with the constitutive laws, form a complete THM model for concrete exposed to fire. These equations are continuous partial differential equations defined on the domain $\Omega$. Their numerical solution requires spatial and temporal discretization, which is the subject of the following \cref{chapter3}.
+
+\subsection{Spalling mechanisms} \label{sec:spalling}
+
+Spalling is defined as the violent or non-violent detachment of layers or pieces of concrete from the surface of a structural element during or after exposure to rapidly rising temperatures. It may lead to premature structural failure through reinforcement exposure and cross-section reduction. Several catastrophic tunnel fires (Channel Tunnel 1996, Mont-Blanc 1999, St.~Gotthard 2001) have illustrated the severity of this phenomenon \cite{dauti2018}.
+
+Despite extensive experimental research, the mechanisms behind spalling are not yet fully understood and no general consensus on a single theory has been reached. The two principal mechanisms most broadly accepted are presented below, followed by their combined action.
+
+\subsubsection{Thermal gradient mechanism} \label{sec:thermal_gradient_mech}
+
+\review{This section is currently under development and will be refined as the study progresses.}
+
+When one face of a concrete member is exposed to fire, a steep temperature gradient develops through the thickness. The resulting differential thermal dilation produces (see Figure~\ref{fig:spalling_TM}):
+
+\begin{enumerate}
+    \item \textbf{Compressive stresses in the heated cover:} The surface layers tend to expand but are restrained by the cooler interior, generating significant compressive stresses parallel to the heated surface.
+    
+    \item \textbf{Tensile stresses in the interior:} The restraint of the expanding surface layers induces tensile stresses in deeper layers of the material.
+    
+    \item \textbf{Fracture and energy release:} When the tensile stress exceeds the tensile strength $f_t$, cracks develop parallel to the surface. The sudden release of elastic energy stored in the compressed surface layers can drive the explosive ejection of concrete fragments.
+\end{enumerate}
+
+High-performance concrete (HPC) is particularly prone to this mechanism due to its higher brittleness: more elastic energy is stored before failure, leading to a more violent release.
+
+\subsubsection{Pore pressure mechanism (moisture clog)} \label{sec:pore_pressure_mech}
+
+\review{This section is currently under development and will be refined as the study progresses.}
+
+The sequence of events is (see Figure~\ref{fig:spalling_TH}):
+
+\begin{enumerate}
+    \item \textbf{Formation of a dry zone:} As the surface is heated, free water evaporates and chemically bound water is released as vapor through dehydration. A dry zone forms near the heated face.
+    
+    \item \textbf{Vapor migration:} Due to pressure gradients, part of the vapor is evacuated toward the heated face, while part is driven toward the cooler interior.
+    
+    \item \textbf{Condensation and moisture clog:} The inward-migrating vapor condenses when it reaches regions where the thermodynamic conditions are satisfied ($T < T_{sat}$). This process continues until a quasi-saturated zone is formed, known as the \textit{moisture clog}, which acts as an impermeable barrier preventing further vapor migration toward the cold side.
+    
+    \item \textbf{Pressure build-up:} Behind the moisture clog, the gas pressure $p_g$ increases sharply as continued evaporation feeds vapor into a region from which it cannot escape. In addition, the thermal dilation of liquid water in saturated pores also contributes to pressure build-up.
+    
+    \item \textbf{Tensile failure:} When the pore pressure exceeds the tensile strength of the material, cracks develop parallel to the surface, potentially leading to explosive spalling.
+\end{enumerate}
+
+The key material parameters governing this mechanism are the \textit{intrinsic permeability} $K_0$ and the \textit{initial moisture content}. Low permeability hinders vapor evacuation, while high moisture content provides more water to be evaporated, both promoting higher pore pressures.
+
+\subsubsection{Combined mechanism} \label{sec:combined_mech}
+
+\review{This section is currently under development and will be refined as the study progresses.}
+
+In practice, explosive spalling generally occurs under the \textit{combined action} of pore pressures and thermal stresses. The spalling condition can be expressed schematically as:
+\begin{equation}
+    \sigma_{thermal}(T) + \sigma_{pore}(p_g, p_c, S_l) 
+    \geq f_t(T)
+    \label{eq:spalling_condition}
+\end{equation}
+where $\sigma_{thermal}$ represents the thermal stress from differential dilation, $\sigma_{pore}$ represents the stress from pore pressure loading (via effective stress), and $f_t(T)$ is the temperature-degraded tensile strength. When the sum of stresses exceeds the tensile strength, cracks develop parallel to the heated surface, often leading to violent failure of the fire-exposed region.
+
+This combined criterion highlights why the complete THM model is needed: neither a purely thermal analysis ($T$ only) nor a purely hydral analysis ($p_g$, $p_c$ only) can capture the full picture.
 
 \section{Discretization}\label{sec:discretization}
 

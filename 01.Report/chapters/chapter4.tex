@@ -1,25 +1,130 @@
 %\cleardoublepage %already included in mainmatter 
-\chapter{Model Calibration and Validation} \label{chapter4}
+\chapter{Model Calibration and Validation} \label{chapter4} %should be limited to 10 pages
 
-\review{This chapter is under review and should be limited to 10 pages}
-\section{Calibration procedure}
+\review{This chapter is under review. The outline is as follow.}
 
-4.1 Calibration Strategy
-Parameters investigated
-Automation workflow (Python)
-Calibration criteria
-4.2 Results
-Temperature evolution
-Gas pressure evolution
-Comparison with experimental data
-4.3 Discussion
-Influence of saturation degree
-Influence of relative humidity
-Model limitations
+\draft{This chapter presents the calibration and validation of the coupled thermo-hydral (TH) model implemented in Cast3M against the Kalifa experiment \cite{kalifa2000}. Rather than adjusting every material parameter at once, a \emph{sequential} calibration is adopted that follows the physical hierarchy of the coupled problem: the temperature field is calibrated first and, only once it is reliably reproduced, the gas-pressure response is addressed. The chapter is therefore organised as a calibration ``journey'': from the heated surface inward for the thermal field (Section~\ref{sec:cal-temp}), then from the dominant to the secondary parameters for the hydric field (Section~\ref{sec:cal-pressure}), closing with the validation outcome and its limitations (Section~\ref{sec:validation}).}
+ 
+% ---------------------------------------------------------------------------
+\section{Calibration strategy} \label{sec:cal-strategy}
+\begin{draftblock}
 
-\section{Validation}
-\subsection{Comparison between numerical and experimental results}
-This section is currently under development and will be refined as the study progresses.
-\subsection{Discussions on model performance}
-This section is currently under development and will be refined as the study progresses.
+To a first approximation, the thermal sub-problem is only weakly coupled to the hydric one: the temperature field drives evaporation, dehydration and the gas-pressure build-up, whereas the back-influence of the hydric state on the temperature field is comparatively small over the range of the test. This hierarchy motivates a two-stage procedure:
+ 
+\begin{enumerate}
+  \item \textbf{Stage~1 -- Temperature.} The thermal response is calibrated independently of the pressure field. Within this stage the parameters are themselves ordered: the \emph{surface} (boundary) parameters are fixed before the \emph{bulk} conduction parameters.
+  \item \textbf{Stage~2 -- Gas pressure.} Using the calibrated temperature field as a fixed thermal loading, the hydric parameters governing the gas-pressure evolution are adjusted, from the most influential to the secondary ones.
+\end{enumerate}
+ 
+\paragraph{Targets and criteria.}
+The calibration targets are the temperature and gas-pressure histories measured at $10$, $20$, $30$, $40$ and $50~\mathrm{mm}$ from the heated face, together with the near-surface temperature recorded at $2~\mathrm{mm}$ (hereafter denoted the $0~\mathrm{mm}$ / surface measurement). The agreement is quantified by the root-mean-square error on each probe history and, for the pressure, by the error on the peak amplitude and on the time-to-peak. The parameter sweeps were orchestrated by a Python automation layer that launches the Cast3M runs, extracts the probe histories and evaluates these criteria, so that each parameter could be varied systematically rather than by trial and error.    
+\end{draftblock} 
+% ---------------------------------------------------------------------------
+\section{Temperature calibration} \label{sec:cal-temp}
+\begin{draftblock}
+    
+\subsection{Surface temperature (\texorpdfstring{$0~\mathrm{mm}$}{0 mm}): boundary heat exchange} \label{sec:cal-surf}
+ 
+The first quantity calibrated is the temperature of the heated face. In the test, heat is supplied by a radiant heater facing the specimen, so the surface energy balance is dominated by radiation and convection:
+\begin{equation}
+  q_{\text{surf}} = h_c\,(T_\infty - T_s)
+  + \varepsilon\,\sigma\,\bigl(T_r^{4} - T_s^{4}\bigr),
+  \label{eq:surf-bc}
+\end{equation}
+where $h_c$ is the convective heat-transfer coefficient, $\varepsilon$ the surface emissivity (radiative coefficient), $\sigma$ the Stefan--Boltzmann constant, $T_r$ the radiant-source temperature and $T_s$ the surface temperature.
+ 
+Because every in-depth temperature is slaved to the surface temperature, the boundary condition~\eqref{eq:surf-bc} is calibrated \emph{first}. The two boundary coefficients $h_c$ and $\varepsilon$ are adjusted so that the computed $0~\mathrm{mm}$ history matches the measured near-surface ($2~\mathrm{mm}$) response -- in particular the initial heating rate and the asymptotic surface temperature. At this point the conduction parameters are held at their reference values; only the energy input at the surface is tuned.
+ 
+% \begin{figure}[h] \centering ... \caption{Calibration of $h_c$ and
+% $\varepsilon$ against the surface ($2~\mathrm{mm}$) thermocouple.}
+% \label{fig:cal-surface} \end{figure}
+ 
+\subsection{In-depth temperature: thermal conductivity and heat capacity} \label{sec:cal-depth}
+ 
+Once the surface temperature is reproduced, the temperature rise at depth ($10$--$50~\mathrm{mm}$) is governed by heat conduction through the material, i.e.\ by the thermal conductivity $\lambda(T)$ and the volumetric heat capacity $\rho C_p(T)$. The conductivity sets the steepness of the thermal gradient and the speed of the thermal front, while the heat capacity sets the thermal inertia -- the time lag of the temperature rise at each depth.
+ 
+A subtlety arises here: adjusting the surface condition in Section~\ref{sec:cal-surf} changes the energy that actually enters the specimen, which in turn shifts the in-depth histories. Consequently $\lambda(T)$ and $\rho C_p(T)$ cannot be calibrated in isolation -- they must be \emph{re-calibrated} jointly with the surface condition. In practice a short iterative loop is used:
+\begin{enumerate}
+  \item $\lambda(T)$ and $\rho C_p(T)$ are adjusted to match the arrival time and
+  slope of the temperature rise at each depth;
+  \item $h_c$ and $\varepsilon$ are then re-checked against the surface probe and,
+  if necessary, slightly corrected;
+\end{enumerate}
+and the loop is repeated until the whole set of probes ($0$--$50~\mathrm{mm}$) is reproduced consistently.
+ 
+% \begin{figure}[h] \centering ... \caption{Computed vs.\ measured temperature
+% histories at $0$, $10$, $20$, $30$, $40$ and $50~\mathrm{mm}$ after calibration
+% of $\lambda(T)$ and $\rho C_p(T)$.} \label{fig:cal-temp-depth} \end{figure}
+ 
+The final temperature agreement is good across all depths (Fig.~\ref{fig:cal-temp-depth}), which provides a reliable thermal loading for the second calibration stage.
+\end{draftblock} 
 
+% ---------------------------------------------------------------------------
+\section{Gas-pressure calibration} \label{sec:cal-pressure}
+\begin{draftblock}
+
+With the temperature field fixed, the gas-pressure evolution is addressed. The pressure build-up behind the moisture clog (Section~\ref{...}) is controlled chiefly by how easily vapour can escape the heated region -- i.e.\ by the permeability -- and by how much water is available to be vaporised.
+ 
+\subsection{Primary parameters: \texorpdfstring{$K_0$}{K0} and \texorpdfstring{$A_\Gamma$}{A_Gamma}} \label{sec:cal-K0-AK}
+ 
+Two parameters dominate the pressure response:
+ 
+\begin{description}
+  \item[Intrinsic permeability $K_0$.] It sets the absolute resistance to gas flow. Lowering $K_0$ traps vapour near the hot face and raises the pressure peak; raising it lets the gas escape and flattens the peak. $K_0$ is therefore the primary control on the \emph{magnitude} of the peak.
+  \item[Permeability--hydration coefficient $A_\Gamma$ (denoted $A_K$).] It governs the evolution of permeability with the effective hydration degree $\tilde{\Gamma}$ in the law $K(\tilde{\Gamma})$, i.e.\ how the microstructure built up during curing modulates transport. It mainly controls the \emph{aging dependence} of the response and shifts the peak \emph{timing}.
+\end{description}
+ 
+% \begin{figure}[h] \centering ... \caption{Sensitivity of the gas-pressure
+% history to $K_0$ (left) and $A_\Gamma$ (right) at $10$--$50~\mathrm{mm}$.}
+% \label{fig:cal-pressure-primary} \end{figure}
+ 
+The sweep over $(K_0, A_\Gamma)$ shows that the peak amplitude and timing can be brought close to the measured values \emph{individually}, but tuning one quantity to fit the peak degrades the fit elsewhere in the history.
+ 
+\subsection{Secondary adjustments investigated} \label{sec:cal-secondary}
+ 
+Since the two primary parameters alone did not yield a satisfactory fit, several additional quantities were investigated:
+ 
+\begin{description}
+  \item[Initial relative humidity $RH_0$ (initial saturation).] It fixes the initial liquid-water content and hence the amount of water available for vaporisation. A higher $RH_0$ feeds a larger and later pressure peak.
+  \item[Vapour mass-transfer (convection) coefficient.] The boundary exchange coefficient for vapour at the heated face controls how readily vapour leaves the surface; it mainly affects the early pressurisation and the near-surface peak.
+  \item[Aging / curing time.] Through the hydration degree it changes the initial porosity, saturation and permeability, and thus the entire pressure history; longer aging densifies the microstructure and tends to raise the peaks.
+\end{description}
+ 
+Each of these was found to influence the response in a physically expected direction, but none of them -- alone or in combination with $K_0$ and $A_\Gamma$ -- resolved the qualitative mismatch discussed below.
+
+\end{draftblock} 
+% ---------------------------------------------------------------------------
+\section{Validation and discussion} \label{sec:validation}
+\begin{draftblock}
+
+\subsection{Temperature} \label{sec:val-temp}
+ 
+The calibrated model reproduces the measured temperature histories at all depths within a few degrees, confirming that the thermal sub-problem and its boundary conditions are correctly captured. The temperature field can therefore be used as a trustworthy loading for the hydric and mechanical sub-problems.
+ 
+\subsection{Gas pressure}
+\label{sec:val-pressure}
+ 
+The gas-pressure response, by contrast, \textbf{could not be validated}. Across the explored parameter space -- $K_0$, $A_\Gamma$, $RH_0$, the vapour transfer coefficient and the aging time -- no single parameter set reproduces \emph{simultaneously} the magnitude, the timing and, above all, the strong post-peak decay of the measured pressure. With the new (THC) saturation and permeability formulation, the model systematically:
+\begin{itemize}
+  \item overestimates the pressurisation phase before the peak, and
+  \item fails to reproduce the sharp pressure relief observed after the peak.
+\end{itemize}
+ 
+% \begin{figure}[h] \centering ... \caption{Computed vs.\ measured gas-pressure
+% histories at $10$--$50~\mathrm{mm}$: the model captures the pressurisation trend
+% but not the post-peak decay.} \label{fig:val-pressure} \end{figure}
+ 
+This limitation is consistent with the physics omitted from the present TH model. The measured pressure decay is largely driven by the cracking and mechanical damage that develop near the hot face, which sharply increase the local permeability and let the trapped gas escape. Because the present formulation does not include the damage--permeability coupling (Eq.~\ref{eq:K-damage}), it cannot capture this relief, and consequently the gas-pressure field cannot be validated against the Kalifa data using the TH/THC formulation alone.
+ 
+\subsection{Conclusions and implications}
+\label{sec:val-conclusions}
+ 
+Two conclusions follow from the calibration journey:
+\begin{enumerate}
+  \item The temperature field -- the loading for the hydric and mechanical sub-problems -- is reliably reproduced, once the surface boundary exchange and then the bulk conduction parameters are calibrated in sequence.
+  \item A quantitative match of the gas pressure is \emph{not} achievable with the new $p_g$ formulation on its own: it is necessary but not sufficient. Capturing the experimental pressure -- and in particular its decay -- requires activating the mechanical (damage) coupling that increases permeability through cracking.
+\end{enumerate}
+ 
+This motivates the coupled THM analysis carried out in the following chapter, where the damage--permeability coupling is reintroduced.
+    
+\end{draftblock} 

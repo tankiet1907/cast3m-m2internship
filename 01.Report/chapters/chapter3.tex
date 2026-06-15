@@ -1,37 +1,140 @@
 %\cleardoublepage %already included in mainmatter 
-\chapter{Experimental Reference and Numerical Model} \label{chapter3}
+\chapter{Experimental Reference and Numerical Model} \label{chapter3} %should be limited to 6 pages
+\review{This chapter is under review. The outline is as follow.}
 
-\review{This chapter is under review and should be limited to 6 pages}
+\draft{This chapter introduces the experimental benchmark used to validate the thermo--hydro--mechanical (THM) implementation and its numerical counterpart. Section~\ref{sec:kalifa} describes the experiment of Kalifa et al.~\cite{kalifa2000}, one of the most widely used references for high-temperature concrete simulations. Section~\ref{sec:num-model} presents the numerical model (geometry, mesh, parameters, thermal input, curing/drying initial conditions and solution strategy), and Section~\ref{sec:thc-application} explains how the thermo--hydro--chemical (THC) model of Sciumè et al.~\cite{sciume2024} is applied, focusing on the hydration degree and on the permeability law that evolves with $K_0$ and the coefficient $A_\Gamma$.}
+ 
+% =====================================================================
+\section{The Kalifa experiment} \label{sec:kalifa}
+\begin{draftblock}
 
-\section{Kalifa Experiment}
+\paragraph{Purpose.}
+The campaign of Kalifa et al.~\cite{kalifa2000} quantifies the \emph{thermo-hydral} process responsible for spalling. When concrete is heated on one face, free and chemically bound water are released as vapour; part migrates inward, recondenses in cooler regions and forms a quasi-saturated \emph{moisture clog} that blocks gas evacuation and triggers a sharp pore-pressure build-up behind the drying front. The test measures \emph{simultaneously and continuously} the temperature, the gas (pore) pressure at several depths, and the global mass loss, providing a quantitative dataset for validating coupled codes.
+ 
+\paragraph{Set-up and instrumentation.}
+A prismatic specimen of $30\times30\times12~\si{\centi\meter\cubed}$ is heated on one $30\times30~\si{\centi\meter\squared}$ face by a radiant heater (up to \SI{5}{\kilo\watt}, \SI{800}{\celsius}) placed \SI{3}{\centi\meter} above the surface. The lateral faces are insulated with porous ceramic blocks, so heat and mass transfer are essentially one-dimensional. The specimen rests on a balance recording its mass. Five gauges measure pressure and temperature at \SIlist{10;20;30;40;50}{\milli\meter} from the heated face, and a sixth tube measures the surface temperature at \SI{2}{\milli\meter} depth.
+ 
+\paragraph{Concrete mixes.}
+Two calcareous-aggregate mixes were tested: an ordinary concrete (OC, M30, $w/c=0.5$) and a high-performance concrete (HPC, M100, $\approx\SI{90}{\mega\pascal}$, $w/c=0.32$). Specimens were sealed for about six months, giving a homogeneous moisture state. The low $w/c$ and high compactness of the HPC strongly reduce its intrinsic permeability, the main parameter controlling the pressure amplitude (Table~\ref{tab:kalifa-mixes}).
+ 
+\begin{table}[ht]
+  \centering
+  \caption{Main characteristics of the two concretes~\cite{kalifa2000}.}
+  \label{tab:kalifa-mixes}
+  \begin{tabular}{lcc}
+    \toprule
+    Property & OC (M30) & HPC (M100) \\
+    \midrule
+    Water/cement ratio $w/c$     & 0.50 & 0.32 \\
+    Initial saturation $S_{l,0}$ & $\approx\SI{62}{\percent}$ & $\approx\SI{77}{\percent}$ \\
+    Measured pressure peak       & $\approx\SI{20}{\bar}$ & $\approx\SI{40}{\bar}$ \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+ 
+\paragraph{Heating scenario and measured data.}
+The heater was set to \SIlist{450;600;800}{\celsius} as a step signal. The \SI{600}{\celsius} test (duplicated for repeatability) is retained as the reference, since it produces a well-developed pressurisation/relief cycle while preserving the 1-D condition. The measured response shows a temperature rise with a short plateau near \SI{200}{\celsius}, a two-stage gas-pressure history (pressurisation then relief as the front passes), and a continuous mass loss. In HPC the pore pressure exceeds the saturating vapour pressure $p_{vs}(T)$, confirming the contribution of enclosed air and of the thermal dilation of liquid water. These three quantities are the validation targets.
+\end{draftblock}
+% =====================================================================
+\section{Numerical model} \label{sec:num-model}
+\begin{draftblock}
 
-Specimen geometry
-Material properties
-Heating scenario
-Instrumentation
-Available measurements
+\paragraph{Geometry and mesh.}
+Because the lateral faces are insulated, the problem is reduced to one dimension along the heating direction: a strip of length $L=\SI{120}{\milli\meter}$ with the heated face at $x=0$ and the rear face at $x=L$ (Figure~\ref{fig:geometry}). The domain is discretised with linear elements graded toward $x=0$ (characteristic size $\sim\SI{1}{\milli\meter}$ at the hot face, coarsening toward the rear), where the sharpest gradients develop. The mesh is refined until the predicted pressure peak and its timing become insensitive to further refinement. Field outputs are extracted at the gauge depths for direct comparison with the measurements.
+ 
+\begin{figure}[ht]
+  \centering
+  % \includegraphics[width=0.62\textwidth]{figures/geometry_bc.pdf}
+  \fbox{\parbox[c][1.4cm][c]{0.62\textwidth}{\centering
+    \emph{Placeholder} — 1-D domain ($L=\SI{120}{\milli\meter}$), heated face at
+    $x=0$, insulated lateral faces, instrumented depths.}}
+  \caption{Geometry and boundary conditions of the simulated specimen.}
+  \label{fig:geometry}
+\end{figure}
+ 
+\paragraph{Material parameters.}
+The constitutive parameters follow the THC calibration of Sciumè et al.~\cite{sciume2024} (composition B400, hydration data from~\cite{sciume2013}); the dehydration parameter is the value identified for the Kalifa concrete (Table~\ref{tab:thc-params}). The initial intrinsic permeability $K_0$ and the coefficient $A_\Gamma$ govern the permeability evolution of Section~\ref{ssec:permeability}.
+ 
+\begin{table}[ht]
+  \centering
+  \caption{Main parameters of the THC model~\cite{sciume2024,sciume2013}.}
+  \label{tab:thc-params}
+  \begin{tabular}{llc}
+    \toprule
+    Parameter & Symbol & Value \\
+    \midrule
+    Cement content                 & $c$          & \SI{400}{\kilo\gram\per\meter\cubed} \\
+    Activation energy              & $E_a$        & \SI{37413}{\joule\per\mol} \\
+    Enthalpy of dehydration        & $H_{dehyd}$  & \SI{58.04}{\mega\joule\per\kilo\gram} \\
+    Initial intrinsic permeability & $K_0$        & \SI{7.5e-20}{\meter\squared} \\
+    Permeability coefficient       & $A_\Gamma\,(A_K)$ & 1.25 \\
+    Dehydration coefficient        & $a_1^F$      & $-0.004$ \\
+    Saturation coefficients        & $a_0,\,b$    & \SI{32897500}{\pascal},\; 2.11 \\
+    Emissivity / mass transfer     & $\epsilon,\,h_g$ & 0.85,\; \SI{0.00018}{\meter\per\second} \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+ 
+\paragraph{Thermal input and boundary conditions.}
+The radiant heater is imposed at $T_\infty=\SI{600}{\celsius}$. On the heated face a combined radiative--convective exchange applies,
+\begin{equation}
+  -\,\lambda\,\frac{\partial T}{\partial x}\Big|_{x=0}
+  = h_T\,(T_\infty - T) + \epsilon\,\sigma\,\big(T_\infty^4 - T^4\big),
+  \label{eq:heated-face}
+\end{equation}
+together with convective vapour/air mass fluxes governed by $h_g$. The lateral faces are adiabatic and impervious (1-D condition); the rear face exchanges heat and moisture with the ambient. The heater temperature is applied as a step.
+ 
+\paragraph{Curing, drying and initial conditions.}
+A key feature of the THC framework~\cite{sciume2024} is that the hygro-chemical state before the accident is obtained from a preliminary \emph{curing} simulation rather than prescribed arbitrarily. Starting from
+\begin{equation}
+  T_0=\SI{20}{\celsius},\quad p_{g,0}=\SI{101325}{\pascal},\quad
+  \mathrm{RH}_0=0.9825,\quad \Gamma_0=0,
+  \label{eq:initial-conditions}
+\end{equation}
+hydration develops over the curing duration, establishing self-consistent profiles of hydration degree $\Gamma$, saturation $S_l$ and relative humidity. The converged curing fields are then used as initial conditions for the heating (drying) stage, ensuring that the initial water content and hydration state — which strongly control the pressure amplitude — are physically consistent with the specimen history.
+ 
+\paragraph{Solution strategy and numerical robustness.}
+\label{ssec:robustness}
+At high temperature the THC system is \emph{strongly nonlinear}: the liquid--vapour phase change and the sorption law vary abruptly around \SI{100}{\celsius}; dehydration $F(T)$ and the Arrhenius hydration term add stiff, temperature-activated source terms; and the permeability and porosity vary by orders of magnitude across the drying front. The Newton iterations may therefore \emph{diverge}, particularly when the moisture clog and the steep front form. Three measures are investigated to restore convergence:
+\begin{itemize}
+  \item \textbf{Increasing the time-integration parameter $\theta$.} Moving the $\theta$-scheme toward a fully implicit integration ($\theta\to 1$), combined with under-relaxation of the Newton updates, damps the oscillations of the nonlinear coefficients and stabilises the iteration.
+  \item \textbf{Reducing the time step.} Adaptive time stepping that cuts $\Delta t$ when the residual stalls resolves the fast transients (front passage, pressure peak) and enlarges the convergence radius of Newton's method.
+  \item \textbf{Refining the mesh.} A finer discretisation near the heated face reduces the inter-element jumps in $T$, $S_l$ and the transport coefficients, avoiding the spurious oscillations that trigger divergence.
+\end{itemize}
 
-\subsection{Experimental tests and material properties}
-This section is currently under development and will be refined as the study progresses.
-\subsection{Thermal, hydraulic and mechanic loadings}
-This section is currently under development and will be refined as the study progresses.
-\subsection{Measured data}
-This section is currently under development and will be refined as the study progresses.
+\end{draftblock}
+ 
+% =====================================================================
+\section{Application of the THC model} \label{sec:thc-application}
 
-\section{Numerical model} \label{sec:model_description}
-Model description and parameters 
+\begin{draftblock}
 
-This geometry is chosen as a representative benchmark for validating the THM implementation against the experimental results presented in \cref{chapter4}, obtained from an experimental campaign conducted under the supervision of S. Dal Pont. The model geometry, material properties, and boundary conditions are described in the following subsections.
+\paragraph{Hydration and effective hydration degree.}
+The internal variable is the hydration degree of the sample $\Gamma(t)$, the ratio between the chemically bound water at time $t$ and at full hydration. It follows an Arrhenius-type law,
+\begin{equation}
+  \frac{\mathrm{d}\Gamma}{\mathrm{d}t}
+  = \mathcal{A}(\Gamma)\,\beta_{\mathrm{RH}}\,
+    \exp\!\left(-\frac{E_a}{R\,T}\right),
+  \label{eq:gamma-evolution}
+\end{equation}
+with $\mathcal{A}(\Gamma)$ the chemical affinity and $\beta_{\mathrm{RH}}$ a function of relative humidity. At high temperature, irreversible dehydration
+$F(T)$ combines with $\Gamma$ into the \emph{effective} hydration degree
+\begin{equation}
+  \tilde{\Gamma} = (1 - F)\,\Gamma,
+  \label{eq:effective-hydration}
+\end{equation}
+where $F(T)$ uses the law of Pesavento et al.~\cite{pesavento2000} with $a_1^F=-0.004$ for the Kalifa concrete. The single field $\tilde{\Gamma}$ condenses the microstructure history (curing and dehydration) and subsequently drives the porosity, the saturation curve and the permeability.
+ 
+\paragraph{Permeability evolution with $K_0$ and $A_\Gamma$.}
+\label{ssec:permeability}
+Intrinsic permeability most strongly governs the pressure amplitude. Here it is not made an explicit function of temperature or damage; instead it evolves with the effective hydration degree,
+\begin{equation}
+  \boxed{\;K(\tilde{\Gamma}) = K_0 \cdot 10^{\,A_\Gamma\,(1 - \tilde{\Gamma})}\;}
+  \label{eq:permeability}
+\end{equation}
+with $K_0=\SI{7.5e-20}{\meter\squared}$ the reference (fully hydrated) permeability and $A_\Gamma=1.25$ (also $A_K$) the sensitivity coefficient. When the material is dense ($\tilde{\Gamma}\to 1$), $K\to K_0$; as dehydration reduces $\tilde{\Gamma}$, the permeability rises up to $K_0\cdot 10^{A_\Gamma}$, i.e. about $10^{1.25}\approx 18$ times $K_0$. The same internal variable that drives porosity and sorption thus drives transport, representing the opening of the porous network by C--S--H dehydration without a separate damage multiplier; this captures part of the gas-pressure relief observed after the peak. The further permeability increase due to \emph{mechanical} microcracking is not included here and is governed by a damage-dependent law~\cite{gawin1999}, left to the mechanical coupling of the following chapters.
+ 
+\paragraph{Summary.}
+The THC application is a chain of chemo-physical effects: the curing/heating history fixes $\Gamma$ and $F$, hence $\tilde{\Gamma}$, which controls the porosity, the saturation curve and the permeability of Eq.~\eqref{eq:permeability}; these properties determine the temperature, gas-pressure and mass-loss responses compared with the Kalifa data. Calibration and validation against the experiment are presented in the next chapter.
 
-\subsection{Geometry}
-This section is currently under development and will be refined as the study progresses.
-
-\subsection{Material properties}
-
-\subsection{Boundary conditions and loadings}
-This section is currently under development and will be refined as the study progresses.
-
-
-\section{Implementation of the TH coupled model} \label{sec:TH_implementation}
-This section is currently under development and will be refined as the study progresses.
-
+\end{draftblock}
