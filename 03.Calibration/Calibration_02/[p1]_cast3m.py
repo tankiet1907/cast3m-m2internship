@@ -114,7 +114,7 @@ if __name__ == "__main__":
     epsilon_values = [0.6, 0.68]
     h_values = [11.0]
     cp_values= [948, 955, 960]
-    lamda_values = [1.386, 1.55, 1.67]
+    lamda_values = [1.38, 1.55, 1.67]
 
     # 2. Create all possible combinations.
     parameter_sets = list(itertools.product(epsilon_values, h_values, lamda_values, cp_values))
