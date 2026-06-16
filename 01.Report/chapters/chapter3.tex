@@ -105,6 +105,18 @@ At high temperature the THC system is \emph{strongly nonlinear}: the liquid--vap
 % =====================================================================
 \section{Application of the THC model} \label{sec:thc-application}
 
+\subsection{Computational Tool: A Customized Cast3M Framework}
+
+The numerical simulations in this study were conducted using a highly customized version of the open-source finite element software Cast3M (base version 2024). Unlike standard mechanical or thermal problems, modeling the Thermo-Hydro-Mechanical (THM) behavior of High-Performance Concrete (HPC) at high temperatures requires handling highly non-linear, multiphysics phenomena. To address these challenges, the standard Cast3M environment was enriched with advanced pre-release procedures and monolithic solvers developed by Sciumè and Dal Pont \cite{sciume2024}.
+
+The necessity of utilizing this custom-compiled version—executed directly from the source directory rather than the standard binary distribution—stems from several critical computational limitations of the vanilla software:
+
+\begin{itemize}
+    \item \textbf{Complex Boundary Conditions:} In standard Cast3M, imposing convective mass flux (such as water vapor escaping the heated concrete surface) alongside Dirichlet or Neumann thermal boundary conditions is not natively straightforward. Core resolution procedures, such as \texttt{TRANSNON}, had to be deeply modified to accurately simulate the mass exchange between the concrete surface and the ambient environment during the drying and accident phases \cite{dauti2018}.
+    \item \textbf{Monolithic TH Solver Implementation:} To overcome the severe convergence issues and high computational costs associated with traditional staggered (partitioned) approaches, this custom version employs a fully coupled monolithic strategy for the Thermo-Hydric (TH) equations. This allows the primary variables (temperature $T$, gas pressure $P_g$, and capillary pressure $P_c$) to be solved simultaneously at each node within the same time loop.
+    \item \textbf{Integration of the THC Approach:} The custom build inherently integrates specific macro-procedures (e.g., \texttt{@BET\_THM}, \texttt{@POWERS}, and \texttt{@SATURA}) required to evaluate the state variables. Specifically, it allows the intrinsic permeability and porosity to evolve dynamically as a function of the \emph{effective hydration/dehydration degree} rather than purely empirical temperature-dependent functions.
+\end{itemize}
+
 \begin{draftblock}
 
 \paragraph{Hydration and effective hydration degree.}

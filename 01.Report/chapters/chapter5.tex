@@ -47,17 +47,127 @@ This work adopts the stochastic approach with two levels of description:
           the property varies from point to point, subject to a spatial correlation structure characterised by a correlation length $L_c$.
 \end{enumerate}
 
+% =====================================================================
+\section{Uncertain material parameters} \label{sec:uncertain-params}
+ 
+\subsection{Choice of random variables}
+ 
+The parametric study of \cref{chapter4} identified the properties that actually drive the THM response. Five uncertain inputs are retained here, chosen because they govern the heat- and mass-transfer behaviour and because they are the least well known experimentally:
+ 
+\begin{description}
+  \item[Intrinsic permeability $K_0$.] Primary control on the magnitude of the gas-pressure peak; reported coefficients of variation are large \cite{delarrard2010}.
+  \item[Water-retention parameter $a$.] The van~Genuchten capillary parameter of the sorption isotherm $p_c = a\,(S_l^{-b}-1)^{1-1/b}$; it sets how much water is held and released, and hence the source feeding the pressure build-up.
+  \item[Thermal conductivity $\lambda$.] Governs the speed of the thermal front and therefore the timing of drying and dehydration.
+  \item[Volumetric heat capacity $\rho C_p$.] Sets the thermal inertia; together with $\lambda$ it fixes the thermal diffusivity $\alpha=\lambda/\rho C_p$.
+  \item[Mix-composition factor $\theta_{\mathrm{mix}}$.] A dimensionless multiplier introduced to represent the \emph{imprecision of the mix design} (water-to-cement ratio, cement and aggregate dosage). Because composition simultaneously shifts porosity, permeability and saturation, $\theta_{\mathrm{mix}}$ is not independent of the four parameters above; it is the physical origin of the input correlations discussed in \cref{sec:correlation-analysis}.
+\end{description}
+ 
+\subsection{Statistical description}
+ 
+Each strictly positive transport or thermal property is described by a \emph{lognormal} distribution, which guarantees $X>0$ and is the standard choice for such quantities \cite{delarrard2010,sudret2000}; the full definition, moments and coefficient of variation (CoV) are given in \cref{sec:random-variables}. The mean of each variable is set to its value calibrated in \cref{chapter4}, so that the stochastic study is centred on the validated deterministic point. The CoVs are taken from the ranges reported in the literature for concrete \cite{delarrard2010,baroth2023}. \Cref{tab:random-variables} summarises the inputs.
+ 
+\begin{table}[htbp]
+  \centering
+  \caption{Random variables of the stochastic THM analysis. Means equal the \cref{chapter4} calibrated values; distributions and CoV ranges follow \cref{sec:random-variables} and \cite{delarrard2010,baroth2023}.}
+  \label{tab:random-variables}
+  \begin{tabular}{llll}
+    \toprule
+    Parameter & Symbol & Distribution & CoV (range) \\
+    \midrule
+    Intrinsic permeability   & $K_0$              & Lognormal & $0.15$--$0.30$ \\
+    Water-retention param.   & $a$                & Lognormal & $0.10$--$0.20$ \\
+    Thermal conductivity     & $\lambda$          & Lognormal & $0.10$--$0.15$ \\
+    Heat capacity            & $\rho C_p$         & Lognormal & $0.10$--$0.15$ \\
+    Mix-composition factor   & $\theta_{\mathrm{mix}}$ & Lognormal & $0.05$--$0.15$ \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+ 
+\paragraph{Output of interest.}
+Throughout this chapter the scalar output of interest (QoI) is the gas pressure at the $10~\mathrm{mm}$ probe, $p_{g}^{10}$, i.e.\ the same near-surface gauge used as a calibration target in \cref{chapter4}. It is the most critical location for thermo-hydral spalling and provides a direct experimental reference.
+ 
+% =====================================================================
+\section{Uncertainty propagation with \texorpdfstring{\textsc{OpenTURNS}}{OpenTURNS}} \label{sec:propagation}
+ 
+\subsection{Coupling \textsc{OpenTURNS} to the Cast3M solver}
+ 
+Uncertainty quantification is carried out with the \textsc{OpenTURNS} library \cite{baudin2017}, reusing the Python automation layer already built for the calibration sweeps of \cref{chapter4}. The deterministic THM solver is wrapped as a black-box function $g$: \textsc{OpenTURNS} draws a sample of the input vector $\mathbf{X}=(K_0,a,\lambda,\rho C_p,\theta_{\mathrm{mix}})$, the Python driver writes the corresponding material data, launches the Cast3M \texttt{PASAPAS} run, extracts the $10~\mathrm{mm}$ pressure history and returns the QoI $p_g^{10}=g(\mathbf{X})$ to \textsc{OpenTURNS}. This is exactly the orchestration used for calibration --- the only change is that the parameter values now come from a probabilistic design of experiments instead of a manual sweep. The propagation loop proceeds as follows:
+ 
+\begin{enumerate}
+  \item Define the marginal distributions (\cref{tab:random-variables}) and the input correlation (\cref{sec:sensitivity}) as an \textsc{OpenTURNS} \texttt{Distribution}.
+  \item Generate an LHS design of $N$ samples $\{\mathbf{x}^{(i)}\}$ (\cref{sec:lhs}).
+  \item \textbf{for} $i=1,\dots,N$: write material data $\rightarrow$ run Cast3M \texttt{PASAPAS} $\rightarrow$ read $p_g^{10}(\mathbf{x}^{(i)})$.
+  \item Assemble the response sample $\{p_g^{10,(i)}\}$ and post-process: correlation, Sobol indices, response PDF/CDF, $P_f$ and $\beta$.
+\end{enumerate}
+ 
+\subsection{Latin Hypercube Sampling} \label{sec:lhs}
+ 
+Crude Monte Carlo sampling (\cref{sec:monte-carlo}) converges only as $1/\sqrt{N}$ and therefore needs many runs of an expensive THM model. Latin Hypercube Sampling (LHS) is used instead as a variance-reduced alternative \cite{mckay1979,baudin2017}: each marginal is partitioned into $N$ equiprobable strata and exactly one sample is drawn per stratum, so the input space is covered evenly and the estimators of the output mean and variance have a lower variance than crude Monte Carlo at the same $N$. LHS thus reaches stable statistics with markedly fewer Cast3M evaluations, which is decisive given the cost of each run. The Gaussian-quadrature scheme of \cref{sec:quadrature} provides an even cheaper, deterministic alternative for a small number of variables and is used as a cross-check in \cref{sec:spatial-effect}.
+
+
+% =====================================================================
+
 \section{Sensitivity analysis} \label{sec:sensitivity}
 
 The THM model involves numerous material parameters. Following \cite{liu2001}, 18 key parameters are selected for sensitivity analysis based on their expected influence on the structural response.
 
+Two complementary measures are extracted from the LHS sample; both are defined in \cref{appendixB}. The \emph{correlation analysis} (Pearson and Spearman rank, \cref{sec:sensitivity-indicators}) gives a cheap first ranking and the sign of each effect, and also displays the input--input correlation imposed by the mix factor $\theta_{\mathrm{mix}}$ (Nataf copula, \cref{sec:correlation}). The \emph{Sobol indices} (\cref{sec:sobol}, \cref{eq:sobol-indices,eq:sobol-total}), computed with \textsc{OpenTURNS}, then give the variance-based decomposition: first-order $S_i$ (main effect), second-order $S_{ij}$ (pairwise interaction) and total-order $S_{T_i}$.
+ 
+\begin{figure}[htbp]
+  \centering
+  % \includegraphics[width=0.7\linewidth]{figs/ch5_correlation.pdf}
+  \caption{Rank (Spearman) correlation of each input with $p_g^{10}$ and input--input correlation induced by $\theta_{\mathrm{mix}}$.}
+  \label{fig:correlation}
+\end{figure}
+ 
+\begin{figure}[htbp]
+  \centering
+  % \includegraphics[width=0.8\linewidth]{figs/ch5_sobol.pdf}
+  \caption{First-order ($S_i$), total-order ($S_{T_i}$) and main second-order ($S_{ij}$) Sobol indices of $p_g^{10}$.}
+  \label{fig:sobol}
+\end{figure}
+ 
+\begin{draftblock}
+\textbf{Analysis.} Consistent with the deterministic study (\cref{chapter4}), $K_0$ is expected to dominate the variance of $p_g^{10}$ (large, negative correlation: lower permeability traps vapour), followed by $a$ and $\theta_{\mathrm{mix}}$, while $\lambda$ and $\rho C_p$ --- which govern the temperature field --- contribute little to the pressure. A gap between $S_{T_i}$ and $S_i$ for $K_0$, together with sizeable $S_{ij}$ for the pairs $(K_0,a)$ and $(K_0,\theta_{\mathrm{mix}})$, would confirm that water availability and its evacuation act jointly. Any variable with a negligible total index can then be fixed at its mean, reducing the dimensionality of the reliability problem (\cref{sec:reliability}).
+\end{draftblock}
+
+
+% =====================================================================
 
 \section{Reliability analysis} \label{sec:reliability}
+The propagated sample yields the full distribution of the QoI. Reconstructing its PDF and CDF (\cref{fig:reliability}) turns the input scatter into a quantitative safety statement: with the limit-state $G=p_{\mathrm{crit}}-p_g^{10}$ and the reliability formulas of \cref{sec:pf-beta} (\cref{eq:pf-beta}), the probability of failure is the upper-tail area $P_f=1-F_{p_g^{10}}(p_{\mathrm{crit}})$ and the reliability index is $\beta=-\Phi^{-1}(P_f)$, where $p_{\mathrm{crit}}$ is the critical pressure tied to the temperature-degraded tensile strength.
+ 
+\begin{figure}[htbp]
+  \centering
+  % \includegraphics[width=0.85\linewidth]{figs/ch5_pdf_cdf.pdf}
+  \caption{Reconstructed PDF and CDF of $p_g^{10}$ with the critical threshold $p_{\mathrm{crit}}$; the shaded upper tail is $P_f$. The measured Kalifa $10~\mathrm{mm}$ peak is shown for comparison.}
+  \label{fig:reliability}
+\end{figure}
+ 
+\begin{draftblock}
+\textbf{Analysis.} Plotting $p_{\mathrm{crit}}$ on the PDF/CDF makes $P_f$ the visible tail beyond it, and placing the \cref{chapter4} calibrated value on the same axis shows how the uncertainty band straddles the limit state. Because the experimental $10~\mathrm{mm}$ peak of the Kalifa test is available, the reconstructed distribution can be confronted directly with the measurement, giving an experimental anchor for the estimated $P_f$ and $\beta$.
+\end{draftblock}
 
 
+% =====================================================================
 
 \section{Effect of spatial heterogeneity on structural safety} \label{sec:spatial-effect}
 
+The analysis above treats each property as a single \emph{random variable}, constant over the specimen in a given realisation. Real concrete varies from point to point, and local weak zones --- not average properties --- trigger spalling. Two descriptions are therefore compared, both detailed in \cref{appendixB}: a \emph{random variable} (homogeneous per realisation), propagated by LHS or, as a cheap deterministic cross-check, by Gaussian quadrature (\cref{sec:quadrature,sec:quad-cost}); and a \emph{random field} (correlation length $L_c$), generated on the Cast3M mesh by the \texttt{ALEA} operator --- Turning Bands plus lognormal transform (\cref{sec:tbm,sec:lognormal-transformation}) --- and propagated by Monte Carlo through the loop of \cref{sec:thm-integration-mc}.
+ 
+\begin{figure}[htbp]
+  \centering
+  % \includegraphics[width=0.85\linewidth]{figs/ch5_rv_vs_rf.pdf}
+  \caption{CDF of $p_g^{10}$ under the homogeneous (random variable) and heterogeneous (random field, \texttt{ALEA}) descriptions, with the resulting $P_f$ / $\beta$.}
+  \label{fig:rv-vs-rf}
+\end{figure}
+ 
+\begin{draftblock}
+\textbf{Analysis.} Spatial heterogeneity is generally \emph{more critical} than the homogeneous assumption: with a random variable the whole structure shares one value per realisation, so weak zones are compensated by strong ones, whereas with a random field local weak zones can initiate failure without compensation. For the same nominal distributions, the \texttt{ALEA}/Monte Carlo case therefore tends to give a higher $P_f$ (lower $\beta$) than the random-variable (quadrature/LHS) case \cite{delarrard2010,fenton2014}; the gap in \cref{fig:rv-vs-rf} quantifies how much the homogeneous assumption underestimates the spalling risk for $p_g^{10}$. The full derivations, the \texttt{ALEA}/Turning-Bands construction and the quadrature operators are collected in \cref{appendixB}.
+\end{draftblock}
+
+
+\review{Old content is below}
 \begin{draftblock}
 
 The quadrature method models each uncertain parameter as a single random variable, constant over the entire structure (\cref{sec:quadrature}). The Monte Carlo framework, on the other hand, models parameters as random fields discretised via the Turning Band Method, allowing spatial variability within each realisation (\cref{sec:monte-carlo}).

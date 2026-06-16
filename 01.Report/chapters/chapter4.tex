@@ -19,6 +19,21 @@ To a first approximation, the thermal sub-problem is only weakly coupled to the 
 \paragraph{Targets and criteria.}
 The calibration targets are the temperature and gas-pressure histories measured at $10$, $20$, $30$, $40$ and $50~\mathrm{mm}$ from the heated face, together with the near-surface temperature recorded at $2~\mathrm{mm}$ (hereafter denoted the $0~\mathrm{mm}$ / surface measurement). The agreement is quantified by the root-mean-square error on each probe history and, for the pressure, by the error on the peak amplitude and on the time-to-peak. The parameter sweeps were orchestrated by a Python automation layer that launches the Cast3M runs, extracts the probe histories and evaluates these criteria, so that each parameter could be varied systematically rather than by trial and error.    
 \end{draftblock} 
+
+\subsection{Automated parameter sweep}
+\label{sec:cal-automation}
+ 
+The sweeps are driven by a short Python script that launches Cast3M repeatedly, one run per parameter combination, without manual intervention. For each stage the parameter values to be tried are listed explicitly, and \texttt{itertools.product} builds every possible combination of those lists; a single loop then feeds each combination to Cast3M in turn and collects the resulting probe histories for comparison against the experiment.
+ 
+For the gas-pressure stage, the two parameters swept are the intrinsic permeability $K_0$ (denoted \texttt{KINT}) and the permeability--hydration coefficient $A_\Gamma$ (denoted \texttt{AK}), with the candidate values:
+\begin{itemize}
+  \item $K_0 \in \{1\!\times\!10^{-19},\ 2\!\times\!10^{-19},\ 1\!\times\!10^{-20},\
+  5\!\times\!10^{-20},\ 7.5\!\times\!10^{-20},\ 8.5\!\times\!10^{-20}\}~\mathrm{m^2}$
+  ($6$ values);
+  \item $A_\Gamma \in \{3,\ 4,\ 5,\ 6,\ 7,\ 8\}$ ($6$ values).
+\end{itemize}
+The Cartesian product of these two lists yields $6\times 6 = 36$ parameter pairs, i.e.\ $36$ Cast3M runs executed back-to-back. The same driver is reused for the other stages by simply changing which value lists are combined.
+
 % ---------------------------------------------------------------------------
 \section{Temperature calibration} \label{sec:cal-temp}
 \begin{draftblock}
