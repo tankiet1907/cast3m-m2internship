@@ -8,7 +8,7 @@ import numpy as np
 # =========================================================
 # ESTABLISHING PROJECT PATHWAYS
 # =========================================================
-working_dir = r"D:\cast3m-m2internship\03.Calibration\Calibration_01"
+working_dir = r"D:\cast3m-m2internship\03.Calibration\Calibration_02"
 csv_dir = os.path.join(working_dir, "CSV")
 output_dir = os.path.join(working_dir, "Plots")
 if not os.path.exists(csv_dir):
@@ -49,15 +49,17 @@ def plot_and_save(file_list, plot_type):
         filename = os.path.basename(file_path)
         
         # Extract epsilon and h-hot from filenames using Regex.
-        match = re.search(r'epsilon_([^_]+)_h-hot_(.+)\.csv', filename)
+        match = re.search(r'epsilon_([^_]+)_h-hot_([^_]+)_lamda_([^_]+)_cp([^.]+)\.csv', filename)
         
         if match:
             epsilon_val = match.group(1)
-            hhot_val = match.group(2)
+            hhot_val    = match.group(2)
+            lamda_val   = match.group(3)
+            cp_val      = match.group(4)
             
-            # Update the Title and File Name
-            title = f"{plot_type} | Epsilon: {epsilon_val} | h_hot: {hhot_val}"
-            save_name = f"{plot_type}_epsilon_{epsilon_val}_h-hot_{hhot_val}.png"
+            # Update the Title and File Name với đầy đủ 4 thông số
+            title = f"{plot_type} | Eps: {epsilon_val} | h_hot: {hhot_val} | Lamda: {lamda_val} | Cp: {cp_val}"
+            save_name = f"{plot_type}_epsilon_{epsilon_val}_h-hot_{hhot_val}_lamda_{lamda_val}_cp{cp_val}.png"
         else:
             title = f"{plot_type} - {filename}"
             save_name = f"{filename}.png"
