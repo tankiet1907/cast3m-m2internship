@@ -101,8 +101,8 @@ KINT = 2E-19;
 AK   = 3.;
 
 * THERMAL PARAMETERS
-CS   = 1.67   ;
-KS   = 948   ;
+CS   = 960   ;
+KS   = 1.67   ;
 
 * DESORPTION ISOTHERME MODEL PARAMETERS
 *a1   =  46.9364E6 ;
@@ -539,7 +539,7 @@ EV_EX_120 = EVOL 'BLAN' 'MANU' 'Time(min)' L_MIN_1 'T_120mm' LT_120_1 ;
 EV_EXPORT_TEMP = EV_EX_00 ET EV_EX_10 ET EV_EX_20 ET EV_EX_30 ET EV_EX_40 ET EV_EX_50 ET EV_EX_120 ;
 
 * 5. Export to CSV/TXT file
-OPTI 'SORT' 'D:\cast3m-m2internship\03.Calibration\Calibration_02\CSV\temp_results_no_12_epsilon_0.68_h-hot_11.0_lamda_948_cp_1.67.csv' ;
+OPTI 'SORT' 'D:\cast3m-m2internship\03.Calibration\Calibration_02\CSV\temp_results_no_18_epsilon_0.68_h-hot_11.0_lamda_1.67_cp_960.csv' ;
 SORT 'EXCE' EV_EXPORT_TEMP ;
 
 
@@ -574,5 +574,5 @@ EV_PG_120  = EVOL 'BLAN' 'MANU' 'Time(min)' L_MIN_1 'PG_120mm(MPa)'  LPG_120_1 ;
 EV_EXPORT_PG = EV_PG_00 ET EV_PG_10 ET EV_PG_20 ET EV_PG_30 ET EV_PG_40 ET EV_PG_50 ET EV_PG_120;
 
 * 5. Export to CSV/TXT file
-OPTI 'SORT' 'D:\cast3m-m2internship\03.Calibration\Calibration_02\CSV\pg_results_no_12_epsilon_0.68_h-hot_11.0_lamda_948_cp_1.67.csv' ;
+OPTI 'SORT' 'D:\cast3m-m2internship\03.Calibration\Calibration_02\CSV\pg_results_no_18_epsilon_0.68_h-hot_11.0_lamda_1.67_cp_960.csv' ;
 SORT 'EXCE' EV_EXPORT_PG ;
