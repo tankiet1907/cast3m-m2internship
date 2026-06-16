@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex 2026.3.4)  16 JUN 2026 11:38
+This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex 2026.3.4)  16 JUN 2026 18:40
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -1517,93 +1517,86 @@ Chapter 4.
 
 ] [19]
 
-LaTeX Warning: Reference `fig:cal-surface' on page 20 undefined on input line 62.
+LaTeX Warning: Reference `fig:cal-surface' on page 20 undefined on input line 60.
 
 
-LaTeX Warning: Reference `fig:cal-surface' on page 20 undefined on input line 85.
+LaTeX Warning: Reference `fig:cal-surface' on page 20 undefined on input line 66.
 
 [20]
 
-LaTeX Warning: Reference `fig:cal-temp-depth' on page 21 undefined on input line 121.
+LaTeX Warning: Reference `fig:cal-temp-depth' on page 21 undefined on input line 88.
 
+[21]
 
-LaTeX Warning: Reference `fig:cal-temp-depth' on page 21 undefined on input line 158.
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 194--194
-
- []
-
-
-LaTeX Warning: Reference `...' on page 21 undefined on input line 194.
+LaTeX Warning: Reference `fig:cal-temp-depth' on page 1 undefined on input line 103.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `subscript' on input line 194.
+(hyperref)                removing `subscript' on input line 112.
 
 
-Underfull \hbox (badness 1189) in paragraph at lines 194--194
-[]\T1/cmr/m/n/12 It fixes the ini-tial liquid-
- []
+LaTeX Warning: Reference `eq:K-chem' on page 1 undefined on input line 114.
 
-[21] [22]
-Underfull \hbox (badness 10000) in paragraph at lines 254--254
+[22]
 
- []
+LaTeX Warning: Reference `fig:cal-hg-result' on page 23 undefined on input line 134.
+
+[23]
+
+LaTeX Warning: Reference `fig:val-temp' on page 24 undefined on input line 167.
 
 
-LaTeX Warning: Reference `eq:K-damage' on page 23 undefined on input line 254.
+LaTeX Warning: Reference `fig:val-pressure' on page 24 undefined on input line 175.
 
-[23]) [24]
+[24]) [25]
 \openout2 = `chapters/chapter5.aux'.
 
  (./chapters/chapter5.tex
 Chapter 5.
-[25
+[26
 
 
 
 
-] [26]
+] [27]
 
 LaTeX Warning: Reference `sec:correlation-analysis' on page 1 undefined on input line 62.
 
-[27]
-
-LaTeX Warning: Citation 'baudin2017' on page 28 undefined on input line 94.
-
 [28]
 
-LaTeX Warning: Citation 'mckay1979' on page 29 undefined on input line 105.
+LaTeX Warning: Citation 'baudin2017' on page 29 undefined on input line 94.
+
+[29]
+
+LaTeX Warning: Citation 'mckay1979' on page 30 undefined on input line 105.
 
 
-LaTeX Warning: Citation 'baudin2017' on page 29 undefined on input line 105.
+LaTeX Warning: Citation 'baudin2017' on page 30 undefined on input line 105.
 
-[29] [30]
+[30] [31]
 Underfull \hbox (badness 10000) in paragraph at lines 175--175
 
  []
 
-) [31]
+) [32]
 \openout2 = `chapters/chapter6.aux'.
 
  (./chapters/chapter6.tex
 Chapter 6.
-[32
+[33
 
 
 
 
-]) [33] [34
-
-
-
-]
+]) [34]
 Overfull \hbox (3.91978pt too wide) in paragraph at lines 140--140
 []\T1/cmr/m/n/12 François Di Paola. ``Start-ing with Cast3m: Ther-mo-me-chan-i-cal Cal-cu-la-tions''. Mar. 27,
  []
 
 [35
+
+
+
 
 
 ] [36]
@@ -1616,148 +1609,156 @@ Appendix A.
 
 ] [38] [39]
 
-LaTeX Warning: Citation 'lewis1998' on page 40 undefined on input line 81.
+LaTeX Warning: Citation 'lewis1998' on page 40 undefined on input line 83.
 
 
-LaTeX Warning: Citation 'furbish1997' on page 40 undefined on input line 91.
+LaTeX Warning: Citation 'furbish1997' on page 40 undefined on input line 93.
 
 
-Overfull \hbox (23.25424pt too wide) in paragraph at lines 91--92
+Overfull \hbox (23.25424pt too wide) in paragraph at lines 93--94
 []\T1/cmr/m/n/12 The liq-uid wa-ter den-sity evolves with tem-per-a-ture ac-cord-ing to a poly-no-mial fit [[]]: 
  []
 
 
-LaTeX Warning: Reference `tab:rho_coeff' on page 40 undefined on input line 96.
+LaTeX Warning: Reference `tab:rho_coeff' on page 40 undefined on input line 98.
 
 
-LaTeX Warning: Citation 'harmathy1973' on page 40 undefined on input line 98.
+LaTeX Warning: Citation 'harmathy1973' on page 40 undefined on input line 101.
 
 
-LaTeX Warning: Citation 'baggio1993' on page 40 undefined on input line 104.
+Overfull \hbox (22.67523pt too wide) in paragraph at lines 100--102
+[][][]\T1/cmr/m/n/12 is[] [][][]not[] [][][]up[]-[]dated  The solid ther-mal ca-pac-ity evolves lin-early with tem-per-a-ture [[]]: 
+ []
 
 
-Overfull \hbox (2.41766pt too wide) in paragraph at lines 104--105
+LaTeX Warning: Citation 'baggio1993' on page 40 undefined on input line 107.
+
+
+Overfull \hbox (2.41766pt too wide) in paragraph at lines 107--108
 []\T1/cmr/m/n/12 The ther-mal con-duc-tiv-ity de-pends on sat-u-ra-tion, poros-ity, and tem-per-a-ture [[]]: 
  []
 
 
-LaTeX Warning: Citation 'harmathy1973' on page 40 undefined on input line 109.
+LaTeX Warning: Citation 'harmathy1973' on page 40 undefined on input line 112.
 
 [40]
-Overfull \hbox (12.07884pt too wide) in paragraph at lines 147--148
+Overfull \hbox (12.07884pt too wide) in paragraph at lines 150--151
 []\T1/cmr/m/n/12 For steady-state ther-mal anal-y-sis, the tem-per-a-ture is time-independent ($\OMS/cmsy/m/n/12 f[]g \OT1/cmr/m/n/12 = 0$\T1/cmr/m/n/12 )[]\T1/cmr/bx/n/12 [DRAFT]
  []
 
 [41] [42]
 
-LaTeX Warning: Citation 'pesavento2000' on page 43 undefined on input line 201.
+LaTeX Warning: Citation 'pesavento2000' on page 43 undefined on input line 206.
+
+[43]
+
+LaTeX Warning: Citation 'reid1987' on page 44 undefined on input line 220.
+
+[44] [45]
+
+LaTeX Warning: Citation 'ashrae2001' on page 46 undefined on input line 329.
 
 
-LaTeX Warning: Citation 'reid1987' on page 43 undefined on input line 215.
-
-[43] [44] [45]
-
-LaTeX Warning: Citation 'ashrae2001' on page 46 undefined on input line 324.
+LaTeX Warning: Citation 'vangenuchten1980' on page 46 undefined on input line 337.
 
 
-LaTeX Warning: Citation 'vangenuchten1980' on page 46 undefined on input line 332.
+LaTeX Warning: Citation 'baroghel1999' on page 46 undefined on input line 337.
 
 
-LaTeX Warning: Citation 'baroghel1999' on page 46 undefined on input line 332.
+LaTeX Warning: `h' float specifier changed to `ht'.
 
 
-LaTeX Warning: Citation 'pesavento2000' on page 46 undefined on input line 352.
+LaTeX Warning: Citation 'pesavento2000' on page 46 undefined on input line 357.
 
 [46]
 
-LaTeX Warning: Citation 'gawin1999' on page 47 undefined on input line 361.
+LaTeX Warning: Citation 'gawin1999' on page 47 undefined on input line 366.
 
 
-LaTeX Warning: Citation 'gawin2002' on page 47 undefined on input line 368.
+LaTeX Warning: Citation 'gawin2002' on page 47 undefined on input line 373.
 
 
-Overfull \hbox (17.08484pt too wide) in paragraph at lines 368--369
+Overfull \hbox (17.08484pt too wide) in paragraph at lines 373--374
 []\T1/cmr/m/n/12 When me-chan-i-cal dam-age is con-sid-ered, the per-me-abil-ity in-creases sig-nif-i-cantly [[]]: 
  []
 
 
-Overfull \hbox (4.68102pt too wide) in paragraph at lines 374--375
+Overfull \hbox (4.68102pt too wide) in paragraph at lines 379--380
 []\T1/cmr/m/n/12 where $\OMS/cmsy/m/n/12 D$ \T1/cmr/m/n/12 is the dam-age pa-ram-e-ter and $\OML/cmm/m/it/12 A[]$ \T1/cmr/m/n/12 is a ma-te-rial con-stant. This damage-permeability
  []
 
 
-LaTeX Warning: Citation 'vangenuchten1980' on page 47 undefined on input line 378.
+LaTeX Warning: Citation 'vangenuchten1980' on page 47 undefined on input line 383.
 
 
-LaTeX Warning: Citation 'perre1990' on page 47 undefined on input line 392.
+LaTeX Warning: Citation 'perre1990' on page 47 undefined on input line 397.
 
 [47]
 
-LaTeX Warning: Citation 'ashrae2001' on page 48 undefined on input line 407.
+LaTeX Warning: Citation 'ashrae2001' on page 48 undefined on input line 412.
 
 
-LaTeX Warning: Citation 'thomas1995' on page 48 undefined on input line 412.
+LaTeX Warning: Citation 'thomas1995' on page 48 undefined on input line 417.
 
 
-LaTeX Warning: Citation 'schneider1989' on page 48 undefined on input line 421.
+LaTeX Warning: Citation 'schneider1989' on page 48 undefined on input line 426.
 
 [48] [49]
 
-LaTeX Warning: Citation 'mazars1986' on page 50 undefined on input line 498.
+LaTeX Warning: Citation 'mazars1986' on page 50 undefined on input line 503.
 
 
-LaTeX Warning: Citation 'mazars1986' on page 50 undefined on input line 502.
+LaTeX Warning: Citation 'mazars1986' on page 50 undefined on input line 507.
 
 [50] [51]
-Overfull \hbox (2.95096pt too wide) in paragraph at lines 559--560
+Overfull \hbox (2.95096pt too wide) in paragraph at lines 564--565
 []\T1/cmr/m/n/12 Due to dam-age evo-lu-tion, the con-sti-tu-tive re-la-tion be-comes non-linear and [][]Equa-tion (A.53)[][]
  []
 
 
-LaTeX Warning: Citation 'bazant1976' on page 52 undefined on input line 576.
+LaTeX Warning: Citation 'bazant1976' on page 52 undefined on input line 581.
 
 [52]
 
-LaTeX Warning: Citation 'pijaudier1987' on page 53 undefined on input line 580.
+LaTeX Warning: Citation 'pijaudier1987' on page 53 undefined on input line 585.
 
 
-LaTeX Warning: Citation 'giry2011' on page 53 undefined on input line 580.
-
-
-LaTeX Warning: Citation 'hillerborg1976' on page 53 undefined on input line 582.
+LaTeX Warning: Citation 'giry2011' on page 53 undefined on input line 585.
 
 
 LaTeX Warning: Citation 'hillerborg1976' on page 53 undefined on input line 587.
 
+
+LaTeX Warning: Citation 'hillerborg1976' on page 53 undefined on input line 592.
+
 [53]
-Overfull \hbox (1.78465pt too wide) in paragraph at lines 636--637
+Overfull \hbox (1.78465pt too wide) in paragraph at lines 641--642
 \T1/cmr/m/n/12 The en-ergy con-ser-va-tion equa-tion gov-erns the tem-per-a-ture field within the porous medium.
  []
 
 [54] [55] [56]
 
-LaTeX Warning: Citation 'lewis1998' on page 57 undefined on input line 731.
+LaTeX Warning: Citation 'lewis1998' on page 57 undefined on input line 736.
 
 
-LaTeX Warning: Reference `sec:mazars' on page 1 undefined on input line 745.
+LaTeX Warning: Reference `sec:mazars' on page 1 undefined on input line 750.
 
-[57] [58]
+[57] [58] [59]
 
-LaTeX Warning: Reference `fig:spalling_TM' on page 59 undefined on input line 838.
+LaTeX Warning: Reference `fig:spalling_TM' on page 60 undefined on input line 842.
 
-[59]
 
-LaTeX Warning: Reference `fig:spalling_TH' on page 60 undefined on input line 854.
+LaTeX Warning: Reference `fig:spalling_TH' on page 60 undefined on input line 858.
 
 [60] [61]
 
-LaTeX Warning: Citation 'lewis1998' on page 62 undefined on input line 926.
+LaTeX Warning: Citation 'lewis1998' on page 62 undefined on input line 930.
 
 
-LaTeX Warning: Citation 'zienkiewicz2013' on page 62 undefined on input line 926.
+LaTeX Warning: Citation 'zienkiewicz2013' on page 62 undefined on input line 930.
 
 
-Overfull \hbox (16.4719pt too wide) in paragraph at lines 926--927
+Overfull \hbox (16.4719pt too wide) in paragraph at lines 930--931
 []\T1/cmr/m/n/12 The time in-te-gra-tion of [][]Equa-tion (A.86)[][] is car-ried out us-ing the Wilson-$\OML/cmm/m/it/12 ^^R$ \T1/cmr/m/n/12 method [[],
  []
 
@@ -1825,12 +1826,12 @@ LaTeX Warning: Reference `sec:dominant-params' on page 1 undefined on input line
 
 
 ]
-<CV/CV.pdf, id=1604, 597.50829pt x 845.0471pt>
+<CV/CV.pdf, id=1609, 597.50829pt x 845.0471pt>
 File: CV/CV.pdf Graphic file (type pdf)
 <use CV/CV.pdf>
 Package pdftex.def Info: CV/CV.pdf  used on input line 152.
 (pdftex.def)             Requested size: 597.50682pt x 845.04504pt.
-<CV/CV.pdf, id=1606, page=1, 597.50829pt x 845.0471pt>
+<CV/CV.pdf, id=1611, page=1, 597.50829pt x 845.0471pt>
 File: CV/CV.pdf Graphic file (type pdf)
 <use CV/CV.pdf, page 1>
 Package pdftex.def Info: CV/CV.pdf , page1 used on input line 152.
@@ -1854,7 +1855,7 @@ Package pdftex.def Info: CV/CV.pdf , page1 used on input line 152.
  [79
 
  <./CV/CV.pdf>]
-<CV/CV.pdf, id=1655, page=2, 597.50829pt x 845.0471pt>
+<CV/CV.pdf, id=1660, page=2, 597.50829pt x 845.0471pt>
 File: CV/CV.pdf Graphic file (type pdf)
 <use CV/CV.pdf, page 2>
 Package pdftex.def Info: CV/CV.pdf , page2 used on input line 152.
@@ -1884,24 +1885,24 @@ LaTeX Warning: There were undefined references.
 LaTeX Warning: There were multiply-defined labels.
 
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: 829AC316E38A3B963CCEDCD1CC8D9FD7;24588.
+(rerunfilecheck)             Checksum: 417F901A881310419B4F34D93A55B510;24557.
 Package logreq Info: Writing requests to 'main.run.xml'.
 \openout1 = `main.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
  43579 strings out of 467525
- 891723 string characters out of 5423210
- 1725559 words of memory out of 5000000
- 71349 multiletter control sequences out of 15000+600000
+ 891755 string characters out of 5423210
+ 1725699 words of memory out of 5000000
+ 71350 multiletter control sequences out of 15000+600000
  652983 words of font info for 106 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  115i,17n,110p,1661b,2113s stack positions out of 10000i,1000n,20000p,200000b,200000s
 <c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx8.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmmib10.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy6.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/symbols/msam10.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/cm-super/sfbx1200.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/cm-super/sfbx1440.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/cm-super/sfbx1728.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/cm-super/sfbx2488.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/cm-super/sfcc1200.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/cm-super/sfrm0800.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/cm-super/sfrm1095.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/cm-super/sfrm1200.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/cm-super/sfti1200.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/cm-super/sftt1200.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/cm-super/sftt1440.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/cm-super/sfxc1440.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/cm-super/sfxc1728.pfb>
-Output written on main.pdf (92 pages, 2725270 bytes).
+Output written on main.pdf (92 pages, 2731922 bytes).
 PDF statistics:
- 1904 PDF objects out of 2073 (max. 8388607)
- 1690 compressed objects within 17 object streams
- 486 named destinations out of 1000 (max. 500000)
+ 1909 PDF objects out of 2073 (max. 8388607)
+ 1695 compressed objects within 17 object streams
+ 485 named destinations out of 1000 (max. 500000)
  978 words of extra memory for PDF output out of 10000 (max. 10000000)
 

@@ -24,6 +24,7 @@ The convection heat transfer mode is \draft{comprised of two mechanisms: energy 
     \item \textbf{Rate Equation (Newton's Law of Cooling):} Regardless of the nature of the convection process, the appropriate rate equation is:
     \begin{equation}
         q''_{conv} = h (T_s - T_\infty)
+        \label{eq:convection}
     \end{equation}
     Where $q''$ is the convective heat flux ($W/m^2$), $h$ is the convection heat transfer coefficient ($W/m^2 \cdot K$), $T_s$ is the surface temperature, and $T_\infty$ is the fluid temperature.
 \end{itemize}
@@ -41,6 +42,7 @@ Thermal radiation is energy emitted by matter that is at a nonzero temperature, 
     \item \textbf{Net Radiation Exchange:} For a gray surface \draft{($\alpha = \varepsilon$)} at $T_s$ completely surrounded by a much larger isothermal surface at $T_{sur}$, the net rate of radiation heat transfer per unit area is:
     \begin{equation}
         q''_{rad} = \varepsilon \sigma (T_s^4 - T_{sur}^4)
+        \label{eq:radiation}
     \end{equation}
     \draft{For many applications, this can also be expressed using a linearized radiation heat transfer coefficient $h_r$ as $q_{rad} = h_r A (T_s - T_{sur})$.}
 \end{itemize}
@@ -95,6 +97,7 @@ The liquid water density evolves with temperature according to a polynomial fit 
 \end{equation}
 with coefficients $a_i$ given in Table~\ref{tab:rho_coeff}.
 
+\review{This section is under review for matching the THC model implemented. Cps is not updated}
 The solid thermal capacity evolves linearly with temperature \cite{harmathy1973}:
 \begin{equation}
     C_{ps}(T) = C_{ps0}[1 + A_c(T - T_0)]
@@ -157,6 +160,8 @@ Due to the low thermal conductivity of concrete, fire exposure produces steep te
 Since concrete is inherently weak in tension, this stress state can initiate cracking parallel to the heated face. The role of thermal gradient in the spalling process is discussed further in \cref{sec:spalling}.
 
 \section{Hydric behavior}
+\review{This section is under review for matching the THC model implemented}
+
 \begin{reviewblock}
 When concrete is exposed to high temperatures, the behavior of water within the porous network plays a central role in the thermo-hydro-mechanical response of the material. This section presents the classification of water in concrete, the phase-change mechanisms, the governing equation for moisture transport, and the constitutive laws required to close the system.
 \end{reviewblock}
@@ -743,7 +748,6 @@ The effective stress $\boldsymbol{\sigma}'$ is the  stress that governs the mech
     \label{eq:sigma_eff_FE}
 \end{equation}
 where $\boldsymbol{\varepsilon}_{el} = \boldsymbol{\varepsilon} - \boldsymbol{\varepsilon}_{th} - \boldsymbol{\varepsilon}_{sh}$ (\cref{eq:eps_elastic}). This effective stress is the input to the Mazars damage criterion (\cref{sec:mazars}). In heated concrete, the build-up of gas pressure (\cref{sec:pore_pressure}) increases $p_s$ in the load vector, which shifts $\boldsymbol{\sigma}'$ toward tension and promotes damage when $f_t$ is exceeded.
-
 
 \section{THM model and spalling}
 
