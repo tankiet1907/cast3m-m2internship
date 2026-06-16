@@ -59,7 +59,7 @@ def plot_and_save(file_list, plot_type):
             
             # Update the Title and File Name với đầy đủ 4 thông số
             title = f"{plot_type} | Eps: {epsilon_val} | h_hot: {hhot_val} | Lamda: {lamda_val} | Cp: {cp_val}"
-            save_name = f"{plot_type}_epsilon_{epsilon_val}_h-hot_{hhot_val}_lamda_{lamda_val}_cp{cp_val}.png"
+            save_name = f"{plot_type}_epsilon_{epsilon_val}_h-hot_{hhot_val}_lamda_{lamda_val}_cp_{cp_val}.png"
         else:
             title = f"{plot_type} - {filename}"
             save_name = f"{filename}.png"
