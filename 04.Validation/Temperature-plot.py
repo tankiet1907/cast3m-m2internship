@@ -5,7 +5,7 @@ import numpy as np
 # ===================================================================
 # CẤU HÌNH TÙY CHỌN (TẮT/BẬT ĐƯỜNG 120mm)
 # ===================================================================
-SHOW_120MM = True  # Đổi thành False nếu bạn muốn ẩn dữ liệu 120mm
+SHOW_120MM = False  # Đổi thành False nếu bạn muốn ẩn dữ liệu 120mm
 
 # ===================================================================
 # 1. NHẬP DỮ LIỆU DAUTI VÀ THỰC NGHIỆM
