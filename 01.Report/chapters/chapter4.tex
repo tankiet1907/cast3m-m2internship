@@ -6,37 +6,44 @@
 \draft{This chapter presents the calibration and validation of the coupled thermo-hydral (TH) model implemented in Cast3M against the Kalifa experiment \cite{kalifa2000}. Rather than adjusting every material parameter at once, a \emph{sequential} calibration is adopted that follows the physical hierarchy of the coupled problem: the temperature field is calibrated first and, only once it is reliably reproduced, the gas-pressure response is addressed. The chapter is therefore organised as a calibration ``journey'': from the heated surface inward for the thermal field (Section~\ref{sec:cal-temp}), then from the dominant to the secondary parameters for the hydric field (Section~\ref{sec:cal-pressure}), closing with the validation outcome and its limitations (Section~\ref{sec:validation}).}
  
 % ---------------------------------------------------------------------------
-\section{Calibration strategy} \label{sec:cal-strategy}
-\begin{draftblock}
+\section{Model calibration} \label{sec:calibration}
 
-To a first approximation, the thermal sub-problem is only weakly coupled to the hydric one: the temperature field drives evaporation, dehydration and the gas-pressure build-up, whereas the back-influence of the hydric state on the temperature field is comparatively small over the range of the test. This hierarchy motivates a two-stage procedure:
- 
+The accuracy of TH/THC model relies on a large number of material parameters -- intrinsic permeability, thermal conductivity and heat capacity, sorption properties, surface exchange coefficients and a complex set of constitutive laws describing their evolution with temperature and dehydration.
+
+Many critical properties at high-temperature such as the evolution of intrinsic permeability, sorption isotherms are extremely difficult or even impossible to measure directly through experimental techniques and the values often contain uncertainties due to the intrusive nature of the sensors. Furthermore these are not measured directly in the Kalifa campaign.
+
+A pre-determined parameter set therefore cannot be expected to reproduce the experiment. Consequently, a calibration procedure for the numerical models is strictly required to identify, within physically admissible ranges, the parameter set that makes the model reproduce the measured temperature and gas-pressure histories. Only once this reference case is calibrated and validated can the model be trusted for uncertainty studies in \cref{chapter5}.
+
+\subsection{Calibration strategy} \label{sec:cal-strategy}
+At the first approximation, the thermal problem is weakly coupled to the hydric one: the temperatur field drives evaporation, dehydration and the gas-pressure build-up, while the effect of the hydric state on the temperature field is relatively small within the experimental range. This hierachy promotes a two-stage calibration process:
+
 \begin{enumerate}
-  \item \textbf{Stage~1 -- Temperature.} The thermal response is calibrated independently of the pressure field. Within this stage the parameters are themselves ordered: the \emph{surface} (boundary) parameters are fixed before the \emph{bulk} conduction parameters.
-  \item \textbf{Stage~2 -- Gas pressure.} Using the calibrated temperature field as a fixed thermal loading, the hydric parameters governing the gas-pressure evolution are adjusted, from the most influential to the secondary ones.
+  \item \textbf{Stage~1 -- Temperature.} The temperature evolution is calibrated independently of the pressure field. In this stage, the \emph{surface} (boundary) parameters should be calibrated first, then the \emph{bulk} conduction parameters.
+  \item \textbf{Stage~2 -- Gas pressure.} With the reliaably calibrated temperature field as a fixed thermal loading, the hydric parameters gorvening the gas-pressure evolution are adjusted, from the most influential to the secondary ones.
 \end{enumerate}
- 
-\paragraph{Targets and criteria.}
-The calibration targets are the temperature and gas-pressure histories measured at $10$, $20$, $30$, $40$ and $50~\mathrm{mm}$ from the heated face, together with the near-surface temperature recorded at $2~\mathrm{mm}$ (hereafter denoted the $0~\mathrm{mm}$ / surface measurement). The agreement is quantified by the root-mean-square error on each probe history and, for the pressure, by the error on the peak amplitude and on the time-to-peak. The parameter sweeps were orchestrated by a Python automation layer that launches the Cast3M runs, extracts the probe histories and evaluates these criteria, so that each parameter could be varied systematically rather than by trial and error.    
-\end{draftblock} 
 
-\subsection{Automated parameter sweep}
-\label{sec:cal-automation}
+\paragraph{Targets and criteria.}
+The calibration targets are the temperature and gas-pressure histories measured at $10$, $20$, $30$, $40$ and $50~\mathrm{mm}$ from the heated face, together with the near-surface temperature recorded at $2~\mathrm{mm}$ (denoted the $0~\mathrm{mm}$ measurement).
+
+
+\subsection{Automated parameter sweep} \label{sec:cal-automation}
+The sweeps are driven by a Python script that launches Cast3M repeatedly, one run per parameter combination, without manual intervention. For each stage the parameter values to be tried are listed explicitly, and \texttt{itertools.product} builds every possible combination of those lists; a single loop then feeds each combination to Cast3M in turn.
+
+This automation relies on two supporting pieces of code. First, the Cast3M input code itself exports the results of each run to a \texttt{.csv} file -- the temperature and gas-pressure histories at the measurement points. Second, a separate Python post-processing script reads these \texttt{.csv} files and plots the computed histories against the experimental measurements \cite{kalifa2000} and also against with the results from Dorjan Dauti's thesis \cite{dauti2018}. All combinations then can be visually compared, and the best-fit set is selected by the author based on this comparison.
  
-The sweeps are driven by a short Python script that launches Cast3M repeatedly, one run per parameter combination, without manual intervention. For each stage the parameter values to be tried are listed explicitly, and \texttt{itertools.product} builds every possible combination of those lists; a single loop then feeds each combination to Cast3M in turn and collects the resulting probe histories for comparison against the experiment.
- 
-For the gas-pressure stage, the two parameters swept are the intrinsic permeability $K_0$ (denoted \texttt{KINT}) and the permeability--hydration coefficient $A_\Gamma$ (denoted \texttt{AK}), with the candidate values:
+For example, in the gas-pressure calibration stage, the two parameters swept are the intrinsic permeability $K_0$ (denoted \texttt{KINT}) and the permeability--hydration coefficient $A_\Gamma$ (denoted \texttt{AK}), with the trial values:
 \begin{itemize}
   \item $K_0 \in \{1\!\times\!10^{-19},\ 2\!\times\!10^{-19},\ 1\!\times\!10^{-20},\
   5\!\times\!10^{-20},\ 7.5\!\times\!10^{-20},\ 8.5\!\times\!10^{-20}\}~\mathrm{m^2}$
   ($6$ values);
   \item $A_\Gamma \in \{3,\ 4,\ 5,\ 6,\ 7,\ 8\}$ ($6$ values).
 \end{itemize}
-The Cartesian product of these two lists yields $6\times 6 = 36$ parameter pairs, i.e.\ $36$ Cast3M runs executed back-to-back. The same driver is reused for the other stages by simply changing which value lists are combined.
+These two lists give $6\times 6 = 36$ parameter pairs, i.e.\ $36$ Cast3M runs. The same driver is reused by simply changing the value lists.
+
+In every stage, a wider range of each parameter is first explored to bracket the admissible values; the search is then narrowed to the few representative values reported in the following sections, which are the ones shown in the figures.
 
 % ---------------------------------------------------------------------------
 \section{Temperature calibration} \label{sec:cal-temp}
-\begin{draftblock}
     
 \subsection{Surface temperature (\texorpdfstring{$0~\mathrm{mm}$}{0 mm}): boundary heat exchange} \label{sec:cal-surf}
  
@@ -49,30 +56,107 @@ The first quantity calibrated is the temperature of the heated face. In the test
 where $h_c$ is the convective heat-transfer coefficient, $\varepsilon$ the surface emissivity (radiative coefficient), $\sigma$ the Stefan--Boltzmann constant, $T_r$ the radiant-source temperature and $T_s$ the surface temperature.
  
 Because every in-depth temperature is slaved to the surface temperature, the boundary condition~\eqref{eq:surf-bc} is calibrated \emph{first}. The two boundary coefficients $h_c$ and $\varepsilon$ are adjusted so that the computed $0~\mathrm{mm}$ history matches the measured near-surface ($2~\mathrm{mm}$) response -- in particular the initial heating rate and the asymptotic surface temperature. At this point the conduction parameters are held at their reference values; only the energy input at the surface is tuned.
+
+The surface response is calibrated over three values of $h_c$ and three of
+$\varepsilon$, giving the $3\times 3$ set of surface-temperature curves shown in
+Fig.~\ref{fig:cal-surface}. The retained pair is $h_c = [\,\dots\,]$ and
+$\varepsilon = [\,\dots\,]$.
  
-% \begin{figure}[h] \centering ... \caption{Calibration of $h_c$ and
-% $\varepsilon$ against the surface ($2~\mathrm{mm}$) thermocouple.}
-% \label{fig:cal-surface} \end{figure}
+%\begin{figure}[H]
+%  \centering
+  % --- row 1: epsilon_1 ---
+%  \begin{subfigure}{0.31\textwidth}\includegraphics[width=\linewidth]{fig/surf_h1_eps1}\caption{}\end{subfigure}\hfill
+%  \begin{subfigure}{0.31\textwidth}\includegraphics[width=\linewidth]{fig/surf_h2_eps1}\caption{}\end{subfigure}\hfill
+%  \begin{subfigure}{0.31\textwidth}\includegraphics[width=\linewidth]{fig/surf_h3_eps1}\caption{}\end{subfigure}
+%  \\[2pt]
+  % --- row 2: epsilon_2 ---
+%  \begin{subfigure}{0.31\textwidth}\includegraphics[width=\linewidth]{fig/surf_h1_eps2}\caption{}\end{subfigure}\hfill
+%  \begin{subfigure}{0.31\textwidth}\includegraphics[width=\linewidth]{fig/surf_h2_eps2}\caption{}\end{subfigure}\hfill
+%  \begin{subfigure}{0.31\textwidth}\includegraphics[width=\linewidth]{fig/surf_h3_eps2}\caption{}\end{subfigure}
+%  \\[2pt]
+  % --- row 3: epsilon_3 ---
+%  \begin{subfigure}{0.31\textwidth}\includegraphics[width=\linewidth]{fig/surf_h1_eps3\caption{}\end{subfigure}\hfill
+%  \begin{subfigure}{0.31\textwidth}\includegraphics[width=\linewidth]{fig/surf_h2_eps3}\caption{}\end{subfigure}\hfill
+%  \begin{subfigure}{0.31\textwidth}\includegraphics[width=\linewidth]{fig/surf_h3_eps3}\caption{}\end{subfigure}
+%  \caption{Surface ($0~\mathrm{mm}$) temperature for the $3\times 3$ combinations of the convective coefficient $h_c$ (columns) and the emissivity $\varepsilon$ (rows), compared with the measured near-surface response.}
+%  \label{fig:cal-surface}
+%\end{figure}
+
+Two distinct effects emerge from Fig.~\ref{fig:cal-surface}. The emissivity
+$\varepsilon$ is the most sensitive parameter and acts in a strongly non-linear way:
+because the radiative term scales as $T^{4}$ in Eq.~\eqref{eq:surf-bc}, a small
+increase in $\varepsilon$ raises the surface temperature substantially, and most
+strongly in the high-temperature part of the curve, where radiation dominates the
+heat input. The convective coefficient $h_c$ acts more gently and mainly on the
+\emph{early} part of the curve: increasing $h_c$ raises the initial heating rate
+(the linear $h_c(T_\infty - T_s)$ term is largest while $T_s$ is still low), with
+only a slight additional rise in the tail. In short, $\varepsilon$ sets the level of
+the high-temperature plateau while $h_c$ controls the initial ramp; tuning the two
+together reproduces both ends of the measured surface history.
  
 \subsection{In-depth temperature: thermal conductivity and heat capacity} \label{sec:cal-depth}
  
-Once the surface temperature is reproduced, the temperature rise at depth ($10$--$50~\mathrm{mm}$) is governed by heat conduction through the material, i.e.\ by the thermal conductivity $\lambda(T)$ and the volumetric heat capacity $\rho C_p(T)$. The conductivity sets the steepness of the thermal gradient and the speed of the thermal front, while the heat capacity sets the thermal inertia -- the time lag of the temperature rise at each depth.
+Once the surface temperature is reproduced, the temperature rise at depth
+($10$--$50~\mathrm{mm}$) is governed by heat conduction through the material, i.e.\
+by the thermal conductivity $\lambda(T)$ and the volumetric heat capacity
+$\rho C_p(T)$. The conductivity sets the steepness of the thermal gradient and the
+speed of the thermal front, while the heat capacity sets the thermal inertia -- the
+time lag of the temperature rise at each depth.
  
-A subtlety arises here: adjusting the surface condition in Section~\ref{sec:cal-surf} changes the energy that actually enters the specimen, which in turn shifts the in-depth histories. Consequently $\lambda(T)$ and $\rho C_p(T)$ cannot be calibrated in isolation -- they must be \emph{re-calibrated} jointly with the surface condition. In practice a short iterative loop is used:
+A subtlety arises here: adjusting the surface condition in
+Section~\ref{sec:cal-surf} changes the energy that actually enters the specimen,
+which in turn shifts the in-depth histories. Consequently $\lambda(T)$ and
+$\rho C_p(T)$ cannot be calibrated in isolation -- they must be
+\emph{re-calibrated} jointly with the surface condition. In practice a short
+iterative loop is used:
 \begin{enumerate}
   \item $\lambda(T)$ and $\rho C_p(T)$ are adjusted to match the arrival time and
   slope of the temperature rise at each depth;
   \item $h_c$ and $\varepsilon$ are then re-checked against the surface probe and,
   if necessary, slightly corrected;
 \end{enumerate}
-and the loop is repeated until the whole set of probes ($0$--$50~\mathrm{mm}$) is reproduced consistently.
+and the loop is repeated until the whole set of probes ($0$--$50~\mathrm{mm}$) is
+reproduced consistently. As for the surface stage, three values of $\lambda$ and
+three of $\rho C_p$ are retained for the final sweep, giving the $3\times 3$ set of
+in-depth temperature curves shown in Fig.~\ref{fig:cal-temp-depth}.
  
-% \begin{figure}[h] \centering ... \caption{Computed vs.\ measured temperature
-% histories at $0$, $10$, $20$, $30$, $40$ and $50~\mathrm{mm}$ after calibration
-% of $\lambda(T)$ and $\rho C_p(T)$.} \label{fig:cal-temp-depth} \end{figure}
+%\begin{figure}[H]
+%  \centering
+  % --- row 1: rcp_1 ---
+%  \begin{subfigure}{0.31\textwidth}\includegraphics[width=\linewidth]{fig/cond_lam1_rcp1}\caption{}\end{subfigure}\hfill
+%  \begin{subfigure}{0.31\textwidth}\includegraphics[width=\linewidth]{fig/cond_lam2_rcp1}\caption{}\end{subfigure}\hfill
+%  \begin{subfigure}{0.31\textwidth}\includegraphics[width=\linewidth]{fig/cond_lam3_rcp1}\caption{}\end{subfigure}
+%  \\[2pt]
+  % --- row 2: rcp_2 ---
+%  \begin{subfigure}{0.31\textwidth}\includegraphics[width=\linewidth]{fig/cond_lam1_rcp2}\caption{}\end{subfigure}\hfill
+%  \begin{subfigure}{0.31\textwidth}\includegraphics[width=\linewidth]{fig/cond_lam2_rcp2}\caption{}\end{subfigure}\hfill
+%  \begin{subfigure}{0.31\textwidth}\includegraphics[width=\linewidth]{fig/cond_lam3_rcp2}\caption{}\end{subfigure}
+%  \\[2pt]
+  % --- row 3: rcp_3 ---
+%  \begin{subfigure}{0.31\textwidth}\includegraphics[width=\linewidth]{fig/cond_lam1_rcp3}\caption{}\end{subfigure}\hfill
+%  \begin{subfigure}{0.31\textwidth}\includegraphics[width=\linewidth]{fig/cond_lam2_rcp3}\caption{}\end{subfigure}\hfill
+%  \begin{subfigure}{0.31\textwidth}\includegraphics[width=\linewidth]{fig/cond_lam3_rcp3}\caption{}\end{subfigure}
+%  \caption{In-depth temperature histories ($10$--$50~\mathrm{mm}$) for the $3\times 3$ combinations of the thermal conductivity $\lambda$ (columns) and the volumetric heat capacity $\rho C_p$ (rows), compared with the measurements.}
+%  \label{fig:cal-temp-depth}
+%\end{figure}
  
-The final temperature agreement is good across all depths (Fig.~\ref{fig:cal-temp-depth}), which provides a reliable thermal loading for the second calibration stage.
-\end{draftblock} 
+The two parameters act on different parts of the specimen. The conductivity
+$\lambda$ mainly affects the region \emph{closer to the heated face}: it sets how
+fast heat is conducted inward. Lowering $\lambda$ slows the inward transfer, so heat
+accumulates near the surface and the near-face temperature rises while the deeper
+points heat up more slowly; raising $\lambda$ has the opposite effect, transmitting
+heat inward and lowering the near-surface temperature. The heat capacity
+$\rho C_p$, by contrast, governs the thermal inertia and is felt mostly at the
+\emph{deepest points} ($40$ and $50~\mathrm{mm}$): a larger $\rho C_p$ stores more
+energy per unit temperature rise, so the same heat flux produces a smaller and more
+delayed temperature increase in the core, lowering the internal temperatures.
+Adjusting $\lambda$ to match the near-face response and $\rho C_p$ to match the
+$40$--$50~\mathrm{mm}$ histories therefore brings the whole depth profile into
+agreement.
+ 
+The final temperature agreement is good across all depths
+(Fig.~\ref{fig:cal-temp-depth}), which provides a reliable thermal loading for the
+second calibration stage.
 
 % ---------------------------------------------------------------------------
 \section{Gas-pressure calibration} \label{sec:cal-pressure}
