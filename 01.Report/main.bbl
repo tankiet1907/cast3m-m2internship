@@ -1,5 +1,5 @@
 % $ biblatex auxiliary file $
-% $ biblatex bbl format version 3.3 $
+% $ biblatex bbl format version 3.2 $
 % Do not modify the above lines!
 %
 % This is an auxiliary file used by the 'biblatex' package.
@@ -18,8 +18,8 @@
 
 
 \refsection{0}
-  \datalist[entry]{nty/global//global/global/global}
-    \entry{baroth2023}{book}{}{}
+  \datalist[entry]{nty/global//global/global}
+    \entry{baroth2023}{book}{}
       \name{author}{1}{}{%
         {{hash=a8bebb79cbb87e04ad72cf0f8e7ff1af}{%
            family={Baroth},
@@ -32,12 +32,10 @@
       }
       \strng{namehash}{a8bebb79cbb87e04ad72cf0f8e7ff1af}
       \strng{fullhash}{a8bebb79cbb87e04ad72cf0f8e7ff1af}
-      \strng{fullhashraw}{a8bebb79cbb87e04ad72cf0f8e7ff1af}
       \strng{bibnamehash}{a8bebb79cbb87e04ad72cf0f8e7ff1af}
       \strng{authorbibnamehash}{a8bebb79cbb87e04ad72cf0f8e7ff1af}
       \strng{authornamehash}{a8bebb79cbb87e04ad72cf0f8e7ff1af}
       \strng{authorfullhash}{a8bebb79cbb87e04ad72cf0f8e7ff1af}
-      \strng{authorfullhashraw}{a8bebb79cbb87e04ad72cf0f8e7ff1af}
       \field{sortinit}{B}
       \field{sortinithash}{d7095fff47cda75ca2589920aae98399}
       \field{labelnamesource}{author}
@@ -48,7 +46,7 @@
       \field{year}{2023}
       \field{dateera}{ce}
     \endentry
-    \entry{baroth2011}{incollection}{}{}
+    \entry{baroth2011}{incollection}{}
       \name{author}{3}{}{%
         {{hash=a8bebb79cbb87e04ad72cf0f8e7ff1af}{%
            family={Baroth},
@@ -68,12 +66,10 @@
       }
       \strng{namehash}{5d213cf760f717bf2e1d5fea8ecc1cc6}
       \strng{fullhash}{5d213cf760f717bf2e1d5fea8ecc1cc6}
-      \strng{fullhashraw}{5d213cf760f717bf2e1d5fea8ecc1cc6}
       \strng{bibnamehash}{5d213cf760f717bf2e1d5fea8ecc1cc6}
       \strng{authorbibnamehash}{5d213cf760f717bf2e1d5fea8ecc1cc6}
       \strng{authornamehash}{5d213cf760f717bf2e1d5fea8ecc1cc6}
       \strng{authorfullhash}{5d213cf760f717bf2e1d5fea8ecc1cc6}
-      \strng{authorfullhashraw}{5d213cf760f717bf2e1d5fea8ecc1cc6}
       \field{sortinit}{B}
       \field{sortinithash}{d7095fff47cda75ca2589920aae98399}
       \field{labelnamesource}{author}
@@ -93,7 +89,7 @@
       \verb C:\Users\thong\Zotero\storage\2ICLRYZQ\Baroth et al. - 2011 - Construction Reliability - Safety, Variability and Sustainability.pdf
       \endverb
     \endentry
-    \entry{bergman2017}{incollection}{}{}
+    \entry{bergman2017}{incollection}{}
       \name{author}{2}{}{%
         {{hash=51aa5e9e880456c2144bd86f05e91631}{%
            family={Bergman},
@@ -111,12 +107,10 @@
       }
       \strng{namehash}{4ae83e4c306f46195d2dfa5eb90cb9bf}
       \strng{fullhash}{4ae83e4c306f46195d2dfa5eb90cb9bf}
-      \strng{fullhashraw}{4ae83e4c306f46195d2dfa5eb90cb9bf}
       \strng{bibnamehash}{4ae83e4c306f46195d2dfa5eb90cb9bf}
       \strng{authorbibnamehash}{4ae83e4c306f46195d2dfa5eb90cb9bf}
       \strng{authornamehash}{4ae83e4c306f46195d2dfa5eb90cb9bf}
       \strng{authorfullhash}{4ae83e4c306f46195d2dfa5eb90cb9bf}
-      \strng{authorfullhashraw}{4ae83e4c306f46195d2dfa5eb90cb9bf}
       \field{sortinit}{B}
       \field{sortinithash}{d7095fff47cda75ca2589920aae98399}
       \field{labelnamesource}{author}
@@ -133,7 +127,7 @@
       \verb C:\Users\thong\Zotero\storage\JEEHEQGK\Bergman and Lavine - 2017 - Introduction.pdf
       \endverb
     \endentry
-    \entry{dalpont2020}{book}{}{}
+    \entry{dalpont2020}{book}{}
       \name{author}{1}{}{%
         {{hash=612cba7e4e060464aeae380c060ac9d3}{%
            family={Dal\bibnamedelima Pont},
@@ -146,12 +140,10 @@
       }
       \strng{namehash}{612cba7e4e060464aeae380c060ac9d3}
       \strng{fullhash}{612cba7e4e060464aeae380c060ac9d3}
-      \strng{fullhashraw}{612cba7e4e060464aeae380c060ac9d3}
       \strng{bibnamehash}{612cba7e4e060464aeae380c060ac9d3}
       \strng{authorbibnamehash}{612cba7e4e060464aeae380c060ac9d3}
       \strng{authornamehash}{612cba7e4e060464aeae380c060ac9d3}
       \strng{authorfullhash}{612cba7e4e060464aeae380c060ac9d3}
-      \strng{authorfullhashraw}{612cba7e4e060464aeae380c060ac9d3}
       \field{sortinit}{D}
       \field{sortinithash}{6f385f66841fb5e82009dc833c761848}
       \field{labelnamesource}{author}
@@ -160,7 +152,7 @@
       \field{year}{2020}
       \field{dateera}{ce}
     \endentry
-    \entry{dauti2018}{thesis}{}{}
+    \entry{dauti2018}{thesis}{}
       \name{author}{1}{}{%
         {{hash=d992015dbe48113dfa0f7d65a9fecc07}{%
            family={Dauti},
@@ -173,12 +165,10 @@
       }
       \strng{namehash}{d992015dbe48113dfa0f7d65a9fecc07}
       \strng{fullhash}{d992015dbe48113dfa0f7d65a9fecc07}
-      \strng{fullhashraw}{d992015dbe48113dfa0f7d65a9fecc07}
       \strng{bibnamehash}{d992015dbe48113dfa0f7d65a9fecc07}
       \strng{authorbibnamehash}{d992015dbe48113dfa0f7d65a9fecc07}
       \strng{authornamehash}{d992015dbe48113dfa0f7d65a9fecc07}
       \strng{authorfullhash}{d992015dbe48113dfa0f7d65a9fecc07}
-      \strng{authorfullhashraw}{d992015dbe48113dfa0f7d65a9fecc07}
       \field{sortinit}{D}
       \field{sortinithash}{6f385f66841fb5e82009dc833c761848}
       \field{labelnamesource}{author}
@@ -194,7 +184,7 @@
       \endverb
       \keyw{Ecaillage,Fire spalling,Haute temperature,High temperature,Mesoscale modeling,Modele Thermo-Hydro-Mecanique,Modelisation mesoscopique,Neutron tomography,Thermo-Hydro-Mechanical model,Tomographie neutron}
     \endentry
-    \entry{delarrard2010}{article}{}{}
+    \entry{delarrard2010}{article}{}
       \name{author}{5}{}{%
         {{useprefix=true,hash=26dac499cd246b1ba4fc5b5e1e00ad40}{%
            family={Larrard},
@@ -226,12 +216,10 @@
       }
       \strng{namehash}{accf59bd7ab63aac8e1524b551c7c39f}
       \strng{fullhash}{4db0875a8ca429d0040d567546e8ffe7}
-      \strng{fullhashraw}{4db0875a8ca429d0040d567546e8ffe7}
       \strng{bibnamehash}{accf59bd7ab63aac8e1524b551c7c39f}
       \strng{authorbibnamehash}{accf59bd7ab63aac8e1524b551c7c39f}
       \strng{authornamehash}{accf59bd7ab63aac8e1524b551c7c39f}
       \strng{authorfullhash}{4db0875a8ca429d0040d567546e8ffe7}
-      \strng{authorfullhashraw}{4db0875a8ca429d0040d567546e8ffe7}
       \field{sortinit}{d}
       \field{sortinithash}{6f385f66841fb5e82009dc833c761848}
       \field{labelnamesource}{author}
@@ -259,7 +247,7 @@
       \verb https://www.sciencedirect.com/science/article/pii/S002954931000628X
       \endverb
     \endentry
-    \entry{dipaola2023}{unpublished}{}{}
+    \entry{dipaola2023}{unpublished}{}
       \name{author}{1}{}{%
         {{hash=a736134b159e5629f38889680d407e63}{%
            family={Di\bibnamedelima Paola},
@@ -269,12 +257,10 @@
       }
       \strng{namehash}{a736134b159e5629f38889680d407e63}
       \strng{fullhash}{a736134b159e5629f38889680d407e63}
-      \strng{fullhashraw}{a736134b159e5629f38889680d407e63}
       \strng{bibnamehash}{a736134b159e5629f38889680d407e63}
       \strng{authorbibnamehash}{a736134b159e5629f38889680d407e63}
       \strng{authornamehash}{a736134b159e5629f38889680d407e63}
       \strng{authorfullhash}{a736134b159e5629f38889680d407e63}
-      \strng{authorfullhashraw}{a736134b159e5629f38889680d407e63}
       \field{sortinit}{D}
       \field{sortinithash}{6f385f66841fb5e82009dc833c761848}
       \field{labelnamesource}{author}
@@ -294,7 +280,7 @@
       \verb https://www-cast3m.cea.fr/index.php?xml=maj2011
       \endverb
     \endentry
-    \entry{fenton2014}{unpublished}{}{}
+    \entry{fenton2014}{unpublished}{}
       \name{author}{1}{}{%
         {{hash=62da7a02d573022f77b9717a371e11db}{%
            family={Fenton},
@@ -304,12 +290,10 @@
       }
       \strng{namehash}{62da7a02d573022f77b9717a371e11db}
       \strng{fullhash}{62da7a02d573022f77b9717a371e11db}
-      \strng{fullhashraw}{62da7a02d573022f77b9717a371e11db}
       \strng{bibnamehash}{62da7a02d573022f77b9717a371e11db}
       \strng{authorbibnamehash}{62da7a02d573022f77b9717a371e11db}
       \strng{authornamehash}{62da7a02d573022f77b9717a371e11db}
       \strng{authorfullhash}{62da7a02d573022f77b9717a371e11db}
-      \strng{authorfullhashraw}{62da7a02d573022f77b9717a371e11db}
       \field{sortinit}{F}
       \field{sortinithash}{2638baaa20439f1b5a8f80c6c08a13b4}
       \field{labelnamesource}{author}
@@ -321,7 +305,7 @@
       \verb C:\Users\thong\Zotero\storage\LGIMK3SC\Fenton - 2014 - Basics of Simulation and RFEM in Stochastic Analysis and Inverse Modelling.pdf
       \endverb
     \endentry
-    \entry{hamon2013}{report}{}{}
+    \entry{hamon2013}{report}{}
       \name{author}{1}{}{%
         {{hash=38ba0b5d6763a6dbffbfbef1fdf85300}{%
            family={Hamon},
@@ -334,12 +318,10 @@
       }
       \strng{namehash}{38ba0b5d6763a6dbffbfbef1fdf85300}
       \strng{fullhash}{38ba0b5d6763a6dbffbfbef1fdf85300}
-      \strng{fullhashraw}{38ba0b5d6763a6dbffbfbef1fdf85300}
       \strng{bibnamehash}{38ba0b5d6763a6dbffbfbef1fdf85300}
       \strng{authorbibnamehash}{38ba0b5d6763a6dbffbfbef1fdf85300}
       \strng{authornamehash}{38ba0b5d6763a6dbffbfbef1fdf85300}
       \strng{authorfullhash}{38ba0b5d6763a6dbffbfbef1fdf85300}
-      \strng{authorfullhashraw}{38ba0b5d6763a6dbffbfbef1fdf85300}
       \field{sortinit}{H}
       \field{sortinithash}{23a3aa7c24e56cfa16945d55545109b5}
       \field{labelnamesource}{author}
@@ -354,7 +336,7 @@
       \verb C:\Users\thong\Zotero\storage\GRDNYWFY\Hamon - 2013 - Model of damage of MAZARS.pdf
       \endverb
     \endentry
-    \entry{kalifa2000}{article}{}{}
+    \entry{kalifa2000}{article}{}
       \name{author}{3}{}{%
         {{hash=59171b442b50a843ba8e53be364eb5f1}{%
            family={Kalifa},
@@ -374,12 +356,10 @@
       }
       \strng{namehash}{c6d0146e5d4a3f69eecae11d38bc5858}
       \strng{fullhash}{c6d0146e5d4a3f69eecae11d38bc5858}
-      \strng{fullhashraw}{c6d0146e5d4a3f69eecae11d38bc5858}
       \strng{bibnamehash}{c6d0146e5d4a3f69eecae11d38bc5858}
       \strng{authorbibnamehash}{c6d0146e5d4a3f69eecae11d38bc5858}
       \strng{authornamehash}{c6d0146e5d4a3f69eecae11d38bc5858}
       \strng{authorfullhash}{c6d0146e5d4a3f69eecae11d38bc5858}
-      \strng{authorfullhashraw}{c6d0146e5d4a3f69eecae11d38bc5858}
       \field{sortinit}{K}
       \field{sortinithash}{c02bf6bff1c488450c352b40f5d853ab}
       \field{labelnamesource}{author}
@@ -399,7 +379,7 @@
       \verb C:\Users\thong\Zotero\storage\BZH2H5AK\Kalifa et al. - 2000 - Spalling and pore pressure in HPC at high temperatures.pdf
       \endverb
     \endentry
-    \entry{liu2001}{article}{}{}
+    \entry{liu2001}{article}{}
       \name{author}{3}{}{%
         {{hash=c98b8df825976ea7cb8362592da21cc7}{%
            family={Liu},
@@ -419,12 +399,10 @@
       }
       \strng{namehash}{4b53889ab99701d8ec0e97dbf1ea82cc}
       \strng{fullhash}{4b53889ab99701d8ec0e97dbf1ea82cc}
-      \strng{fullhashraw}{4b53889ab99701d8ec0e97dbf1ea82cc}
       \strng{bibnamehash}{4b53889ab99701d8ec0e97dbf1ea82cc}
       \strng{authorbibnamehash}{4b53889ab99701d8ec0e97dbf1ea82cc}
       \strng{authornamehash}{4b53889ab99701d8ec0e97dbf1ea82cc}
       \strng{authorfullhash}{4b53889ab99701d8ec0e97dbf1ea82cc}
-      \strng{authorfullhashraw}{4b53889ab99701d8ec0e97dbf1ea82cc}
       \field{sortinit}{L}
       \field{sortinithash}{7c47d417cecb1f4bd38d1825c427a61a}
       \field{labelnamesource}{author}
@@ -444,7 +422,7 @@
       \verb C:\Users\thong\Zotero\storage\4AVICVHG\Liu et al. - 2001 - Stochastic finite element method for random temperature in concrete structures.pdf
       \endverb
     \endentry
-    \entry{matheron1973}{article}{}{}
+    \entry{matheron1973}{article}{}
       \name{author}{1}{}{%
         {{hash=ea0a6a067aea85f0014b448311fbd6c0}{%
            family={Matheron},
@@ -457,12 +435,10 @@
       }
       \strng{namehash}{ea0a6a067aea85f0014b448311fbd6c0}
       \strng{fullhash}{ea0a6a067aea85f0014b448311fbd6c0}
-      \strng{fullhashraw}{ea0a6a067aea85f0014b448311fbd6c0}
       \strng{bibnamehash}{ea0a6a067aea85f0014b448311fbd6c0}
       \strng{authorbibnamehash}{ea0a6a067aea85f0014b448311fbd6c0}
       \strng{authornamehash}{ea0a6a067aea85f0014b448311fbd6c0}
       \strng{authorfullhash}{ea0a6a067aea85f0014b448311fbd6c0}
-      \strng{authorfullhashraw}{ea0a6a067aea85f0014b448311fbd6c0}
       \field{sortinit}{M}
       \field{sortinithash}{4625c616857f13d17ce56f7d4f97d451}
       \field{labelnamesource}{author}
@@ -481,7 +457,7 @@
       \verb C:\Users\thong\Zotero\storage\ZPEZUUW4\Matheron - 1973 - The intrinsic random functions and their applications.pdf
       \endverb
     \endentry
-    \entry{mclaughlin2023}{article}{}{}
+    \entry{mclaughlin2023}{article}{}
       \name{author}{2}{}{%
         {{hash=9779b2f4a098a06dc6c89bb3bb1cfa80}{%
            family={McLaughlin},
@@ -496,12 +472,10 @@
       }
       \strng{namehash}{ccf2439512a44ddcc74cdc53cd130a65}
       \strng{fullhash}{ccf2439512a44ddcc74cdc53cd130a65}
-      \strng{fullhashraw}{ccf2439512a44ddcc74cdc53cd130a65}
       \strng{bibnamehash}{ccf2439512a44ddcc74cdc53cd130a65}
       \strng{authorbibnamehash}{ccf2439512a44ddcc74cdc53cd130a65}
       \strng{authornamehash}{ccf2439512a44ddcc74cdc53cd130a65}
       \strng{authorfullhash}{ccf2439512a44ddcc74cdc53cd130a65}
-      \strng{authorfullhashraw}{ccf2439512a44ddcc74cdc53cd130a65}
       \field{sortinit}{M}
       \field{sortinithash}{4625c616857f13d17ce56f7d4f97d451}
       \field{labelnamesource}{author}
@@ -518,7 +492,7 @@
       \verb https://www.businessinsider.com/spacex-starship-rocket-crater-concrete-launchpad-upon-liftoff-2023-4
       \endverb
     \endentry
-    \entry{sciume2024}{article}{}{}
+    \entry{sciume2024}{article}{}
       \name{author}{3}{}{%
         {{hash=e4f49bba5a977ecd5f63275b95c1db7f}{%
            family={Sciumè},
@@ -538,12 +512,10 @@
       }
       \strng{namehash}{df48e49ae4223db668156aa5156b1ce4}
       \strng{fullhash}{df48e49ae4223db668156aa5156b1ce4}
-      \strng{fullhashraw}{df48e49ae4223db668156aa5156b1ce4}
       \strng{bibnamehash}{df48e49ae4223db668156aa5156b1ce4}
       \strng{authorbibnamehash}{df48e49ae4223db668156aa5156b1ce4}
       \strng{authornamehash}{df48e49ae4223db668156aa5156b1ce4}
       \strng{authorfullhash}{df48e49ae4223db668156aa5156b1ce4}
-      \strng{authorfullhashraw}{df48e49ae4223db668156aa5156b1ce4}
       \field{sortinit}{S}
       \field{sortinithash}{b164b07b29984b41daf1e85279fbc5ab}
       \field{labelnamesource}{author}
@@ -561,7 +533,7 @@
       \verb C:\Users\thong\Zotero\storage\UYVQ4TCR\Sciumè et al. - 2024 - Thermo‐hygro‐chemical model of concrete from curing to high temperature behavior.pdf
       \endverb
     \endentry
-    \entry{sudret2003}{inproceedings}{}{}
+    \entry{sudret2003}{inproceedings}{}
       \name{author}{2}{}{%
         {{hash=2abed76f47b747f79ac23afd26cf6fc1}{%
            family={Sudret},
@@ -576,12 +548,10 @@
       }
       \strng{namehash}{95f935dcec6dc26db12d82d79124a80c}
       \strng{fullhash}{95f935dcec6dc26db12d82d79124a80c}
-      \strng{fullhashraw}{95f935dcec6dc26db12d82d79124a80c}
       \strng{bibnamehash}{95f935dcec6dc26db12d82d79124a80c}
       \strng{authorbibnamehash}{95f935dcec6dc26db12d82d79124a80c}
       \strng{authornamehash}{95f935dcec6dc26db12d82d79124a80c}
       \strng{authorfullhash}{95f935dcec6dc26db12d82d79124a80c}
-      \strng{authorfullhashraw}{95f935dcec6dc26db12d82d79124a80c}
       \field{sortinit}{S}
       \field{sortinithash}{b164b07b29984b41daf1e85279fbc5ab}
       \field{labelnamesource}{author}
@@ -594,7 +564,7 @@
       \verb C:\Users\thong\Zotero\storage\IV76GACU\Sudret and Cherradi - 2003 - Quadrature method for finite element reliability analysis.pdf
       \endverb
     \endentry
-    \entry{sudret2000}{article}{}{}
+    \entry{sudret2000}{article}{}
       \name{author}{2}{}{%
         {{hash=2abed76f47b747f79ac23afd26cf6fc1}{%
            family={Sudret},
@@ -609,12 +579,10 @@
       }
       \strng{namehash}{67589a66dc6c89cc54362328b28f1926}
       \strng{fullhash}{67589a66dc6c89cc54362328b28f1926}
-      \strng{fullhashraw}{67589a66dc6c89cc54362328b28f1926}
       \strng{bibnamehash}{67589a66dc6c89cc54362328b28f1926}
       \strng{authorbibnamehash}{67589a66dc6c89cc54362328b28f1926}
       \strng{authornamehash}{67589a66dc6c89cc54362328b28f1926}
       \strng{authorfullhash}{67589a66dc6c89cc54362328b28f1926}
-      \strng{authorfullhashraw}{67589a66dc6c89cc54362328b28f1926}
       \field{sortinit}{S}
       \field{sortinithash}{b164b07b29984b41daf1e85279fbc5ab}
       \field{labelnamesource}{author}
