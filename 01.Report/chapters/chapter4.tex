@@ -29,7 +29,7 @@ The calibration targets are the temperature and gas-pressure histories measured 
 \subsection{Automated parameter sweep} \label{sec:cal-automation}
 The sweeps are driven by a Python script that launches Cast3M repeatedly, one run per parameter combination, without manual intervention. For each stage the parameter values to be tried are listed explicitly, and \texttt{itertools.product} builds every possible combination of those lists; a single loop then feeds each combination to Cast3M in turn.
 
-This automation relies on two supporting pieces of code. First, the Cast3M input code itself exports the results of each run to a \texttt{.csv} file -- the temperature and gas-pressure histories at the measurement points. Second, a separate Python post-processing script reads these \texttt{.csv} files and plots the computed histories against the experimental measurements \cite{kalifa2000} and also against with the results from Dorjan Dauti's thesis \cite{dauti2018}. All combinations then can be visually compared, and the best-fit set is selected by the author based on this comparison.
+This automation relies on two supporting pieces of code. First, the Cast3M input code itself exports the results of each run to a \texttt{.csv} file -- the temperature and gas-pressure histories at the measurement points. Second, a separate Python post-processing script reads these \texttt{.csv} files and plots the computed histories against the experimental measurements \cite{kalifa2000} and also against the results from Dorjan Dauti's thesis \cite{dauti2018}. All combinations then can be visually compared, and the best-fit set is selected by the author based on this comparison.
  
 For example, in the gas-pressure calibration stage, the two parameters swept are the intrinsic permeability $K_0$ (denoted \texttt{KINT}) and the permeability--hydration coefficient $A_\Gamma$ (denoted \texttt{AK}), with the trial values:
 \begin{itemize}
@@ -194,6 +194,31 @@ Each of these was found to influence the response in a physically expected direc
 \end{draftblock} 
 % ---------------------------------------------------------------------------
 \section{Validation and discussion} \label{sec:validation}
+
+The reference model uses the calibrated parameter set summarised in
+Table~\ref{tab:calibrated}. With this single set of values, the computed
+temperature and gas-pressure histories are now compared against the measurements of
+the Kalifa experiment at all probe depths.
+
+\begin{table}[H]
+  \centering
+  \caption{Final calibrated parameter set retained for the reference model.}
+  \label{tab:calibrated}
+  \begin{tabular}{lll}
+    \hline
+    Stage & Parameter & Retained value \\
+    \hline
+    Surface heat exchange & Convective coefficient $h_c$        & $[\,\dots\,]$ \\
+                          & Emissivity $\varepsilon$            & $[\,\dots\,]$ \\
+    Bulk conduction       & Thermal conductivity $\lambda$      & $[\,\dots\,]$ \\
+                          & Volumetric heat capacity $\rho C_p$ & $[\,\dots\,]$ \\
+    Gas pressure          & Intrinsic permeability $K_0$        & $[\,\dots\,]$ \\
+                          & Permeability--hydration coeff.\ $A_\Gamma$ & $[\,\dots\,]$ \\
+    \hline
+  \end{tabular}
+\end{table}
+
+
 \begin{draftblock}
 
 \subsection{Temperature} \label{sec:val-temp}
@@ -215,9 +240,9 @@ The gas-pressure response, by contrast, \textbf{could not be validated}. Across 
  
 This limitation is consistent with the physics omitted from the present TH model. The measured pressure decay is largely driven by the cracking and mechanical damage that develop near the hot face, which sharply increase the local permeability and let the trapped gas escape. Because the present formulation does not include the damage--permeability coupling (Eq.~\ref{eq:K-damage}), it cannot capture this relief, and consequently the gas-pressure field cannot be validated against the Kalifa data using the TH/THC formulation alone.
  
-\subsection{Conclusions and implications}
-\label{sec:val-conclusions}
- 
+\subsection{Conclusions and implications} \label{sec:val-conclusions}
+
+\review{This is wrong conclustion} 
 Two conclusions follow from the calibration journey:
 \begin{enumerate}
   \item The temperature field -- the loading for the hydric and mechanical sub-problems -- is reliably reproduced, once the surface boundary exchange and then the bulk conduction parameters are calibrated in sequence.
