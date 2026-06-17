@@ -108,18 +108,18 @@ where $\mathbf{X}$ is the input vector of the analysis considered ($K_0$ in A; $
  
 \subsection{Coupling \textsc{OpenTURNS} to the Cast3M solver}
  
-Uncertainty quantification is carried out with the \textsc{OpenTURNS} library \cite{baudin2017}, reusing the Python automation layer built for the calibration sweeps of \cref{sec:cal-automation}. There, \texttt{itertools.product} enumerated a deterministic grid of parameters; here the same driver is fed by a probabilistic design of experiments. The deterministic THM solver is wrapped as a black-box $g$: \textsc{OpenTURNS} draws a sample of the input vector, the Python driver writes the permeability (A) or the mix proportions (B) into the Cast3M data, launches the \texttt{PASAPAS} run, the run exports the $10~\mathrm{mm}$ history to \texttt{.csv}, and the driver returns the peak $p_g^{10}=g(\mathbf{X})$. The same loop serves both analyses, only the input vector changes:
- 
+Uncertainty quantification is carried out with the \textsc{OpenTURNS} library \cite{baudin2017}, reusing the Python automation layer built for the calibration sweeps of \cref{sec:cal-automation}. There, \texttt{itertools.product} is also reused for a probabilistic design.
+
+Besides, extra steps is required for the automated stochastic analyses:
 \begin{enumerate}
-  \item Define the marginals (\cref{tab:random-variables}, \cref{lst:ot-dist}) of the analysis as an \textsc{OpenTURNS} \texttt{ComposedDistribution}.
+  \item Define the distribution(\cref{tab:random-variables}, of the analysis as an \textsc{OpenTURNS} \texttt{ComposedDistribution}.
   \item Generate an LHS design of $N$ samples (\cref{sec:lhs}).
-  \item \textbf{for} $i=1,\dots,N$: write inputs $\rightarrow$ (B only) Powers' model sets $\phi,\tilde\Gamma,S_l$ $\rightarrow$ run Cast3M \texttt{PASAPAS} $\rightarrow$ read $p_g^{10}$.
-  \item Assemble $\{p_g^{10,(i)}\}$ and post-process: correlation, Sobol indices, response PDF/CDF, $P_f$, $\beta$.
+  \item Python script for post-process and ploting: correlation, Sobol indices, response PDF.
 \end{enumerate}
  
 \subsection{Latin Hypercube Sampling} \label{sec:lhs}
  
-Crude Monte Carlo (\cref{sec:monte-carlo}) converges only as $1/\sqrt{N}$ and needs many runs of an expensive THM model. Latin Hypercube Sampling (LHS) is used instead as a variance-reduced alternative \cite{mckay1979,baudin2017}: each marginal is split into $N$ equiprobable strata with one sample per stratum, so the input space is covered evenly and the output statistics stabilise with markedly fewer Cast3M evaluations. For the small number of variables here, the Gaussian-quadrature scheme of \cref{sec:quadrature} offers an even cheaper deterministic cross-check, used in \cref{sec:spatial-effect}.
+Monte Carlo (\cref{sec:monte-carlo}) converges only as $1/\sqrt{N}$ and needs many runs of an expensive THM model. Latin Hypercube Sampling (LHS) is used instead as a variance-reduced alternative \cite{mckay1979,baudin2017}: each marginal is split into $N$ equiprobable strata with one sample per stratum, so the input space is covered evenly and the output statistics stabilise with markedly fewer Cast3M evaluations. For the small number of variables here, the Gaussian-quadrature scheme of \cref{sec:quadrature} offers an even cheaper deterministic cross-check, used in \cref{sec:spatial-effect}.
  
 % =====================================================================
 \section{Sensitivity analysis} \label{sec:sensitivity}
