@@ -10,9 +10,9 @@ import pandas as pd
 # =========================================================
 working_dir = r"D:\cast3m-m2internship\05.Stochastic\Stochastic_B"
 output_dir = os.path.join(working_dir, "Plots")
+os.makedirs(output_dir, exist_ok=True)
 input_csv_file = os.path.join(working_dir, "OpenTURNS_Inputs_X.csv")
 output_csv_file = os.path.join(working_dir, "OpenTURNS_Outputs_Y.csv")
-
 
 # =========================================================
 # 1. READING SAVED DATA FROM SCRIPT 1

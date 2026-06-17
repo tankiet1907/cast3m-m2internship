@@ -10,6 +10,7 @@ import glob
 working_dir = r"D:\cast3m-m2internship\05.Stochastic\Stochastic_A"
 csv_dir = os.path.join(working_dir, "CSV")
 output_dir = os.path.join(working_dir, "Plots")
+os.makedirs(output_dir, exist_ok=True)
 N_loops = 30
 
 # MỚI: Đường dẫn đến file kết quả gốc (Baseline)
