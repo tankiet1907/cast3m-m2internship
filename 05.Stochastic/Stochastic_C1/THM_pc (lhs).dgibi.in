@@ -443,4 +443,11 @@ def_T0 = DEFO mail1  tab1m.deplacements.0 1000;
 def_T =  DEFO mail1  tab1m.deplacements.(dimet - 1) 1000 ROUG;
 *trac cach (def_T0 et def_T);
 
+*=====================================================================
+* EXPORT DATA TO CSV FILE                                              
+*=====================================================================
+OPTI 'SORT' '@CSV_U@' ;
+SORT 'EXCE' evret ;
+*=====================================================================
+
 fin;

@@ -402,8 +402,8 @@ MESS '%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%';
 * I.8E) PDF / CDF of shrinkage strain via PROBDENS
 *=====================================================================
 PDF_S CDF_S = PROBDENS MU_S SIGMA_S RB1_S B2_S;
-DESS PDF_S;
-DESS CDF_S;
+*DESS PDF_S;
+*DESS CDF_S;
 
 *=====================================================================
 * I.8F) DETERMINISTIC REFERENCE RUN
@@ -423,7 +423,7 @@ FIN BOUCLE;
 DSWPC = EVOL MANU 'T' XPC 'T' YDSW;
 YCP   = -1. * YDSW * EPS * RHO;
 CP_ref    =  EVOL MANU 'T' XPC 'C' YCP;
-DESS CP_ref;
+*DESS CP_ref;
 
 * K_EFF with nominal KINT_mean
 tXPC  = 0.;
@@ -438,7 +438,7 @@ REPETER BOUCLE (150);
 FIN BOUCLE;
 YK_ref    = YKRL * ((RHO * MU_K0) / VISC);
 K_EFF_ref = EVOL MANU 'T' XPC 'K' YK_ref;
-DESS K_EFF_ref;
+*DESS K_EFF_ref;
 
 MA_HYGR_ref = MATE MO_HYGR 'RHO' 1. 'C' CP_ref 'K' K_EFF_ref;
 MA_TOT_ref  = MA_HYGR_ref et MA_CONV;
@@ -472,11 +472,11 @@ FIN BOUCLE;
 
 * Plot HR maps at days 0, 30, 60, 90, 120
 SCALA_HR = PROG 0.5 PAS ((0.9-0.5)/16) 0.9;
-trac tab_hr.0   mail1 SCALA_HR;
-trac tab_hr.30  mail1 SCALA_HR;
-trac tab_hr.60  mail1 SCALA_HR;
-trac tab_hr.90  mail1 SCALA_HR;
-trac tab_hr.120 mail1 SCALA_HR;
+* trac tab_hr.0   mail1 SCALA_HR;
+* trac tab_hr.30  mail1 SCALA_HR;
+* trac tab_hr.60  mail1 SCALA_HR;
+* trac tab_hr.90  mail1 SCALA_HR;
+* trac tab_hr.120 mail1 SCALA_HR;
 
 *=====================================================================
 * SAVE hygro results to file (relative path - works on any machine)
@@ -540,7 +540,7 @@ list dimet;
 
 p3 = MAIL1 POIN PROC (0.  0. (LATO1/2));
 L0 = LATO1/2;
-trac CACH (MAIL1 et p3);
+* trac CACH (MAIL1 et p3);
 
 temps    = PROG;
 ret      = PROG;
@@ -557,11 +557,18 @@ REPETER BOUCLE dimet;
 FIN BOUCLE;
 
 evret = EVOL 'BLAN' 'MANU' 'JOURS' temps 'MICRON/METER' ret;
-DESS evret;
+*DESS evret;
 
 * Plot deformed shape: initial (white) vs final (red)
 def_T0 = DEFO mail1  tab1m.deplacements.0 1000;
 def_T =  DEFO mail1  tab1m.deplacements.(dimet - 1) 1000 ROUG;
-trac cach (def_T0 et def_T);
+* trac cach (def_T0 et def_T);
 
-FIN;
+*=====================================================================
+* EXPORT DATA TO CSV FILE                                              
+*=====================================================================
+OPTI 'SORT' '@CSV_U@' ;
+SORT 'EXCE' evret ;
+*=====================================================================
+
+fin;
