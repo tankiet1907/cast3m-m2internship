@@ -1,0 +1,406 @@
+*=====================================================================
+* Drying and shrinkage test case - coupled thermo-hydro model (single luquid phase)
+* Extended version: Uncertainty quantification on permeability Kint with Quadrature method.
+
+* Original author : G. Sciume (24-04-2017)
+* Modified by: Tan Kiet HONG (20-03-2026)
+* Modifications :
+*   - All absolute file paths replaced with relative paths
+*     (runs on any machine without modification)
+*   - Added 'TREF' and 'TALP' to mechanical material (fixes ERREUR 77)
+*   - English comments throughout
+
+* Extended and developed from the debugged TH-model single luquid phase Code 1a and Sphere.dgibi (quadrature template)
+*   - Removed Paraview export (AVS)
+*   - Uncertainty quantification on permeability Kint:
+*       QUADRATU → quadrature points/weights
+*       PARASTAT → sensitivity analysis
+*       PROBDENS → PDF/CDF of shrinkage strain
+*=====================================================================
+
+OPTI ECHO 0;
+OPTI DIME 3 MODE TRID ELEM CUB8;
+
+*--------------------------------------------------------------------
+*
+*
+*           I) HYDRO MODEL WITH CONSTANT TEMPERATURE INPUT
+*
+*
+*--------------------------------------------------------------------
+
+*=====================================================================
+* I.1) USER-DEFINED PROCEDURES: Sl, dSl/dPc, krl
+*=====================================================================
+
+* Procedure: degree of saturation Sl as a function of capillary pressure
+DEBP sldegre pcap*'FLOTTANT';
+   temp1 = b1/(b1-1.);
+   temp2 = pcap/a1;
+   temp3 = 1. + (temp2**temp1);
+   temp4 = -1./b1;
+   sldegre = temp3**temp4;
+FINP sldegre;
+
+* Procedure: derivative of Sl with respect to capillary pressure (dSl/dPc)
+DEBP sldepc pcap*'FLOTTANT';
+   temp1 = b1/(b1-1.);
+   temp2 = pcap/a1;
+   temp3 = 1. + (temp2**temp1);
+   temp4 = -1.*((b1 + 1.)/b1);
+   temp5 = temp3**temp4;
+   temp6 = pcap**(1./(b1 - 1.));
+   temp7 = a1**(b1/(b1 - 1.));
+   temp8 = temp6/temp7;
+   temp9 = (-1./(b1 - 1.))*temp8;
+   sldepc =  temp5 * temp9;
+FINP sldepc;
+
+* Procedure: relative permeability krl as a function of capillary pressure
+DEBP krl pcap*'FLOTTANT';
+   temp1 = b1/(b1-1.);
+   temp2 = pcap/a1;
+   temp3 = 1. + (temp2**temp1);
+   temp4 = -1./b1;
+   temp5 = temp3**temp4;
+   temp6 = 1. - (temp5**b1);
+   temp7 = temp6**(1./b1);
+   temp8 = (1. - temp7)**2.;
+   temp9 = temp5**0.5;
+   krl = temp8 * temp9;
+FINP krl;
+
+* Procedure: relative humidity field (CHPOINT) from capillary pressure field
+DEBP hr_chpo pcap*'CHPOINT' mail1*'MAILLAGE';
+   temp0 = (EXCO pcap  'T') 'NOMC' 'SCAL';
+   temp1 = 18.e-3 / (8.314 * 1000. * 293.15);
+   temp2 = temp0 * temp1 * -1.;
+   chhpc = EXP(temp2);
+FINP chhpc;
+
+*=====================================================================
+* I.2) MATERIAL PARAMETERS
+*=====================================================================
+* Water density [kg/m3]
+RHO  = 1000.;
+* van Genuchten parameter a1 [Pa]
+A1   = 20.E6;
+* van Genuchten parameter b1 [-]
+B1   = 2.;
+* Dynamic viscosity of water [Pa.s]
+VISC = 1.E-3 ;
+* Porosity [-] (DETERMINISTIC: NOT part of the UQ -> capacity C is fixed)
+EPS  = 0.2;
+
+*=====================================================================
+* I.3) INITIAL AND EXTERNAL CONDITIONS
+*=====================================================================
+* Temperature
+TEMPE1 = 20.0;
+* External relative humidity
+HR_EXT = 0.50;
+* Initial relative humidity
+HR_INI = 0.90;
+
+*=====================================================================
+* I.4) MESH CONSTRUCTION: 1/8 of a cubic specimen
+*=====================================================================
+* Full side length of cube [m]
+LATO1    = 0.10;
+* Coarse mesh density
+DENS_GRO = 0.01;
+* Fine mesh density (near exposed surface)
+DENS_FIN = 0.002;
+
+p1    =  0.        0.  0.;
+p2    = (LATO1/2.) 0.  0.;
+l12   =  DROI p1 p2 'DINI' DENS_GRO 'DFIN' DENS_FIN;
+SURF1 = l12 TRANS (0. (LATO1/2.) 0.) 'DINI' DENS_GRO 'DFIN' DENS_FIN;
+*trac SURF1;
+
+VEC1  = 0. 0. (LATO1/2.);
+MAIL1 = SURF1 VOLU TRAN VEC1 'DINI' DENS_GRO 'DFIN' DENS_FIN;
+*TRAC CACH MAIL1;
+
+* Extract exposed surface (convective boundary condition)
+p3 = (LATO1/2.) (LATO1/2.)  0. ;
+p4 =  0.   (LATO1/2.)  0.;
+p5 = (LATO1/2.) (LATO1/2.)  0.01;
+p6 = 0.000 (LATO1/2.)  0.01;
+P_CONT1 = 'POIN' MAIL1 'PLAN' p2 p3 p5 0.0005;
+P_CONT2 = 'POIN' MAIL1 'PLAN' p3 p4 p6 0.0005;
+P_CONT = P_CONT1 et P_CONT2;
+*trac P_CONT;
+
+CONTH = (face 3 mail1) 'ELEM' 'APPUYE' 'STRICTEMENT' P_CONT;
+*trac conth;
+
+*=====================================================================
+* I.5) TIME DISCRETIZATION
+*=====================================================================
+* 1 hour in seconds
+heure1  = 3600.;
+jour1   = 24  * heure1;
+TFIN    = 120 * jour1;
+LTEMPS1 = PROG 0. PAS (24 * heure1) TFIN;
+
+*=====================================================================*
+* I.6) HYGROMETRIC MODEL AND MATERIAL DEFINITION                          *
+*=====================================================================*
+MO_HYGR = MODE MAIL1 THERMIQUE;
+MO_CONV = MODE CONTH THERMIQUE CONVECTION;
+MO_TOT  = MO_HYGR et MO_CONV;
+
+MA_CONV = MATE MO_CONV 'H' 1.E-13;
+
+*=====================================================================
+* I.7) INITIAL AND BOUNDARY CONDITIONS (HYGRO)
+*=====================================================================
+
+* Initial capillary pressure field from initial relative humidity
+PC_INI = -8.314*293.15*1000*(LOG(HR_INI))/18.e-3;
+PC0    = MANU 'CHPO' MAIL1 'T'  PC_INI;
+
+* External capillary pressure (imposed at exposed surface)
+PC_EXT  = -8.314 * 293.15 * 1000. * (LOG(HR_EXT)) / 18.e-3;
+CONV1   = MANU 'CHPO' CONTH 1 'T' PC_EXT 'NATURE' 'DISCRETE';
+EV_CHAR = EVOL MANU 'TEMPS' (PROG 0. TFIN) 'T' (PROG 1. 1.);
+CHAR1   = CHAR 'TECO' CONV1 EV_CHAR;
+
+*--------------------------------------------------------------------
+*
+*
+*      II) MECHANICAL MODEL WITH SHRINKAGE STRAIN AS INPUT
+*
+*
+*--------------------------------------------------------------------
+
+*=====================================================================
+* II.1) PROCEDURE: degree of saturation as CHPOINT field (for mech. load)
+*=====================================================================
+DEBP sl_chpo pcap*'CHPOINT' mail1*'MAILLAGE';
+   pcap0 = pcap 'NOMC' 'SCAL';
+   temp1 = b1/(b1-1.);
+   temp2 = pcap0 * (1/a1);
+   temp3 = 1. + (temp2 ** temp1);
+   temp4 = -1./b1;
+   chsl = temp3**temp4;
+FINP chsl;
+
+*=====================================================================
+* II.2) MECHANICAL PARAMETERS
+*=====================================================================
+eyou1  =  30.e9;
+nu1    =  0.2;
+BIOT1  =  0.60;
+
+BULK1    = eyou1 / (3 * (1 - (2. * nu1)));
+ALPHA_EQ = BIOT1 / (3. * BULK1);
+
+*=====================================================================*
+* II.3) MECHANICAL MODEL AND MATERIAL
+* FIX (Tan Kiet HONG): added 'TREF' and 'TALPH' to avoid ERREUR 77 in PASAPAS
+*   TREF = reference capillary pressure (stress-free state)
+*   TALP = reference capillary pressure of the coefficient of (thermal) expansion
+*=====================================================================
+MODM = MODE MAIL1 MECANIQUE ELASTIQUE;
+MATM = MATE MODM 'YOUN' eyou1 'NU' nu1 'ALPHA' ALPHA_EQ 'TREF' PC_INI 'TALP' PC_INI;
+
+*=====================================================================
+* II.4) MECHANICAL BOUNDARY CONDITIONS (symmetry planes)
+*=====================================================================
+BASE1 = surf1;
+
+p7 = p2 'PLUS' (0.0  0.0 0.1);
+p8 = p4 'PLUS' (0.0  0.0 0.1);
+
+P_CO12 = 'POIN' MAIL1 'PLAN' p1 p2 p7 0.0005;
+P_CO14 = 'POIN' MAIL1 'PLAN' p1 p4 p8 0.0005;
+
+LATO12 = (face 3 mail1) 'ELEM' 'APPUYE' 'STRICTEMENT' P_CO12;
+LATO14 = (face 3 mail1) 'ELEM' 'APPUYE' 'STRICTEMENT' P_CO14;
+*trac (BASE1 et LATO12 et LATO14);
+
+CONTM1 =  BASE1;
+CONTM2 =  LATO12;
+CONTM3 =  LATO14;
+rig1   = BLOQ 'UZ' CONTM1;
+rig2   = BLOQ 'UY' CONTM2;
+rig3   = BLOQ 'UX' CONTM3;
+RIGTOT = rig1 et rig2 et rig3;
+
+*=====================================================================
+* Reference point for shrinkage strain measurement
+p3_meas = MAIL1 POIN PROC (0.  0. (LATO1/2.));
+L0      = LATO1/2.;
+
+*=====================================================================
+* I.8A) QUADRATURE POINTS FOR KINT ONLY (single lognormal variable)
+*   Only the intrinsic permeability is uncertain. Porosity EPS stays
+*   deterministic, so the uncertainty propagates through K_eff ONLY.
+*=====================================================================
+
+* Mean value of intrinsic permeability [m2] (= nominal KINT of THM_pc)
+MU_K0  = 8.5E-20;
+* Coefficient of variation (20% uncertainty)
+CV_K0  = 0.30;
+* Standard deviation
+SIG_K0 = CV_K0 * MU_K0;
+* Number of quadrature points
+NpK0 = 7;
+
+* QUADRATU takes physical mean and std dev directly (lognormal)
+TabK0 = QUADRATU 'LOGN' MU_K0 SIG_K0 NpK0;
+
+* BUILD TabGLO: one entry per KINT quadrature point (no tensor product)
+TabGLO = TABLE;
+ITEM = 0;
+
+REPE BcK0 NpK0;
+  ITEM = ITEM + 1;
+  TabGLO.ITEM = TABLE;
+  TabGLO.ITEM.'POIDS' = TabK0.&BcK0.'POIDS';
+  TabGLO.ITEM.'K0'    = TabK0.&BcK0.'POINT';
+FIN BcK0;
+
+N_TOTAL = ITEM;
+MESS 'Total quadrature points (KINT) = ' N_TOTAL;
+
+*==============================================================================
+* I.8B) PROCEDURE: full THM (hygro+mech) solve for a given KINT value
+*        returns the final longitudinal shrinkage strain [micron/m]
+
+DEBPROC CalStrain KINT_val*FLOTTANT;
+
+* Build moisture capacity coefficient C(Pc) = -EPS * rho * dSl/dPc
+*   EPS (porosity) is DETERMINISTIC here -> C does not change between runs
+tXPC  = 0.;
+tYDSW = 0.;
+XPC  = PROG tXPC;
+YDSW = PROG tYDSW;
+REPETER BOUCLE (150);
+  tXPC = tXPC + 1.E6;
+  tYDSW = sldepc tXPC;
+  XPC  = XPC  et (PROG tXPC);
+  YDSW = YDSW et (PROG tYDSW);
+FIN BOUCLE;
+DSWPC = EVOL MANU 'T' XPC 'T' YDSW;
+YCP   = -1. * YDSW * EPS * RHO;
+CP_i    =  EVOL MANU 'T' XPC 'C' YCP;
+
+* Build effective hydraulic conductivity K_eff(Pc) = krl * rho * Kint / visc
+tXPC  = 0.;
+tYKRL = 1.;
+XPC  = PROG tXPC;
+YKRL = PROG tYKRL;
+REPETER BOUCLE (150);
+  tXPC = tXPC + 1.E6;
+  tYKRL = krl tXPC;
+  XPC  = XPC et (PROG tXPC);
+  YKRL = YKRL et (PROG tYKRL);
+FIN BOUCLE;
+YK    = YKRL * ((RHO * KINT_val)/VISC);
+
+K_EFF_i = EVOL MANU 'T' XPC 'K' YK;
+
+MA_HYGR_i = MATE MO_HYGR 'RHO' 1. 'C' CP_i 'K' K_EFF_i;
+MAT_TOT_i = MA_HYGR_i ET MA_CONV;
+
+* PASAPAS nonlinear solve
+TABi= table;
+TABi.TEMPERATURES= table;
+TABi.TEMPERATURES.0= pc0;
+TABi.MODELE= MO_TOT;
+TABi.CARACTERISTIQUES= MAT_TOT_i;
+TABi.CHARGEMENT= CHAR1;
+TABi.PROCEDURE_THERMIQUE= NONLINEAIRE;
+TABi.RELAXATION_THETA= 0.51;
+TABi.TEMPS_CALCULES= ltemps1;
+
+PASAPAS TABi;
+
+*=====================================================================
+* II.5) MECHANICAL LOADING: skeletal pressure from capillary pressure
+* Thermique and mechanic
+* ps = -Sl(Pc) * Pc  (effective stress from drying)
+*=====================================================================
+* Calculate skeletal pressure from capillary pressure ps
+TABi.PS = 'TABLE';
+NTABi = DIME TABi.TEMPERATURES;
+*LIST NTAB1i;
+
+N0i = 0;
+REPETER BOU_PSi NTABi;
+   satu = sl_chpo  TABi . 'TEMPERATURES' . N0i MAIL1;
+   pc_i   = ('EXCO' 'T' TABi . 'TEMPERATURES' . N0i) 'NOMC' 'SCAL';
+   ps_i   = (-1. * satu * pc_i) 'NOMC' 'T';
+   TABi . 'PS' . N0i = ps_i;
+   N0i = N0i + 1;
+FIN BOU_PSi;
+
+*LIST TAB1i . 'PSi';
+
+* Build thermal-like load from skeletal pressure history
+CHAM_THi = CHAR 'T'  (TABi . 'TEMPS')  (TABi . 'PS') ;
+*LIST CHAM_THi;
+
+*=====================================================================
+* II.6) MECHANICAL RESOLUTION - PASAPAS
+*=====================================================================
+
+TABii                         = TABLE;
+TABii.'MODELE'                = MODM;
+TABii.'CARACTERISTIQUES'      = MATM;
+TABii.'BLOCAGES_MECANIQUES'   = RIGTOT;
+TABii.'CHARGEMENT'            = CHAM_THi;
+TABii.'TEMPS_CALCULES'        = LTEMPS1;
+PASAPAS TABii;
+
+* --- Extract QoI: longitudinal shrinkage strain at final step ---
+NdimM    = DIME TABii.'DEPLACEMENTS';
+UZ_fin   = EXTR TABii.'DEPLACEMENTS'.(NdimM - 1) 'UZ' p3_meas;
+strain_i = (UZ_fin / L0) * 1000000.;
+
+FINP strain_i;
+
+*==============================================================================
+* I.8C) LOOP OVER QUADRATURE POINTS → build TabRES & EXPORT DATA
+*==============================================================================
+* Khởi tạo các danh sách trống để lưu dữ liệu
+L_K0     = PROG; 
+L_STRAIN = PROG; 
+L_POIDS  = PROG;
+
+REPE BoucleQ N_TOTAL;
+  K0_q    = TabGLO.&BoucleQ.'K0';
+  POIDS_q = TabGLO.&BoucleQ.'POIDS';
+
+* Gọi FEM giải bài toán Hygro-Mech
+  strain_q  = CalStrain K0_q;
+
+* Đưa dữ liệu vào danh sách
+  L_K0     = L_K0 ET (PROG K0_q);
+  L_STRAIN = L_STRAIN ET (PROG strain_q);
+  L_POIDS  = L_POIDS ET (PROG POIDS_q);
+
+  MESS '--- Quadrature point ' &BoucleQ ' / ' N_TOTAL;
+  MESS '    KINT   = ' K0_q;
+  MESS '    POIDS  = ' POIDS_q;
+  MESS '    Strain = ' strain_q ' micron/m';
+FIN BoucleQ;
+
+*=====================================================================
+* TẠO ĐỐI TƯỢNG EVOL VÀ XUẤT RA CSV
+*=====================================================================
+* EV_Q1 chứa cặp (K0, Strain)
+EV_Q1 = EVOL 'MANU' 'K0' L_K0 'STRAIN' L_STRAIN;
+* EV_Q2 chứa cặp (K0, Poids - Trọng số)
+EV_Q2 = EVOL 'MANU' 'K0' L_K0 'POIDS' L_POIDS;
+
+EV_OUT = EV_Q1 ET EV_Q2;
+
+OPTI 'SORT' '@CSV_U@';
+SORT 'EXCE' EV_OUT;
+
+FIN;
+
