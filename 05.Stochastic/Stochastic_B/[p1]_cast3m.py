@@ -6,8 +6,8 @@ import glob
 # =========================================================
 # ESTABLISHING PROJECT PATHWAYS
 # =========================================================
-working_dir = r"D:\cast3m-m2internship\04.OpenTURNS\Test_02"
-csv_dir = r"D:\cast3m-m2internship\04.OpenTURNS\Test_02\CSV"
+working_dir = r"D:\cast3m-m2internship\05.Stochastic\Stochastic_B"
+csv_dir = os.path.join(working_dir, "CSV")
 os.makedirs(csv_dir, exist_ok=True)
 
 # Summarized OpenTurns inputs and outputs file paths for Script 1 and Script 2 to share data
