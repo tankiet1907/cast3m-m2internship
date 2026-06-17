@@ -6,9 +6,9 @@
 \addvspace {10\p@ }
 \contentsline {table}{\numberline {4.1}{\ignorespaces Final calibrated parameter set retained for the reference model.}}{30}{table.caption.48}%
 \addvspace {10\p@ }
-\contentsline {table}{\numberline {5.1}{\ignorespaces Random variables of the stochastic THM analysis. Means equal the \cref {chapter4} calibrated values; distributions and CoV ranges follow \cref {sec:random-variables} and \blx@tocontentsinit {0}\cite {delarrard2010,baroth2023}.}}{36}{table.caption.49}%
+\contentsline {table}{\numberline {5.1}{\ignorespaces Random inputs of the two analyses. calibrated $K_0$ and the mix proportions}}{36}{table.caption.49}%
 \addvspace {10\p@ }
 \addvspace {10\p@ }
-\contentsline {table}{\numberline {A.1}{\ignorespaces Van Genuchten parameters at ambient temperature}}{55}{table.caption.69}%
+\contentsline {table}{\numberline {A.1}{\ignorespaces Van Genuchten parameters at ambient temperature}}{57}{table.caption.73}%
 \addvspace {10\p@ }
-\contentsline {table}{\numberline {B.1}{\ignorespaces Comparison of random variable and random field stochastic descriptions.}}{76}{table.caption.104}%
+\contentsline {table}{\numberline {B.1}{\ignorespaces Comparison of random variable and random field stochastic descriptions.}}{78}{table.caption.108}%
