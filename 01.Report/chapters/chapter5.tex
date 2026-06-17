@@ -78,7 +78,7 @@ The four mix proportions are taken as mutually independent design choices; their
     Input & Symbol & Distribution & Parameters \\
     \midrule
     \multicolumn{4}{l}{\emph{Analysis A --- transport property}}\\
-    Intrinsic permeability & $K_0$ (\texttt{KINT}) & Lognormal & $\mu=8.5\times10^{-20}~\si{\square\meter}$, $\mathrm{CoV}=0.30$ \\
+    Intrinsic permeability & $K_0$ & Lognormal & $\mu=8.5\times10^{-20}~\si{\square\meter}$, $\mathrm{CoV}=0.30$ \\
     \addlinespace
     \multicolumn{4}{l}{\emph{Analysis B --- mix composition}}\\
     Cement content      & $c$    & Normal  & $\mu=377,\ \sigma=15~\si{\kilogram\per\cubic\meter}$ \\
@@ -112,7 +112,7 @@ Uncertainty quantification is carried out with the \textsc{OpenTURNS} library \c
 
 Besides, extra steps is required for the automated stochastic analyses:
 \begin{enumerate}
-  \item Define the distribution(\cref{tab:random-variables}, of the analysis as an \textsc{OpenTURNS} \texttt{ComposedDistribution}.
+  \item Define the distribution(\cref{tab:random-variables}), using \texttt{ComposedDistribution}.
   \item Generate an LHS design of $N$ samples (\cref{sec:lhs}).
   \item Python script for post-process and ploting: correlation, Sobol indices, response PDF.
 \end{enumerate}
@@ -146,7 +146,6 @@ Therefore, for Analysis~A, \textsc{OpenTURNS} focuses two main sensitivity outpu
   \label{fig:sensA-ci}
 \end{figure}
 
-
 \subsection{Analysis B --- mix composition} \label{sec:sens-mix}
  
 In Analysis~B the four mix proportions are random and $K_0$ is fixed. From the LHS sample, \textsc{OpenTURNS} produces four sensitivity outputs (\cref{fig:sensB-corr,fig:sensB-sobol1,fig:sensB-sobol2,fig:sensB-ci}): the input--output correlation, the first- and total-order Sobol indices, the second-order Sobol indices, and the bootstrap confidence-interval bands of the indices.
@@ -179,10 +178,9 @@ In Analysis~B the four mix proportions are random and $K_0$ is fixed. From the L
   \label{fig:sensB-ci}
 \end{figure}
 
- 
-\begin{draftblock}
+\begin{reviewblock}
 \textbf{Analysis.} Among the mix proportions, $w/c$ is expected to dominate --- it sets the porosity and the initial saturation, i.e.\ both the ease of vapour escape and the size of the water reservoir --- followed by $s/c$, which densifies the paste, while the cement and aggregate \emph{contents} ($c$, $agg$) should contribute little. Non-negligible second-order indices for the pair $(w/c, s/c)$ would indicate that the two ratios jointly shape the pore structure. Any proportion with a negligible total index can be fixed at its mean in the reliability step (\cref{sec:reliability}).
-\end{draftblock}
+\end{reviewblock}
  
 % =====================================================================
 \section{Reliability analysis} \label{sec:reliability}
@@ -203,9 +201,9 @@ For each analysis the propagated sample yields the distribution of $p_g^{10}$. R
   \label{fig:reliability-B}
 \end{figure}
  
-\begin{draftblock}
+\begin{reviewblock}
 \textbf{Analysis.} Comparing the two distributions (\cref{fig:reliability-A,fig:reliability-B}) shows which source of uncertainty contributes more to the exceedance of $p_{\mathrm{crit}}$: the permeability scatter of Analysis~A is expected to produce the wider spread of $p_g^{10}$ and hence the larger $P_f$ (smaller $\beta$), the mix-composition uncertainty of Analysis~B a narrower one. Placing the \cref{chapter4} calibrated value and the measured Kalifa $10~\mathrm{mm}$ peak on each axis anchors the estimate experimentally. The value of $p_{\mathrm{crit}}$ retained (tied to the temperature-degraded tensile strength) and the resulting $P_f$ and $\beta$ for each analysis are reported here.
-\end{draftblock}
+\end{reviewblock}
 
  
 % =====================================================================
@@ -219,10 +217,10 @@ Propagating a random field through the full non-linear THC model is impractical 
  
 In this simplified model the permeability is treated in the classical way and is \emph{not} coupled to the effective hydration degree: $K_0$ (\texttt{KINT}) is a plain intrinsic permeability and the coefficient $A_\Gamma$ of the THC formulation is not used. The quantity entering the assembled flow matrix is the liquid-phase effective permeability, function of the capillary pressure $P_c$ only,
 \begin{equation}
-  K_{\mathrm{eff}}(P_c) \;=\; \frac{k_{rl}\,\rho_l\,K_{int}}{\mu_l},
+  K_{\mathrm{eff}}(P_c) \;=\; \frac{k_{rl}\,\rho_l\,K_0}{\mu_l},
   \label{eq:keff}
 \end{equation}
-where $k_{rl}$ is the liquid relative permeability, $\rho_l$ the liquid density and $\mu_l$ the dynamic viscosity. The spatially variable input is $K_{int}$, and the outputs are the pore pressure $p_g$ and the maximum displacement $u_{\max}$ obtained through the poromechanical coupling (\cref{appendixA}). This sacrifices the thermal coupling and the hydration dependence of permeability, but isolates the effect of $K_{int}$ heterogeneity on the hydro-mechanical response in a setting where all three stochastic methods can be applied consistently.
+where $k_{rl}$ is the liquid relative permeability, $\rho_l$ the liquid density and $\mu_l$ the dynamic viscosity. The spatially variable input is $K_0$, and the outputs are the capillary pressure $p_c$ and the maximum displacement $u_{\max}$ obtained through the poromechanical coupling (\cref{appendixA}). This sacrifices the thermal coupling and the hydration dependence of permeability, but isolates the effect of $K_0$ heterogeneity on the hydro-mechanical response in a setting where all three stochastic methods can be applied consistently.
  
 \subsection{Methods compared} \label{sec:spatial-methods}
  
@@ -237,11 +235,11 @@ The same $K_{int}$ marginal is propagated in three ways, all detailed in \cref{a
 \begin{figure}[htbp]
   \centering
   % \includegraphics[width=0.9\linewidth]{figs/ch5_heterogeneity.pdf}
-  \caption{Simplified isothermal model: distribution of the pore pressure $p_g$ (left) and the maximum displacement $u_{\max}$ (right) for the homogeneous random variable (LHS and quadrature) and the heterogeneous random field (\texttt{ALEA}, 10-realisation average) descriptions of $K_{int}$.}
+  \caption{Simplified isothermal model: distribution the maximum displacement $u_{\max}$ for the homogeneous random variable (LHS - 30 values and quadrature - 7 points ) and the heterogeneous random field (\texttt{ALEA}, 30-realisation average) descriptions of $K_{int}$.}
   \label{fig:rv-vs-rf}
 \end{figure}
 
-\begin{draftblock}
+\begin{reviewblock}
 \textbf{Analysis.} Two cross-checks and one physical result are expected. First, LHS and quadrature --- both homogeneous random-variable methods --- should return the same mean and standard deviation of $p_g$ and $u_{\max}$, validating the inexpensive quadrature scheme against the sampling estimate. Second, the random-field (\texttt{ALEA}) description should give a \emph{more critical} response: a local low-permeability zone traps the pressure and concentrates the deformation, producing a higher $u_{\max}$ and a wider tail than the homogeneous case, because the weak zone is not compensated by the surrounding material. The $10$-realisation average is a pragmatic estimate given the cost of each run; its scatter indicates the residual Monte Carlo uncertainty. The gap between the homogeneous and heterogeneous results quantifies how much the random-variable assumption underestimates the risk. The full Turning Bands / \texttt{ALEA} construction, the quadrature operators and the Monte Carlo convergence are collected in \cref{appendixB}.
-\end{draftblock}
+\end{reviewblock}
     
