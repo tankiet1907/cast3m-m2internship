@@ -49,6 +49,7 @@ for target_name in output_names:
 # ---------------------------------------------------------
 # 2.2. STATISTICAL MOMENTS (Thống kê mô tả)
 # ---------------------------------------------------------
+    mean_val = target_sample.computeMean()[0]
     var_val = target_sample.computeCovariance()[0, 0]
     std_val = np.sqrt(var_val)
     skew_val = target_sample.computeSkewness()[0]
