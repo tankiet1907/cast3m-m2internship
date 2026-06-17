@@ -94,87 +94,76 @@ for target_name in output_names:
     plt.savefig(os.path.join(output_dir, f"Scatter_Plots_{target_name}.png"), dpi=150, bbox_inches='tight')
     plt.close(fig)
 
-# ---------------------------------------------------------
-# 3.2. METAMODEL (PCE) 
-# ---------------------------------------------------------
-    print(" -> Constructing Metamodel (PCE)...")
-    algo = ot.FunctionalChaosAlgorithm(input_ot, target_sample, my_distribution)
-    algo.run()
-    result_pce = algo.getResult()
-    metamodel = result_pce.getMetaModel() 
 
-    mean_val = target_sample.computeMean()[0]
+# ---------------------------------------------------------
+# 2.2. STATISTICAL MOMENTS (Thống kê mô tả)
+# ---------------------------------------------------------
     var_val = target_sample.computeCovariance()[0, 0]
     std_val = np.sqrt(var_val)
+    skew_val = target_sample.computeSkewness()[0]
+    kurt_val = target_sample.computeKurtosis()[0]
 
     print(f"\n--- THỐNG KÊ KẾT QUẢ ĐẦU RA ({target_name}) ---")
+    print(f" + Số lượng mẫu (N)            : {target_sample.getSize()}")
     print(f" + Giá trị trung bình (Mean)   : {mean_val:.4f}")
-    print(f" + Phương sai (Variance)       : {var_val:.4f}")
     print(f" + Độ lệch chuẩn (Std. Dev.)   : {std_val:.4f}")
+    print(f" + Hệ số bất đối xứng (Skew)   : {skew_val:.4f}")
+    print(f" + Độ nhọn (Kurtosis)          : {kurt_val:.4f}")
     print("-------------------------------------------------")
 
 # ---------------------------------------------------------
-# 3.3. RELIABILITY ANALYSIS (Dành riêng cho biến dạng)
+# 2.3. KERNEL SMOOTHING & RELIABILITY ANALYSIS
 # ---------------------------------------------------------
-    # Thiết lập ngưỡng rủi ro cho độ co ngót (Ví dụ: -400 µm/m)
-    # Bạn có thể thay đổi con số này tùy theo yêu cầu của bài toán
+    print(" -> Đang xây dựng phân bố xác suất trơn (Kernel Smoothing) từ dữ liệu...")
+    factory = ot.KernelSmoothing()
+    fitted_dist = factory.build(target_sample)
+
     CURRENT_THRESHOLD = -90.0 
-    
     unit = "µm/m"
-    operator = ot.Less()
     operator_str = "<"
 
     print(f"   -> Đang chạy Phân tích Độ tin cậy (Ngưỡng {target_name} {operator_str} {CURRENT_THRESHOLD} {unit})...")
-
-    X_rnd = ot.RandomVector(my_distribution)
-    Y_metamodel = ot.CompositeRandomVector(metamodel, X_rnd)
-
-    # Khởi tạo Event: Sự cố xảy ra khi Biến dạng < Ngưỡng âm
-    event = ot.ThresholdEvent(Y_metamodel, operator, CURRENT_THRESHOLD)
-
-    print("\n   [Đang tính bằng Monte Carlo...]")
-    mc_algo = ot.ProbabilitySimulationAlgorithm(event, ot.MonteCarloExperiment())
-    mc_algo.setMaximumOuterSampling(100000)
-    mc_algo.run()
-    pf_mc = mc_algo.getResult().getProbabilityEstimate()
+    pf_estimate = fitted_dist.computeCDF(CURRENT_THRESHOLD)
 
     print(f"=========================================================")
-    print(f" RELIABILITY ANALYSIS RESULTS")
+    print(f" RELIABILITY ANALYSIS RESULTS (Dựa trên KDE)")
     print(f" Threshold: {operator_str} {CURRENT_THRESHOLD} {unit}")
-    print(f" Monte Carlo Pf : {pf_mc * 100:.4f} %")
+    print(f" Estimated Pf : {pf_estimate * 100:.4f} %")
     print(f"=========================================================")
 
     # =========================================================
-    # VẼ ĐỒ THỊ (PLOT PDF & FAILURE REGION)
+    # VẼ ĐỒ THỊ PDF & FAILURE REGION
     # =========================================================
     print(" -> Đang tạo đồ thị phân phối xác suất...")
-    
-    Y_sample_plot = Y_metamodel.getSample(10000)
-    graph = ot.KernelSmoothing().build(Y_sample_plot).drawPDF()
+    graph = fitted_dist.drawPDF()
     
     fig2 = plt.figure(figsize=(10, 8))
     ax2 = fig2.add_subplot(111)
     view = viewer.View(graph, figure=fig2, axes=[ax2])
     
     line = ax2.lines[0]
+    line.set_color('blue')
+    line.set_linewidth(2)
+    line.set_label('KDE PDF')
+    
     x_data = line.get_xdata()
     y_data = line.get_ydata()
     
-    # Chỉ quét phần đuôi bên trái đồ thị (vì đang xét nhỏ hơn ngưỡng âm)
     x_tail = x_data[x_data <= CURRENT_THRESHOLD] 
     y_tail = y_data[x_data <= CURRENT_THRESHOLD]
     
     legend_text = (f'Failure Region ({operator_str} {CURRENT_THRESHOLD} {unit})\n'
-                   f'Failure Prob (Pf) : {pf_mc * 100:.2f}%')
+                   f'Failure Prob (Pf) : {pf_estimate * 100:.2f}%')
     ax2.fill_between(x_tail, y_tail, color='red', alpha=0.4, label=legend_text)
     ax2.axvline(x=CURRENT_THRESHOLD, color='black', linestyle='--', linewidth=1.5, label=f'Threshold: {CURRENT_THRESHOLD} {unit}')
     
-    ax2.set_title(f'Probability Density & Failure Probability for {target_name}', fontsize=14, fontweight='bold')
+    ax2.hist(out_array, bins='auto', density=True, alpha=0.5, color='gray', edgecolor='black', label='Empirical Data (Histogram)')
+
+    ax2.set_title(f'Distribution & Failure Probability for {target_name}', fontsize=14, fontweight='bold')
     ax2.set_xlabel(f'Values ({unit})', fontsize=12)
     ax2.set_ylabel('Density', fontsize=12)
     ax2.tick_params(axis='both', labelsize=10)
 
-    # Đặt Legend ở góc trên bên trái để không che đồ thị
     ax2.legend(loc='upper left', fontsize=10) 
     ax2.grid(True, linestyle='--', alpha=0.6)
     
