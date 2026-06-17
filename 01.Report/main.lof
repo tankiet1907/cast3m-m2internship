@@ -4,11 +4,21 @@
 \addvspace {10\p@ }
 \contentsline {figure}{\numberline {3.1}{\ignorespaces Geometry and boundary conditions of the simulated specimen.}}{14}{figure.caption.21}%
 \addvspace {10\p@ }
+\contentsline {figure}{\numberline {4.1}{\ignorespaces Surface ($0~\mathrm {mm}$) temperature: sensitivity to the emissivity $\varepsilon $ (a) and to the convective coefficient $h_c$ (b), compared with the measured near-surface response.}}{20}{figure.caption.30}%
+\contentsline {figure}{\numberline {4.2}{\ignorespaces Temperature with the reference set ($\varepsilon =0.68$, $h_c=11$, $C_{ps}=948$, $\lambda _{d0}=1.67$), compared with the experiment and with Dauti's results.}}{22}{figure.caption.32}%
+\contentsline {figure}{\numberline {4.3}{\ignorespaces Effect of decreasing the conductivity $\lambda _{d0}$ (\texttt {KS})}}{23}{figure.caption.34}%
+\contentsline {figure}{\numberline {4.4}{\ignorespaces Re-calibration of the emissivity $\varepsilon $ after the conductivity was reduced}}{23}{figure.caption.36}%
+\contentsline {figure}{\numberline {4.5}{\ignorespaces Effect of increasing the heat capacity $C_{ps}$ (\texttt {CS}):}}{24}{figure.caption.38}%
+\contentsline {figure}{\numberline {4.6}{\ignorespaces Temperature with the calibrated set ($\varepsilon =0.6$, $h_c=11$, $C_{ps}=960$, $\lambda _{d0}=1.38$): simulation (solid) vs.\ Dauti (dashed) vs.\ experiment (dotted) at $10$--$50~\mathrm {mm}$.}}{25}{figure.caption.40}%
+\contentsline {figure}{\numberline {4.7}{\ignorespaces Effect of $A_\Gamma $ ($A_K = 3,4,5$) at the initial reference permeability $K_0 = 2\times 10^{-19}~\mathrm {m^2}$}}{26}{figure.caption.42}%
+\contentsline {figure}{\numberline {4.8}{\ignorespaces Effect of $A_\Gamma $ ($A_K = 3,4,5$) at the reduced permeability $K_0 = 8.5\times 10^{-20}~\mathrm {m^2}$}}{27}{figure.caption.44}%
+\contentsline {figure}{\numberline {4.9}{\ignorespaces Gas pressure with the retained pair ($K_0 = 8.5\times 10^{-20}~\mathrm {m^2}$, $A_\Gamma = 4$): simulation (solid) vs. Dauti (dashed) vs. experiment (dotted)}}{28}{figure.caption.46}%
+\contentsline {figure}{\numberline {4.10}{\ignorespaces Gas-pressure histories at $10$--$50~\mathrm {mm}$ for a minimal vapour transfer coefficient $h_g = 0.001$ and a large $K_0 = 2\times 10^{-18}~\mathrm {m^2}$, sweeping $A_\Gamma $ from $1$ to $4$.}}{30}{figure.caption.47}%
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {5.1}{\ignorespaces Rank (Spearman) correlation of each input with $p_g^{10}$ and input--input correlation induced by $\theta _{\mathrm {mix}}$.}}{30}{figure.caption.33}%
-\contentsline {figure}{\numberline {5.2}{\ignorespaces First-order ($S_i$), total-order ($S_{T_i}$) and main second-order ($S_{ij}$) Sobol indices of $p_g^{10}$.}}{30}{figure.caption.34}%
-\contentsline {figure}{\numberline {5.3}{\ignorespaces Reconstructed PDF and CDF of $p_g^{10}$ with the critical threshold $p_{\mathrm {crit}}$; the shaded upper tail is $P_f$. The measured Kalifa $10~\mathrm {mm}$ peak is shown for comparison.}}{31}{figure.caption.35}%
-\contentsline {figure}{\numberline {5.4}{\ignorespaces CDF of $p_g^{10}$ under the homogeneous (random variable) and heterogeneous (random field, \texttt {ALEA}) descriptions, with the resulting $P_f$ / $\beta $.}}{32}{figure.caption.36}%
+\contentsline {figure}{\numberline {5.1}{\ignorespaces Rank (Spearman) correlation of each input with $p_g^{10}$ and input--input correlation induced by $\theta _{\mathrm {mix}}$.}}{37}{figure.caption.51}%
+\contentsline {figure}{\numberline {5.2}{\ignorespaces First-order ($S_i$), total-order ($S_{T_i}$) and main second-order ($S_{ij}$) Sobol indices of $p_g^{10}$.}}{37}{figure.caption.52}%
+\contentsline {figure}{\numberline {5.3}{\ignorespaces Reconstructed PDF and CDF of $p_g^{10}$ with the critical threshold $p_{\mathrm {crit}}$; the shaded upper tail is $P_f$. The measured Kalifa $10~\mathrm {mm}$ peak is shown for comparison.}}{38}{figure.caption.53}%
+\contentsline {figure}{\numberline {5.4}{\ignorespaces CDF of $p_g^{10}$ under the homogeneous (random variable) and heterogeneous (random field, \texttt {ALEA}) descriptions, with the resulting $P_f$ / $\beta $.}}{39}{figure.caption.54}%
 \addvspace {10\p@ }
 \addvspace {10\p@ }
 \addvspace {10\p@ }

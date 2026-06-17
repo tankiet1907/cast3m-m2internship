@@ -56,13 +56,28 @@ where $h^{\mathrm{hot}}$ is the convective heat-transfer coefficient at the top-
  
 The two boundary coefficients $h^{\mathrm{hot}}$ and $\varepsilon$ are adjusted so that the computed $0~\mathrm{mm}$ history matches the measured near-surface ($2~\mathrm{mm}$) response. At this point the conduction parameters are held at their reference values; only the energy input at the surface is tuned.
 
-The surface response is calibrated over three values of $\varepsilon$ ($0.65$, $0.68$, $0.72$) and three of $h_c$ ($9$, $10$, $11~\mathrm{W\,m^{-2}K^{-1}}$). Because the resulting curves differ only slightly, the full $3\times 3$ grid is not informative; instead the effect of each parameter is shown one at a time, varying it while the other is held at its retained value (Fig.~\ref{fig:cal-surface}). The pair retained at this stage is $\varepsilon = 0.68$ and $h^{\mathrm{hot}} = 11~\mathrm{W\,m^{-2}K^{-1}}$.
+The surface response is calibrated over three values of $\varepsilon$ ($0.65$, $0.68$, $0.72$) and three of $h_c$ ($9$, $10$, $11~\mathrm{W\,m^{-2}K^{-1}}$). 
+
+Because the resulting curves differ only slightly, the full $3\times 3$ grid is not informative; instead the effect of each parameter is shown one at a time, varying it while the other is held at its retained value (Fig.~\ref{fig:cal-surface}). The pair retained at this stage is $\varepsilon = 0.68$ and $h^{\mathrm{hot}} = 11~\mathrm{W\,m^{-2}K^{-1}}$.
  
-%\begin{figure}[H]
+\begin{figure}[H]
+  \centering
+  \begin{subfigure}{0.48\textwidth}
+    \includegraphics[width=\linewidth]{figures/chapter4/surf_eps_sweep.png}
+    \caption{Effect of $\varepsilon$ ($h_c = 11$ fixed).}
+    \label{fig:cal-surf-eps}
+  \end{subfigure}\hfill
+  \begin{subfigure}{0.48\textwidth}
+    \includegraphics[width=\linewidth]{figures/chapter4/surf_h_sweep.png}
+    \caption{Effect of $h_c$ ($\varepsilon = 0.68$ fixed).}
+    \label{fig:cal-surf-h}
+  \end{subfigure}
+  \caption{Surface ($0~\mathrm{mm}$) temperature: sensitivity to the emissivity
+  $\varepsilon$ (a) and to the convective coefficient $h_c$ (b), compared with the measured near-surface response.}
+  \label{fig:cal-surface}
+\end{figure}
 
-%\end{figure}
-
-Two distinct effects are concluded from Fig.~\ref{fig:cal-surface}. 
+Two distinct effects are concluded from \cref{fig:cal-surface}. 
 \begin{itemize}
   \item The emissivity $\varepsilon$ is the most sensitive parameter: because the radiative term acts in a strong non-linear way as $T^{4}$ in \cref{eq:surf-bc}, a small increase in $\varepsilon$ raises the surface temperature substantially, and mostly in the high-temperature part of the curve, where radiation dominates the heat input. 
 
@@ -79,29 +94,63 @@ Once the surface temperature is reproduced, the temperature rise at depth ($10$-
   \item the reference dry conductivity $\lambda_{d0}$ (denoted \texttt{KS} in the model), which scales the whole conductivity law.
 \end{itemize}
  
-A subtlety arises here: adjusting the surface condition in Section~\ref{sec:cal-surf} changes the energy that actually enters the specimen, which in turn shifts the in-depth histories. Consequently $\lambda_{d0}$ and $C_{ps}$ cannot be calibrated in isolation -- they must be \emph{re-calibrated} jointly with the surface condition. In practice a short iterative loop is used:
-\begin{enumerate}
-  \item $\lambda_{d0}$ and $C_{ps}$ are adjusted to match the arrival time and slope of the temperature rise at each depth;
-  \item $h^{\mathrm{hot}}$ and $\varepsilon$ are then re-checked against the surface probe and, if necessary, slightly corrected;
-\end{enumerate}
-and the loop is repeated until the whole set of probes ($0$--$50~\mathrm{mm}$) is reproduced consistently. As for the surface stage, the differences between neighbouring parameter values are small, so the effect of each quantity is shown one at a time rather than as a full grid. Fig.~\ref{fig:cal-temp-depth} therefore collects three panels: the influence of the conductivity $\lambda_{d0}$ (\texttt{KS}), the influence of the heat capacity $C_{ps}$ (\texttt{CS}), and the re-calibration of the emissivity $\varepsilon$ that closes the iterative loop.
+A subtlety arises here: adjusting the surface condition in \cref{sec:cal-surf} changes the energy that actually enters the specimen, which in turn shifts the in-depth histories. Consequently $\lambda_{d0}$ and $C_{ps}$ cannot be calibrated in isolation -- they must be \emph{re-calibrated} jointly with the surface condition. 
+
+The calibration therefore proceeds as a short journey, starting from the parameter set carried over from the surface stage and adjusting one quantity at a time.
+
+\paragraph{Starting point.}
+The run is first launched with the reference set inherited from the surface calibration in \cref{sec:cal-surf}: $\varepsilon = 0.68$, $h^{\mathrm{hot}} = 11~\mathrm{W\,m^{-2}K^{-1}}$, $C_{ps} = 948~\mathrm{J\,kg^{-1}K^{-1}}$ and $\lambda_{d0} = 1.67~\mathrm{W\,m^{-1}K^{-1}}$.
+Compared with the experiment and with the earlier results of Dauti (\cref{fig:cal-depth-ref}), the temperature is already well reproduced near the surface, but the deeper probes ($30$, $40$ and $50~\mathrm{mm}$) are over-predicted: the in-depth temperatures are too high and still need to be calibrated.
  
-%\begin{figure}[H]
-
-%\end{figure}
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.75\textwidth]{figures/chapter4/Temp_compare_epsilon_0.68_h-hot_11.png}
+  \caption{Temperature with the reference set ($\varepsilon=0.68$, $h_c=11$, $C_{ps}=948$, $\lambda_{d0}=1.67$), compared with the experiment and with Dauti's results.}
+  \label{fig:cal-depth-ref}
+\end{figure}
  
-The two parameters act on different parts of the specimen. 
-
-\begin{itemize}
-
-  \item The conductivity -- through $\lambda_{d0}$ -- mainly affects the region \emph{closer to the heated face}: it sets how fast heat is conducted inward. Lowering $\lambda_{d0}$ slows the inward transfer, so heat accumulates near the surface and the near-face temperature rises while the deeper points heat up more slowly; raising $\lambda_{d0}$ has the opposite effect, transmitting heat inward and lowering the near-surface temperature.
-
-  \item The heat capacity -- through $C_{ps}$ -- by contrast governs the thermal inertia and is felt mostly at the \emph{deepest points} ($40$ and $50~\mathrm{mm}$): a larger $C_{ps}$ stores more energy per unit temperature rise, so the same heat flux produces a smaller and more delayed temperature increase in the core, lowering the internal temperatures. Adjusting $\lambda_{d0}$ to match the near-face response and $C_{ps}$ to match the $40$--$50~\mathrm{mm}$ histories therefore brings the whole depth profile into agreement.
-\end{itemize}
+\paragraph{Step 1 -- reducing the conductivity $\lambda_{d0}$ (\texttt{KS}).} The conductivity acts mostly on the layers \emph{closer to the heated face}. To bring down the over-predicted $10$ and $20~\mathrm{mm}$ curves, $\lambda_{d0}$ is reduced (\cref{fig:cal-depth-ks}). This indeed lowers those curves, but it has a side effect: by slowing the inward transfer, heat accumulates near the surface, so the surface temperature becomes too high in the tail of the curve and, for the lowest values, the computation eventually crashes.
  
-The final temperature agreement is good across all depths (\cref{fig:cal-temp-depth}), which provides a reliable thermal loading for the second calibration stage.
-
-Finally the retained thermal parameter set is $h^{\mathrm{hot}} = [\,\dots\,]$ and $\varepsilon = [\,\dots\,]$, $\lambda_{d0}= [\,\dots\,]$ and $C_{ps} = [\,\dots\,]$.
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.75\textwidth]{figures/chapter4/depth_KS_sweep.png}
+  \caption{Effect of decreasing the conductivity $\lambda_{d0}$ (\texttt{KS})}
+  \label{fig:cal-depth-ks}
+\end{figure}
+ 
+\paragraph{Step 2 -- re-calibrating the emissivity $\varepsilon$.}
+The surface overheating introduced by the lower $\lambda_{d0}$ is corrected by re-calibrating the emissivity. Reducing $\varepsilon$ lowers the radiative input at the surface (Fig.~\ref{fig:cal-depth-eps}) and restores the $0~\mathrm{mm}$ response,stabilising the run.
+ 
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.75\textwidth]{figures/chapter4/depth_eps_recal.png}
+  \caption{Re-calibration of the emissivity $\varepsilon$ after the conductivity was reduced}
+  \label{fig:cal-depth-eps}
+\end{figure}
+ 
+\paragraph{Step 3 -- increasing the heat capacity $C_{ps}$ (\texttt{CS}).}
+The heat capacity governs the thermal inertia and is felt mostly at the \emph{deepest points}. To bring down the still over-predicted $30$, $40$ and $50~\mathrm{mm}$ curves, $C_{ps}$ is increased (Fig.~\ref{fig:cal-depth-cs}): a larger $C_{ps}$ stores more energy per unit temperature rise, so the same heat flux produces a smaller, more delayed temperature increase in the core, lowering the internal temperatures.
+ 
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.75\textwidth]{figures/chapter4/depth_CS_sweep.png}
+  \caption{Effect of increasing the heat capacity $C_{ps}$ (\texttt{CS}):}
+  \label{fig:cal-depth-cs}
+\end{figure}
+ 
+\paragraph{Balancing $C_{ps}$ and $\lambda_{d0}$.}
+Increasing $C_{ps}$, however, cannot be pushed independently of $\lambda_{d0}$: the two parameters are coupled and must be balanced against each other. If $C_{ps}$ is raised while $\lambda_{d0}$ is kept low, the material both stores a large amount of energy and conducts it inward too slowly, so the incoming heat cannot diffuse away from the surface. This was observed directly for the combination $\varepsilon = 0.68$, $h^{\mathrm{hot}} = 11$, $C_{ps} = 960$, $\lambda_{d0} = 1.38$: the surface heat could not pass inward, the surface temperature rose abnormally, and the run crashed. The combination only becomes stable once the surface input is reduced -- by lowering the emissivity to $\varepsilon = 0.6$ (Step~2) -- so that a high $C_{ps}$ and a low $\lambda_{d0}$ can coexist. The calibration therefore consists of finding a balanced $(\lambda_{d0}, C_{ps})$ pair, together with the matching surface input, rather than tuning either conduction parameter on its own.
+ 
+At the end of this journey the temperature is reproduced consistently at all depths ($0$--$50~\mathrm{mm}$). The final comparison against the Dauti and experimental curves is shown in \cref{fig:cal-depth-final}, providing a reliable thermal loading for the gas-pressure calibration.
+ 
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{figures/chapter4/Temp_compare_step3_CS.png}
+  \caption{Temperature with the calibrated set
+  ($\varepsilon=0.6$, $h_c=11$, $C_{ps}=960$, $\lambda_{d0}=1.38$): simulation
+  (solid) vs.\ Dauti (dashed) vs.\ experiment (dotted) at $10$--$50~\mathrm{mm}$.}
+  \label{fig:cal-depth-final}
+\end{figure}
 
 % ---------------------------------------------------------------------------
 \section{Gas-pressure calibration} \label{sec:cal-pressure}
@@ -110,13 +159,40 @@ With the temperature field fixed, the calibration of the gas-pressure evolution 
  
 \subsection{Primary parameters: \texorpdfstring{$K_0$}{K0} and \texorpdfstring{$A_\Gamma$}{A_Gamma}} \label{sec:cal-K0-AK}
  
-The intrinsic permeability $K_0$ (denoted \texttt{KINT}) and the permeability--hydration coefficient $A_\Gamma$ (denoted \texttt{AK}) are the two most influential parameters dictating the magnitude and acceleration of the gas transport. In the newly implemented THC model, the evolution of permeability is highly sensitive to the degradation of the effective hydration degree $\tilde{\Gamma}$ \cref{eq:K-chem}. 
+The intrinsic permeability $K_0$ (denoted \texttt{KINT}) and the permeability--hydration coefficient $A_\Gamma$ (denoted \texttt{AK}) are the two most influential parameters dictating the magnitude and acceleration of the gas transport. In the newly implemented THC model, the evolution of permeability is highly sensitive to the degradation of the effective hydration degree $\tilde{\Gamma}$ \cref{eq:permeability}. 
  
 These two parameters must be strictly balanced. If the combination makes $K$ too low, vapour cannot escape and the trapped vapor generates extremely severe pressure gradients; if it makes $K$ too high, the vapor escapes too easily into the environment, resulting in flattened, underestimated pressure profiles. In both cases, the Newton-Raphson solver diverges (crashes), so $K_0$ and $A_\Gamma$ have to be calibrated carefully together. 
  
-% \begin{figure}[h] 
+\paragraph{Starting point -- $K_0 = 2\times10^{-19}~\mathrm{m^2}$.}
+The first sweep is performed at the initial reference permeability $K_0 = 2\times10^{-19}~\mathrm{m^2}$, varying $A_\Gamma$ over $3$, $4$ and $5$ (with $A_\Gamma = 3$ as the initial reference); the result is shown in \cref{fig:cal-pg-kint2e19}. Increasing $A_\Gamma$ raises the peaks, but this $K_0$ value is not physically representative of HPC, and the curves still do not fit the experimental pressures.
+ 
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.75\textwidth]{figures/chapter4/pg_AK_sweep_KINT_2e-19.png}
+  \caption{Effect of $A_\Gamma$ ($A_K = 3,4,5$) at the initial reference permeability $K_0 = 2\times10^{-19}~\mathrm{m^2}$}
+  \label{fig:cal-pg-kint2e19}
+\end{figure}
+ 
+\paragraph{Reducing the permeability -- $K_0 = 8.5\times10^{-20}~\mathrm{m^2}$.}
+The permeability is therefore reduced to $K_0 = 8.5\times10^{-20}~\mathrm{m^2}$,which is more consistent with a dense HPC, and the $A_\Gamma$ sweep is repeated \cref{fig:cal-pg-kint85e20}) to assess the effect of lowering $K_0$. Trapping the gas more effectively raises the peaks, and the pair $K_0 = 8.5\times10^{-20}~\mathrm{m^2}$, $A_\Gamma = 4$ is retained as the best compromise.
+ 
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.75\textwidth]{figures/chapter4/pg_AK_sweep_KINT_8.5e-20.png}
+  \caption{Effect of $A_\Gamma$ ($A_K = 3,4,5$) at the reduced permeability $K_0 = 8.5\times10^{-20}~\mathrm{m^2}$}
+  \label{fig:cal-pg-kint85e20}
+\end{figure}
 
-% \label{fig:cal-pressure-primary} \end{figure}
+\paragraph{Comparison with the references.}
+The retained pair is compared against the Dauti and experimental curves in
+\cref{fig:cal-pg-compare}. The agreement is reasonable in the outer layer of 10 mm, but a structural difficulty appears with depth, as discussed below.
+ 
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{figures/chapter4/Pg_compare_KINT_8.5e-20_AK_4.png}
+  \caption{Gas pressure with the retained pair ($K_0 = 8.5\times10^{-20}~\mathrm{m^2}$, $A_\Gamma = 4$): simulation (solid) vs. Dauti (dashed) vs. experiment (dotted)}
+  \label{fig:cal-pg-compare}
+\end{figure}
 
 \textbf{The Main Issue:} The sweep over $(K_0, A_\Gamma)$ reveals the central difficulty of this stage: the gas pressure can be adjusted significantly only in the \emph{outer layers} ($10$ and $20~\mathrm{mm}$). As one moves deeper into the specimen ($30, 40, 50~\mathrm{mm}$), the simulated peak pressure \emph{decreases}. This contradicts the experimental observations of Kalifa et al. \cite{kalifa2000}, where deeper zones exhibited progressively higher peak pressures. 
 
@@ -130,11 +206,18 @@ To address this depth-dependent pressure decay and force the moisture clog deepe
     \item \textbf{Initial Relative Humidity ($RH_0$):} While intuitively a higher initial saturation provides a larger water reservoir for vaporization, increasing $RH_0$ towards full saturation (e.g., $>0.99$) induces severe numerical singularities in the capillary pressure gradients, systematically causing the code to crash.
     \item \textbf{Desorption Isotherm ($a$):} Adopting a stiffer desorption curve (higher $a$ parameter, which is physically more appropriate for HPC to retain water at higher capillary pressures) successfully yielded a slight increase in the peak pressure at $20~\mathrm{mm}$, but failed to propagate this increment to the $30-50~\mathrm{mm}$ depths.
     \item \textbf{Aging / Curing time:} Modifying the hydration history significantly alters the initial state. Decreasing the aging time reduces the overall gas pressure and critically compromises the code's stability. On the other hand, increasing the aging time excessively subjects the HPC to severe self-desiccation, rendering the internal core unrealistically dry prior to heating.
-    \item \textbf{Vapor mass-transfer coefficient ($h_g$):} In an attempt to artificially trap the gas, the convective exchange coefficient at the heated face (\texttt{MATCOH}) was reduced to a minimum. While this approach successfully forced vapor inward and increased $p_g$ in the deeper zones, it could only maintain numerical stability if compensated by an artificially large intrinsic permeability ($K_0$). However, imposing a large $K_0$ fundamentally contradicts the extremely dense, low-permeability nature of HPC containing silica fume. The outcome of this attempt is shown in Fig.~\ref{fig:cal-hg-result}.
+    \item \textbf{Vapor mass-transfer coefficient ($h_g$):} In an attempt to artificially trap the gas, the convective exchange coefficient at the heated face was reduced to a minimum. While this approach successfully forced vapor inward and increased $p_g$ in the deeper zones, it could only maintain numerical stability if compensated by an artificially large intrinsic permeability ($K_0$). However, imposing a large $K_0$ fundamentally contradicts the extremely dense, low-permeability nature of HPC containing silica fume.
 \end{itemize}
 
-%\begin{figure}[H]
-%\end{figure}
+The outcome of the last attempt is shown in \cref{fig:cal-hg-result}: with $h_g = 0.001$ and a large $K_0 = 2\times10^{-18}~\mathrm{m^2}$, increasing $A_\Gamma$ ($1$ to $4$) does raise the deeper-zone pressures, but the overall pressure level is depressed because such an abnormally large $K_0$ lets the gas escape too easily.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{figures/chapter4/pg_test10_AK_sweep_hg0.001.png}
+  \caption{Gas-pressure histories at $10$--$50~\mathrm{mm}$ for a minimal vapour transfer coefficient $h_g = 0.001$ and a large $K_0 = 2\times10^{-18}~\mathrm{m^2}$, sweeping $A_\Gamma$ from $1$ to $4$.}
+  \label{fig:cal-hg-result}
+\end{figure}
+
  
 In summary, none of these secondary adjustments -- alone or in combination with $K_0$ and $A_\Gamma$ -- could perfectly reproduce the deep pressure peaks without violating either the physical constraints of the material or the mathematical stability of the solver.
 
@@ -151,44 +234,36 @@ The reference model utilizes the calibrated parameter set optimized primarily fo
     \hline
     Stage & Parameter & Retained value \\
     \hline
-    Surface heat exchange & Convective coefficient $h^{\mathrm{hot}}$        & $[\,\dots\,]$ \\
-                          & Emissivity $\varepsilon$            & $[\,\dots\,]$ \\
-    Bulk conduction       & Reference dry conductivity $\lambda_{d0}$ & $[\,\dots\,]$ \\
-                          & Solid specific heat $C_{ps}$        & $[\,\dots\,]$ \\
-    Gas pressure          & Intrinsic permeability $K_0$        & $[\,\dots\,]$ \\
-                          & Permeability--hydration coeff.\ $A_\Gamma$ & $[\,\dots\,]$ \\
+    Surface heat exchange & Convective coefficient $h_c$        & $11~\mathrm{W\,m^{-2}K^{-1}}$ \\
+                          & Emissivity $\varepsilon$            & $0.6$ \\
+    Bulk conduction       & Reference dry conductivity $\lambda_{d0}$ & $1.38~\mathrm{W\,m^{-1}K^{-1}}$ \\
+                          & Solid specific heat $C_{ps}$        & $960~\mathrm{J\,kg^{-1}K^{-1}}$ \\
+    Gas pressure          & Intrinsic permeability $K_0$        & $8.5\times10^{-20}~\mathrm{m^2}$ \\
+                          & Permeability--hydration coeff.\ $A_\Gamma$ & $4$ \\
     \hline
   \end{tabular}
 \end{table}
 
 
 \subsection{Temperature} \label{sec:val-temp}
-Using the calibrated parameter set of Table~\ref{tab:calibrated}, the model reproduces the measured temperature histories at all depths within a few degrees (Fig.~\ref{fig:val-temp}), confirming that the thermal sub-problem and its boundary conditions are correctly captured. The temperature field can therefore be used as a trustworthy loading for the hydric and mechanical sub-problems.
-
-% \begin{figure}[h] 
-
-% \label{fig:cal-pressure-primary} \end{figure}
+The temperature validation is the in-depth comparison already obtained at the end of the calibration (\cref{fig:cal-depth-final}): with the calibrated set of Table~\ref{tab:calibrated}, the model reproduces the measured temperature histories at all depths within a few degrees, confirming that the thermal sub-problem and its boundary conditions are correctly captured. Importantly, the gas-pressure parameters $K_0$ and $A_\Gamma$ calibrated in the last stage have a negligible effect on the temperature field, so the temperature agreement of \cref{fig:cal-depth-final} remains valid for the final parameter set. The temperature field can therefore be used as a trustworthy loading for the hydric and mechanical sub-problems.
 
 \subsection{Gas pressure} \label{sec:val-pressure}
  
-The gas-pressure response, by contrast, \textbf{could not be fully validated} (Fig.~\ref{fig:val-pressure}). Even with the calibrated set of Table~\ref{tab:calibrated}, and across the explored parameter space -- $K_0$, $A_\Gamma$, $RH_0$, $h_g$, the desorption parameter $a$ and the aging time -- the model reproduces the pressure only in the outer layers ($10$ and $20~\mathrm{mm}$). In the deeper zones the simulated peak pressure keeps decreasing with depth, while the measurements show the opposite trend. The high-pressure region generated by the simulation thus remains too concentrated near the exposed surface and does not extend inward as it should.
+The gas-pressure validation is the comparison obtained with the retained pair
+(\cref{fig:cal-pg-compare}). The response \textbf{could not be validated}: even with the calibrated set of Table~\ref{tab:calibrated}, and across the explored parameter space -- $K_0$, $A_\Gamma$, $RH_0$, $h_g$, the desorption parameter $a$ and the aging time -- the model reproduces the pressure only in the outer layers ($10$ and $20~\mathrm{mm}$). In the deeper zones the simulated peak pressure keeps decreasing with depth, while the measurements show the opposite trend, so the high-pressure region remains too concentrated near the exposed surface. 
+
+Additionally, the conduction parameters $C_{ps}$ and $\lambda_{d0}$ retained for the temperature have a negligible effect on the gas pressure. With the fact $K_0$ and $A_\Gamma$ ave a negligible effect on the temperature field, these justify the sequential calibration adopted in this chapter.
+
  
-% \begin{figure}[h] \centering ... \caption{Computed vs.\ measured gas-pressure
-% histories at $10$--$50~\mathrm{mm}$: the model captures the pressurisation trend
-% but not the post-peak decay.} \label{fig:val-pressure} \end{figure}
+\subsection{Dicussions} \label{sec:val-dicussion}
+
+Two complementary explanations are proposed for this discrepancy.
+\begin{itemize}
+
+  \item The first concerns the experiment itself. Measuring pore pressure requires inserting a gauge into the concrete, which inevitably creates a local discontinuity -- a small cavity surrounded by an already porous and heterogeneous material. It is therefore not certain that these gauges record the true gas pressure of the intact porous network; part of what they measure may reflect the local conditions of the cavity and the surrounding damaged zone rather than the field the model computes. This raises a genuine question about what the deep-zone gauges are actually measuring, and hence about the reference against which the model is being judged.
  
-\subsection{Conclusions} \label{sec:val-conclusions}
-
-Rather than solely attributing this mismatch to numerical shortcomings, this discrepancy invites a \textbf{critical reassessment of the experimental paradigm itself}. The standard PTM (Pressure-Temperature-Mass loss) tests involve highly intrusive measurement techniques. 
-
-The physical insertion of pressure gauges (which can be up to $12~\mathrm{mm}$ in diameter) into the concrete matrix introduces massive discontinuities and artificial voids. Because the metallic sensors and the surrounding concrete possess vastly different thermo-hydro-mechanical properties, the severe thermal mismatch during heating induces localized micro-cracking around the gauge. These cracks inevitably act as artificial "escape channels" for the vapor. Furthermore, as migrating moisture condenses, liquid water can accumulate within the free volume of the sensor cavity itself. 
-
-Consequently, a fundamental question arises: \textit{Are these gauges truly measuring the intrinsic pore gas pressure of an intact material?} It is highly probable that the sensors are measuring a distorted pressure field or a localized fluid-vapor expansion altered by the sensor's own intrusive presence. Expecting a homogenized continuum model to perfectly match these point-wise, potentially biased experimental values might therefore be an ill-posed objective.
-
-Two major conclusions follow from this deterministic calibration:
-\begin{enumerate}
-    \item The sequentially calibrated THM model reliably predicts the complex thermal behavior of HPC under fire conditions, offering a solid foundation for further investigations.
-    \item The newly implemented THC approach, which couples transport properties dynamically to the material's effective hydration degree, is physically far more rigorous than traditional temperature-dependent empirical laws. However, to accurately reproduce the sudden post-peak pressure drops and deep moisture clogs, the model requires further refinement—specifically the integration of a mechanical damage-permeability coupling to simulate physical cracking.
-\end{enumerate}
+  \item The second concerns the model. The formulation used here is the recent THC model, which is still being developed; its saturation, permeability and dehydration laws have not yet been fully tuned to the high-temperature behaviour of HPC. The fact that the deeper-zone pressures could be raised only through physically unreasonable parameter values (very high $K_0$, minimal $h_g$) suggests that the model is missing a mechanism that redistributes the pressure build-up further inward, and that further refinement of the THC formulation is required before a quantitative validation of the gas pressure can be expected.
+\end{itemize}
 
 Given the inherent uncertainties in both the non-linear material parameters and the ambiguous experimental gas-pressure data, relying solely on deterministic calibration is insufficient. This robustly justifies the necessity of shifting toward a probabilistic framework, utilizing uncertainty quantification to assess the spalling risk, which will be the core focus of \cref{chapter5}.
