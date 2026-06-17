@@ -83,10 +83,10 @@ PO_120 = MAIL1 POIN 'PROC' (0.06 0.000);
 *---------------------------------------------------------------------
 
 * MIX DATA
-cem  = @CEM@;
-aggr = @AGG@;
-wc   = @WC@;
-sc   = @SC@;
+cem  = 377.   ;
+aggr = 1920.  ;
+wc   = 0.34   ;
+sc   = 0.1  ;
 
 * HYDRATION PROCESS DATA (affinity. activation energy. hydration heat)
 AI   = 6    ;
@@ -97,7 +97,7 @@ EAR1 = 5369.  ;
 lat1 = 114.3e6 ;
 
 * INTRINSIC PERMEABILITY
-KINT = 8.5E-20;
+KINT = @KINT@;
 AK   = 4.;
 
 * THERMAL PARAMETERS
