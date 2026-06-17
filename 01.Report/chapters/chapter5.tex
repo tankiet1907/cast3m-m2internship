@@ -184,8 +184,18 @@ In Analysis~B the four mix proportions are random and $K_0$ is fixed. From the L
  
 % =====================================================================
 \section{Reliability analysis} \label{sec:reliability}
- 
-For each analysis the propagated sample yields the distribution of $p_g^{10}$. Reconstructing its PDF and CDF (\cref{fig:reliability-A,fig:reliability-B}) turns the input scatter into a quantitative safety statement: with the limit state of \cref{eq:limit-state} and the formulas of \cref{sec:pf-beta} (\cref{eq:pf-beta}), the probability of failure is the upper-tail area $P_f=1-F_{p_g^{10}}(p_{\mathrm{crit}})$ and the reliability index is $\beta=-\Phi^{-1}(P_f)$.
+
+For each analysis, the propagated sample yields a discrete set of structural responses (e.g., the peak gas pressure $p_g^{10}$ or the maximum shrinkage strain). To turn this input scatter into a quantitative safety statement, the continuous Probability Density Function (PDF) and Cumulative Distribution Function (CDF) must be reconstructed. With the limit state of \cref{eq:limit-state} and the formulas of \cref{sec:pf-beta}, the probability of failure is calculated as the upper-tail area $P_f=1-F(p_{\mathrm{crit}})$ and the reliability index as $\beta=-\Phi^{-1}(P_f)$.
+
+Due to the different nature of the stochastic propagation methods employed, two distinct numerical strategies are utilized within \textsc{OpenTURNS} to reconstruct the distributions and evaluate the failure probability:
+
+\begin{description}
+    \item[Kernel Density Estimation (Analyses A, C1, and C2):] For analyses where the input uncertainty is limited to a single random variable (e.g., global $K_0$) or governed by a spatial random field (\texttt{ALEA}), building a multidimensional metamodel is either mathematically unnecessary or algorithmically incompatible. Instead, the continuous PDF is reconstructed directly from the raw, macroscopic Cast3M outputs using non-parametric Kernel Density Estimation (KDE). The probability of failure is then directly estimated by integrating the tail of this smoothed empirical distribution.
+    
+    \item[PCE Metamodel and Monte Carlo (Analysis B):] In the multivariable mix-composition study, evaluating the failure probability directly from the limited 30-sample LHS design would yield highly inaccurate tail estimations. To overcome the computational bottleneck of the FEA solver, a surrogate model is constructed using Polynomial Chaos Expansion (PCE). This metamodel approximates the complex, computationally expensive Cast3M THM solver into a fast analytical function. Once validated, a massive Monte Carlo simulation ($10^5$ realizations) is executed exclusively on the PCE metamodel, allowing for a highly accurate and computationally inexpensive evaluation of $P_f$ without requiring additional Cast3M runs.
+\end{description}
+
+These reconstructed PDFs (\cref{fig:reliability-A,fig:reliability-B}) visually demonstrate how the input uncertainties propagate towards the critical threshold.
  
 \begin{figure}[htbp]
   \centering

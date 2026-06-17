@@ -79,13 +79,13 @@
 \contentsline {subsection}{\numberline {5.5.1}Analysis A --- permeability $K_0$ ($A_\Gamma $ constant)}{34}{subsection.5.5.1}%
 \contentsline {subsection}{\numberline {5.5.2}Analysis B --- mix composition}{34}{subsection.5.5.2}%
 \contentsline {section}{\numberline {5.6}Reliability analysis}{38}{section.5.6}%
-\contentsline {section}{\numberline {5.7}Effect of spatial heterogeneity on structural safety}{39}{section.5.7}%
-\contentsline {subsection}{\numberline {5.7.1}A simplified isothermal poro-mechanical model}{39}{subsection.5.7.1}%
-\contentsline {subsection}{\numberline {5.7.2}Stochastic propagation methods}{40}{subsection.5.7.2}%
-\contentsline {chapter}{\numberline {6}Conclusions and Perspectives}{44}{chapter.6}%
-\contentsline {section}{\numberline {6.1}Main findings}{44}{section.6.1}%
-\contentsline {section}{\numberline {6.2}Model limitations and possible improvements}{44}{section.6.2}%
-\contentsline {section}{\numberline {6.3}Perspectives for future research}{45}{section.6.3}%
+\contentsline {section}{\numberline {5.7}Effect of spatial heterogeneity on structural safety}{40}{section.5.7}%
+\contentsline {subsection}{\numberline {5.7.1}A simplified isothermal poro-mechanical model}{40}{subsection.5.7.1}%
+\contentsline {subsection}{\numberline {5.7.2}Stochastic propagation methods}{41}{subsection.5.7.2}%
+\contentsline {chapter}{\numberline {6}Conclusions and Perspectives}{45}{chapter.6}%
+\contentsline {section}{\numberline {6.1}Main findings}{45}{section.6.1}%
+\contentsline {section}{\numberline {6.2}Model limitations and possible improvements}{45}{section.6.2}%
+\contentsline {section}{\numberline {6.3}Perspectives for future research}{46}{section.6.3}%
 \contentsline {chapter}{Bibliography}{47}{chapter*.59}%
 \value {tocdepth}=0
 \contentsline {chapter}{\numberline {A}Thermo-Hydro-Mechanical behavior of Heated Concrete}{49}{appendix.A}%
