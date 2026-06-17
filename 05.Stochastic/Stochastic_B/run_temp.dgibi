@@ -1,5 +1,5 @@
 *---------------------------------------------------------------------
-* CALIBRATION OF THE SURFACE EXCHANGE COEFFICIENT
+* CALIBRATION OF THE THERMAL CONDUCTIVITY AND HEAT CAPACITY + RECALIBRATION OF SURFACE EXCHANGE COEFFICIENT
 * ADIABATIC HYDRATION / AGING / ACCIDENT - COOLING OF KALIFA (2000) EXPERIMENT
 *---------------------------------------------------------------------
 * By: Tan Kiet HONG
@@ -83,10 +83,10 @@ PO_120 = MAIL1 POIN 'PROC' (0.06 0.000);
 *---------------------------------------------------------------------
 
 * MIX DATA
-cem  = 377.   ;
-aggr = 1920.  ;
-wc   = 0.34   ;
-sc   = 0.1  ;
+cem  = 349.19260833798256;
+aggr = 1959.76529223645;
+wc   = 0.37597402255172074;
+sc   = 0.0925854689718;
 
 * HYDRATION PROCESS DATA (affinity. activation energy. hydration heat)
 AI   = 6    ;
@@ -97,12 +97,12 @@ EAR1 = 5369.  ;
 lat1 = 114.3e6 ;
 
 * INTRINSIC PERMEABILITY
-KINT = 2E-19;
-AK   = 3.;
+KINT = 8.5E-20;
+AK   = 4.;
 
 * THERMAL PARAMETERS
-CS   = 948.   ;
-KS   = 1.67   ;
+CS   = 960.   ;
+KS   = 1.38   ;
 
 * DESORPTION ISOTHERME MODEL PARAMETERS
 *a1   =  46.9364E6 ;
@@ -449,8 +449,8 @@ REST;
 *---------------------------------------------------------------------
 * ACCIDENT
 *---------------------------------------------------------------------
-EPSILON=@EPSILON@;
-HHOT=@HHOT@;
+EPSILON=0.6;
+HHOT=11;
 
 OPTI ECHO 0;
 DEBP PARATHER ;
@@ -539,7 +539,7 @@ EV_EX_120 = EVOL 'BLAN' 'MANU' 'Time(min)' L_MIN_1 'T_120mm' LT_120_1 ;
 EV_EXPORT_TEMP = EV_EX_00 ET EV_EX_10 ET EV_EX_20 ET EV_EX_30 ET EV_EX_40 ET EV_EX_50 ET EV_EX_120 ;
 
 * 5. Export to CSV/TXT file
-OPTI 'SORT' '@CSV_TEMP@' ;
+OPTI 'SORT' 'D:\cast3m-m2internship\05.Stochastic\Stochastic_B\CSV\temp_results_no_2.csv' ;
 SORT 'EXCE' EV_EXPORT_TEMP ;
 
 
@@ -574,7 +574,5 @@ EV_PG_120  = EVOL 'BLAN' 'MANU' 'Time(min)' L_MIN_1 'PG_120mm(MPa)'  LPG_120_1 ;
 EV_EXPORT_PG = EV_PG_00 ET EV_PG_10 ET EV_PG_20 ET EV_PG_30 ET EV_PG_40 ET EV_PG_50 ET EV_PG_120;
 
 * 5. Export to CSV/TXT file
-OPTI 'SORT' '@CSV_PG@' ;
+OPTI 'SORT' 'D:\cast3m-m2internship\05.Stochastic\Stochastic_B\CSV\pg_results_no_2.csv' ;
 SORT 'EXCE' EV_EXPORT_PG ;
-
-FIN;
