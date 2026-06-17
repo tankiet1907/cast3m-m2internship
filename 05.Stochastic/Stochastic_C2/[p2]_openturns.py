@@ -47,34 +47,6 @@ for target_name in output_names:
     out_array = np.array(target_sample).flatten()
 
 # ---------------------------------------------------------
-# 2.1. SCATTER PLOT (Sự phân tán dữ liệu theo vòng lặp)
-# ---------------------------------------------------------
-    print("\n -> Drawing Scatter Plot (Run Index vs Output)...")
-    run_indices = np.arange(1, len(out_array) + 1)
-
-    fig1, ax1 = plt.subplots(figsize=(8, 5))
-    
-    # Vẽ các điểm phân tán
-    ax1.scatter(run_indices, out_array, alpha=0.7, color='b', edgecolors='k', label='Dữ liệu đầu ra')
-    
-    # Vẽ thêm đường trung bình để dễ tham chiếu
-    mean_val = np.mean(out_array)
-    ax1.axhline(y=mean_val, color='r', linestyle='--', linewidth=1.5, label=f'Mean: {mean_val:.2f}')
-
-    ax1.set_xlabel("Vòng lặp (Run Index)", fontsize=12)
-    ax1.set_ylabel(f"Giá trị {target_name}", fontsize=12)
-    ax1.set_title(f'Scatter Plot: Sự phân tán của {target_name}', fontsize=14, fontweight='bold')
-    ax1.grid(True, linestyle='--', alpha=0.6)
-    ax1.tick_params(axis='both', labelsize=10)
-    ax1.legend(loc='best')
-
-    plt.tight_layout()
-    scatter_path = os.path.join(output_dir, f"Scatter_Plot_{target_name}.png")
-    plt.savefig(scatter_path, dpi=150, bbox_inches='tight')
-    plt.close(fig1)
-    print(f"   [OK] Đã lưu Scatter Plot tại: {scatter_path}")
-
-# ---------------------------------------------------------
 # 2.2. STATISTICAL MOMENTS (Thống kê mô tả)
 # ---------------------------------------------------------
     var_val = target_sample.computeCovariance()[0, 0]
@@ -97,7 +69,7 @@ for target_name in output_names:
     factory = ot.KernelSmoothing()
     fitted_dist = factory.build(target_sample)
 
-    CURRENT_THRESHOLD = -400.0 
+    CURRENT_THRESHOLD = -90.0 
     unit = "µm/m"
     operator_str = "<"
 

@@ -118,7 +118,7 @@ for target_name in output_names:
 # ---------------------------------------------------------
     # Thiết lập ngưỡng rủi ro cho độ co ngót (Ví dụ: -400 µm/m)
     # Bạn có thể thay đổi con số này tùy theo yêu cầu của bài toán
-    CURRENT_THRESHOLD = -400.0 
+    CURRENT_THRESHOLD = -90.0 
     
     unit = "µm/m"
     operator = ot.Less()
