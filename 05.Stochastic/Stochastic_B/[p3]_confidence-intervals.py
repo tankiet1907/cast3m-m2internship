@@ -14,8 +14,8 @@ os.makedirs(output_dir, exist_ok=True)
 N_loops = 30
 
 # MỚI: Đường dẫn đến file kết quả gốc (Baseline)
-baseline_T_file  = r'D:\cast3m-m2internship\03.Calibration\Calibration_03\temp_results_no_32_KINT_8.5e-20_AK_4.0.csv'
-baseline_Pg_file = r'D:\cast3m-m2internship\03.Calibration\Calibration_03\pg_results_no_32_KINT_8.5e-20_AK_4.0.csv'
+baseline_T_file  = r'D:\cast3m-m2internship\03.Calibration\Calibration_03\CSV\temp_results_no_32_KINT_8.5e-20_AK_4.0.csv'
+baseline_Pg_file = r'D:\cast3m-m2internship\03.Calibration\Calibration_03\CSV\pg_results_no_32_KINT_8.5e-20_AK_4.0.csv'
 
 colors = {
     '00': 'blue',     # Không có trong trend plot, giữ màu đen
