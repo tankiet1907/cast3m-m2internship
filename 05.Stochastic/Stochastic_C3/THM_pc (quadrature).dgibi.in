@@ -243,11 +243,11 @@ L0      = LATO1/2.;
 * Mean value of intrinsic permeability [m2] (= nominal KINT of THM_pc)
 MU_K0  = 8.5E-20;
 * Coefficient of variation (20% uncertainty)
-CV_K0  = 0.20;
+CV_K0  = 0.30;
 * Standard deviation
 SIG_K0 = CV_K0 * MU_K0;
 * Number of quadrature points
-NpK0 = 3;
+NpK0 = 7;
 
 * QUADRATU takes physical mean and std dev directly (lognormal)
 TabK0 = QUADRATU 'LOGN' MU_K0 SIG_K0 NpK0;
