@@ -1,6 +1,6 @@
 %\cleardoublepage %already included in mainmatter 
 \chapter{Experimental Reference and Numerical Model} \label{chapter3} %should be limited to 6 pages
-\review{This chapter is under review. The outline is as follow.}
+\review{This chapter is a draft version and its outline is as follow.}
 
 \draft{This chapter introduces the experimental benchmark used to validate the thermo--hydro--mechanical (THM) implementation and its numerical counterpart. Section~\ref{sec:kalifa} describes the experiment of Kalifa et al.~\cite{kalifa2000}, one of the most widely used references for high-temperature concrete simulations. Section~\ref{sec:num-model} presents the numerical model (geometry, mesh, parameters, thermal input, curing/drying initial conditions and solution strategy), and Section~\ref{sec:thc-application} explains how the thermo--hydro--chemical (THC) model of Sciumè et al.~\cite{sciume2024} is applied, focusing on the hydration degree and on the permeability law that evolves with $K_0$ and the coefficient $A_\Gamma$.}
  
@@ -15,7 +15,9 @@ The campaign of Kalifa et al.~\cite{kalifa2000} quantifies the \emph{thermo-hydr
 A prismatic specimen of $30\times30\times12~\si{\centi\meter\cubed}$ is heated on one $30\times30~\si{\centi\meter\squared}$ face by a radiant heater (up to \SI{5}{\kilo\watt}, \SI{800}{\celsius}) placed \SI{3}{\centi\meter} above the surface. The lateral faces are insulated with porous ceramic blocks, so heat and mass transfer are essentially one-dimensional. The specimen rests on a balance recording its mass. Five gauges measure pressure and temperature at \SIlist{10;20;30;40;50}{\milli\meter} from the heated face, and a sixth tube measures the surface temperature at \SI{2}{\milli\meter} depth.
  
 \paragraph{Concrete mixes.}
-Two calcareous-aggregate mixes were tested: an ordinary concrete (OC, M30, $w/c=0.5$) and a high-performance concrete (HPC, M100, $\approx\SI{90}{\mega\pascal}$, $w/c=0.32$). Specimens were sealed for about six months, giving a homogeneous moisture state. The low $w/c$ and high compactness of the HPC strongly reduce its intrinsic permeability, the main parameter controlling the pressure amplitude.
+Two calcareous-aggregate mixes were tested: an ordinary concrete (OC, M30, $w/c=0.5$) and a high-performance concrete (HPC, M100, $\approx\SI{90}{\mega\pascal}$, $w/c=0.34$). Specimens were sealed for about six months, giving a homogeneous moisture state. The low $w/c$ and high compactness of the HPC strongly reduce its intrinsic permeability, the main parameter controlling the pressure amplitude.
+
+\begin{draftblock}
 
 \begin{table}[ht]
   \centering
@@ -31,6 +33,8 @@ Two calcareous-aggregate mixes were tested: an ordinary concrete (OC, M30, $w/c=
     \bottomrule
   \end{tabular}
 \end{table}
+  
+\end{draftblock}
  
 \paragraph{Heating scenario and measured data.}
 The heater was set to \SIlist{450;600;800}{\celsius} as a step signal. The \SI{600}{\celsius} test (duplicated for repeatability) is retained as the reference, since it produces a well-developed pressurisation/relief cycle while preserving the 1-D condition. The measured response shows a temperature rise with a short plateau near \SI{200}{\celsius}, a two-stage gas-pressure history (pressurisation then relief as the front passes), and a continuous mass loss. In HPC the pore pressure exceeds the saturating vapour pressure $p_{vs}(T)$, confirming the contribution of enclosed air and of the thermal dilation of liquid water. These three quantities are the validation targets.
@@ -40,6 +44,8 @@ The heater was set to \SIlist{450;600;800}{\celsius} as a step signal. The \SI{6
 \review{This section is currently a draft version}
 
 \paragraph{Geometry and mesh.}
+\begin{draftblock}
+
 Because the lateral faces are insulated, the problem is reduced to one dimension along the heating direction: a strip of length $L=\SI{120}{\milli\meter}$ with the heated face at $x=0$ and the rear face at $x=L$ (Figure~\ref{fig:geometry}). The domain is discretised with linear elements graded toward $x=0$ (characteristic size $\sim\SI{1}{\milli\meter}$ at the hot face, coarsening toward the rear), where the sharpest gradients develop. The mesh is refined until the predicted pressure peak and its timing become insensitive to further refinement. Field outputs are extracted at the gauge depths for direct comparison with the measurements.
 
 \begin{figure}[ht]
@@ -51,8 +57,11 @@ Because the lateral faces are insulated, the problem is reduced to one dimension
   \caption{Geometry and boundary conditions of the simulated specimen.}
   \label{fig:geometry}
 \end{figure}
-
+  
+\end{draftblock}
 \paragraph{Material parameters.}
+\begin{draftblock}
+
 The constitutive parameters follow the THC calibration of Sciumè et al.~\cite{sciume2024} (composition B400, hydration data from~\cite{sciume2013}); the dehydration parameter is the value identified for the Kalifa concrete (Table~\ref{tab:thc-params}). The initial intrinsic permeability $K_0$ and the coefficient $A_\Gamma$ govern the permeability evolution of Section~\ref{ssec:permeability}.
  
 \begin{table}[ht]
@@ -74,8 +83,12 @@ The constitutive parameters follow the THC calibration of Sciumè et al.~\cite{s
     \bottomrule
   \end{tabular}
 \end{table}
+  
+\end{draftblock}
  
 \paragraph{Thermal input and boundary conditions.}
+\begin{draftblock}
+
 The radiant heater is imposed at $T_\infty=\SI{600}{\celsius}$. On the heated face a combined radiative--convective exchange applies,
 \begin{equation}
   -\,\lambda\,\frac{\partial T}{\partial x}\Big|_{x=0}
@@ -83,15 +96,19 @@ The radiant heater is imposed at $T_\infty=\SI{600}{\celsius}$. On the heated fa
   \label{eq:heated-face}
 \end{equation}
 together with convective vapour/air mass fluxes governed by $h_g$. The lateral faces are adiabatic and impervious (1-D condition); the rear face exchanges heat and moisture with the ambient. The heater temperature is applied as a step.
- 
+  
+\end{draftblock}
+
 \paragraph{Curing, drying and initial conditions.}
 A key feature of the THC framework~\cite{sciume2024} is that the hygro-chemical state before the accident is obtained from a preliminary \emph{curing} simulation rather than prescribed arbitrarily. Starting from
 \begin{equation}
   T_0=\SI{20}{\celsius},\quad p_{g,0}=\SI{101325}{\pascal},\quad
-  \mathrm{RH}_0=0.9825,\quad \Gamma_0=0,
+  \mathrm{RH}_0=0.5,\quad \Gamma_0=0,
   \label{eq:initial-conditions}
 \end{equation}
 hydration develops over the curing duration, establishing self-consistent profiles of hydration degree $\Gamma$, saturation $S_l$ and relative humidity. The converged curing fields are then used as initial conditions for the heating (drying) stage, ensuring that the initial water content and hydration state — which strongly control the pressure amplitude — are physically consistent with the specimen history.
+
+Noted that $\mathrm{RH}_0=0.5$ in curing duration reflect a inrealistic intial conditions, but prevent the code from crashing. An attempt to calibrate $p_g$ results by reverting this value to a high as $\mathrm{RH}_0=0.98$ is done but the outcome show that this value is not useful in the calibration stage \cref{sec:cal-pressure}.
  
 \paragraph{Solution strategy and numerical robustness.}
 \label{ssec:robustness}

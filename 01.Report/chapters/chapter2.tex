@@ -1,12 +1,11 @@
 %\cleardoublepage %already included in mainmatter 
 \chapter{Theoretical framework} \label{chapter2} %should be limited to 8 pages
 
-\review{The old content of this chapter is now moved to Appendix A. The updated outline is as follow.}
+\review{The old content of this chapter is mostly moved to Appendix A. This chapter is a draft version and its outline is as follow.}
 
 \draft{This chapter establishes the physical and mathematical framework used to model concrete exposed to fire. It first summarises the thermal and hydric phenomena that develop in heated concrete \cref{sec:phenomena} and explains how their interaction triggers spalling \cref{sec:spalling}. The coupled thermo-hydric (TH) model is then formulated \ref{sec:thmodel} and extended into an improved thermo-hydro-chemical (THC) model that explicitly resolves the chemical state of the cement paste (Section~\ref{sec:thcmodel}). Finally, the one-way coupling of the TH/THC fields to the mechanical problem is introduced (Section~\ref{sec:mech}); the detailed constitutive laws and the numerical discretisation are reported in \cref{appendixA}.} 
 
 \section{Thermal and hydric phenomena in heated concrete} \label{sec:phenomena}
-\begin{draftblock}
 
 When one face of a concrete member is exposed to a rising temperature, a sequence of strongly interacting thermal and hydric processes develops through the thickness. They are summarised here; the full constitutive relations are derived in Appendix~\ref{app:thm}.
  
@@ -17,11 +16,8 @@ Heat is transmitted into the material essentially by \emph{conduction}, governed
 Concrete is treated as a multiphase porous medium made of a solid skeleton ($s$), liquid water ($l$), water vapour ($v$) and dry air ($a$). On heating, free water \emph{evaporates} and chemically bound water is released from the calcium--silicate--hydrates (C--S--H) through \emph{dehydration}. The generated vapour is transported by pressure-driven \emph{Darcy flow} and by \emph{Fickian diffusion} within the gas mixture. Part of the vapour migrates inward, reaches cooler regions and \emph{recondenses}, building a quasi-saturated layer --- the \emph{moisture clog} --- that blocks further gas transport. Behind this clog the gas pressure $p_g$ rises sharply (Section~\ref{sec:spalling}). The governing transport and mass-balance relations are given in Appendix~\ref{app:hydric}.
  
 These two families of phenomena are the physical origin of the two spalling mechanisms described next.
-    
-\end{draftblock}
 
 \section{Spalling mechanisms} \label{sec:spalling}
-\begin{draftblock}
 
 Spalling is the violent or non-violent detachment of layers or pieces of concrete from the surface of a heated structural element. It can cause premature structural failure through reinforcement exposure and cross-section reduction, as illustrated by several catastrophic tunnel fires (Channel Tunnel 1996, Mont-Blanc 1999, St.\ Gotthard 2001) \cite{thmframework}. Despite extensive experimental work, no single theory has reached consensus; the two most widely accepted mechanisms, and their combined action, are presented below.
  
@@ -53,11 +49,8 @@ In practice, explosive spalling generally results from the \emph{combined action
 \end{equation}
 where $\sigma_{thermal}$ is the thermal stress from differential dilation, $\sigma_{pore}$ the stress from pore-pressure loading (via the effective stress, Section~\ref{sec:mech}), and $f_t(T)$ the temperature-degraded tensile strength. Equation~\eqref{eq:spalling} makes clear why a complete coupled model is needed: neither a purely thermal nor a purely hydric analysis can capture the full picture.
     
-\end{draftblock}
-
 
 \section{Thermo-hydric (TH) coupled model} \label{sec:thmodel}
-\begin{draftblock}
 
 The thermal and hydric fields are described by three primary variables,
 \begin{equation}
@@ -128,14 +121,13 @@ Equations~\eqref{eq:air}--\eqref{eq:energy} are \emph{two-way coupled}:
 The momentum balance and the resulting mechanical response are introduced in
 Section~\ref{sec:mech}.
 
-\end{draftblock}
 
 \section{Improved thermo-hydro-chemical (THC) model} \label{sec:thcmodel}
-\begin{draftblock}
 
 \subsection{Motivation}
 In the TH model above, dehydration enters only as a prescribed source term $\dot m_{dehyd}(T)$ and the porosity follows a simple linear law $\phi=\phi_0+A_\phi(T-T_0)$ (Eq.~\ref{eq:phi-linear} in Appendix~\ref{app:hydric}). This treatment ignores three facts that strongly influence spalling: (i) the \emph{chemical state} of the cement paste before the accident depends on its hydration/curing history; (ii) the release of chemically bound water from the C--S--H is the chemical process that controls porosity, permeability and strength at high temperature; and (iii) chemical damage is essentially \emph{irreversible}. The improved model adopted here, following Scium\`e, Moreira and Dal~Pont \cite{sciume2024}, resolves the chemical field explicitly and couples it to the thermal and hydric fields.
- 
+
+\begin{draftblock}
 \subsection{Chemical state variables}
 The chemical state of the cement paste is described by the progress of two reactions:
 \begin{equation}
@@ -179,7 +171,6 @@ Collecting the primary unknowns, the improved model solves $\mathcal{U}_{THC}=\{
 \end{draftblock}
 
 \section{Coupling to the mechanical field} \label{sec:mech}
-\begin{draftblock}
 
 The mechanical response is driven by the converged TH/THC fields through a \emph{one-way} (staggered) coupling: at each time step the fields $(T,p_g,p_c)$ enter the mechanical problem as prescribed loading, and the resulting damage $\mathcal{D}$ feeds back weakly to the transport properties via Eq.~\eqref{eq:KF-chem} at the next step. The TH/THC fields act through two routes:
  
@@ -199,4 +190,3 @@ The mechanical response is driven by the converged TH/THC fields through a \emph
  
 Together with the spalling criterion~\eqref{eq:spalling}, this closes the physical loop between the transport and mechanical fields. The constitutive model (linear elasticity coupled with Mazars continuum damage \cite{mazars1986}), its fracture-energy regularisation \cite{hillerborg1976}, and the spatial/temporal discretisation of the coupled problem are reported in full in Appendix~\ref{app:mechanical}; only the elements needed to interpret the results of the following chapters are retained here.
 
-\end{draftblock}
