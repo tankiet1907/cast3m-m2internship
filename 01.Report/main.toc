@@ -151,39 +151,34 @@
 \contentsline {subsection}{\numberline {A.6.2}Temporal discretization}{76}{subsection.A.6.2}%
 \contentsline {subsection}{\numberline {A.6.3}Solution strategy}{76}{subsection.A.6.3}%
 \contentsline {chapter}{\numberline {B}Theory of Stochastic analysis}{77}{appendix.B}%
-\contentsline {section}{\numberline {B.1}Random variable and random field}{77}{section.B.1}%
-\contentsline {subsection}{\numberline {B.1.1}Random variables (PDF, CDF, moments, CoV)}{77}{subsection.B.1.1}%
-\contentsline {subsubsection}{PDF and CDF}{77}{section*.100}%
-\contentsline {subsubsection}{Statistical moments}{78}{section*.101}%
-\contentsline {paragraph}{Input moments.}{78}{section*.102}%
-\contentsline {paragraph}{Output moments.}{78}{section*.103}%
-\contentsline {subsubsection}{Coefficient of Variation (CoV)}{79}{section*.104}%
-\contentsline {subsection}{\numberline {B.1.2}Random fields and correlation structure}{79}{subsection.B.1.2}%
-\contentsline {subsubsection}{Random fields}{79}{section*.105}%
-\contentsline {subsubsection}{Correlation function and correlation length}{80}{section*.106}%
-\contentsline {paragraph}{Remark:}{80}{section*.107}%
-\contentsline {subsection}{\numberline {B.1.3}Random field simulation}{80}{subsection.B.1.3}%
-\contentsline {subsection}{\numberline {B.1.4}Summary: random variable versus random field}{81}{subsection.B.1.4}%
-\contentsline {section}{\numberline {B.2}Monte Carlo simulation framework}{82}{section.B.2}%
-\contentsline {subsection}{\numberline {B.2.1}Principle}{82}{subsection.B.2.1}%
-\contentsline {subsection}{\numberline {B.2.2}Convergence}{82}{subsection.B.2.2}%
-\contentsline {subsection}{\numberline {B.2.3}Transformation of Lognormal to Gaussian distribution}{83}{subsection.B.2.3}%
-\contentsline {subsection}{\numberline {B.2.4}Turning Bands Method (\texttt {ALEA})}{84}{subsection.B.2.4}%
-\contentsline {paragraph}{Principle}{84}{section*.109}%
-\contentsline {paragraph}{Implementation in Cast3M}{84}{section*.110}%
-\contentsline {subsection}{\numberline {B.2.5}Integration of spatial variability into the THM model}{84}{subsection.B.2.5}%
-\contentsline {subsubsection}{Simulation loop and dynamic material updating}{84}{section*.111}%
-\contentsline {section}{\numberline {B.3}Gaussian Quadrature framework}{85}{section.B.3}%
-\contentsline {subsection}{\numberline {B.3.1}Step 1: Quadrature points and weights (\texttt {QUADRATU})}{85}{subsection.B.3.1}%
-\contentsline {subsection}{\numberline {B.3.2}Step 2: Statistical moments (\texttt {PARASTAT})}{86}{subsection.B.3.2}%
-\contentsline {subsection}{\numberline {B.3.3}Step 3: PDF reconstruction and reliability (\texttt {PROBDENS})}{86}{subsection.B.3.3}%
-\contentsline {subsection}{\numberline {B.3.4}Computational cost}{87}{subsection.B.3.4}%
-\contentsline {section}{\numberline {B.4}Sensitivity indicators and ranking methods}{87}{section.B.4}%
-\contentsline {subsection}{\numberline {B.4.1}Variance decomposition}{87}{subsection.B.4.1}%
-\contentsline {subsection}{\numberline {B.4.2}Variance-based sensitivity: Sobol indices}{87}{subsection.B.4.2}%
-\contentsline {subsection}{\numberline {B.4.3}Practical sensitivity approximation}{88}{subsection.B.4.3}%
-\contentsline {section}{\numberline {B.5}Probability of failure and reliability index}{89}{section.B.5}%
-\contentsline {subsection}{\numberline {B.5.1}Limit state function}{89}{subsection.B.5.1}%
-\contentsline {subsection}{\numberline {B.5.2}Probability of failure}{89}{subsection.B.5.2}%
-\contentsline {subsection}{\numberline {B.5.3}Reliability indices}{89}{subsection.B.5.3}%
-\contentsline {paragraph}{Remark:}{90}{section*.112}%
+\contentsline {section}{\numberline {B.1}Random variable (PDF, CDF, moments, CoV)}{77}{section.B.1}%
+\contentsline {subsection}{\numberline {B.1.1}PDF and CDF}{77}{subsection.B.1.1}%
+\contentsline {subsection}{\numberline {B.1.2}Statistical moments}{78}{subsection.B.1.2}%
+\contentsline {paragraph}{Input moments.}{78}{section*.100}%
+\contentsline {paragraph}{Output moments.}{78}{section*.101}%
+\contentsline {subsection}{\numberline {B.1.3}Coefficient of Variation (CoV)}{79}{subsection.B.1.3}%
+\contentsline {section}{\numberline {B.2}Random fields}{79}{section.B.2}%
+\contentsline {subsection}{\numberline {B.2.1}Correlation function and correlation length}{80}{subsection.B.2.1}%
+\contentsline {paragraph}{Remark:}{80}{section*.102}%
+\contentsline {subsection}{\numberline {B.2.2}Random field simulation}{80}{subsection.B.2.2}%
+\contentsline {subsection}{\numberline {B.2.3}Turning Bands Method (\texttt {ALEA})}{81}{subsection.B.2.3}%
+\contentsline {paragraph}{Principle}{81}{section*.103}%
+\contentsline {paragraph}{Implementation in Cast3M}{82}{section*.104}%
+\contentsline {subsection}{\numberline {B.2.4}Transformation of Lognormal to Gaussian distribution}{82}{subsection.B.2.4}%
+\contentsline {section}{\numberline {B.3}Monte Carlo simulation framework}{83}{section.B.3}%
+\contentsline {subsection}{\numberline {B.3.1}Principle}{83}{subsection.B.3.1}%
+\contentsline {subsection}{\numberline {B.3.2}Convergence}{83}{subsection.B.3.2}%
+\contentsline {section}{\numberline {B.4}Gaussian Quadrature framework}{84}{section.B.4}%
+\contentsline {subsection}{\numberline {B.4.1}Step 1: Quadrature points and weights (\texttt {QUADRATU})}{84}{subsection.B.4.1}%
+\contentsline {subsection}{\numberline {B.4.2}Step 2: Statistical moments (\texttt {PARASTAT})}{85}{subsection.B.4.2}%
+\contentsline {subsection}{\numberline {B.4.3}Step 3: PDF reconstruction and reliability (\texttt {PROBDENS})}{85}{subsection.B.4.3}%
+\contentsline {subsection}{\numberline {B.4.4}Computational cost}{85}{subsection.B.4.4}%
+\contentsline {section}{\numberline {B.5}Sensitivity indicators and ranking methods}{86}{section.B.5}%
+\contentsline {subsection}{\numberline {B.5.1}Variance decomposition}{86}{subsection.B.5.1}%
+\contentsline {subsection}{\numberline {B.5.2}Variance-based sensitivity: Sobol indices}{86}{subsection.B.5.2}%
+\contentsline {subsection}{\numberline {B.5.3}Practical sensitivity approximation}{87}{subsection.B.5.3}%
+\contentsline {section}{\numberline {B.6}Probability of failure and reliability index}{88}{section.B.6}%
+\contentsline {subsection}{\numberline {B.6.1}Limit state function}{88}{subsection.B.6.1}%
+\contentsline {subsection}{\numberline {B.6.2}Probability of failure}{88}{subsection.B.6.2}%
+\contentsline {subsection}{\numberline {B.6.3}Reliability indices}{88}{subsection.B.6.3}%
+\contentsline {paragraph}{Remark:}{89}{section*.105}%

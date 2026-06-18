@@ -182,9 +182,12 @@ Once the PCE metamodel is built and validated, it allows for a highly accurate a
   \label{fig:sensB-ci}
 \end{figure}
 
-\begin{reviewblock}
-\textbf{Analysis.} Among the mix proportions, $w/c$ is expected to dominate --- it sets the porosity and the initial saturation, i.e.\ both the ease of vapour escape and the size of the water reservoir --- followed by $s/c$, which densifies the paste, while the cement and aggregate \emph{contents} ($c$, $agg$) should contribute little. Non-negligible second-order indices for the pair $(w/c, s/c)$ would indicate that the two ratios jointly shape the pore structure. Any proportion with a negligible total index can be fixed at its mean in the reliability step (\cref{sec:reliability}).
-\end{reviewblock}
+\textbf{Conclusion.} In Analysis~A \cref{fig:sensA-corr} the permeability shows a clear, almost deterministic dependence: $K_0$ is strongly and negatively correlated with $p_g^{10}$ (Pearson/Spearman $\approx -0.98$), the points falling on a tight monotone curve, which confirms permeability as the controlling input. In Analysis~B \cref{fig:sensB-corr} the picture is far more scattered: apart from $w/c$, which is strongly correlated with $p_g^{10}$ ($\approx 0.93$), only the cement content shows an appreciable correlation ($\approx 0.34$), while the aggregate content and $s/c$ are essentially uncorrelated ($-0.11$ and $0.24$). The variance-based ranking confirms and sharpens this: $w/c$ carries by far the largest Sobol index ($S_i\approx S_{T_i}\approx 0.58$), followed by the cement content ($\approx 0.25$) and the aggregate content ($\approx 0.15$), while $s/c$ is negligible ($<0.01$). The first- and total-order indices nearly coincide for every input, so the interactions are weak and the response is essentially additive, and the second-order indices (\cref{fig:sensB-sobol2}) are correspondingly small. Notably, the aggregate content is almost uncorrelated yet still carries a non-negligible total index, a contribution that the monotone correlation misses but the variance decomposition captures.
+
+The dominance of $w/c$ shows that the initial free-water content of the mix governs the peak pressure far more than any other proportion: a higher $w/c$ means both a more open pore structure and more capillary water available to vaporise, and both feed the gas pressure. This is fully consistent with \cref{sec:cal-secondary}, where a higher initial relative humidity was found to release more vapour and raise $p_g^{10}$. 
+
+Finally, the mix-induced scatter is small in absolute terms (mean $p_g^{10}=2.11~\mathrm{MPa}$, standard deviation $0.074~\mathrm{MPa}$), which is why Analysis~B yields a negligible failure probability in \cref{sec:reliability}; the proportions with a negligible total index, $s/c$ in particular, can be fixed at their mean there.
+
  
 % =====================================================================
 \section{Reliability analysis} \label{sec:reliability}
@@ -215,9 +218,7 @@ These reconstructed PDFs (\cref{fig:reliability-A,fig:reliability-B}) visually d
   \label{fig:reliability-B}
 \end{figure}
  
-\begin{reviewblock}
-\textbf{Analysis.} Comparing the two distributions (\cref{fig:reliability-A,fig:reliability-B}) shows which source of uncertainty contributes more to the exceedance of $p_{\mathrm{crit}}$: the permeability scatter of Analysis~A is expected to produce the wider spread of $p_g^{10}$ and hence the larger $P_f$ (smaller $\beta$), the mix-composition uncertainty of Analysis~B a narrower one. Placing the \cref{chapter4} calibrated value and the measured Kalifa $10~\mathrm{mm}$ peak on each axis anchors the estimate experimentally. The value of $p_{\mathrm{crit}}$ retained (tied to the temperature-degraded tensile strength) and the resulting $P_f$ and $\beta$ for each analysis are reported here.
-\end{reviewblock}
+\textbf{Conclusion.} With the critical threshold set at $p_{\mathrm{crit}}=2.5~\mathrm{MPa}$, the two analyses give markedly different risks. Under the permeability uncertainty (Analysis~A, \cref{fig:reliability-A}) the peak pressure spreads widely --- from about $1.3$ to $3.0~\mathrm{MPa}$ around a mean near $2.1~\mathrm{MPa}$ --- and its upper tail crosses the threshold, giving a failure probability $P_f = 6.59\%$ and a reliability index $\beta = -\Phi^{-1}(P_f) \approx 1.51$. Under the mix-composition uncertainty (Analysis~B, \cref{fig:reliability-B}) the distribution is much narrower, confined between about $1.8$ and $2.4~\mathrm{MPa}$, so no sampled realisation reaches $p_{\mathrm{crit}}$: the failure probability is $P_f \approx 0$ and the corresponding $\beta$ is effectively unbounded. The permeability is therefore by far the dominant source of spalling risk --- both sources keep the mean response below the threshold, but only the scatter of $K_0$ produces a tail able to exceed it. This confirms the sensitivity ranking of \cref{sec:sensitivity}, justifies treating $K_0$ rather than the mix proportions as the critical random input, and motivates the spatial-variability study of \cref{sec:spatial-effect}, where local low-permeability zones may raise the risk further.
 
  
 % =====================================================================
@@ -252,26 +253,26 @@ However, for Analysis C3, because Cast3M lacks native support for exporting thes
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.8\textwidth]{figures/chapter5/random-field-of-K-in-cube}
+  \includegraphics[width=0.6\textwidth]{figures/chapter5/random-field-of-K-in-cube}
   \caption{A single realization of the spatially heterogeneous intrinsic permeability field $K_0(\mathbf{x})$ generated on the 3D cube mesh using the Turning Bands Method ($L_c = 0.02$~m).}
   \label{fig:rf_k_cube}
 \end{figure}
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.8\textwidth]{figures/chapter5/final-strain-of-cube}
+  \includegraphics[width=0.6\textwidth]{figures/chapter5/final-strain-of-cube}
   \caption{Resulting final shrinkage strain field of the concrete cube induced by capillary forces, highlighting the localized deformations driven by the heterogeneous permeability field.}
   \label{fig:strain_cube}
 \end{figure}
 
 \begin{figure}[htbp]
     \centering
-    %\includegraphics[width=0.85\linewidth]{figures/chapter5/evret_C1_C2}
+    \includegraphics[width=0.85\linewidth]{figures/chapter5/analysisC2/evret_C1_C2}
     \caption{Mean longitudinal shrinkage strain history at the corner point for the two stochastic analyses, LHS (C1) and the spatial random field (C2). Faint lines show the individual realisations of each analysis.}
     \label{fig:evret_c1c2}
 \end{figure}
 
-Figure~\ref{fig:evret_c1c2} compares the mean shrinkage history of the two analyses before each is examined in detail. The ALEA mean (C2) lies slightly below the LHS mean (C1) throughout the drying period, while its realisations are visibly less scattered. These two features pull in opposite directions: a lower mean points to a more severe average response, but a tighter spread limits how often large strains are reached. The mean curve alone therefore cannot identify the more critical analysis. This requires comparing the full distributions of the final strain, given by the probability density functions in \cref{fig:pdf_c1} and \cref{fig:pdf_c2}.
+The Figure~\ref{fig:evret_c1c2} compares the mean shrinkage history of the two analyses before each is examined in detail. The ALEA mean (C2) lies slightly below the LHS mean (C1) throughout the drying period, while its realisations are visibly less scattered. These two features pull in opposite directions: a lower mean points to a more severe average response, but a tighter spread limits how often large strains are reached. The mean curve alone therefore cannot identify the more critical analysis. This requires comparing the full distributions of the final strain, given by the probability density functions in \cref{fig:C1_pdf} and \cref{fig:C2_pdf}.
 
 \begin{figure}[htbp]
   \centering

@@ -1,16 +1,14 @@
 \chapter{Theory of Stochastic analysis} \label{appendixB}
 \review{This chapter is under review}
 
-\section{Random variable and random field} \label{sec:rv-rf}
-
-\subsection{Random variables (PDF, CDF, moments, CoV)} \label{sec:random-variables}
+\section{Random variable (PDF, CDF, moments, CoV)} \label{sec:random-variables}
 
 \review{This section is currently under development and will be refined as the study progresses.}
 
 A \textbf{random variable} $X$ is a quantity whose value is not fixed but described by a probability law.
 Instead of saying ``$E = 30$~GPa'', one writes $E \sim \mathcal{N}(30,\,3^2)$~GPa, meaning that the Young's modulus follows a normal (Gaussian) distribution with mean $\mu = 30$~GPa and standard deviation $\sigma = 3$~GPa.
 
-\subsubsection{PDF and CDF}
+\subsection{PDF and CDF}
 
 The Probability Density Function (\textbf{PDF}) $f_X(x)$ describes the relative likelihood of $X$ taking a given value. It is always non-negative and integrates to one over the entire domain. 
 
@@ -50,7 +48,7 @@ Two distributions are used in this work:
 
 The lognormal distribution is particularly relevant for material properties such as the Young modulus or permeability, which must remain strictly positive \cite{delarrard2010, sudret2000, baroth2023}.
 
-\subsubsection{Statistical moments}
+\subsection{Statistical moments}
 
 The distribution of $X$ can be summarised by its \textbf{statistical moments} \cite{baroth2011}, which quantify location, spread, asymmetry, and tail heaviness. In this work, the first two moments are prescribed as \emph{input} to the stochastic analysis, while the higher moments are \emph{computed as output} by the quadrature method (\cref{sec:quadrature}).
 
@@ -77,7 +75,7 @@ The \textbf{skewness} $\delta_3$ and \textbf{kurtosis} $\delta_4$ measure the as
 
 These four moments play a central role in the Gaussian Quadrature method (\cref{sec:quadrature}), where the response PDF is reconstructed from the computed moments using Winterstein or Pearson approximations \cite{sudret2003}.
 
-\subsubsection{Coefficient of Variation (CoV)}
+\subsection{Coefficient of Variation (CoV)}
 
 The coefficient of variation quantifies the relative dispersion of $X$:
 
@@ -88,11 +86,10 @@ The coefficient of variation quantifies the relative dispersion of $X$:
 
 It is a dimensionless measure that allows comparison of variability across parameters with different units and magnitudes. For concrete, typical values are $\mathrm{CoV}_E \approx 0.10$--$0.20$ for the Young's modulus \cite{delarrard2010} and $\mathrm{CoV}_K \approx 0.15$--$0.30$ for permeability \cite{baroth2023}.
 
-\subsection{Random fields and correlation structure} \label{sec:random-fields}
+\section{Random fields} \label{sec:random-fields}
 
 \review{This section is currently under development and will be refined as the study progresses.}
 
-\subsubsection{Random fields}
 
 A random variable assigns a \emph{single} uncertain value to a material property for the entire structure. In reality, concrete properties vary spatially due to heterogeneous microstructure, local variations in the water-to-cement ratio, and non-uniform compaction during casting \cite{delarrard2010}. A \textbf{random field} captures this spatial variability: it assigns an uncertain value to \emph{every point} $\mathbf{x}$ in the domain, not just one value for the whole structure.
 
@@ -121,7 +118,7 @@ A \textbf{second-order} random field is fully characterised by two functions \ci
 
 The mean field gives the average value at each point; the covariance function measures how strongly the values at two points $\mathbf{x}$ and $\mathbf{y}$ are linked. When both depend only on the separation $\boldsymbol{\tau} = \mathbf{x} - \mathbf{y}$, the field is called \textbf{homogeneous} (stationary).
 
-\subsubsection{Correlation function and correlation length} \label{sec:correlation}
+\subsection{Correlation function and correlation length} \label{sec:correlation}
 
 When a material property (e.g.\ Young's modulus) is modelled as a random field, nearby points tend to have similar values while distant points are more different. The \textbf{autocorrelation function} $\rho_H(\boldsymbol{\tau})$ quantifies this similarity as a function of distance $\tau$:
 
@@ -174,63 +171,25 @@ To use a random field in a finite element model, one must \emph{generate} realis
 
 In this work, the TBM method, described in detail in \cref{sec:tbm}, is adopted because it is the method implemented in the Cast3M \texttt{ALEA} operator.
 
-\subsection{Summary: random variable versus random field}
-\review{This section is under review}
-\cref{tab:rv-vs-rf} summarises the key differences between the two levels of stochastic description and their implications for the numerical methods used in this work.
+\subsection{Turning Bands Method (\texttt{ALEA})} \label{sec:tbm}
+\paragraph{Principle}
 
-\begin{table}[htbp]
-\centering
-\caption{Comparison of random variable and random field stochastic descriptions.}
-\label{tab:rv-vs-rf}
-\smallskip
-\begin{tabular}{lll}
-\hline
-\textbf{Aspect} & \textbf{Random variable} & \textbf{Random field} \\
-\hline
-Spatial variation   & None (uniform)                  & Yes (spatially heterogeneous) \\
-Characterisation    & PDF: mean $\mu$, std $\sigma$   & Mean field $\bar{H}(\mathbf{x})$, covariance $C_H(\mathbf{x},\mathbf{y})$ \\
-Key parameter       & CoV                             & Correlation length $L_c$ \\
-Stochastic level    & First-order                     & Second-order \\
-Simulation method   & Gaussian Quadrature             & TBM + Monte Carlo \\
-Cast3M operator     & \texttt{QUADRATU}               & \texttt{ALEA} \\
-Computational cost  & Low (3--7 runs per variable)    & High (hundreds to thousands of runs) \\
-\hline
-\end{tabular}
-\end{table}
+The Turning Bands Method (TBM), introduced by \cite{matheron1973}, simplifies the generation of a 2-D or 3-D random field by reducing it to a set of 1-D problems.
 
-\section{Monte Carlo simulation framework} \label{sec:monte-carlo}
-
-\subsection{Principle}
-
-Monte Carlo simulation (MCS) estimates the effect of uncertain inputs by running the same deterministic model many times, each time with a different random sample \cite{fenton2014}. Each trial consists of three steps:
-
-\begin{enumerate}
-    \item Generate a realisation of the random input (random variable or random field) according to its prescribed distribution.
-    \item Run the deterministic model (here, the THM finite element solver in Cast3M) to obtain the response.
-    \item Collect the result; repeat until the output statistics are stable.
-\end{enumerate}
-
-Because no assumption is made on the shape of the response, MCS can estimate the \emph{entire} output distribution---unlike linearisation methods such as FORM/SORM \cite{fenton2014}.
-
-\subsection{Convergence}
-
-The probability of failure is estimated as the fraction of realisations where the limit state is violated:
+The idea (\cref{fig:tbm}): draw $L$ lines through the domain in different directions. Along each line, simulate an independent 1-D random process. To obtain the field value at any point $\mathbf{x}$, project it onto each line and average the results:
 
 \begin{equation}
-    \hat{P}_f = \frac{N_f}{n},
-    \label{eq:mc-pf}
+    Z(\mathbf{x}) \;=\; \frac{1}{\sqrt{L}}
+    \sum_{i=1}^{L}
+    Z_i\!\left(\mathbf{x} \cdot \mathbf{u}_i\right),
+    \label{eq:tbm}
 \end{equation}
 
-where the hat denotes that $\hat{P}_f$ is an estimate of the true $P_f$, which improves as $n$ increases, and $N_f$ is the number of failures out of $n$ total runs. The more runs, the more accurate the estimate---but the error only decreases as $1/\sqrt{n}$. To halve the error, one must quadruple the number of runs.
+where $\mathbf{u}_i$ is the direction of the $i$-th line and $Z_i$ is the 1-D process along it. The 1-D processes are constructed so that the resulting field reproduces the prescribed covariance structure (\cref{sec:correlation}). In practice, $L = 16$ lines are sufficient for isotropic fields in two dimensions \cite{fenton2014}.
 
-At $95\%$ confidence, the required number of runs is \cite{fenton2014}:
+\paragraph{Implementation in Cast3M}
 
-\begin{equation}
-    n \;\geq\; \frac{4\,p_f(1-p_f)}{e^2},
-    \label{eq:mc-nsample}
-\end{equation}
-
-where $e$ is the acceptable absolute error. For a small failure probability ($p_f \approx 10^{-3}$) with $10\%$ relative accuracy, this gives $n \approx 400{,}000$ runs. When a single THM analysis takes several minutes, this cost becomes prohibitive---motivating the Gaussian Quadrature method (\cref{sec:quadrature}) as a faster alternative.
+The TBM is natively implemented in the Cast3M \texttt{ALEA} operator, which takes as input the Gaussian parameters $(\mu_{\ln}, \sigma_{\ln})$ and the correlation length $L_c$, and returns the simulated field directly as nodal values on the mesh. The lognormal transformation and assignment to \texttt{MATE} follow the procedure described in \cref{sec:lognormal-transformation}.
 
 \subsection{Transformation of Lognormal to Gaussian distribution} \label{sec:lognormal-transformation}
 
@@ -275,51 +234,40 @@ The standard computational procedure in Cast3M \texttt{ALEA} then consists of tw
 
 This pointwise transformation is exact: the autocorrelation structure of the underlying Gaussian field is preserved in the lognormal field, so the spatial variability characterised by the correlation length $L_c$ remains physically meaningful after transformation \cite{delarrard2010}.
 
-\subsection{Turning Bands Method (\texttt{ALEA})} \label{sec:tbm}
-\paragraph{Principle}
+\section{Monte Carlo simulation framework} \label{sec:monte-carlo}
 
-The Turning Bands Method (TBM), introduced by \cite{matheron1973}, simplifies the generation of a 2-D or 3-D random field by reducing it to a set of 1-D problems.
+\subsection{Principle}
 
-The idea (\cref{fig:tbm}): draw $L$ lines through the domain in different directions. Along each line, simulate an independent 1-D random process. To obtain the field value at any point $\mathbf{x}$, project it onto each line and average the results:
-
-\begin{equation}
-    Z(\mathbf{x}) \;=\; \frac{1}{\sqrt{L}}
-    \sum_{i=1}^{L}
-    Z_i\!\left(\mathbf{x} \cdot \mathbf{u}_i\right),
-    \label{eq:tbm}
-\end{equation}
-
-where $\mathbf{u}_i$ is the direction of the $i$-th line and $Z_i$ is the 1-D process along it. The 1-D processes are constructed so that the resulting field reproduces the prescribed covariance structure (\cref{sec:correlation}). In practice, $L = 16$ lines are sufficient for isotropic fields in two dimensions \cite{fenton2014}.
-
-\paragraph{Implementation in Cast3M}
-
-The TBM is natively implemented in the Cast3M \texttt{ALEA} operator, which takes as input the Gaussian parameters $(\mu_{\ln}, \sigma_{\ln})$ and the correlation length $L_c$, and returns the simulated field directly as nodal values on the mesh. The lognormal transformation and assignment to \texttt{MATE} follow the procedure described in \cref{sec:lognormal-transformation}.
-
-\subsection{Integration of spatial variability into the THM model} \label{sec:thm-integration-mc}
-This section is currently under development and will be refined as the study progresses.
-
-Once the lognormal random field $H(\mathbf{x})$ has been constructed via the Turning Band Method (see \cref{sec:tbm}), it is propagated through the nonlinear THM model using Monte Carlo simulation. Given the computational cost of each THM evaluation, the iterative procedure is fully automated in Cast3M using the \texttt{REPETER} operator.
-
-\subsubsection{Simulation loop and dynamic material updating} \label{sec:mc-loop}
-
-For a predefined number of simulations $N_{simu}$, the global algorithm performs the following sequential steps within each loop:
+Monte Carlo simulation (MCS) estimates the effect of uncertain inputs by running the same deterministic model many times, each time with a different random sample \cite{fenton2014}. Each trial consists of three steps:
 
 \begin{enumerate}
-    \item \textbf{Random Field Generation:} A new statistically independent realization of the random field is generated using the \texttt{ALEA} operator. For instance, the spatial distribution of the Young's modulus $\mathbf{E}(x)$ is recalculated based on the assigned log-normal parameters (mean, standard deviation, and correlation length).
-    \item \textbf{Material Updating:} The macroscopic properties of the finite element model are updated. The newly generated random field is projected onto the mesh to form the updated material stiffness matrix using the \texttt{MATE} operator.
-    \item \textbf{Non-linear Resolution:} The \texttt{PASAPAS} procedure is invoked to solve the multi-physics THM problem from $t=0$ to the final time $t_{fin}$, utilizing the updated heterogeneous material properties.
+    \item Generate a realisation of the random input (random variable or random field) according to its prescribed distribution.
+    \item Run the deterministic model (here, the THM finite element solver in Cast3M) to obtain the response.
+    \item Collect the result; repeat until the output statistics are stable.
 \end{enumerate}
 
-\begin{draftblock}
-\subsubsection{Data extraction and post-processing}
-Storing the complete output database (which includes nodal displacements, stress tensors, and internal damage variables for every time step) for hundreds of simulations would result in an unmanageable amount of data and exceed memory limits. Therefore, a selective data extraction strategy is implemented.
+Because no assumption is made on the shape of the response, MCS can estimate the \emph{entire} output distribution---unlike linearisation methods such as FORM/SORM \cite{fenton2014}.
 
-Instead of saving the entire mesh history, a specific "Quantity of Interest" (QoI) is dynamically extracted at the end of each calculation loop. Depending on the targeted sensitivity analysis for the spalling risk, the QoI could be the maximum equivalent plastic strain, the peak pore pressure, or the maximum macroscopic damage variable $D$. 
+\subsection{Convergence}
 
-In the Cast3M script, this is executed using the \texttt{EXCO} (to extract the specific component, e.g., the internal variable \texttt{'V1'} for damage) and \texttt{MAXI} operators to find the extreme value over the spatial domain. Finally, the extracted scalar values are continuously appended to an external structured text file (CSV format) using the \texttt{SORT 'CHAI'} command. 
+The probability of failure is estimated as the fraction of realisations where the limit state is violated:
 
-This exported dataset containing the input realizations and the corresponding QoI outputs serves as the direct input for the external probabilistic software (e.g., Persalys) to compute the probability density functions and rank the dominant parameters via Sobol indices \cref{sec:sobol}.
-\end{draftblock}
+\begin{equation}
+    \hat{P}_f = \frac{N_f}{n},
+    \label{eq:mc-pf}
+\end{equation}
+
+where the hat denotes that $\hat{P}_f$ is an estimate of the true $P_f$, which improves as $n$ increases, and $N_f$ is the number of failures out of $n$ total runs. The more runs, the more accurate the estimate---but the error only decreases as $1/\sqrt{n}$. To halve the error, one must quadruple the number of runs.
+
+At $95\%$ confidence, the required number of runs is \cite{fenton2014}:
+
+\begin{equation}
+    n \;\geq\; \frac{4\,p_f(1-p_f)}{e^2},
+    \label{eq:mc-nsample}
+\end{equation}
+
+where $e$ is the acceptable absolute error. For a small failure probability ($p_f \approx 10^{-3}$) with $10\%$ relative accuracy, this gives $n \approx 400{,}000$ runs. When a single THM analysis takes several minutes, this cost becomes prohibitive---motivating the Gaussian Quadrature method (\cref{sec:quadrature}) as a faster alternative.
+
 
 \section{Gaussian Quadrature framework} \label{sec:quadrature}
 
