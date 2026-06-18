@@ -3,123 +3,46 @@
 
 \review{The old content of this chapter is mostly moved to Appendix A. This chapter is a draft version and its outline is as follow.}
 
-\draft{This chapter establishes the physical and mathematical framework used to model concrete exposed to fire. It first summarises the thermal and hydric phenomena that develop in heated concrete \cref{sec:phenomena} and explains how their interaction triggers spalling \cref{sec:spalling}. The coupled thermo-hydric (TH) model is then formulated \ref{sec:thmodel} and extended into an improved thermo-hydro-chemical (THC) model that explicitly resolves the chemical state of the cement paste (Section~\ref{sec:thcmodel}). Finally, the one-way coupling of the TH/THC fields to the mechanical problem is introduced (Section~\ref{sec:mech}); the detailed constitutive laws and the numerical discretisation are reported in \cref{appendixA}.} 
-
 \section{Thermal and hydric phenomena in heated concrete} \label{sec:phenomena}
-
-When one face of a concrete member is exposed to a rising temperature, a sequence of strongly interacting thermal and hydric processes develops through the thickness. They are summarised here; the full constitutive relations are derived in Appendix~\ref{app:thm}.
- 
-\paragraph{Thermal phenomena.}
-Heat is transmitted into the material essentially by \emph{conduction}, governed by Fourier's law, while \emph{convection} and \emph{radiation} act on the heated boundary and are accounted for through the boundary conditions. Energy transport is not purely conductive: the bulk flow of liquid water and gas advects enthalpy, and the phase changes (evaporation, dehydration) consume energy and locally slow the temperature rise. The resulting energy balance and the temperature dependence of the heat capacity $\rho C_p$ and conductivity $\lambda$ are detailed in Appendix~\ref{app:thermal}.
- 
-\paragraph{Hydric phenomena.}
-Concrete is treated as a multiphase porous medium made of a solid skeleton ($s$), liquid water ($l$), water vapour ($v$) and dry air ($a$). On heating, free water \emph{evaporates} and chemically bound water is released from the calcium--silicate--hydrates (C--S--H) through \emph{dehydration}. The generated vapour is transported by pressure-driven \emph{Darcy flow} and by \emph{Fickian diffusion} within the gas mixture. Part of the vapour migrates inward, reaches cooler regions and \emph{recondenses}, building a quasi-saturated layer --- the \emph{moisture clog} --- that blocks further gas transport. Behind this clog the gas pressure $p_g$ rises sharply (Section~\ref{sec:spalling}). The governing transport and mass-balance relations are given in Appendix~\ref{app:hydric}.
- 
-These two families of phenomena are the physical origin of the two spalling mechanisms described next.
+When one face of a concrete member is exposed to a rising temperature, a sequence of strongly interacting thermal and hydric processes develops through the thickness. Heat is transmitted into the material essentially by conduction, while phase changes (evaporation, dehydration) consume energy and locally slow the temperature rise. The generated vapour is transported by pressure-driven Darcy flow and Fickian diffusion. Part of the vapour migrates inward, recondenses in cooler regions, and builds a quasi-saturated layer (the moisture clog) that blocks further gas transport, causing a sharp pore-pressure build-up. The full mathematical derivation of these physical mechanisms, including fluxes and constitutive relations, is detailed in \cref{appendixA}.
 
 \section{Spalling mechanisms} \label{sec:spalling}
-
 Spalling is the violent or non-violent detachment of layers or pieces of concrete from the surface of a heated structural element. It can cause premature structural failure through reinforcement exposure and cross-section reduction, as illustrated by several catastrophic tunnel fires (Channel Tunnel 1996, Mont-Blanc 1999, St.\ Gotthard 2001) \cite{thmframework}. Despite extensive experimental work, no single theory has reached consensus; the two most widely accepted mechanisms, and their combined action, are presented below.
- 
+
 \subsection{Thermal-gradient mechanism}
 A steep temperature gradient through the thickness produces differential thermal dilation:
 \begin{enumerate}
-  \item \textbf{Compressive stresses in the heated cover}: the surface layers tend to expand but are restrained by the cooler interior, generating compressive stresses parallel to the heated face.
-  \item \textbf{Tensile stresses in the interior}: the restraint of the expanding surface induces tension in the deeper layers.
-  \item \textbf{Fracture and energy release}: when the tensile stress exceeds the tensile strength $f_t$, cracks form parallel to the surface; the sudden release of stored elastic energy can drive the explosive ejection of fragments.
+    \item \textbf{Compressive stresses in the heated cover}: the surface layers tend to expand but are restrained by the cooler interior, generating compressive stresses parallel to the heated face.
+    \item \textbf{Tensile stresses in the interior}: the restraint of the expanding surface induces tension in the deeper layers.
+    \item \textbf{Fracture and energy release}: when the tensile stress exceeds the tensile strength $f_t$, cracks form parallel to the surface; the sudden release of stored elastic energy can drive the explosive ejection of fragments.
 \end{enumerate}
 High-performance concrete (HPC) is particularly prone to this mechanism because its higher brittleness stores more elastic energy before failure, leading to a more violent release.
- 
+
 \subsection{Pore-pressure mechanism (moisture clog)}
 The sequence of events is:
 \begin{enumerate}
-  \item \textbf{Dry zone}: near the heated face, free water evaporates and bound water is released by dehydration, forming a dry zone.
-  \item \textbf{Vapour migration}: part of the vapour escapes towards the heated face, part is driven inward.
-  \item \textbf{Condensation / moisture clog}: the inward vapour condenses where $T<T_{sat}$, forming a quasi-saturated, nearly impermeable barrier.
-  \item \textbf{Pressure build-up}: behind the clog, $p_g$ rises sharply as evaporation feeds a region from which vapour cannot escape; thermal dilation of liquid water in saturated pores adds to the build-up.
-  \item \textbf{Tensile failure}: when $p_g$ exceeds the tensile strength, cracks form parallel to the surface, potentially leading to explosive spalling.
+    \item \textbf{Dry zone}: near the heated face, free water evaporates and bound water is released by dehydration, forming a dry zone.
+    \item \textbf{Vapour migration}: part of the vapour escapes towards the heated face, part is driven inward.
+    \item \textbf{Condensation / moisture clog}: the inward vapour condenses where $T<T_{sat}$, forming a quasi-saturated, nearly impermeable barrier.
+    \item \textbf{Pressure build-up}: behind the clog, $p_g$ rises sharply as evaporation feeds a region from which vapour cannot escape; thermal dilation of liquid water in saturated pores adds to the build-up.
+    \item \textbf{Tensile failure}: when $p_g$ exceeds the tensile strength, cracks form parallel to the surface, potentially leading to explosive spalling.
 \end{enumerate}
 The governing parameters are the intrinsic permeability $K_0$ (low permeability hinders vapour evacuation) and the initial moisture content (more water to evaporate), both promoting higher pore pressures.
- 
+
 \subsection{Combined mechanism}
 In practice, explosive spalling generally results from the \emph{combined action} of pore pressure and thermal stress. The spalling condition can be written schematically as
 \begin{equation}
-  \sigma_{thermal}(T) + \sigma_{pore}(p_g,p_c,S_l) \ge f_t(T),
-  \label{eq:spalling}
+    \sigma_{thermal}(T) + \sigma_{pore}(p_g,p_c,S_l) \ge f_t(T),
+    \label{eq:spalling}
 \end{equation}
-where $\sigma_{thermal}$ is the thermal stress from differential dilation, $\sigma_{pore}$ the stress from pore-pressure loading (via the effective stress, Section~\ref{sec:mech}), and $f_t(T)$ the temperature-degraded tensile strength. Equation~\eqref{eq:spalling} makes clear why a complete coupled model is needed: neither a purely thermal nor a purely hydric analysis can capture the full picture.
+where $\sigma_{thermal}$ is the thermal stress from differential dilation, $\sigma_{pore}$ the stress from pore-pressure loading (via the effective stress, \cref{sec:mech}), and $f_t(T)$ the temperature-degraded tensile strength. Equation~\eqref{eq:spalling} makes clear why a complete coupled model is needed: neither a purely thermal nor a purely hydric analysis can capture the full picture.
     
-
-\section{Thermo-hydric (TH) coupled model} \label{sec:thmodel}
-
-The thermal and hydric fields are described by three primary variables,
-\begin{equation}
-  \mathcal{U}_{TH} = \{\, p_g,\; p_c,\; T \,\},
-\end{equation}
-the gas pressure, the capillary pressure and the temperature. Each is associated with a conservation equation. After substitution of Darcy's law, Fick's law and the constitutive relations (Appendix~\ref{app:hydric}), the final coupled forms read:
- 
-\paragraph{Dry-air conservation.}
-\begin{equation}
-\begin{aligned}
-&\phi(1-S_l)\!\left(\frac{\partial\rho_a}{\partial T}\frac{\partial T}{\partial t}
-+\frac{\partial\rho_a}{\partial p_c}\frac{\partial p_c}{\partial t}
-+\frac{\partial\rho_a}{\partial p_g}\frac{\partial p_g}{\partial t}\right)
-+(1-S_l)\rho_a\frac{\partial\phi}{\partial T}\frac{\partial T}{\partial t} \\
-&-\phi\rho_a\!\left(\frac{\partial S_l}{\partial p_c}\frac{\partial p_c}{\partial t}
-+\frac{\partial S_l}{\partial T}\frac{\partial T}{\partial t}\right)
--\nabla\!\cdot\!\left(\frac{K\rho_a k_{rg}}{\mu_g}\nabla p_g\right)
--\nabla\!\cdot\!\left(D\rho_g\frac{M_v M_a}{M_g^2}\nabla\frac{p_a}{p_g}\right)=0 .
-\end{aligned}
-\label{eq:air}
-\end{equation}
- 
-\paragraph{Water-species conservation.}
-\begin{equation}
-\begin{aligned}
-&\big(S_l\rho_l-(1-S_l)\rho_v\big)\frac{\partial\phi}{\partial T}\frac{\partial T}{\partial t}
-+S_l\phi\frac{\partial\rho_l}{\partial T}\frac{\partial T}{\partial t}
-+\phi(\rho_l-\rho_v)\!\left(\frac{\partial S_l}{\partial T}\frac{\partial T}{\partial t}
-+\frac{\partial S_l}{\partial p_c}\frac{\partial p_c}{\partial t}\right) \\
-&+(1-S_l)\phi\!\left(\frac{\partial\rho_v}{\partial T}\frac{\partial T}{\partial t}
-+\frac{\partial\rho_v}{\partial p_c}\frac{\partial p_c}{\partial t}
-+\frac{\partial\rho_v}{\partial p_g}\frac{\partial p_g}{\partial t}\right)
--\nabla\!\cdot\!\left(\frac{K\rho_l k_{rl}}{\mu_l}(\nabla p_g-\nabla p_c)\right) \\
-&-\nabla\!\cdot\!\left(\frac{K\rho_v k_{rg}}{\mu_g}\nabla p_g\right)
--\nabla\!\cdot\!\left(D\rho_g\frac{M_v M_a}{M_g^2}\nabla\frac{p_v}{p_g}\right)
-= -\dot{m}_{dehyd} .
-\end{aligned}
-\label{eq:water}
-\end{equation}
- 
-\paragraph{Energy conservation.}
-\begin{equation}
-\rho C_p\frac{\partial T}{\partial t}
--K\!\left(C_l\frac{\rho_l k_{rl}}{\mu_l}(\nabla p_g-\nabla p_c)
-+C_g\frac{\rho_v k_{rg}}{\mu_g}\nabla p_g\right)\!\cdot\!\nabla T
--\nabla\!\cdot(\lambda\cdot\nabla T)
-= -H_{vap}\dot m_{vap} + H_{dehyd}\dot m_{dehyd}.
-\label{eq:energy}
-\end{equation}
- 
-\subsection{TH coupling mechanisms}
-Equations~\eqref{eq:air}--\eqref{eq:energy} are \emph{two-way coupled}:
- 
-\begin{itemize}
-  \item \textbf{Temperature drives the hydric field.} It enters through
-  \emph{mass source terms} --- evaporation $\dot m_{vap}$ and dehydration
-  $\dot m_{dehyd}$ are thermally activated --- and through
-  \emph{temperature-dependent transport coefficients}: permeability $K(T)$,
-  porosity $\phi(T)$, viscosities $\mu(T)$, saturation vapour pressure
-  $p_{vs}(T)$ and diffusivity $D(T)$.
-  \item \textbf{The hydric field drives the temperature.} The bulk flow of
-  water and gas \emph{advects} enthalpy (the advection term in
-  Eq.~\eqref{eq:energy}), while phase changes act as heat sinks
-  ($-H_{vap}\dot m_{vap}$, $+H_{dehyd}\dot m_{dehyd}$), and the moisture
-  content modifies $\rho C_p$ and $\lambda$.
-\end{itemize}
- 
-The momentum balance and the resulting mechanical response are introduced in
-Section~\ref{sec:mech}.
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.8\linewidth]{figures/chapter2/spalling-mechanisms}
+  \caption{Spalling combined mechanisms \cite{aldalaien2025}}
+  \label{fig:exp-setup}
+\end{figure}
 
 
 \section{Improved thermo-hydro-chemical (THC) model} \label{sec:thcmodel}
@@ -127,48 +50,37 @@ Section~\ref{sec:mech}.
 \subsection{Motivation}
 In the TH model above, dehydration enters only as a prescribed source term $\dot m_{dehyd}(T)$ and the porosity follows a simple linear law $\phi=\phi_0+A_\phi(T-T_0)$ (Eq.~\ref{eq:phi-linear} in Appendix~\ref{app:hydric}). This treatment ignores three facts that strongly influence spalling: (i) the \emph{chemical state} of the cement paste before the accident depends on its hydration/curing history; (ii) the release of chemically bound water from the C--S--H is the chemical process that controls porosity, permeability and strength at high temperature; and (iii) chemical damage is essentially \emph{irreversible}. The improved model adopted here, following Scium\`e, Moreira and Dal~Pont \cite{sciume2024}, resolves the chemical field explicitly and couples it to the thermal and hydric fields.
 
-\begin{draftblock}
 \subsection{Chemical state variables}
-The chemical state of the cement paste is described by the progress of two reactions:
+Unlike standard TH models, the THC framework explicitly resolves the chemical state of the cement paste. The evolution of the microstructure depends on two main processes \cite{sciume2024}:
+\begin{itemize}
+    \item \textbf{Hydration degree $\Gamma(t) \in [1]$:} Defines the formation of Calcium-Silicate-Hydrates (C-S-H) during curing and aging. Its evolution is governed by an Arrhenius-type chemo-kinetic law (detailed in \cref{sec:affinity}), driven by time, temperature, and relative humidity.
+    \item \textbf{Dehydration degree $F(T) \in [1]$:} Represents the irreversible release of chemically bound water at high temperatures (typically $T > 105^\circ\mathrm{C}$).
+\end{itemize}
+To couple these effects, the \textbf{effective hydration degree} $\tilde{\Gamma}$ is introduced as the primary internal variable describing the state of the solid matrix:
 \begin{equation}
-  \mathcal{U}_{C} = \{\, \Gamma_{hydr},\; \Gamma_{dehyd}\,\},
+    \tilde{\Gamma} = (1 - F(T))\,\Gamma
+    \label{eq:effective-hydration}
 \end{equation}
-where $\Gamma_{hydr}\in[0,1]$ is the \emph{hydration degree} (formation of C--S--H during curing and ageing) and $\Gamma_{dehyd}\in[0,1]$ is the \emph{dehydration degree} (release of bound water at high temperature). Their evolution is governed by chemo-kinetic laws driven by time, temperature and relative humidity \cite{sciume2024}:
-\begin{equation}
-  \dot\Gamma_{hydr} = \mathcal{A}_{h}(\Gamma_{hydr},T,\mathrm{RH}),
-  \qquad
-  \dot\Gamma_{dehyd} = \mathcal{A}_{d}(\Gamma_{dehyd},T),
-  \label{eq:chem-kinetics}
-\end{equation}
-so that the whole service life of the material --- from casting and curing, through ageing, up to the accident --- is represented within a single monolithic framework.
- 
-\subsection{Chemical coupling to the hydric field}
-The dehydration reaction releases bound water, which becomes a mass source for the liquid/vapour phase. The dehydration rate that appears on the right-hand sides of Eqs.~\eqref{eq:water} and \eqref{eq:energy} is now obtained \emph{consistently} from the chemical kinetics rather than imposed empirically:
-\begin{equation}
-  \dot m_{dehyd} = -\,m_{w}^{0}\,\dot\Gamma_{dehyd},
-  \label{eq:mdehyd-chem}
-\end{equation}
-where $m_w^{0}$ is the maximum mass of chemically bound water per unit volume that can be released by full dehydration.
- 
-\subsection{Chemo-physical constitutive couplings}
-The key improvement is that the transport and mechanical properties are made explicit functions of the chemical state. Following Powers' stoichiometric model \cite{powers,sciume2024}, the volume fractions of the solid phases and the porosity evolve during both hydration and dehydration:
-\begin{equation}
-  \phi = \phi\big(\Gamma_{hydr},\Gamma_{dehyd}\big),
-  \label{eq:phi-chem}
-\end{equation}
-which replaces the linear law $\phi=\phi_0+A_\phi(T-T_0)$. The intrinsic permeability and the tensile strength likewise degrade with the chemical state,
-\begin{equation}
-  K = K_0\,g_K\!\big(\Gamma_{dehyd},\,\mathcal{D}\big),
-  \qquad
-  f_t = f_{t,0}\,g_f\!\big(\Gamma_{dehyd},T\big),
-  \label{eq:KF-chem}
-\end{equation}
-so that dehydration increases permeability (easing pressure relief) while lowering the strength that resists spalling, as in Eq.~\eqref{eq:spalling}; $\mathcal{D}$ is the mechanical damage (Section~\ref{sec:mech}). The irreversibility of chemical damage is enforced through an adsorption--desorption description of the pore microstructure \cite{sciume2024}, so that re-wetting does not restore the dehydrated material.
- 
-\subsection{Resulting coupled system}
-Collecting the primary unknowns, the improved model solves $\mathcal{U}_{THC}=\{p_g,p_c,T,\Gamma_{hydr},\Gamma_{dehyd}\}$ through the mass and energy balances \eqref{eq:air}--\eqref{eq:energy}, in which the source term~\eqref{eq:mdehyd-chem} and the chemo-physical couplings~\eqref{eq:phi-chem}--\eqref{eq:KF-chem} now close the system. A notable practical advantage of this formulation is that it requires only a limited number of experiments for calibration \cite{sciume2024}. The calibration against the Kalifa benchmark \cite{kalifa2000} and the numerical implementation are addressed in Chapter~\ref{ch:experiment}.
+The transport and mechanical properties, such as porosity $\phi(\tilde{\Gamma})$ and intrinsic permeability $K(\tilde{\Gamma})$, are explicitly updated as functions of this effective hydration state. The specific evolution laws for these properties are detailed in \cref{appendixA}.
 
-\end{draftblock}
+\subsection{Resulting coupled system}
+The complex mathematical derivation of the governing equations, based on Powers' stoichiometry and the averaging theory for multiphase porous media, is detailed in \cref{appendixA}. By incorporating the chemical couplings, the final system reduces to three highly non-linear conservation equations for the state variables $(p_g, p_c, T)$:
+
+\paragraph{1. Dry-air conservation:}
+\begin{equation}
+    \frac{\partial}{\partial t}\big(\phi(1-S_l)\rho_a\big) + \nabla \cdot (\mathbf{J}_a) = (1 - S_l)\rho_a \left(a_\phi \Omega \frac{\partial \tilde{\Gamma}}{\partial t}\right)
+\end{equation}
+
+\paragraph{2. Total water-species conservation:}
+\begin{equation}
+    \frac{\partial}{\partial t}\big(\phi S_l \rho_l + \phi(1-S_l)\rho_v\big) + \nabla \cdot (\mathbf{J}_l + \mathbf{J}_v) = \left[ S_l\rho_l + (1-S_l)\rho_v \right] \left( a_\phi \Omega \frac{\partial \tilde{\Gamma}}{\partial t} \right) - 0.228 c \xi_\infty \frac{\partial \tilde{\Gamma}}{\partial t}
+\end{equation}
+
+\paragraph{3. Energy conservation:}
+\begin{equation}
+    \overline{\rho C_p}\frac{\partial T}{\partial t} + \mathbf{J}_{energy}^{adv} - \nabla \cdot (\lambda \nabla T) = -H_{vap}\dot{m}_{vap} + \left(H_{vap} 0.228 c \xi_\infty + L_{hyd}\right) \frac{\partial \tilde{\Gamma}}{\partial t}
+\end{equation}
+where $a_\phi$ is the porosity evolution parameter, $c$ is the cement content, and $\xi_\infty$ is the maximum hydration fraction. 
 
 \section{Coupling to the mechanical field} \label{sec:mech}
 

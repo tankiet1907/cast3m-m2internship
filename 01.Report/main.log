@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2026.2.25)  18 JUN 2026 09:26
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2026.2.25)  18 JUN 2026 11:16
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -967,14 +967,14 @@ Package: etexcmds 2019/12/15 v1.7 Avoid name clashes with e-TeX commands (HO)
 Package translations Info: No language package found. I am going to use `english' as default language. on input line 65.
 \@quotelevel=\count483
 \@quotereset=\count484
- (./main.aux (./chapters/chapter1.aux) (./chapters/chapter2.aux) (./chapters/chapter3.aux) (./chapters/chapter4.aux) (./chapters/chapter5.aux) (./chapters/chapter6.aux) (./appendices/appendixA.aux
+ (./main.aux (./chapters/chapter1.aux) (./chapters/chapter2.aux) (./chapters/chapter3.aux
 
-LaTeX Warning: Label `sec:spalling' multiply defined.
+LaTeX Warning: Label `fig:exp-setup' multiply defined.
 
 
-LaTeX Warning: Label `sec:spalling@cref' multiply defined.
+LaTeX Warning: Label `fig:exp-setup@cref' multiply defined.
 
-) (./appendices/appendixB.aux))
+) (./chapters/chapter4.aux) (./chapters/chapter5.aux) (./chapters/chapter6.aux) (./appendices/appendixA.aux) (./appendices/appendixB.aux))
 \openout1 = `main.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 65.
@@ -1078,6 +1078,13 @@ Package biblatex Info: Automatic encoding selection.
 Package biblatex Info: Trying to load bibliographic data...
 Package biblatex Info: ... file 'main.bbl' found.
  (./main.bbl
+
+Package biblatex Warning: The following entry could not be found
+(biblatex)                in the database:
+(biblatex)                aldalaien2025
+(biblatex)                Please verify the spelling and rerun
+(biblatex)                LaTeX afterwards.
+
 
 Package biblatex Warning: The following entry could not be found
 (biblatex)                in the database:
@@ -1246,13 +1253,6 @@ Package biblatex Warning: The following entry could not be found
 (biblatex)                Please verify the spelling and rerun
 (biblatex)                LaTeX afterwards.
 
-
-Package biblatex Warning: The following entry could not be found
-(biblatex)                in the database:
-(biblatex)                zienkiewicz2013
-(biblatex)                Please verify the spelling and rerun
-(biblatex)                LaTeX afterwards.
-
 )
 Package biblatex Info: Reference section=0 on input line 65.
 Package biblatex Info: Reference segment=0 on input line 65.
@@ -1265,7 +1265,7 @@ Package hyperref Info: Link coloring ON on input line 65.
 
 
 pdfTeX warning: pdflatex (file ./frontmatter/m2coverpage.pdf): PDF inclusion: found PDF version <1.7>, but at most version <1.5> allowed
-<frontmatter/m2coverpage.pdf, id=465, 597.55246pt x 845.07718pt>
+<frontmatter/m2coverpage.pdf, id=469, 597.55246pt x 845.07718pt>
 File: frontmatter/m2coverpage.pdf Graphic file (type pdf)
 <use frontmatter/m2coverpage.pdf>
 Package pdftex.def Info: frontmatter/m2coverpage.pdf  used on input line 68.
@@ -1283,7 +1283,7 @@ pdfTeX warning: pdflatex (file ./frontmatter/m2coverpage.pdf): PDF inclusion: fo
 
 
 pdfTeX warning: pdflatex (file ./frontmatter/m2coverpage.pdf): PDF inclusion: found PDF version <1.7>, but at most version <1.5> allowed
-<frontmatter/m2coverpage.pdf, id=468, page=1, 597.55246pt x 845.07718pt>
+<frontmatter/m2coverpage.pdf, id=472, page=1, 597.55246pt x 845.07718pt>
 File: frontmatter/m2coverpage.pdf Graphic file (type pdf)
 <use frontmatter/m2coverpage.pdf, page 1>
 Package pdftex.def Info: frontmatter/m2coverpage.pdf , page1 used on input line 68.
@@ -1333,7 +1333,7 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 \openout7 = `main.toc'.
 
  [6] (./main.lof
-LaTeX Font Info:    Trying to load font information for T1+cmtt on input line 9.
+LaTeX Font Info:    Trying to load font information for T1+cmtt on input line 11.
  (/usr/share/texlive/texmf-dist/tex/latex/base/t1cmtt.fd
 File: t1cmtt.fd 2023/04/13 v2.5m Standard LaTeX font definitions
 ) [7
@@ -1355,12 +1355,12 @@ File: t1cmtt.fd 2023/04/13 v2.5m Standard LaTeX font definitions
 
  (./chapters/chapter1.tex
 Chapter 1.
-<figures/chapter1/spacex_crater.png, id=746, 602.25pt x 381.67593pt>
+<figures/chapter1/spacex_crater.png, id=755, 602.25pt x 381.67593pt>
 File: figures/chapter1/spacex_crater.png Graphic file (type png)
 <use figures/chapter1/spacex_crater.png>
 Package pdftex.def Info: figures/chapter1/spacex_crater.png  used on input line 15.
 (pdftex.def)             Requested size: 218.51521pt x 138.48647pt.
-<figures/chapter1/spacex_debris.png, id=748, 1027.84pt x 685.56125pt>
+<figures/chapter1/spacex_debris.png, id=757, 1027.84pt x 685.56125pt>
 File: figures/chapter1/spacex_debris.png Graphic file (type png)
 <use figures/chapter1/spacex_debris.png>
 Package pdftex.def Info: figures/chapter1/spacex_debris.png  used on input line 22.
@@ -1385,56 +1385,55 @@ l.47
  (./chapters/chapter2.tex
 Chapter 2.
 
-LaTeX Warning: Reference `app:thm' on page 5 undefined on input line 10.
-
-
-LaTeX Warning: Reference `app:thermal' on page 5 undefined on input line 13.
-
-
-LaTeX Warning: Reference `app:hydric' on page 5 undefined on input line 16.
+LaTeX Warning: Citation 'thmframework' on page 5 undefined on input line 10.
 
 [5
 
 
 
 
-]
-
-LaTeX Warning: Citation 'thmframework' on page 6 undefined on input line 22.
-
-[6]
-
-LaTeX Warning: Reference `app:hydric' on page 7 undefined on input line 59.
-
-[7]
-Overfull \hbox (24.05838pt too wide) detected at line 102
-[][][]\OML/cmm/m/it/12 ^^ZC[][] \OMS/cmsy/m/n/12 ^^@ \OML/cmm/m/it/12 K  []  \OMS/cmsy/m/n/12 ^^A  r\OML/cmm/m/it/12 T \OMS/cmsy/m/n/12 ^^@ r  ^^A \OT1/cmr/m/n/12 (\OML/cmm/m/it/12 ^^U \OMS/cmsy/m/n/12 ^^A r\OML/cmm/m/it/12 T\OT1/cmr/m/n/12 ) = \OMS/cmsy/m/n/12 ^^@\OML/cmm/m/it/12 H[][] \OT1/cmr/m/n/12 + \OML/cmm/m/it/12 H[][]:
- []
+] [6]
+<figures/chapter2/spalling-mechanisms.png, id=809, 816.04875pt x 448.67625pt>
+File: figures/chapter2/spalling-mechanisms.png Graphic file (type png)
+<use figures/chapter2/spalling-mechanisms.png>
+Package pdftex.def Info: figures/chapter2/spalling-mechanisms.png  used on input line 42.
+(pdftex.def)             Requested size: 364.19667pt x 200.2388pt.
 
 
-LaTeX Warning: Reference `eq:phi-linear' on page 8 undefined on input line 128.
+LaTeX Warning: Citation 'aldalaien2025' on page 7 undefined on input line 43.
 
 
-LaTeX Warning: Reference `app:hydric' on page 8 undefined on input line 128.
-
-[8]
-
-LaTeX Warning: Reference `eq:KF-chem' on page 9 undefined on input line 175.
+LaTeX Warning: Citation 'aldalaien2025' on page 7 undefined on input line 43.
 
 
-LaTeX Warning: Citation 'mazars1986' on page 9 undefined on input line 191.
+LaTeX Warning: Reference `eq:phi-linear' on page 7 undefined on input line 51.
 
 
-LaTeX Warning: Citation 'hillerborg1976' on page 9 undefined on input line 191.
+LaTeX Warning: Reference `app:hydric' on page 7 undefined on input line 51.
+
+[7 <./figures/chapter2/spalling-mechanisms.png>] [8]
+
+LaTeX Warning: Reference `eq:KF-chem' on page 9 undefined on input line 87.
 
 
-LaTeX Warning: Reference `app:mechanical' on page 9 undefined on input line 191.
+LaTeX Warning: Citation 'mazars1986' on page 9 undefined on input line 103.
+
+
+LaTeX Warning: Citation 'hillerborg1976' on page 9 undefined on input line 103.
+
+
+LaTeX Warning: Reference `app:mechanical' on page 9 undefined on input line 103.
 
 ) [9]
 \openout2 = `chapters/chapter3.aux'.
 
  (./chapters/chapter3.tex
 Chapter 3.
+<figures/chapter3/exp_setup.png, id=842, 939.51pt x 659.46375pt>
+File: figures/chapter3/exp_setup.png Graphic file (type png)
+<use figures/chapter3/exp_setup.png>
+Package pdftex.def Info: figures/chapter3/exp_setup.png  used on input line 17.
+(pdftex.def)             Requested size: 318.66948pt x 223.68138pt.
 
 Package siunitx Warning: Unit macro \bar has been deprecated in this release.
 (siunitx)                
@@ -1449,52 +1448,578 @@ Package siunitx Warning: Unit macro \bar has been deprecated in this release.
 
 
 
-] [11]
+] [11 <./figures/chapter3/exp_setup.png (PNG copy)>]
+<figures/chapter3/model_setup.png, id=865, 1513.15312pt x 627.84563pt>
+File: figures/chapter3/model_setup.png Graphic file (type png)
+<use figures/chapter3/model_setup.png>
+Package pdftex.def Info: figures/chapter3/model_setup.png  used on input line 96.
+(pdftex.def)             Requested size: 455.24411pt x 188.89162pt.
+ [12 <./figures/chapter3/model_setup.png (PNG copy)>] [13] [14]
 
-LaTeX Warning: Reference `sec:permeability' on page 12 undefined on input line 106.
+LaTeX Warning: Citation 'gawin1999' on page 15 undefined on input line 217.
 
-
-LaTeX Warning: Reference `sec:cal-temp)' on page 1 undefined on input line 170.
-
-[12] [13] [14]
-
-LaTeX Warning: Citation 'pesavento2000' on page 15 undefined on input line 243.
-
-
-LaTeX Warning: Citation 'gawin1999' on page 15 undefined on input line 270.
-
-) [15]
+[15]) [16]
 \openout2 = `chapters/chapter4.aux'.
 
  (./chapters/chapter4.tex
 Chapter 4.
-[16
+[17
 
 
 
 
-] [17]
-<figures/chapter4/surf_eps_sweep.png, id=914, 625.8582pt x 509.2626pt>
+] [18]
+<figures/chapter4/surf_eps_sweep.png, id=937, 625.8582pt x 509.2626pt>
 File: figures/chapter4/surf_eps_sweep.png Graphic file (type png)
 <use figures/chapter4/surf_eps_sweep.png>
 Package pdftex.def Info: figures/chapter4/surf_eps_sweep.png  used on input line 66.
 (pdftex.def)             Requested size: 218.51521pt x 177.80942pt.
-<figures/chapter4/surf_h_sweep.png, id=915, 625.8582pt x 509.2626pt>
+<figures/chapter4/surf_h_sweep.png, id=938, 625.8582pt x 509.2626pt>
 File: figures/chapter4/surf_h_sweep.png Graphic file (type png)
 <use figures/chapter4/surf_h_sweep.png>
 Package pdftex.def Info: figures/chapter4/surf_h_sweep.png  used on input line 71.
 (pdftex.def)             Requested size: 218.51521pt x 177.80942pt.
- [18 <./figures/chapter4/surf_eps_sweep.png> <./figures/chapter4/surf_h_sweep.png>] [19]
-<figures/chapter4/Temp_compare_epsilon_0.68_h-hot_11.png, id=948, 625.8582pt x 509.2626pt>
+ [19 <./figures/chapter4/surf_eps_sweep.png> <./figures/chapter4/surf_h_sweep.png>]
+
+LaTeX Warning: Reference `eq:rhoCp' on page 1 undefined on input line 91.
+
+
+LaTeX Warning: Reference `eq:rhoCp' on page 20 undefined on input line 93.
+
+[20]
+<figures/chapter4/Temp_compare_epsilon_0.68_h-hot_11.png, id=967, 625.8582pt x 509.2626pt>
 File: figures/chapter4/Temp_compare_epsilon_0.68_h-hot_11.png Graphic file (type png)
 <use figures/chapter4/Temp_compare_epsilon_0.68_h-hot_11.png>
 Package pdftex.def Info: figures/chapter4/Temp_compare_epsilon_0.68_h-hot_11.png  used on input line 107.
 (pdftex.def)             Requested size: 341.43307pt x 277.82625pt.
 LaTeX Font Info:    Font shape `T1/cmtt/bx/n' in size <12> not available
 (Font)              Font shape `T1/cmtt/m/n' tried instead on input line 112.
-<figures/chapter4/depth_KS_sweep.png, id=950, 625.8582pt x 509.2626pt>
+<figures/chapter4/depth_KS_sweep.png, id=969, 625.8582pt x 509.2626pt>
 File: figures/chapter4/depth_KS_sweep.png Graphic file (type png)
 <use figures/chapter4/depth_KS_sweep.png>
 Package pdftex.def Info: figures/chapter4/depth_KS_sweep.png  used on input line 116.
 (pdftex.def)             Requested size: 341.43307pt x 277.82625pt.
- [
+ [21 <./figures/chapter4/Temp_compare_epsilon_0.68_h-hot_11.png>]
+<figures/chapter4/depth_eps_recal.png, id=977, 625.8582pt x 509.2626pt>
+File: figures/chapter4/depth_eps_recal.png Graphic file (type png)
+<use figures/chapter4/depth_eps_recal.png>
+Package pdftex.def Info: figures/chapter4/depth_eps_recal.png  used on input line 126.
+(pdftex.def)             Requested size: 341.43307pt x 277.82625pt.
+ [22 <./figures/chapter4/depth_KS_sweep.png> <./figures/chapter4/depth_eps_recal.png>]
+<figures/chapter4/depth_CS_sweep.png, id=986, 625.8582pt x 509.2626pt>
+File: figures/chapter4/depth_CS_sweep.png Graphic file (type png)
+<use figures/chapter4/depth_CS_sweep.png>
+Package pdftex.def Info: figures/chapter4/depth_CS_sweep.png  used on input line 136.
+(pdftex.def)             Requested size: 341.43307pt x 277.82625pt.
+<figures/chapter4/Temp_compare_step3_CS.png, id=988, 625.8582pt x 523.2348pt>
+File: figures/chapter4/Temp_compare_step3_CS.png Graphic file (type png)
+<use figures/chapter4/Temp_compare_step3_CS.png>
+Package pdftex.def Info: figures/chapter4/Temp_compare_step3_CS.png  used on input line 148.
+(pdftex.def)             Requested size: 364.19667pt x 304.48236pt.
+ [23 <./figures/chapter4/depth_CS_sweep.png>]
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `subscript' on input line 160.
+
+
+LaTeX Warning: Reference `eq:permeability' on page 1 undefined on input line 162.
+
+[24 <./figures/chapter4/Temp_compare_step3_CS.png>]
+<figures/chapter4/pg_AK_sweep_KINT_2e-19.png, id=1002, 622.4856pt x 511.1898pt>
+File: figures/chapter4/pg_AK_sweep_KINT_2e-19.png Graphic file (type png)
+<use figures/chapter4/pg_AK_sweep_KINT_2e-19.png>
+Package pdftex.def Info: figures/chapter4/pg_AK_sweep_KINT_2e-19.png  used on input line 171.
+(pdftex.def)             Requested size: 341.43307pt x 280.39084pt.
+<figures/chapter4/pg_AK_sweep_KINT_8.5e-20.png, id=1004, 622.4856pt x 511.1898pt>
+File: figures/chapter4/pg_AK_sweep_KINT_8.5e-20.png Graphic file (type png)
+<use figures/chapter4/pg_AK_sweep_KINT_8.5e-20.png>
+Package pdftex.def Info: figures/chapter4/pg_AK_sweep_KINT_8.5e-20.png  used on input line 181.
+(pdftex.def)             Requested size: 341.43307pt x 280.39084pt.
+ [25 <./figures/chapter4/pg_AK_sweep_KINT_2e-19.png>]
+<figures/chapter4/Pg_compare_KINT_8.5e-20_AK_4.png, id=1014, 622.4856pt x 509.2626pt>
+File: figures/chapter4/Pg_compare_KINT_8.5e-20_AK_4.png Graphic file (type png)
+<use figures/chapter4/Pg_compare_KINT_8.5e-20_AK_4.png>
+Package pdftex.def Info: figures/chapter4/Pg_compare_KINT_8.5e-20_AK_4.png  used on input line 192.
+(pdftex.def)             Requested size: 364.19667pt x 297.96016pt.
+ [26 <./figures/chapter4/pg_AK_sweep_KINT_8.5e-20.png>] [27 <./figures/chapter4/Pg_compare_KINT_8.5e-20_AK_4.png>]
+<figures/chapter4/pg_test10_AK_sweep_hg0.001.png, id=1028, 622.4856pt x 511.1898pt>
+File: figures/chapter4/pg_test10_AK_sweep_hg0.001.png Graphic file (type png)
+<use figures/chapter4/pg_test10_AK_sweep_hg0.001.png>
+Package pdftex.def Info: figures/chapter4/pg_test10_AK_sweep_hg0.001.png  used on input line 216.
+(pdftex.def)             Requested size: 364.19667pt x 299.08772pt.
+ [28] [29 <./figures/chapter4/pg_test10_AK_sweep_hg0.001.png>] [30]) [31]
+\openout2 = `chapters/chapter5.aux'.
+
+ (./chapters/chapter5.tex
+Chapter 5.
+[32
+
+
+
+
+] [33] [34] [35]
+
+LaTeX Warning: Citation 'baudin2017' on page 36 undefined on input line 109.
+
+
+LaTeX Warning: Reference `sec:lhs' on page 1 undefined on input line 114.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `math shift' on input line 124.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `subscript' on input line 124.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `math shift' on input line 124.
+
+<figures/chapter5/analysisA/Scatter_Plots_Pg_10_Max.png, id=1116, 424.4658pt x 355.5684pt>
+File: figures/chapter5/analysisA/Scatter_Plots_Pg_10_Max.png Graphic file (type png)
+<use figures/chapter5/analysisA/Scatter_Plots_Pg_10_Max.png>
+Package pdftex.def Info: figures/chapter5/analysisA/Scatter_Plots_Pg_10_Max.png  used on input line 129.
+(pdftex.def)             Requested size: 318.66948pt x 266.95776pt.
+<figures/chapter5/analysisA/Confidence_Intervals_GasPressure.png, id=1117, 880.7304pt x 508.299pt>
+File: figures/chapter5/analysisA/Confidence_Intervals_GasPressure.png Graphic file (type png)
+<use figures/chapter5/analysisA/Confidence_Intervals_GasPressure.png>
+Package pdftex.def Info: figures/chapter5/analysisA/Confidence_Intervals_GasPressure.png  used on input line 136.
+(pdftex.def)             Requested size: 455.24411pt x 262.73477pt.
+[36] [37 <./figures/chapter5/analysisA/Scatter_Plots_Pg_10_Max.png> <./figures/chapter5/analysisA/Confidence_Intervals_GasPressure.png>]
+<figures/chapter5/analysisB/Scatter_Plots_Pg_10_Max.png, id=1137, 1146.2022pt x 284.7438pt>
+File: figures/chapter5/analysisB/Scatter_Plots_Pg_10_Max.png Graphic file (type png)
+<use figures/chapter5/analysisB/Scatter_Plots_Pg_10_Max.png>
+Package pdftex.def Info: figures/chapter5/analysisB/Scatter_Plots_Pg_10_Max.png  used on input line 147.
+(pdftex.def)             Requested size: 455.24411pt x 113.0917pt.
+<figures/chapter5/analysisB/Sobol_Sensitivity_Pg_10_Max.png, id=1138, 609.9588pt x 508.299pt>
+File: figures/chapter5/analysisB/Sobol_Sensitivity_Pg_10_Max.png Graphic file (type png)
+<use figures/chapter5/analysisB/Sobol_Sensitivity_Pg_10_Max.png>
+Package pdftex.def Info: figures/chapter5/analysisB/Sobol_Sensitivity_Pg_10_Max.png  used on input line 154.
+(pdftex.def)             Requested size: 318.66948pt x 265.5657pt.
+<figures/chapter5/analysisB/Sobol_SecondOrder_Heatmap_Pg_10_Max.png, id=1139, 450.483pt x 381.5856pt>
+File: figures/chapter5/analysisB/Sobol_SecondOrder_Heatmap_Pg_10_Max.png Graphic file (type png)
+<use figures/chapter5/analysisB/Sobol_SecondOrder_Heatmap_Pg_10_Max.png>
+Package pdftex.def Info: figures/chapter5/analysisB/Sobol_SecondOrder_Heatmap_Pg_10_Max.png  used on input line 161.
+(pdftex.def)             Requested size: 318.66948pt x 269.93784pt.
+<figures/chapter5/analysisB/Confidence_Intervals_GasPressure.png, id=1140, 880.7304pt x 508.299pt>
+File: figures/chapter5/analysisB/Confidence_Intervals_GasPressure.png Graphic file (type png)
+<use figures/chapter5/analysisB/Confidence_Intervals_GasPressure.png>
+Package pdftex.def Info: figures/chapter5/analysisB/Confidence_Intervals_GasPressure.png  used on input line 168.
+(pdftex.def)             Requested size: 455.24411pt x 262.73477pt.
+ [38 <./figures/chapter5/analysisB/Scatter_Plots_Pg_10_Max.png> <./figures/chapter5/analysisB/Sobol_Sensitivity_Pg_10_Max.png>] [39 <./figures/chapter5/analysisB/Sobol_SecondOrder_Heatmap_Pg_10_Max.png> <./figures/chapter5/analysisB/Confidence_Intervals_GasPressure.png>]
+Overfull \hbox (17.04028pt too wide) in paragraph at lines 190--191
+[]\T1/cmr/m/n/12 In the mul-ti-vari-able mix-composition
+ []
+
+[40]
+<figures/chapter5/analysisA/Reliability_Analysis_Pg_10_Max.png, id=1167, 619.113pt x 508.299pt>
+File: figures/chapter5/analysisA/Reliability_Analysis_Pg_10_Max.png Graphic file (type png)
+<use figures/chapter5/analysisA/Reliability_Analysis_Pg_10_Max.png>
+Package pdftex.def Info: figures/chapter5/analysisA/Reliability_Analysis_Pg_10_Max.png  used on input line 197.
+(pdftex.def)             Requested size: 318.66948pt x 261.6334pt.
+<figures/chapter5/analysisB/Reliability_Analysis_Pg_10_Max.png, id=1168, 603.2136pt x 508.299pt>
+File: figures/chapter5/analysisB/Reliability_Analysis_Pg_10_Max.png Graphic file (type png)
+<use figures/chapter5/analysisB/Reliability_Analysis_Pg_10_Max.png>
+Package pdftex.def Info: figures/chapter5/analysisB/Reliability_Analysis_Pg_10_Max.png  used on input line 204.
+(pdftex.def)             Requested size: 318.66948pt x 268.53625pt.
+ [41 <./figures/chapter5/analysisA/Reliability_Analysis_Pg_10_Max.png>] [42 <./figures/chapter5/analysisB/Reliability_Analysis_Pg_10_Max.png>]
+<figures/chapter5/random-field-of-K-in-cube.png, id=1187, 712.91344pt x 663.22781pt>
+File: figures/chapter5/random-field-of-K-in-cube.png Graphic file (type png)
+<use figures/chapter5/random-field-of-K-in-cube.png>
+Package pdftex.def Info: figures/chapter5/random-field-of-K-in-cube.png  used on input line 250.
+(pdftex.def)             Requested size: 273.14923pt x 254.1139pt.
+ [43]
+<figures/chapter5/final-strain-of-cube.png, id=1194, 712.91344pt x 663.22781pt>
+File: figures/chapter5/final-strain-of-cube.png Graphic file (type png)
+<use figures/chapter5/final-strain-of-cube.png>
+Package pdftex.def Info: figures/chapter5/final-strain-of-cube.png  used on input line 257.
+(pdftex.def)             Requested size: 273.14923pt x 254.1139pt.
+<figures/chapter5/analysisC2/evret_C1_C2.png, id=1195, 592.25266pt x 375.804pt>
+File: figures/chapter5/analysisC2/evret_C1_C2.png Graphic file (type png)
+<use figures/chapter5/analysisC2/evret_C1_C2.png>
+Package pdftex.def Info: figures/chapter5/analysisC2/evret_C1_C2.png  used on input line 264.
+(pdftex.def)             Requested size: 386.96027pt x 245.53699pt.
+ [44 <./figures/chapter5/random-field-of-K-in-cube.png> <./figures/chapter5/final-strain-of-cube.png>]
+<figures/chapter5/analysisC1/Scatter_Plots_Shrinkage_Strain.png, id=1205, 424.9476pt x 355.5684pt>
+File: figures/chapter5/analysisC1/Scatter_Plots_Shrinkage_Strain.png Graphic file (type png)
+<use figures/chapter5/analysisC1/Scatter_Plots_Shrinkage_Strain.png>
+Package pdftex.def Info: figures/chapter5/analysisC1/Scatter_Plots_Shrinkage_Strain.png  used on input line 275.
+(pdftex.def)             Requested size: 318.66948pt x 266.64308pt.
+<figures/chapter5/analysisC1/Reliability_Analysis_Shrinkage_Strain.png, id=1206, 619.113pt x 508.299pt>
+File: figures/chapter5/analysisC1/Reliability_Analysis_Shrinkage_Strain.png Graphic file (type png)
+<use figures/chapter5/analysisC1/Reliability_Analysis_Shrinkage_Strain.png>
+Package pdftex.def Info: figures/chapter5/analysisC1/Reliability_Analysis_Shrinkage_Strain.png  used on input line 282.
+(pdftex.def)             Requested size: 318.66948pt x 261.6334pt.
+<figures/chapter5/analysisC2/Reliability_Analysis_Shrinkage_Strain.png, id=1207, 619.113pt x 508.299pt>
+File: figures/chapter5/analysisC2/Reliability_Analysis_Shrinkage_Strain.png Graphic file (type png)
+<use figures/chapter5/analysisC2/Reliability_Analysis_Shrinkage_Strain.png>
+Package pdftex.def Info: figures/chapter5/analysisC2/Reliability_Analysis_Shrinkage_Strain.png  used on input line 289.
+(pdftex.def)             Requested size: 318.66948pt x 261.6334pt.
+<figures/chapter5/analysisC3/Quadrature_PDF.png, id=1208, 619.113pt x 508.299pt>
+File: figures/chapter5/analysisC3/Quadrature_PDF.png Graphic file (type png)
+<use figures/chapter5/analysisC3/Quadrature_PDF.png>
+Package pdftex.def Info: figures/chapter5/analysisC3/Quadrature_PDF.png  used on input line 296.
+(pdftex.def)             Requested size: 318.66948pt x 261.6334pt.
+ [45 <./figures/chapter5/analysisC2/evret_C1_C2.png>] [46 <./figures/chapter5/analysisC1/Scatter_Plots_Shrinkage_Strain.png> <./figures/chapter5/analysisC1/Reliability_Analysis_Shrinkage_Strain.png>] [47 <./figures/chapter5/analysisC2/Reliability_Analysis_Shrinkage_Strain.png> <./figures/chapter5/analysisC3/Quadrature_PDF.png>]) [48]
+\openout2 = `chapters/chapter6.aux'.
+
+ (./chapters/chapter6.tex
+Chapter 6.
+[49
+
+
+
+
+]) [50]
+Overfull \hbox (3.91978pt too wide) in paragraph at lines 140--140
+[]\T1/cmr/m/n/12 François Di Paola. ``Start-ing with Cast3m: Ther-mo-me-chan-i-cal Cal-cu-la-tions''. Mar. 27,
+ []
+
+[51
+
+
+
+
+
+] [52]
+\openout2 = `appendices/appendixA.aux'.
+
+ (./appendices/appendixA.tex
+Appendix A.
+[53
+
+
+] [54]
+
+LaTeX Warning: Citation 'furbish1997' on page 55 undefined on input line 80.
+
+
+Overfull \hbox (23.25424pt too wide) in paragraph at lines 80--81
+\T1/cmr/m/n/12 The liq-uid wa-ter den-sity evolves with tem-per-a-ture ac-cord-ing to a poly-no-mial fit [[]]: 
+ []
+
+
+LaTeX Warning: Reference `tab:rho_coeff' on page 55 undefined on input line 85.
+
+
+LaTeX Warning: Citation 'harmathy1973' on page 55 undefined on input line 87.
+
+
+Overfull \hbox (11.5154pt too wide) in paragraph at lines 87--88
+[]\T1/cmr/m/n/12 The solid ther-mal ca-pac-ity the-o-ret-i-cally evolves lin-early with tem-per-a-ture [[]]: 
+ []
+
+[55]
+
+LaTeX Warning: Citation 'baggio1993' on page 56 undefined on input line 95.
+
+
+Overfull \hbox (2.41766pt too wide) in paragraph at lines 95--96
+[]\T1/cmr/m/n/12 The ther-mal con-duc-tiv-ity de-pends on sat-u-ra-tion, poros-ity, and tem-per-a-ture [[]]: 
+ []
+
+
+LaTeX Warning: Citation 'harmathy1973' on page 56 undefined on input line 100.
+
+[56] [57]
+
+LaTeX Warning: Citation 'pesavento2000' on page 58 undefined on input line 192.
+
+[58]
+
+LaTeX Warning: Citation 'reid1987' on page 59 undefined on input line 206.
+
+[59] [60]
+
+LaTeX Warning: Citation 'ashrae2001' on page 61 undefined on input line 315.
+
+
+LaTeX Warning: Citation 'vangenuchten1980' on page 61 undefined on input line 323.
+
+
+LaTeX Warning: Citation 'baroghel1999' on page 61 undefined on input line 323.
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+
+LaTeX Warning: Citation 'pesavento2000' on page 61 undefined on input line 343.
+
+[61]
+
+LaTeX Warning: Citation 'gawin1999' on page 62 undefined on input line 352.
+
+
+LaTeX Warning: Citation 'gawin2002' on page 62 undefined on input line 359.
+
+
+Overfull \hbox (17.08484pt too wide) in paragraph at lines 359--360
+[]\T1/cmr/m/n/12 When me-chan-i-cal dam-age is con-sid-ered, the per-me-abil-ity in-creases sig-nif-i-cantly [[]]: 
+ []
+
+
+Overfull \hbox (4.68102pt too wide) in paragraph at lines 365--366
+[]\T1/cmr/m/n/12 where $\OMS/cmsy/m/n/12 D$ \T1/cmr/m/n/12 is the dam-age pa-ram-e-ter and $\OML/cmm/m/it/12 A[]$ \T1/cmr/m/n/12 is a ma-te-rial con-stant. This damage-permeability
+ []
+
+
+LaTeX Warning: Citation 'vangenuchten1980' on page 62 undefined on input line 369.
+
+
+LaTeX Warning: Citation 'perre1990' on page 62 undefined on input line 383.
+
+[62]
+
+LaTeX Warning: Citation 'ashrae2001' on page 63 undefined on input line 398.
+
+
+LaTeX Warning: Citation 'thomas1995' on page 63 undefined on input line 403.
+
+
+LaTeX Warning: Citation 'schneider1989' on page 63 undefined on input line 412.
+
+[63] [64] [65]
+
+LaTeX Warning: Citation 'mazars1986' on page 66 undefined on input line 508.
+
+
+LaTeX Warning: Citation 'mazars1986' on page 66 undefined on input line 512.
+
+[66] [67]
+Overfull \hbox (2.95096pt too wide) in paragraph at lines 569--570
+[]\T1/cmr/m/n/12 Due to dam-age evo-lu-tion, the con-sti-tu-tive re-la-tion be-comes non-linear and [][]Equa-tion (A.55)[][]
+ []
+
+
+LaTeX Warning: Citation 'bazant1976' on page 68 undefined on input line 586.
+
+[68]
+
+LaTeX Warning: Citation 'pijaudier1987' on page 69 undefined on input line 590.
+
+
+LaTeX Warning: Citation 'giry2011' on page 69 undefined on input line 590.
+
+
+LaTeX Warning: Citation 'hillerborg1976' on page 69 undefined on input line 592.
+
+
+LaTeX Warning: Citation 'hillerborg1976' on page 69 undefined on input line 597.
+
+[69]
+Overfull \hbox (1.78465pt too wide) in paragraph at lines 646--647
+\T1/cmr/m/n/12 The en-ergy con-ser-va-tion equa-tion gov-erns the tem-per-a-ture field within the porous medium.
+ []
+
+[70]
+
+LaTeX Warning: Reference `eq:rhoCp' on page 1 undefined on input line 669.
+
+[71] [72]
+
+LaTeX Warning: Citation 'lewis1998' on page 73 undefined on input line 735.
+
+
+LaTeX Warning: Reference `sec:mazars' on page 1 undefined on input line 749.
+
+[73]
+
+LaTeX Warning: Reference `eq:final_energy' on page 1 undefined on input line 785.
+
+
+LaTeX Warning: Reference `eq:final_water' on page 1 undefined on input line 785.
+
+
+LaTeX Warning: Reference `eq:final_air' on page 1 undefined on input line 785.
+
+[74]
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `math shift' on input line 816.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `\theta' on input line 816.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `math shift' on input line 816.
+
+
+LaTeX Warning: Citation 'lewis1998' on page 75 undefined on input line 817.
+
+) [75]
+\openout2 = `appendices/appendixB.aux'.
+
+ (./appendices/appendixB.tex
+Appendix B.
+[76
+
+
+
+
+]
+Overfull \hbox (7.30827pt too wide) in paragraph at lines 76--77
+[]\T1/cmr/m/n/12 These four mo-ments play a cen-tral role in the Gaus-sian Quadra-ture method ([][]Ap-pendix B.4[][]),
+ []
+
+[77] [78]
+
+LaTeX Warning: Reference `fig:correlation-length-effect' on page 1 undefined on input line 147.
+
+
+LaTeX Warning: Reference `sec:mc-framework' on page 1 undefined on input line 149.
+
+[79]
+LaTeX Font Info:    Font shape `T1/cmtt/bx/n' in size <14.4> not available
+(Font)              Font shape `T1/cmtt/m/n' tried instead on input line 174.
+
+
+LaTeX Warning: Reference `fig:tbm' on page 1 undefined on input line 179.
+
+[80] [81]
+
+LaTeX Warning: Citation 'mckay1979' on page 82 undefined on input line 242.
+
+
+LaTeX Warning: Citation 'baudin2017' on page 82 undefined on input line 242.
+
+[82]
+
+LaTeX Warning: Citation 'baldeweck1999' on page 83 undefined on input line 267.
+
+
+LaTeX Warning: Citation 'baldeweck1999' on page 83 undefined on input line 284.
+
+[83] [84]
+
+LaTeX Warning: Citation 'sobol1993' on page 85 undefined on input line 338.
+
+
+Overfull \hbox (16.80074pt too wide) in paragraph at lines 360--361
+[]\T1/cmr/m/n/12 where $\OML/cmm/m/it/12 V[] \OT1/cmr/m/n/12 = [][\OML/cmm/m/it/12 g[]\OT1/cmr/m/n/12 (\OML/cmm/m/it/12 X[]\OT1/cmr/m/n/12 )]$ \T1/cmr/m/n/12 is the first-order vari-ance (ef-fect of $\OML/cmm/m/it/12 X[]$ \T1/cmr/m/n/12 alone) and $\OML/cmm/m/it/12 V[] \OT1/cmr/m/n/12 = [][\OML/cmm/m/it/12 g[]\OT1/cmr/m/n/12 (\OML/cmm/m/it/12 X[]; X[]\OT1/cmr/m/n/12 )]$
+ []
+
+
+LaTeX Warning: Citation 'sobol1993' on page 85 undefined on input line 364.
+
+[85]
+
+LaTeX Warning: Reference `sec:dominant-params' on page 1 undefined on input line 426.
+
+[86]
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `math shift' on input line 437.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `\beta' on input line 437.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `math shift' on input line 437.
+
+) [87] [88
+
+
+
+]
+
+pdfTeX warning: pdflatex (file ./CV/CV.pdf): PDF inclusion: found PDF version <1.7>, but at most version <1.5> allowed
+<CV/CV.pdf, id=1716, 597.50829pt x 845.0471pt>
+File: CV/CV.pdf Graphic file (type pdf)
+<use CV/CV.pdf>
+Package pdftex.def Info: CV/CV.pdf  used on input line 152.
+(pdftex.def)             Requested size: 597.50682pt x 845.04504pt.
+
+
+pdfTeX warning: pdflatex (file ./CV/CV.pdf): PDF inclusion: found PDF version <1.7>, but at most version <1.5> allowed
+File: CV/CV.pdf Graphic file (type pdf)
+<use CV/CV.pdf>
+Package pdftex.def Info: CV/CV.pdf  used on input line 152.
+(pdftex.def)             Requested size: 597.50682pt x 845.04504pt.
+
+
+pdfTeX warning: pdflatex (file ./CV/CV.pdf): PDF inclusion: found PDF version <1.7>, but at most version <1.5> allowed
+
+
+pdfTeX warning: pdflatex (file ./CV/CV.pdf): PDF inclusion: found PDF version <1.7>, but at most version <1.5> allowed
+<CV/CV.pdf, id=1719, page=1, 597.50829pt x 845.0471pt>
+File: CV/CV.pdf Graphic file (type pdf)
+<use CV/CV.pdf, page 1>
+Package pdftex.def Info: CV/CV.pdf , page1 used on input line 152.
+(pdftex.def)             Requested size: 597.50682pt x 845.04504pt.
+File: CV/CV.pdf Graphic file (type pdf)
+<use CV/CV.pdf, page 1>
+Package pdftex.def Info: CV/CV.pdf , page1 used on input line 152.
+(pdftex.def)             Requested size: 597.53416pt x 845.08372pt.
+File: CV/CV.pdf Graphic file (type pdf)
+<use CV/CV.pdf, page 1>
+Package pdftex.def Info: CV/CV.pdf , page1 used on input line 152.
+(pdftex.def)             Requested size: 597.53416pt x 845.08372pt.
+File: CV/CV.pdf Graphic file (type pdf)
+<use CV/CV.pdf, page 1>
+Package pdftex.def Info: CV/CV.pdf , page1 used on input line 152.
+(pdftex.def)             Requested size: 597.53416pt x 845.08372pt.
+File: CV/CV.pdf Graphic file (type pdf)
+<use CV/CV.pdf, page 1>
+Package pdftex.def Info: CV/CV.pdf , page1 used on input line 152.
+(pdftex.def)             Requested size: 597.53416pt x 845.08372pt.
+[89
+
+ <./CV/CV.pdf>]
+
+pdfTeX warning: pdflatex (file ./CV/CV.pdf): PDF inclusion: found PDF version <1.7>, but at most version <1.5> allowed
+<CV/CV.pdf, id=1768, page=2, 597.50829pt x 845.0471pt>
+File: CV/CV.pdf Graphic file (type pdf)
+<use CV/CV.pdf, page 2>
+Package pdftex.def Info: CV/CV.pdf , page2 used on input line 152.
+(pdftex.def)             Requested size: 597.53416pt x 845.08372pt.
+File: CV/CV.pdf Graphic file (type pdf)
+<use CV/CV.pdf, page 2>
+Package pdftex.def Info: CV/CV.pdf , page2 used on input line 152.
+(pdftex.def)             Requested size: 597.53416pt x 845.08372pt.
+File: CV/CV.pdf Graphic file (type pdf)
+<use CV/CV.pdf, page 2>
+Package pdftex.def Info: CV/CV.pdf , page2 used on input line 152.
+(pdftex.def)             Requested size: 597.53416pt x 845.08372pt.
+[90
+
+ <./CV/CV.pdf>] [91
+
+] (./main.aux (./chapters/chapter1.aux) (./chapters/chapter2.aux) (./chapters/chapter3.aux) (./chapters/chapter4.aux) (./chapters/chapter5.aux) (./chapters/chapter6.aux) (./appendices/appendixA.aux) (./appendices/appendixB.aux))
+ ***********
+LaTeX2e <2023-11-01> patch level 1
+L3 programming layer <2024-01-22>
+ ***********
+
+
+LaTeX Warning: There were undefined references.
+
+
+LaTeX Warning: There were multiply-defined labels.
+
+Package rerunfilecheck Info: File `main.out' has not changed.
+(rerunfilecheck)             Checksum: 9DF5418833BFB883DD1645D86D97C33D;24453.
+Package logreq Info: Writing requests to 'main.run.xml'.
+\openout1 = `main.run.xml'.
+
+ ) 
+Here is how much of TeX's memory you used:
+ 43061 strings out of 474222
+ 888586 string characters out of 5748733
+ 1946975 words of memory out of 5000000
+ 64179 multiletter control sequences out of 15000+600000
+ 585800 words of font info for 111 fonts, out of 8000000 for 9000
+ 1141 hyphenation exceptions out of 8191
+ 115i,17n,110p,1639b,1971s stack positions out of 10000i,1000n,20000p,200000b,200000s
+</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmib10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy6.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/symbols/msam10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfbx1200.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfbx1440.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfbx1728.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfbx2488.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfcc1200.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm0800.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm1095.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm1200.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfti1200.pfb></usr/share/texmf/fonts/type1/public/cm-super/sftt1200.pfb></usr/share/texmf/fonts/type1/public/cm-super/sftt1440.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfxc1200.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfxc1728.pfb>
+Output written on main.pdf (103 pages, 6676077 bytes).
+PDF statistics:
+ 2021 PDF objects out of 2073 (max. 8388607)
+ 1739 compressed objects within 18 object streams
+ 478 named destinations out of 1000 (max. 500000)
+ 1133 words of extra memory for PDF output out of 10000 (max. 10000000)
+
