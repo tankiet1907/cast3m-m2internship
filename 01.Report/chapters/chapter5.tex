@@ -148,7 +148,11 @@ Therefore, for Analysis~A, \textsc{OpenTURNS} focuses two main sensitivity outpu
 
 \subsection{Analysis B --- mix composition} \label{sec:sens-mix}
  
-In Analysis~B the four mix proportions are random and $K_0$ is fixed. From the LHS sample, \textsc{OpenTURNS} produces four sensitivity outputs (\cref{fig:sensB-corr,fig:sensB-sobol1,fig:sensB-sobol2,fig:sensB-ci}): the input--output correlation, the first- and total-order Sobol indices, the second-order Sobol indices, and the bootstrap confidence-interval bands of the indices.
+In Analysis~B, the four mix proportions ($c, agg, w/c, s/c$) are treated as random variables while the intrinsic permeability $K_0$ is held fixed. Because evaluating variance-based sensitivity measures directly from the computationally expensive Cast3M model via a limited 30-sample LHS design is mathematically insufficient and highly inaccurate, a surrogate modeling strategy is necessarily employed.
+
+To overcome this computational bottleneck, a surrogate model is first constructed within \textsc{OpenTURNS} using Polynomial Chaos Expansion (PCE). This metamodel maps the input mix proportions to the peak gas pressure $p_g^{10}$, effectively approximating the complex non-linear THM finite element solver into a fast analytical function based on the LHS training data. 
+
+Once the PCE metamodel is built and validated, it allows for a highly accurate and computationally inexpensive extraction of the sensitivity measures. Consequently, this analysis produces four main outputs (\cref{fig:sensB-corr,fig:sensB-sobol1,fig:sensB-sobol2,fig:sensB-ci}): the input--output correlation (evaluated from the raw LHS samples), the first- and total-order Sobol' indices (derived directly from the PCE coefficients), the second-order Sobol' indices (cross-interactions evaluated via massive sampling on the metamodel), and the bootstrap confidence-interval bands of the indices.
  
 \begin{figure}[htbp]
   \centering
@@ -185,14 +189,14 @@ In Analysis~B the four mix proportions are random and $K_0$ is fixed. From the L
 % =====================================================================
 \section{Reliability analysis} \label{sec:reliability}
 
-For each analysis, the propagated sample yields a discrete set of structural responses (e.g., the peak gas pressure $p_g^{10}$ or the maximum shrinkage strain). To turn this input scatter into a quantitative safety statement, the continuous Probability Density Function (PDF) and Cumulative Distribution Function (CDF) must be reconstructed. With the limit state of \cref{eq:limit-state} and the formulas of \cref{sec:pf-beta}, the probability of failure is calculated as the upper-tail area $P_f=1-F(p_{\mathrm{crit}})$ and the reliability index as $\beta=-\Phi^{-1}(P_f)$.
+For each analysis, the propagated sample yields a discrete set of structural responses (e.g., the peak gas pressure $p_g^{10}$ or the longitudinal shrinkage strain). To turn this input scatter into a quantitative safety statement, the continuous Probability Density Function (PDF) and Cumulative Distribution Function (CDF) must be reconstructed. With the limit state of \cref{eq:limit-state} and the formulas of \cref{sec:pf-beta}, the probability of failure is calculated as the upper-tail area $P_f=1-F(p_{\mathrm{crit}})$ and the reliability index as $\beta=-\Phi^{-1}(P_f)$.
 
-Due to the different nature of the stochastic propagation methods employed, two distinct numerical strategies are utilized within \textsc{OpenTURNS} to reconstruct the distributions and evaluate the failure probability:
+Depending on the stochastic method employed, two distinct numerical strategies are utilized to reconstruct the distributions and evaluate the failure probability:
 
 \begin{description}
     \item[Kernel Density Estimation (Analyses A, C1, and C2):] For analyses where the input uncertainty is limited to a single random variable (e.g., global $K_0$) or governed by a spatial random field (\texttt{ALEA}), building a multidimensional metamodel is either mathematically unnecessary or algorithmically incompatible. Instead, the continuous PDF is reconstructed directly from the raw, macroscopic Cast3M outputs using non-parametric Kernel Density Estimation (KDE). The probability of failure is then directly estimated by integrating the tail of this smoothed empirical distribution.
     
-    \item[PCE Metamodel and Monte Carlo (Analysis B):] In the multivariable mix-composition study, evaluating the failure probability directly from the limited 30-sample LHS design would yield highly inaccurate tail estimations. To overcome the computational bottleneck of the FEA solver, a surrogate model is constructed using Polynomial Chaos Expansion (PCE). This metamodel approximates the complex, computationally expensive Cast3M THM solver into a fast analytical function. Once validated, a massive Monte Carlo simulation ($10^5$ realizations) is executed exclusively on the PCE metamodel, allowing for a highly accurate and computationally inexpensive evaluation of $P_f$ without requiring additional Cast3M runs.
+    \item[Monte Carlo on PCE Metamodel (Analysis B):] In the multivariable mix-composition study, evaluating the failure probability directly from the limited 30-sample LHS design would yield highly inaccurate tail estimations. Instead, a massive Monte Carlo simulation ($10^5$ realizations) is executed exclusively on the Polynomial Chaos Expansion (PCE) surrogate model---which was previously constructed for the sensitivity analysis (\cref{sec:sens-mix}). This allows for a highly accurate and computationally inexpensive evaluation of $P_f$ without requiring additional Cast3M runs.
 \end{description}
 
 These reconstructed PDFs (\cref{fig:reliability-A,fig:reliability-B}) visually demonstrate how the input uncertainties propagate towards the critical threshold.
@@ -241,8 +245,10 @@ The uncertainty of the intrinsic permeability ($K_0$) is propagated using three 
 \begin{description}
   \item[Analysis C1 (OpenTURNS + LHS):] A homogeneous probabilistic baseline where $K_0$ is treated as a random variable uniform over the entire specimen (i.e., one single value per realization). A Latin Hypercube Sampling (LHS) design of 30 samples is generated via OpenTURNS (\cref{sec:lhs}). 
   \item[Analysis C2 (Cast3M \texttt{ALEA}):] A heterogeneous random field approach. The spatially variable field $K_0(\mathbf{x})$ is generated directly on the 3D finite element mesh using the Turning Bands Method (TBM) coupled with a lognormal transformation (\cref{sec:tbm,sec:lognormal-transformation}). The spatial correlation length is set to $L_c = 0.02$~m. A total of 30 independent runs are executed to capture the spatial variability effects.
-  \item[Analysis C3 (Gaussian Quadrature):] A deterministic, few-point integration scheme utilizing the \texttt{QUADRATU}/\texttt{PARASTAT} operators in Cast3M (\cref{sec:quadrature,sec:quad-cost}). $K_0$ is modeled homogeneously using 7 quadrature points. This method serves as a computationally inexpensive cross-check to validate the statistical moments obtained from the LHS baseline (C1).
+  \item[Analysis C3 (Gaussian Quadrature):] A deterministic, few-point integration scheme utilizing the \texttt{QUADRATU} operator in Cast3M (\cref{sec:quadrature,sec:quad-cost}). $K_0$ is modeled homogeneously using 7 quadrature points. Within Cast3M, the statistical moments of the response are computed via the \texttt{PARASTAT} operator, and the corresponding continuous PDF can be theoretically approximated as a Pearson type III distribution using the \texttt{PRODENS} operator (detailed in \cref{appendixB}). 
 \end{description}
+
+However, for Analysis C3, because Cast3M lacks native support for exporting these continuous PDF curves for high-quality visualization, statical moments calculation and the Pearson type III reconstruction based on the quadrature moments was re-implemented in Python. This ensures consistent plotting and comparison against the LHS and random field methods. Ultimately, this approach serves as a computationally inexpensive cross-check to validate the statistical moments obtained from the LHS baseline (C1).
 
 \begin{figure}[H]
   \centering
@@ -287,11 +293,10 @@ The uncertainty of the intrinsic permeability ($K_0$) is propagated using three 
 \end{figure}
 
 
-\begin{reviewblock}
-\textbf{Analysis.} Two cross-checks and one primary physical observation are drawn from this comparative study. First, while both LHS (Analysis C1) and Gaussian quadrature (Analysis C3) treat the intrinsic permeability as a homogeneous random variable, their resulting probability distributions exhibit noticeable differences. Although the 7-point quadrature scheme provides a computationally inexpensive estimation, it yields a \emph{more critical} response profile for the capillary pressure $P_c$ and the longitudinal shrinkage strain compared to the 30-sample LHS baseline. 
+\textbf{Conclusion.} Two cross-checks and one primary physical observation are drawn from this comparative study. First, while both LHS (Analysis C1) and Gaussian quadrature (Analysis C3) treat the intrinsic permeability as a homogeneous random variable, their resulting probability distributions exhibit noticeable differences. Although the 7-point quadrature scheme provides a computationally inexpensive estimation, it yields a \emph{more critical} response profile for the capillary pressure $P_c$ and the longitudinal shrinkage strain compared to the 30-sample LHS baseline. 
 
 Second, and most importantly, the spatially heterogeneous random-field approach (Analysis C2) produces the \emph{most critical} structural response. Physically, local low-permeability zones restrict moisture transport and amplify local capillary forces, which severely concentrates the deformation. This mechanism generates significantly higher peak shrinkage strains and a wider probability tail than both homogeneous cases (C1 and C3), because the highly stressed local weak zones cannot be entirely compensated by the surrounding material. 
 
 The 30-realisation ensemble used for the Monte Carlo/LHS and random field analyses is a pragmatic estimate given the computational cost of each non-linear run; its scatter indicates the residual statistical uncertainty. Ultimately, the significant gap between the homogeneous and heterogeneous results quantitatively highlights how a simple random-variable assumption dangerously underestimates the structural risk. The full Turning Bands / \texttt{ALEA} construction, the quadrature operators, and the Monte Carlo convergence details are collected in \cref{appendixB}.
-\end{reviewblock}
+
     
