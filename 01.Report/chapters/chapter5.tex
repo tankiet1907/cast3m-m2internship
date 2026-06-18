@@ -134,14 +134,14 @@ Therefore, for Analysis~A, \textsc{OpenTURNS} focuses two main sensitivity outpu
 
 \begin{figure}[htbp]
   \centering
-  % \includegraphics[width=0.7\linewidth]{figs/ch5_corr.pdf}
+  \includegraphics[width=0.7\linewidth]{figures/chapter5/analysisA/Scatter_Plots_Pg_10_Max}
   \caption{Analysis A--- correlation: Pearson and Spearman rank correlation of $K_0$ with the peak pressure $p_g^{10}$.}
   \label{fig:sensA-corr}
 \end{figure}
 
 \begin{figure}[htbp]
   \centering
-  % \includegraphics[width=0.7\linewidth]{figs/ch5_sobol_ci.pdf}
+  \includegraphics[width=1\linewidth]{figures/chapter5/analysisA/Confidence_Intervals_GasPressure}
   \caption{Analysis A --- bootstrap $95\%$ confidence-interval bands of the first- and total-order Sobol indices.}
   \label{fig:sensA-ci}
 \end{figure}
@@ -152,28 +152,28 @@ In Analysis~B the four mix proportions are random and $K_0$ is fixed. From the L
  
 \begin{figure}[htbp]
   \centering
-  % \includegraphics[width=0.7\linewidth]{figs/ch5_corr.pdf}
+  \includegraphics[width=1\linewidth]{figures/chapter5/analysisB/Scatter_Plots_Pg_10_Max}
   \caption{Analysis B --- correlation: Pearson and Spearman rank correlation of each mix proportion $(c,agg,w/c,s/c)$ with the peak pressure $p_g^{10}$.}
   \label{fig:sensB-corr}
 \end{figure}
  
 \begin{figure}[htbp]
   \centering
-  % \includegraphics[width=0.7\linewidth]{figs/ch5_sobol1.pdf}
+  \includegraphics[width=0.7\linewidth]{figures/chapter5/analysisB/Sobol_Sensitivity_Pg_10_Max}
   \caption{Analysis B --- first- and total-order Sobol indices ($S_i$, $S_{T_i}$) of the mix proportions on $p_g^{10}$.}
   \label{fig:sensB-sobol1}
 \end{figure}
  
 \begin{figure}[htbp]
   \centering
-  % \includegraphics[width=0.7\linewidth]{figs/ch5_sobol2.pdf}
+  \includegraphics[width=0.7\linewidth]{figures/chapter5/analysisB/Sobol_SecondOrder_Heatmap_Pg_10_Max}
   \caption{Analysis B --- second-order Sobol indices $S_{ij}$ of the mix-proportion pairs on $p_g^{10}$.}
   \label{fig:sensB-sobol2}
 \end{figure}
  
 \begin{figure}[htbp]
   \centering
-  % \includegraphics[width=0.7\linewidth]{figs/ch5_sobol_ci.pdf}
+  \includegraphics[width=1\linewidth]{figures/chapter5/analysisB/Confidence_Intervals_GasPressure}
   \caption{Analysis B --- bootstrap $95\%$ confidence-interval bands of the first- and total-order Sobol indices.}
   \label{fig:sensB-ci}
 \end{figure}
@@ -184,19 +184,29 @@ In Analysis~B the four mix proportions are random and $K_0$ is fixed. From the L
  
 % =====================================================================
 \section{Reliability analysis} \label{sec:reliability}
- 
-For each analysis the propagated sample yields the distribution of $p_g^{10}$. Reconstructing its PDF and CDF (\cref{fig:reliability-A,fig:reliability-B}) turns the input scatter into a quantitative safety statement: with the limit state of \cref{eq:limit-state} and the formulas of \cref{sec:pf-beta} (\cref{eq:pf-beta}), the probability of failure is the upper-tail area $P_f=1-F_{p_g^{10}}(p_{\mathrm{crit}})$ and the reliability index is $\beta=-\Phi^{-1}(P_f)$.
+
+For each analysis, the propagated sample yields a discrete set of structural responses (e.g., the peak gas pressure $p_g^{10}$ or the maximum shrinkage strain). To turn this input scatter into a quantitative safety statement, the continuous Probability Density Function (PDF) and Cumulative Distribution Function (CDF) must be reconstructed. With the limit state of \cref{eq:limit-state} and the formulas of \cref{sec:pf-beta}, the probability of failure is calculated as the upper-tail area $P_f=1-F(p_{\mathrm{crit}})$ and the reliability index as $\beta=-\Phi^{-1}(P_f)$.
+
+Due to the different nature of the stochastic propagation methods employed, two distinct numerical strategies are utilized within \textsc{OpenTURNS} to reconstruct the distributions and evaluate the failure probability:
+
+\begin{description}
+    \item[Kernel Density Estimation (Analyses A, C1, and C2):] For analyses where the input uncertainty is limited to a single random variable (e.g., global $K_0$) or governed by a spatial random field (\texttt{ALEA}), building a multidimensional metamodel is either mathematically unnecessary or algorithmically incompatible. Instead, the continuous PDF is reconstructed directly from the raw, macroscopic Cast3M outputs using non-parametric Kernel Density Estimation (KDE). The probability of failure is then directly estimated by integrating the tail of this smoothed empirical distribution.
+    
+    \item[PCE Metamodel and Monte Carlo (Analysis B):] In the multivariable mix-composition study, evaluating the failure probability directly from the limited 30-sample LHS design would yield highly inaccurate tail estimations. To overcome the computational bottleneck of the FEA solver, a surrogate model is constructed using Polynomial Chaos Expansion (PCE). This metamodel approximates the complex, computationally expensive Cast3M THM solver into a fast analytical function. Once validated, a massive Monte Carlo simulation ($10^5$ realizations) is executed exclusively on the PCE metamodel, allowing for a highly accurate and computationally inexpensive evaluation of $P_f$ without requiring additional Cast3M runs.
+\end{description}
+
+These reconstructed PDFs (\cref{fig:reliability-A,fig:reliability-B}) visually demonstrate how the input uncertainties propagate towards the critical threshold.
  
 \begin{figure}[htbp]
   \centering
-  % \includegraphics[width=0.8\linewidth]{figs/ch5_pdf_A.pdf}
+  \includegraphics[width=0.7\linewidth]{figures/chapter5/analysisA/Reliability_Analysis_Pg_10_Max}
   \caption{Analysis A: PDF of the peak pressure $p_g^{10}$ under the permeability uncertainty ($K_0$), with the critical threshold $p_{\mathrm{crit}}$ (shaded tail $=P_f$) and the measured Kalifa $10~\mathrm{mm}$ peak.}
   \label{fig:reliability-A}
 \end{figure}
  
 \begin{figure}[htbp]
   \centering
-  % \includegraphics[width=0.8\linewidth]{figs/ch5_pdf_B.pdf}
+  \includegraphics[width=0.7\linewidth]{figures/chapter5/analysisB/Reliability_Analysis_Pg_10_Max}
   \caption{Analysis B: PDF of the peak pressure $p_g^{10}$ under the mix-composition uncertainty $(c,agg,w/c,s/c)$, with the critical threshold $p_{\mathrm{crit}}$ (shaded tail $=P_f$) and the measured Kalifa $10~\mathrm{mm}$ peak.}
   \label{fig:reliability-B}
 \end{figure}
@@ -211,35 +221,77 @@ For each analysis the propagated sample yields the distribution of $p_g^{10}$. R
  
 The analyses above treat the permeability as a single random variable, constant over the specimen in a given realisation. Real concrete varies from point to point, and local weak zones --- not average properties --- govern failure. The intrinsic permeability $K_{int}$, the most spatially variable and most influential property (\cref{sec:sens-K0}), is therefore additionally described as a \emph{random field} and compared with the homogeneous description. The same lognormal marginal as in Analysis~A is used (mean $=K_0^{\mathrm{cal}}=8.5\times10^{-20}~\si{\square\meter}$, $\mathrm{CoV}=0.30$, calibrated in \cref{chapter4}).
  
-\subsection{A simplified isothermal model} \label{sec:spatial-model}
+\subsection{A simplified isothermal poro-mechanical model} \label{sec:spatial-model}
  
-Propagating a random field through the full non-linear THC model is impractical for this comparison. The thermal and hydric properties evolve with temperature and hydration, so a parametric system matrix with a \emph{fixed} structure --- as required by the Gaussian-quadrature framework (\texttt{QUADRATU}/\texttt{PARASTAT}, \cref{sec:quadrature}) --- cannot be assembled, and each non-linear realisation is very expensive. To obtain a controlled and tractable comparison, the earlier \emph{simplified TH model} is used instead, in an isothermal setting: the temperature is held constant at room temperature ($T=T_0$), which freezes the constitutive evolution.
+Propagating a spatially heterogeneous random field through the fully coupled, highly non-linear Thermo-Hygro-Chemical (THC) model presents severe computational and algorithmic challenges. Because the thermal and hydric properties evolve dynamically with temperature and hydration, assembling a parametric system matrix with a \emph{fixed} structure --- a strict requirement for the Gaussian-quadrature framework (\texttt{QUADRATU}/\texttt{PARASTAT}, \cref{sec:quadrature}) in Cast3M --- is mathematically intractable. Furthermore, executing numerous non-linear THM realizations is computationally prohibitive and highly prone to divergence.
  
-In this simplified model the permeability is treated in the classical way and is \emph{not} coupled to the effective hydration degree: $K_0$ (\texttt{KINT}) is a plain intrinsic permeability and the coefficient $A_\Gamma$ of the THC formulation is not used. The quantity entering the assembled flow matrix is the liquid-phase effective permeability, function of the capillary pressure $P_c$ only,
+To obtain a controlled, tractable, and stable comparison of the stochastic methods, a \emph{simplified isothermal poro-mechanical model} applied to a $10 \times 10 \times 10$~cm concrete cube is adopted instead (simulated exploiting its symmetries). By holding the temperature constant at room conditions ($T=20^\circ\mathrm{C}$), the complex thermo-chemical constitutive evolution is entirely frozen. Consequently, the intrinsic permeability is treated in a classical macroscopic manner, decoupled from the effective hydration degree (i.e., the parameter $A_\Gamma$ of the THC formulation is deactivated). The quantity entering the assembled flow matrix is strictly the liquid-phase effective permeability, which becomes a function of the capillary pressure $P_c$ only:
 \begin{equation}
-  K_{\mathrm{eff}}(P_c) \;=\; \frac{k_{rl}\,\rho_l\,K_0}{\mu_l},
+  K_{\mathrm{eff}}(P_c) \;=\; \frac{k_{rl}(P_c)\,\rho_l\,K_0}{\mu_l},
   \label{eq:keff}
 \end{equation}
-where $k_{rl}$ is the liquid relative permeability, $\rho_l$ the liquid density and $\mu_l$ the dynamic viscosity. The spatially variable input is $K_0$, and the outputs are the capillary pressure $p_c$ and the maximum displacement $u_{\max}$ obtained through the poromechanical coupling (\cref{appendixA}). This sacrifices the thermal coupling and the hydration dependence of permeability, but isolates the effect of $K_0$ heterogeneity on the hydro-mechanical response in a setting where all three stochastic methods can be applied consistently.
+where $k_{rl}$ is the liquid relative permeability governed by the van Genuchten model, $\rho_l$ is the liquid density, and $\mu_l$ is the dynamic viscosity. 
+
+In this test case, the specimen is subjected to convective drying, where the internal relative humidity drops from an initial state of $90\%$ to an environmental humidity of $50\%$ at the exposed surfaces. The intrinsic permeability $K_0$ (\texttt{KINT}) is designated as the spatially variable input. The primary outputs of interest are the local capillary pressure $P_c$ and the resulting \emph{longitudinal shrinkage strain}. This strain is induced purely by capillary forces through the poro-mechanical coupling, where the skeletal pressure acting on the solid matrix is explicitly computed as $p_s = -S_l(P_c) P_c$. While this simplified approach sacrifices the high-temperature thermal coupling and the hydration-dependent permeability, it perfectly isolates the effect of $K_0$ spatial heterogeneity on the hydro-mechanical response in a stable setting where all three stochastic methods can be applied consistently.
  
-\subsection{Methods compared} \label{sec:spatial-methods}
+\subsection{Stochastic propagation methods} \label{sec:spatial-methods}
  
-The same $K_{int}$ marginal is propagated in three ways, all detailed in \cref{appendixB}:
+The uncertainty of the intrinsic permeability ($K_0$) is propagated using three distinct stochastic approaches, all detailed in \cref{appendixB}:
  
 \begin{description}
-  \item[OpenTURNS + LHS (random variable).] $K_{int}$ uniform over the specimen, one value per realisation; $N$ Latin-Hypercube samples (\cref{sec:lhs}). This is the homogeneous baseline.
-  \item[Cast3M \texttt{ALEA} (random field).] $K_{int}(\mathbf{x})$ generated on the mesh by the Turning Bands Method and the lognormal transformation (\cref{sec:tbm,sec:lognormal-transformation}) with correlation length $L_c$. Given the cost, $10$ realisations are generated and the output statistics are averaged over them --- a small Monte Carlo ensemble (\cref{sec:thm-integration-mc}).
-  \item[Gaussian quadrature (random variable).] The deterministic few-point \texttt{QUADRATU}/\texttt{PARASTAT} scheme (\cref{sec:quadrature,sec:quad-cost}), used as a cheap cross-check of the LHS moments.
+  \item[Analysis C1 (OpenTURNS + LHS):] A homogeneous probabilistic baseline where $K_0$ is treated as a random variable uniform over the entire specimen (i.e., one single value per realization). A Latin Hypercube Sampling (LHS) design of 30 samples is generated via OpenTURNS (\cref{sec:lhs}). 
+  \item[Analysis C2 (Cast3M \texttt{ALEA}):] A heterogeneous random field approach. The spatially variable field $K_0(\mathbf{x})$ is generated directly on the 3D finite element mesh using the Turning Bands Method (TBM) coupled with a lognormal transformation (\cref{sec:tbm,sec:lognormal-transformation}). The spatial correlation length is set to $L_c = 0.02$~m. A total of 30 independent runs are executed to capture the spatial variability effects.
+  \item[Analysis C3 (Gaussian Quadrature):] A deterministic, few-point integration scheme utilizing the \texttt{QUADRATU}/\texttt{PARASTAT} operators in Cast3M (\cref{sec:quadrature,sec:quad-cost}). $K_0$ is modeled homogeneously using 7 quadrature points. This method serves as a computationally inexpensive cross-check to validate the statistical moments obtained from the LHS baseline (C1).
 \end{description}
- 
-\begin{figure}[htbp]
+
+\begin{figure}[H]
   \centering
-  % \includegraphics[width=0.9\linewidth]{figs/ch5_heterogeneity.pdf}
-  \caption{Simplified isothermal model: distribution the maximum displacement $u_{\max}$ for the homogeneous random variable (LHS - 30 values and quadrature - 7 points ) and the heterogeneous random field (\texttt{ALEA}, 30-realisation average) descriptions of $K_{int}$.}
-  \label{fig:rv-vs-rf}
+  %\includegraphics[width=0.8\textwidth]{figures/chapter5/random-field-of-K-in-cube}
+  \caption{A single realization of the spatially heterogeneous intrinsic permeability field $K_0(\mathbf{x})$ generated on the 3D cube mesh using the Turning Bands Method ($L_c = 0.02$~m).}
+  \label{fig:rf_k_cube}
 \end{figure}
 
+\begin{figure}[H]
+  \centering
+  %\includegraphics[width=0.8\textwidth]{figures/chapter5/final-strain-of-cube}
+  \caption{Resulting final shrinkage strain field of the concrete cube induced by capillary forces, highlighting the localized deformations driven by the heterogeneous permeability field.}
+  \label{fig:strain_cube}
+\end{figure}
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.7\linewidth]{figures/chapter5/analysisC1/Scatter_Plots_Shrinkage_Strain}
+  \caption{Analysis C1 (OpenTURNS + LHS): Pearson and Spearman rank correlation between the intrinsic permeability ($K_0$) and the resulting longitudinal shrinkage strain.}
+  \label{fig:C1_scatter}
+\end{figure}
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.7\linewidth]{figures/chapter5/analysisC1/Reliability_Analysis_Shrinkage_Strain}
+  \caption{Analysis C1 (OpenTURNS + LHS): Probability Density Function (PDF) of the longitudinal shrinkage strain induced by the uncertainty of the intrinsic permeability ($K_0$).}
+  \label{fig:C1_pdf}
+\end{figure}
+
+\begin{figure}[htbp]
+  \centering
+  %\includegraphics[width=0.7\linewidth]{figures/chapter5/analysisC2/Reliability_Analysis_Shrinkage_Strain}
+  \caption{Analysis C2 (Cast3M \texttt{ALEA}): Probability Density Function (PDF) of the longitudinal shrinkage strain considering the spatial heterogeneity of the intrinsic permeability field.}
+  \label{fig:C2_pdf}
+\end{figure}
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.7\linewidth]{figures/chapter5/analysisC3/Quadrature_PDF}
+  \caption{Analysis C3 (Gaussian Quadrature): Probability Density Function (PDF) of the longitudinal shrinkage strain evaluated through the deterministic few-point integration scheme.}
+  \label{fig:C3_pdf}
+\end{figure}
+
+
 \begin{reviewblock}
-\textbf{Analysis.} Two cross-checks and one physical result are expected. First, LHS and quadrature --- both homogeneous random-variable methods --- should return the same mean and standard deviation of $p_g$ and $u_{\max}$, validating the inexpensive quadrature scheme against the sampling estimate. Second, the random-field (\texttt{ALEA}) description should give a \emph{more critical} response: a local low-permeability zone traps the pressure and concentrates the deformation, producing a higher $u_{\max}$ and a wider tail than the homogeneous case, because the weak zone is not compensated by the surrounding material. The $10$-realisation average is a pragmatic estimate given the cost of each run; its scatter indicates the residual Monte Carlo uncertainty. The gap between the homogeneous and heterogeneous results quantifies how much the random-variable assumption underestimates the risk. The full Turning Bands / \texttt{ALEA} construction, the quadrature operators and the Monte Carlo convergence are collected in \cref{appendixB}.
+\textbf{Analysis.} Two cross-checks and one primary physical observation are drawn from this comparative study. First, while both LHS (Analysis C1) and Gaussian quadrature (Analysis C3) treat the intrinsic permeability as a homogeneous random variable, their resulting probability distributions exhibit noticeable differences. Although the 7-point quadrature scheme provides a computationally inexpensive estimation, it yields a \emph{more critical} response profile for the capillary pressure $P_c$ and the longitudinal shrinkage strain compared to the 30-sample LHS baseline. 
+
+Second, and most importantly, the spatially heterogeneous random-field approach (Analysis C2) produces the \emph{most critical} structural response. Physically, local low-permeability zones restrict moisture transport and amplify local capillary forces, which severely concentrates the deformation. This mechanism generates significantly higher peak shrinkage strains and a wider probability tail than both homogeneous cases (C1 and C3), because the highly stressed local weak zones cannot be entirely compensated by the surrounding material. 
+
+The 30-realisation ensemble used for the Monte Carlo/LHS and random field analyses is a pragmatic estimate given the computational cost of each non-linear run; its scatter indicates the residual statistical uncertainty. Ultimately, the significant gap between the homogeneous and heterogeneous results quantitatively highlights how a simple random-variable assumption dangerously underestimates the structural risk. The full Turning Bands / \texttt{ALEA} construction, the quadrature operators, and the Monte Carlo convergence details are collected in \cref{appendixB}.
 \end{reviewblock}
     
