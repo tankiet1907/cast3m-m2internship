@@ -77,19 +77,6 @@ To solve this equation, appropriate boundary conditions must be specified:
 \end{itemize}
 
 \subsubsection{Thermal properties} \label{sec:thermal_properties}
-
-The thermal properties of concrete are strongly influenced by both the hydric state and the material composition.
-
-The overall heat capacity $\rho C_p$ reflects the multiphase nature of the porous medium, combining contributions from the solid skeleton, liquid water, dry air, and water vapor \cite{lewis1998}:
-\begin{equation}
-    \rho C_p = (1-\phi)\,\rho_s\,C_{ps} + \phi\left[S_l\,\rho_l\,C_{pl} + (1-S_l)\left(\rho_a\,C_{pa} + \rho_v\,C_{pv}\right)\right]
-    \label{eq:rhoCp}
-\end{equation}
-
-where:
-
-The solid density decreases linearly with temperature due to dehydration: $\rho_s(T) = \rho_{s0}[1-A_{\rho}(T-T_0)]$ with $\rho_{s0} = 2611$ kg/m$^3$.
-
 The liquid water density evolves with temperature according to a polynomial fit \cite{furbish1997}:
 \begin{equation}
     \rho_l(T) = \sum_{i=0}^{5} a_i\,T^i
@@ -97,12 +84,13 @@ The liquid water density evolves with temperature according to a polynomial fit 
 \end{equation}
 with coefficients $a_i$ given in Table~\ref{tab:rho_coeff}.
 
-\review{This section is under review for matching the THC model implemented. Cps is not updated}
-The solid thermal capacity evolves linearly with temperature \cite{harmathy1973}:
+The solid thermal capacity theoretically evolves linearly with temperature \cite{harmathy1973}:
 \begin{equation}
     C_{ps}(T) = C_{ps0}[1 + A_c(T - T_0)]
 \end{equation}
-with $C_{ps0} = 940$ J$\cdot$kg$^{-1}$K$^{-1}$.
+with $C_{ps0} = 940$~\si{\joule\per\kilogram\per\kelvin} and $A_c$ is a material constant. 
+
+\textbf{Note on numerical implementation:} Although the theoretical framework accounts for a temperature-dependent solid heat capacity, in the current THC numerical code implementation, this parameter is maintained as a constant ($C_{ps} = C_{ps0}$). This assumption is made to ensure numerical robustness and simplify the resolution of the highly non-linear energy conservation system at extreme temperatures without significantly affecting the overall thermal diffusion profile.
 
 The thermal conductivity depends on saturation, porosity, and temperature \cite{baggio1993}:
 \begin{equation}
@@ -155,12 +143,10 @@ By solving this linear system, we can determine the unknown temperatures $\{T\}$
 
 \subsection{Thermal gradient} \label{sec:thermal_gradient}
 
-Due to the low thermal conductivity of concrete, fire exposure produces steep temperature gradients near the heated surface. The hot surface layer tends to expand while the cooler interior restrains this deformation, generating compressive stresses at the surface and tensile stresses in the interior. 
-
-Since concrete is inherently weak in tension, this stress state can initiate cracking parallel to the heated face. The role of thermal gradient in the spalling process is discussed further in \cref{sec:spalling}.
+Due to the low thermal conductivity of concrete, fire exposure produces steep temperature gradients near the heated surface. The hot surface layer tends to expand while the cooler interior restrains this deformation, generating compressive stresses at the surface and tensile stresses in the interior.
+Since concrete is inherently weak in tension, this stress state can initiate cracking parallel to the heated face. The role of thermal gradient in the spalling process is discussed further in \cref{sec:spalling} of \cref{chapter2}.
 
 \section{Hydric behavior}
-\review{This section is under review for matching the THC model implemented}
 
 \begin{reviewblock}
 When concrete is exposed to high temperatures, the behavior of water within the porous network plays a central role in the thermo-hydro-mechanical response of the material. This section presents the classification of water in concrete, the phase-change mechanisms, the governing equation for moisture transport, and the constitutive laws required to close the system.
@@ -341,17 +327,17 @@ The relationship between capillary pressure and liquid saturation is described b
 where $a$ and $b$ are material parameters determined experimentally. Representative values at ambient temperature are given in \cref{tab:VG}.
 
 \begin{table}[h]
-\centering
-\caption{Van Genuchten parameters at ambient temperature} 
-\label{tab:VG}
-\begin{tabular}{lcccc}
-\hline
- & NSC & HPC & NSM & HPM \\
-\hline
-$a$ [MPa] & 18.62 & 46.94 & 37.55 & 96.28 \\
-$b$ [-]   & 2.275 & 2.060 & 2.168 & 1.954 \\
-\hline
-\end{tabular}
+    \centering
+    \caption{Van Genuchten parameters at ambient temperature} 
+    \label{tab:VG}
+    \begin{tabular}{lcccc}
+    \hline
+    & NSC & HPC & NSM & HPM \\
+    \hline
+    $a$ [MPa] & 18.62 & 46.94 & 37.55 & 96.28 \\
+    $b$ [-]   & 2.275 & 2.060 & 2.168 & 1.954 \\
+    \hline
+    \end{tabular}
 \end{table}
 
 At elevated temperatures, the parameter $a$ is modified to account for changes in surface tension and pore structure \cite{pesavento2000}:
@@ -434,6 +420,25 @@ where $\phi_0$ is the initial porosity and $A_\phi$ is a material constant.
 When concrete is heated, evaporation and dehydration produce vapor that raises the pore pressure. Part of this vapor migrates toward the cooler interior, where it recondenses and forms a quasi-saturated zone --- the \textit{moisture clog}. This layer blocks further gas transport, causing significant pressure build-up behind the drying front. In dense concretes such as HPC, the low intrinsic permeability $K_0$ further limits gas evacuation.
 
 When the pore pressure exceeds the tensile strength, it can trigger explosive spalling (\cref{sec:spalling}).
+
+\section{Chemical behavior}
+\subsection{Chemical kinetics and Affinity} \label{sec:affinity}
+The evolution of the hydration degree $\Gamma$ is governed by an Arrhenius-type equation:
+\begin{equation}
+    \frac{\mathrm{d}\Gamma}{\mathrm{d}t} = \mathcal{A}(\Gamma) \cdot \beta_{\mathrm{RH}} \cdot \exp\left( -\frac{E_a}{R T} \right)
+\end{equation}
+where $E_a$ is the activation energy, and $\beta_{\mathrm{RH}}$ accounts for the moisture effect. The macroscopic chemical affinity $\mathcal{A}(\Gamma)$ drives the reaction speed depending on the current hydration state \cite{sciume2024}:
+\begin{equation}
+    \mathcal{A}(\Gamma) = \frac{A_i + (A_p - A_i)\sin\left[\frac{\pi}{2}\left(1 - \left\langle \frac{\Gamma_p - \Gamma}{\Gamma_p} \right\rangle_+\right)\right]}{\left[1 + \zeta \left\langle \frac{\Gamma - \Gamma_p}{1 - \Gamma_p} \right\rangle_+\right]} - \left(\frac{A_p}{1+\zeta}\right)\left\langle \frac{\Gamma - \Gamma_p}{1 - \Gamma_p} \right\rangle_+
+\end{equation}
+where $\langle \cdot \rangle_+$ is the positive part operator. The parameters $A_i, A_p$ regulate the initial and peak affinity, $\Gamma_p$ is the hydration degree at the peak, and $\zeta$ controls the deceleration phase.
+
+\subsection{Permeability evolution law} \label{sec:perm-law}
+The intrinsic permeability is heavily dependent on the degradation of the solid matrix. In the THC framework, it is explicitly coupled to the effective hydration degree $\tilde{\Gamma}$ \cite{sciume2024}:
+\begin{equation}
+    K(\tilde{\Gamma}) = K_0 \cdot 10^{A_\Gamma (1 - \tilde{\Gamma})^{B_K}}
+\end{equation}
+where $K_0$ is the initial intrinsic permeability, $A_\Gamma$ is a coefficient defining the maximum increase in permeability upon total dehydration, and $B_K$ modifies the shape of the permeability gain. This formulation elegantly replaces direct temperature- or damage-dependent multipliers by relying strictly on the microstructural state.
 
 \section{Mechanical behavior} \label{sec:mechanical}
 
@@ -680,15 +685,9 @@ When a mechanically loaded concrete element is exposed to high temperature, the 
 \end{equation}
 where:
 \begin{itemize}
-    \item $\boldsymbol{\varepsilon}_\sigma$ represents the 
-    \textit{mechanical strains} induced by external loading 
-    (elastic strain, creep strain, etc.);
-    \item $\boldsymbol{\varepsilon}_{th}$ represents the 
-    \textit{thermal dilation strain}, driven by the 
-    temperature field;
-    \item $\boldsymbol{\varepsilon}_{sh}$ represents the 
-    \textit{capillary shrinkage strain}, driven by the 
-    capillary pressure field.
+    \item $\boldsymbol{\varepsilon}_\sigma$ represents the \textit{mechanical strains} induced by external loading  (elastic strain, creep strain, etc.);
+    \item $\boldsymbol{\varepsilon}_{th}$ represents the \textit{thermal dilation strain}, driven by the temperature field;
+    \item $\boldsymbol{\varepsilon}_{sh}$ represents the \textit{capillary shrinkage strain}, driven by the capillary pressure field.
 \end{itemize}
 
 In general, the mechanical strain includes elastic and creep contributions:
@@ -753,137 +752,27 @@ where $\boldsymbol{\varepsilon}_{el} = \boldsymbol{\varepsilon} - \boldsymbol{\v
 
 This section assembles the governing equations of the thermo-hydro-mechanical (THM) model from the conservation laws and constitutive relations developed in the previous sections. The coupled system is then used to explain how spalling arises from the interaction between thermal, hydric, and mechanical fields.
 
-\subsection{Full THM governing formulation} \label{sec:THM_model}
-
+\section{THM governing formulation} \label{sec:THM_model}
 The state of concrete at high temperature is described by four primary variables \cite{dauti2018}:
 \begin{equation}
-    \mathcal{U} = \left\{p_g,\; p_c,\; T,\; \mathbf{u}\right\}
+    \mathcal{U} = \left\{p_g,\, p_c,\, T,\, \mathbf{u}\right\}
     \label{eq:primary_vars}
 \end{equation}
 where $p_g$ is the gas pressure, $p_c$ is the capillary pressure, $T$ is the temperature, and $\mathbf{u}$ is the displacement vector.
 
-The model consists of four conservation equations, each associated with one primary variable. Their final forms, after substitution of Darcy's law, Fick's law, and the constitutive relations, are as follows.
+The substitution of the constitutive laws and transport fluxes (detailed in the preceding sections) into the general mass, energy, and momentum balances yields the final coupled non-linear system. To avoid redundancy, the fully expanded partial differential equations for dry-air conservation, water-species conservation, and energy conservation are presented directly in \cref{sec:thcmodel} of \cref{chapter2}.
 
-\subsubsection{Dry air conservation}
-
-\begin{equation}
-\begin{split}
-    &\phi(1-S_l)\left(\frac{\partial \rho_a}{\partial T}\frac{\partial T}{\partial t}
-    + \frac{\partial \rho_a}{\partial p_c}\frac{\partial p_c}{\partial t}
-    + \frac{\partial \rho_a}{\partial p_g}\frac{\partial p_g}{\partial t}\right)
-    + (1-S_l)\rho_a\frac{\partial \phi}{\partial T}\frac{\partial T}{\partial t} \\
-    &- \phi\rho_a\left(\frac{\partial S_l}{\partial p_c}\frac{\partial p_c}{\partial t}
-    + \frac{\partial S_l}{\partial T}\frac{\partial T}{\partial t}\right)
-    - \nabla\cdot\left(\frac{K\rho_a k_{rg}}{\mu_g}\nabla p_g\right)
-    - \nabla\cdot\left(D\rho_g\frac{M_v M_a}{M_g^2}\nabla\frac{p_a}{p_g}\right) = 0
-\end{split}
-\label{eq:final_air}
-\end{equation}
-
-\subsubsection{Water species conservation}
-
-\begin{equation}
-\begin{split}
-    &(S_l\rho_l - (1-S_l)\rho_v)\frac{\partial \phi}{\partial T}\frac{\partial T}{\partial t}
-    + S_l\phi\frac{\partial \rho_l}{\partial T}\frac{\partial T}{\partial t}
-    + \phi(\rho_l - \rho_v)\left(\frac{\partial S_l}{\partial T}\frac{\partial T}{\partial t}
-    + \frac{\partial S_l}{\partial p_c}\frac{\partial p_c}{\partial t}\right) \\
-    &+ (1-S_l)\phi\left(\frac{\partial \rho_v}{\partial T}\frac{\partial T}{\partial t}
-    + \frac{\partial \rho_v}{\partial p_c}\frac{\partial p_c}{\partial t}
-    + \frac{\partial \rho_v}{\partial p_g}\frac{\partial p_g}{\partial t}\right) \\
-    &- \nabla\cdot\left(\frac{K\rho_l k_{rl}}{\mu_l}(\nabla p_g - \nabla p_c)\right)- \nabla\cdot\left(\frac{K\rho_v k_{rg}}{\mu_g}\nabla p_g\right)
-    - \nabla\cdot\left(D\rho_g\frac{M_v M_a}{M_g^2}\nabla\frac{p_v}{p_g}\right) = -\dot{m}_{dehyd}
-\end{split}
-\label{eq:final_water}
-\end{equation}
-
-\subsubsection{Energy conservation}
-
-\begin{equation}
-\begin{split}
-    \rho C_p\frac{\partial T}{\partial t}- K\left(C_l\frac{\rho_l k_{rl}}{\mu_l}(\nabla p_g - \nabla p_c)
-    + C_g\frac{\rho_v k_{rg}}{\mu_g}\nabla p_g\right)\cdot\nabla T
-    - \nabla\cdot(\lambda\cdot\nabla T) \\
-    = -H_{vap}\,\dot{m}_{vap} 
-    + H_{dehyd}\,\dot{m}_{dehyd}
-\end{split}
-\label{eq:final_energy}
-\end{equation}
-
-\subsubsection{Momentum conservation}
-
-By neglecting inertial forces:
+By neglecting inertial forces, the momentum conservation reads:
 \begin{equation}
     \nabla\cdot\boldsymbol{\sigma}^{Total} + \rho\,\mathbf{g} = \mathbf{0}
     \label{eq:final_momentum}
 \end{equation}
-where $\mathbf{g}$ is the gravitational acceleration and the total density is:
+where $\mathbf{g}$ is the gravitational acceleration and the total density $\rho$ is:
 \begin{equation}
     \rho = (1-\phi)\rho_s + \phi\left(S_l\rho_l + (1-S_l)\rho_g\right)
     \label{eq:rho_total}
 \end{equation}
-
-The total stress $\boldsymbol{\sigma}^{Total}$ is related to the effective stress via Bishop's relation (\cref{eq:eff_stress}), which in turn depends on the primary variables $p_g$ and $p_c$. 
-
-The discretisation of this equation into the global system $[\mathbf{K}_M]\{\mathbf{U}\} = \{\mathbf{F}\}$ is presented in \cref{sec:mechanical}.
-
-\paragraph{Remark:} The governing equations presented in this chapter --- dry air conservation, water species conservation, energy conservation, and momentum conservation --- together with the constitutive laws, form a complete THM model for concrete exposed to fire. These equations are continuous partial differential equations defined on the domain $\Omega$. Their numerical solution requires spatial and temporal discretization, which is the subject of the following \cref{chapter3}.
-
-\subsection{Spalling mechanisms} \label{sec:spalling}
-
-Spalling is defined as the violent or non-violent detachment of layers or pieces of concrete from the surface of a structural element during or after exposure to rapidly rising temperatures. It may lead to premature structural failure through reinforcement exposure and cross-section reduction. Several catastrophic tunnel fires (Channel Tunnel 1996, Mont-Blanc 1999, St.~Gotthard 2001) have illustrated the severity of this phenomenon \cite{dauti2018}.
-
-Despite extensive experimental research, the mechanisms behind spalling are not yet fully understood and no general consensus on a single theory has been reached. The two principal mechanisms most broadly accepted are presented below, followed by their combined action.
-
-\subsubsection{Thermal gradient mechanism} \label{sec:thermal_gradient_mech}
-
-\review{This section is currently under development and will be refined as the study progresses.}
-
-When one face of a concrete member is exposed to fire, a steep temperature gradient develops through the thickness. The resulting differential thermal dilation produces (see Figure~\ref{fig:spalling_TM}):
-
-\begin{enumerate}
-    \item \textbf{Compressive stresses in the heated cover:} The surface layers tend to expand but are restrained by the cooler interior, generating significant compressive stresses parallel to the heated surface.
-    
-    \item \textbf{Tensile stresses in the interior:} The restraint of the expanding surface layers induces tensile stresses in deeper layers of the material.
-    
-    \item \textbf{Fracture and energy release:} When the tensile stress exceeds the tensile strength $f_t$, cracks develop parallel to the surface. The sudden release of elastic energy stored in the compressed surface layers can drive the explosive ejection of concrete fragments.
-\end{enumerate}
-
-High-performance concrete (HPC) is particularly prone to this mechanism due to its higher brittleness: more elastic energy is stored before failure, leading to a more violent release.
-
-\subsubsection{Pore pressure mechanism (moisture clog)} \label{sec:pore_pressure_mech}
-
-\review{This section is currently under development and will be refined as the study progresses.}
-
-The sequence of events is (see Figure~\ref{fig:spalling_TH}):
-
-\begin{enumerate}
-    \item \textbf{Formation of a dry zone:} As the surface is heated, free water evaporates and chemically bound water is released as vapor through dehydration. A dry zone forms near the heated face.
-    
-    \item \textbf{Vapor migration:} Due to pressure gradients, part of the vapor is evacuated toward the heated face, while part is driven toward the cooler interior.
-    
-    \item \textbf{Condensation and moisture clog:} The inward-migrating vapor condenses when it reaches regions where the thermodynamic conditions are satisfied ($T < T_{sat}$). This process continues until a quasi-saturated zone is formed, known as the \textit{moisture clog}, which acts as an impermeable barrier preventing further vapor migration toward the cold side.
-    
-    \item \textbf{Pressure build-up:} Behind the moisture clog, the gas pressure $p_g$ increases sharply as continued evaporation feeds vapor into a region from which it cannot escape. In addition, the thermal dilation of liquid water in saturated pores also contributes to pressure build-up.
-    
-    \item \textbf{Tensile failure:} When the pore pressure exceeds the tensile strength of the material, cracks develop parallel to the surface, potentially leading to explosive spalling.
-\end{enumerate}
-
-The key material parameters governing this mechanism are the \textit{intrinsic permeability} $K_0$ and the \textit{initial moisture content}. Low permeability hinders vapor evacuation, while high moisture content provides more water to be evaporated, both promoting higher pore pressures.
-
-\subsubsection{Combined mechanism} \label{sec:combined_mech}
-
-\review{This section is currently under development and will be refined as the study progresses.}
-
-In practice, explosive spalling generally occurs under the \textit{combined action} of pore pressures and thermal stresses. The spalling condition can be expressed schematically as:
-\begin{equation}
-    \sigma_{thermal}(T) + \sigma_{pore}(p_g, p_c, S_l) 
-    \geq f_t(T)
-    \label{eq:spalling_condition}
-\end{equation}
-where $\sigma_{thermal}$ represents the thermal stress from differential dilation, $\sigma_{pore}$ represents the stress from pore pressure loading (via effective stress), and $f_t(T)$ is the temperature-degraded tensile strength. When the sum of stresses exceeds the tensile strength, cracks develop parallel to the heated surface, often leading to violent failure of the fire-exposed region.
-
-This combined criterion highlights why the complete THM model is needed: neither a purely thermal analysis ($T$ only) nor a purely hydral analysis ($p_g$, $p_c$ only) can capture the full picture.
+The total stress $\boldsymbol{\sigma}^{Total}$ is related to the effective stress via Bishop's relation (\cref{eq:eff_stress}), which in turn depends on the primary variables $p_g$ and $p_c$. The discretisation of this equation into the global system $[\mathbf{K}_M]\{\mathbf{U}\} = \{\mathbf{F}\}$ is presented in \cref{sec:mechanical}.
 
 \section{Discretization}\label{sec:discretization}
 
@@ -924,31 +813,18 @@ The mechanical problem (\cref{eq:final_momentum}) is solved in a staggered manne
 \end{equation}
 where $\mathbf{K}_M$ (\cref{eq:KM_effective}) contains the damaged stiffness $(1-\mathcal{D})\,\mathbb{C}$ --- the displacement-dependent part that remains on the left-hand side --- and $\mathbf{F}$ (\cref{eq:F_full}) collects the TH-prescribed loads ($\boldsymbol{\varepsilon}^{th}$, $\boldsymbol{\varepsilon}^{sh}$, $\alpha\,p_s$) that do not depend on $\mathbf{U}$.
 
-\subsection{Temporal discretization} \label{sec:temporal_discret}
-\review{This section is currently under development and will be refined as the study progresses.}
-
-The time integration of \cref{eq:TH_matrix} is carried out using the Wilson-$\theta$ method \cite{lewis1998,zienkiewicz2013}, which evaluates the equation at an intermediate time $t_{n+\theta} = t_n + \theta\,\Delta t$ with $\theta \in [0,1]$. This transforms the semi-discrete system into a fully discrete algebraic system at each time step:
+\subsection{Temporal discretization (The $\theta$-method)} \label{sec:temporal_discret}
+The time integration of the nonlinear semi-discrete system $\mathbf{C} \dot{\mathbf{Y}} + \mathbf{K} \mathbf{Y} = \mathbf{f}$ is carried out using the Wilson-$\theta$ method \cite{lewis1998}. The governing equations are evaluated at an intermediate time step $t_{n+\theta} = t_n + \theta\,\Delta t$. This yields a fully discrete algebraic system:
 \begin{equation}
-    \tilde{\mathbf{K}}\,\Delta\mathbf{Y}^{n+1} 
-    + \mathbf{K}\,\mathbf{Y}^{n} 
-    = \mathbf{f}^{n+\theta}
-    \label{eq:theta_method}
+    \tilde{\mathbf{K}} \Delta\mathbf{Y}^{n+1} + \mathbf{K} \mathbf{Y}^{n} = \mathbf{f}^{n+\theta}
 \end{equation}
-where:
+where the effective stiffness matrix $\tilde{\mathbf{K}}$ is defined as:
 \begin{equation}
-    \Delta\mathbf{Y}^{n+1} = \mathbf{Y}^{n+1} 
-    - \mathbf{Y}^{n}, \qquad
-    \tilde{\mathbf{K}} = \frac{\mathbf{C}}{\Delta t} 
-    + \theta\,\mathbf{K}
-    \label{eq:theta_Ktilde}
+    \tilde{\mathbf{K}} = \frac{\mathbf{C}}{\Delta t} + \theta \mathbf{K}
 \end{equation}
-The parameter $\theta$ controls the scheme: $\theta=0$ gives the explicit forward Euler method, $\theta=1$ the fully implicit backward Euler, and $\theta=0.5$ the Crank-Nicolson scheme. In practice, $\theta=1$ is used for unconditional stability.
-
-Since the capacity and conductivity matrices depend nonlinearly on the unknowns ($\mathbf{C} = \mathbf{C}(\mathbf{Y})$, $\mathbf{K} = \mathbf{K}(\mathbf{Y})$), \cref{eq:theta_method} is solved iteratively using the Newton-Raphson method within each time step.
-
-\subsection{Solution strategy} \label{sec:solution_strategy}
-\review{This section is currently under development and will be refined as the study progresses.}
-
-The TH subsystem (\cref{eq:theta_method}) is solved \textit{monolithically}: all three unknowns $p_g$, $p_c$, $T$ are updated simultaneously within a single Newton-Raphson loop at each time step.
-
-The mechanical problem (\cref{eq:mech_matrix}) is solved in a \textit{staggered} manner: at each time step, the converged TH solution provides $\bar{T}$, $\bar{p}_g$, $\bar{p}_c$, which are used to assemble $\mathbf{F}$ (\cref{eq:F_full}) and solve for $\mathbf{U}$. The damage variable $\mathcal{D}$ computed from the Mazars model feeds back to the intrinsic permeability via \cref{eq:perm_damage}, creating a weak M$\to$H coupling updated at the next time step.
+The relaxation parameter $\theta \in [1]$ dictates the stability and accuracy of the scheme:
+\begin{itemize}
+    \item $\theta = 0$: Explicit forward Euler method (conditionally stable).
+    \item $\theta = 0.5$: Crank-Nicolson scheme (unconditionally stable, second-order accurate but prone to numerical oscillations).
+    \item $\theta = 1$: Fully implicit backward Euler method. This is strictly required ($\theta = 1$) for highly nonlinear THC problems at high temperatures to strongly damp numerical oscillations caused by abrupt phase changes and permeability jumps.
+\end{itemize}

@@ -1,0 +1,360 @@
+*=====================================================================
+* Drying and shrinkage test case - coupled thermo-hydro model (single liquid phase)
+* Original author : G. Sciume (24-04-2017)
+* Modified and debugged by: Tan Kiet HONG (20-03-2026)
+* UQ version: lognormal random field for KINT (multi-zone) + per-run
+*             PRNG decorrelation via NBURN (injected by Python wrapper).
+*=====================================================================
+
+OPTI ECHO 0;
+OPTI DIME 3 MODE TRID ELEM CUB8;
+
+*--------------------------------------------------------------------
+*           I) HYDRO MODEL WITH CONSTANT TEMPERATURE INPUT
+*--------------------------------------------------------------------
+
+*=====================================================================
+* 1) USER-DEFINED PROCEDURES: Sl, dSl/dPc, krl
+*=====================================================================
+DEBP sldegre pcap*'FLOTTANT';
+   temp1 = b1/(b1-1.);
+   temp2 = pcap/a1;
+   temp3 = 1. + (temp2**temp1);
+   temp4 = -1./b1;
+   sldegre = temp3**temp4;
+FINP sldegre;
+
+DEBP sldepc pcap*'FLOTTANT';
+   temp1 = b1/(b1-1.);
+   temp2 = pcap/a1;
+   temp3 = 1. + (temp2**temp1);
+   temp4 = -1.*((b1 + 1.)/b1);
+   temp5 = temp3**temp4;
+   temp6 = pcap**(1./(b1 - 1.));
+   temp7 = a1**(b1/(b1 - 1.));
+   temp8 = temp6/temp7;
+   temp9 = (-1./(b1 - 1.))*temp8;
+   sldepc =  temp5 * temp9;
+FINP sldepc;
+
+DEBP krl pcap*'FLOTTANT';
+   temp1 = b1/(b1-1.);
+   temp2 = pcap/a1;
+   temp3 = 1. + (temp2**temp1);
+   temp4 = -1./b1;
+   temp5 = temp3**temp4;
+   temp6 = 1. - (temp5**b1);
+   temp7 = temp6**(1./b1);
+   temp8 = (1. - temp7)**2.;
+   temp9 = temp5**0.5;
+   krl = temp8 * temp9;
+FINP krl;
+
+DEBP hr_chpo pcap*'CHPOINT' mail1*'MAILLAGE';
+   temp0 = (EXCO pcap  'T') 'NOMC' 'SCAL';
+   temp1 = 18.e-3 / (8.314 * 1000. * 293.15);
+   temp2 = temp0 * temp1 * -1.;
+   chhpc = EXP(temp2);
+FINP chhpc;
+
+*=====================================================================
+* 2) MATERIAL PARAMETERS
+*=====================================================================
+RHO  = 1000.;
+EPS  = 0.2;
+A1   = 20.E6;
+B1   = 2.;
+VISC = 1.E-3 ;
+
+*=====================================================================
+* 3) INITIAL AND EXTERNAL CONDITIONS
+*=====================================================================
+TEMPE1 = 20.0;
+HR_EXT = 0.50;
+HR_INI = 0.90;
+
+*=====================================================================
+* 4) MESH CONSTRUCTION: 1/8 of a cubic specimen
+*=====================================================================
+LATO1    = 0.10;
+DENS_GRO = 0.01;
+DENS_FIN = 0.002;
+
+p1    =  0.        0.  0.;
+p2    = (LATO1/2.) 0.  0.;
+l12   =  DROI p1 p2 'DINI' DENS_GRO 'DFIN' DENS_FIN;
+SURF1 = l12 TRANS (0. (LATO1/2.) 0.) 'DINI' DENS_GRO 'DFIN' DENS_FIN;
+
+VEC1  = 0. 0. (LATO1/2.);
+MAIL1 = SURF1 VOLU TRAN VEC1 'DINI' DENS_GRO 'DFIN' DENS_FIN;
+
+p3 = (LATO1/2.) (LATO1/2.)  0. ;
+p4 =  0.   (LATO1/2.)  0.;
+p5 = (LATO1/2.) (LATO1/2.)  0.01;
+p6 = 0.000 (LATO1/2.)  0.01;
+P_CONT1 = 'POIN' MAIL1 'PLAN' p2 p3 p5 0.0005;
+P_CONT2 = 'POIN' MAIL1 'PLAN' p3 p4 p6 0.0005;
+P_CONT = P_CONT1 et P_CONT2;
+
+CONTH = (face 3 mail1) 'ELEM' 'APPUYE' 'STRICTEMENT' P_CONT;
+
+*=====================================================================
+* 5) TIME DISCRETIZATION
+*=====================================================================
+heure1  = 3600.;
+jour1   = 24  * heure1;
+TFIN    = 120 * jour1;
+LTEMPS1 = PROG 0. PAS (24 * heure1) TFIN;
+
+*=====================================================================*
+* 6) HYGROMETRIC MODEL WITH LOGNORMAL RANDOM FIELD FOR KINT (K0)      *
+*=====================================================================*
+
+* --- A) STATISTICAL PARAMETERS FOR KINT (K0) ---
+LC       = 0.02;
+K_MEAN   = 8.5E-20;
+K_CV     = 0.3;
+K_SIGMA  = K_CV * K_MEAN;
+GVAR     = LOG (1. + (K_CV**2));
+GSIGMA   = GVAR ** (0.5);
+GMOYENNE = LOG (K_MEAN) - (0.5 * GVAR);
+
+* --- B) GENERATE RANDOM FIELD ---
+MOD_DUMMY = MODE MAIL1 THERMIQUE ISOTROPE;
+
+* --- B0) PER-RUN DECORRELATION VIA PRNG BURN-IN ----------------------
+*   ALEA has no seed and the PRNG starts from the SAME state every Cast3M
+*   session, so a plain re-run reproduces the identical field. We advance
+*   the PRNG by NBURN cheap ALEA draws (on a 1-element throwaway mesh)
+*   BEFORE the real draw. NBURN is injected per run by the Python wrapper
+*   (placeholder 30), so each run lands on a different RNG state ->
+*   a different K field every run.
+*   Standalone run: replace 30 by any integer by hand.
+NBURN = 30 ;
+pBA  = 0. 0. 0. ;
+pBB  = 1. 0. 0. ;
+SEGD = DROI 1 pBA pBB ;
+SI (NBURN > 0) ;
+  REPE Bburn NBURN ;
+    xjunk = ALEA SEGD 'BANDES_TOURNANTES' EXPO 'SIGMA' 1. 'MOYENNE' 0. 'LAMBDA' 1. ;
+  FIN Bburn ;
+FINSI ;
+* --------------------------------------------------------------------
+
+GFIELD    = ALEA MOD_DUMMY 'BANDES_TOURNANTES' EXPO 'SIGMA' GSIGMA 'MOYENNE' GMOYENNE 'LAMBDA' LC;
+KINT_FLD  = EXP GFIELD;
+
+KINT_CHP  = CHAN 'CHPO' MOD_DUMMY KINT_FLD;
+MESS 'RUN NBURN =' NBURN ' -> Kint min =' (MINI KINT_CHP) ' max =' (MAXI KINT_CHP);
+
+* --- C) PRECOMPUTE COMMON CURVES (CP and KRL) ---
+tXPC  = 0.;
+tYDSW = 0.;
+tYKRL = 1.;
+XPC   = PROG tXPC;
+YDSW  = PROG tYDSW;
+YKRL  = PROG tYKRL;
+
+REPETER BOUCLE 150;
+  tXPC  = tXPC + 1.E6;
+  tYDSW = sldepc tXPC;
+  tYKRL = krl tXPC;
+  XPC   = XPC  et (PROG tXPC);
+  YDSW  = YDSW et (PROG tYDSW);
+  YKRL  = YKRL et (PROG tYKRL);
+FIN BOUCLE;
+
+YCP = -1. * YDSW * EPS * RHO;
+CP  = EVOL MANU 'T' XPC 'C' YCP;
+
+* --- D) MULTI-ZONE APPROACH (ELEMENT BY ELEMENT) ---
+NBELEM = NBEL MAIL1;
+MESS 'Building Multi-zone model for' NBELEM 'elements...';
+
+MAIL_i = ELEM MAIL1 1;
+MOD_i  = MODE MAIL_i THERMIQUE;
+PT_i   = MAIL_i POIN 1;
+KINT_i = EXTR KINT_CHP 'SCAL' PT_i;
+
+YK_i    = YKRL * ((RHO * KINT_i) / VISC);
+K_EFF_i = EVOL MANU 'T' XPC 'K' YK_i;
+MAT_i   = MATE MOD_i 'RHO' 1. 'C' CP 'K' K_EFF_i;
+
+MOD_CUMUL = MOD_i;
+MAT_CUMUL = MAT_i;
+
+SI (NBELEM > 1);
+  REPE BELEM (NBELEM - 1);
+    ii     = &BELEM + 1;
+    MAIL_i = ELEM MAIL1 ii;
+    MOD_i  = MODE MAIL_i THERMIQUE;
+
+    PT_i   = MAIL_i POIN 1;
+    KINT_i = EXTR KINT_CHP 'SCAL' PT_i;
+
+    YK_i    = YKRL * ((RHO * KINT_i) / VISC);
+    K_EFF_i = EVOL MANU 'T' XPC 'K' YK_i;
+    MAT_i   = MATE MOD_i 'RHO' 1. 'C' CP 'K' K_EFF_i;
+
+    MOD_CUMUL = MOD_CUMUL ET MOD_i;
+    MAT_CUMUL = MAT_CUMUL ET MAT_i;
+  FIN BELEM;
+FINSI;
+
+* --- E) ASSEMBLE GLOBAL MODEL ---
+MO_HYGR = MOD_CUMUL;
+MA_HYGR = MAT_CUMUL;
+
+CONTH   = (face 3 mail1) 'ELEM' 'APPUYE' 'STRICTEMENT' P_CONT;
+MO_CONV = MODE CONTH THERMIQUE CONVECTION;
+MA_CONV = MATE MO_CONV 'H' 1.E-13;
+
+MO_TOT  = MO_HYGR et MO_CONV;
+MA_TOT  = MA_HYGR et MA_CONV;
+
+*=====================================================================
+* 7) INITIAL AND BOUNDARY CONDITIONS (HYGRO)
+*=====================================================================
+PC_INI = -8.314*293.15*1000*(LOG(HR_INI))/18.e-3;
+PC0    = MANU 'CHPO' MAIL1 'T'  PC_INI;
+
+PC_EXT  = -8.314 * 293.15 * 1000. * (LOG(HR_EXT)) / 18.e-3;
+CONV1   = MANU 'CHPO' CONTH 1 'T' PC_EXT 'NATURE' 'DISCRETE';
+EV_CHAR = EVOL MANU 'TEMPS' (PROG 0. TFIN) 'T' (PROG 1. 1.);
+CHAR1   = CHAR 'TECO' CONV1 EV_CHAR;
+
+*=====================================================================
+* 8) HYGRO RESOLUTION - PASAPAS (nonlinear transient)
+*=====================================================================
+tab1= table;
+tab1.TEMPERATURES= table;
+tab1.TEMPERATURES.0= pc0;
+tab1.MODELE= mo_tot;
+tab1.CARACTERISTIQUES= ma_tot;
+tab1.CHARGEMENT= CHAR1;
+tab1.PROCEDURE_THERMIQUE= NONLINEAIRE;
+tab1.RELAXATION_THETA= 0.51;
+tab1.TEMPS_CALCULES= ltemps1;
+PASAPAS tab1;
+
+*=====================================================================
+* SAVE / RESTORE hygro results for mechanical coupling
+*=====================================================================
+opti sauv 'FORMAT' 'SECHAGE';
+sauv 'FORMAT';
+opti rest 'FORMAT' 'SECHAGE';
+rest 'FORMAT';
+OPTI ECHO 0;
+
+*--------------------------------------------------------------------
+*      II) MECHANICAL MODEL WITH SHRINKAGE STRAIN AS INPUT
+*--------------------------------------------------------------------
+
+*=====================================================================
+* 1) PROCEDURE: degree of saturation as CHPOINT field (for mech. load)
+*=====================================================================
+DEBP sl_chpo pcap*'CHPOINT' mail1*'MAILLAGE';
+   pcap0 = pcap 'NOMC' 'SCAL';
+   temp1 = b1/(b1-1.);
+   temp2 = pcap0 * (1/a1);
+   temp3 = 1. + (temp2 ** temp1);
+   temp4 = -1./b1;
+   chsl = temp3**temp4;
+FINP chsl;
+
+*=====================================================================
+* 2) MECHANICAL PARAMETERS
+*=====================================================================
+eyou1  =  30.e9;
+nu1    =  0.2;
+BIOT1  =  0.60;
+BULK1    = eyou1 / (3 * (1 - (2. * nu1)));
+ALPHA_EQ = BIOT1 / (3. * BULK1);
+
+*=====================================================================*
+* 3) MECHANICAL MODEL AND MATERIAL
+*=====================================================================
+MODM = MODE MAIL1 MECANIQUE ELASTIQUE;
+MATM = MATE MODM 'YOUN' eyou1 'NU' nu1 'ALPHA' ALPHA_EQ 'TREF' PC_INI 'TALP' PC_INI;
+
+*=====================================================================
+* 4) MECHANICAL BOUNDARY CONDITIONS (symmetry planes)
+*=====================================================================
+BASE1 = surf1;
+p7 = p2 'PLUS' (0.0  0.0 0.1);
+p8 = p4 'PLUS' (0.0  0.0 0.1);
+P_CO12 = 'POIN' MAIL1 'PLAN' p1 p2 p7 0.0005;
+P_CO14 = 'POIN' MAIL1 'PLAN' p1 p4 p8 0.0005;
+LATO12 = (face 3 mail1) 'ELEM' 'APPUYE' 'STRICTEMENT' P_CO12;
+LATO14 = (face 3 mail1) 'ELEM' 'APPUYE' 'STRICTEMENT' P_CO14;
+CONTM1 =  BASE1;
+CONTM2 =  LATO12;
+CONTM3 =  LATO14;
+rig1   = BLOQ 'UZ' CONTM1;
+rig2   = BLOQ 'UY' CONTM2;
+rig3   = BLOQ 'UX' CONTM3;
+RIGTOT = rig1 et rig2 et rig3;
+
+*=====================================================================
+* 5) MECHANICAL LOADING: skeletal pressure from capillary pressure
+*=====================================================================
+TAB1.PS = 'TABLE';
+NTAB1 = DIME TAB1.TEMPERATURES;
+N0 = 0;
+REPETER BOU_PS NTAB1;
+   satu = sl_chpo  TAB1 . 'TEMPERATURES' . N0 MAIL1;
+   pc   = ('EXCO' 'T' TAB1 . 'TEMPERATURES' . N0) 'NOMC' 'SCAL';
+   ps   = (-1. * satu * pc) 'NOMC' 'T';
+   TAB1 . 'PS' . N0 = ps;
+   N0 = N0 + 1;
+FIN BOU_PS;
+CHAM_TH = CHAR 'T'  (TAB1 . 'TEMPS')  (TAB1 . 'PS') ;
+
+*=====================================================================
+* 6) MECHANICAL RESOLUTION - PASAPAS
+*=====================================================================
+TAB1M                         = 'TABL' ;
+TAB1M . 'MODELE'              = MODM;
+TAB1M . 'CARACTERISTIQUES'    = MATM;
+TAB1M . 'BLOCAGES_MECANIQUES' = RIGTOT ;
+TAB1M . 'CHARGEMENT'          = CHAM_TH;
+TAB1M . 'TEMPS_CALCULES'      = ltemps1;
+PASAPAS TAB1M ;
+
+opti sauv 'FORMAT' 'RETRAIT';
+sauv 'FORMAT';
+opti rest 'FORMAT' 'RETRAIT';
+rest 'FORMAT';
+OPTI ECHO 0;
+
+*=====================================================================
+* 7) POST-PROCESSING: longitudinal shrinkage strain vs time
+*=====================================================================
+dimet = DIME TAB1M . 'DEPLACEMENTS' ;
+
+p3 = MAIL1 POIN PROC (0.  0. (LATO1/2));
+L0 = LATO1/2;
+
+temps    = PROG;
+ret      = PROG;
+
+n6 = 0;
+REPETER BOUCLE dimet;
+  temps1 = TAB1 . 'TEMPS' . n6;
+  temps1 = temps1 / 86400. ;
+  temps  = temps ET (PROG temps1);
+  retrait1 =  EXTR TAB1M.DEPLACEMENTS.n6 'UZ' p3;
+  deltaA   = (retrait1 / L0 )*1000000.;
+  ret      = ret ET (PROG deltaA);
+  n6 = n6 + 1;
+FIN BOUCLE;
+
+evret = EVOL 'BLAN' 'MANU' 'JOURS' temps 'MICRON/METER' ret;
+
+*=====================================================================
+* EXPORT DATA TO CSV FILE (semicolon-separated to match the Python reader)
+*=====================================================================
+OPTI 'SORT' 'D:\cast3m-m2internship\05.Stochastic\Stochastic_C2\CSV\u_results_no_30.csv' ;
+SORT 'EXCE' evret;
+
+fin;
