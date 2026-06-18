@@ -445,3 +445,53 @@ In modern engineering codes, $P_f$ is frequently mapped to the \textbf{generaliz
     \beta = -\Phi^{-1}(P_f).
     \label{eq:beta-generalized}
 \end{equation}
+
+\section{Reference parameters for the simplified poro-mechanical model} \label{sec:simplified-model-inputs}
+To evaluate the effect of spatial heterogeneity in \cref{chapter5}, a simplified isothermal poro-mechanical model is implemented in \textsc{Cast3M}. This section details the specific constitutive laws and material parameters used for that test case.
+
+\subsection{Constitutive relationships}
+The hygral behaviour is governed by the van Genuchten model \cite{vangenuchten1980}. The degree of saturation $S_l$ and the liquid relative permeability $k_{rl}$ are functions of the capillary pressure $P_c$:
+\begin{equation}
+    S_l(P_c) = \left[ 1 + \left(\frac{P_c}{a_1}\right)^{\frac{b_1}{b_1-1}} \right]^{-\frac{1}{b_1}}
+\end{equation}
+\begin{equation}
+    k_{rl}(P_c) = \sqrt{S_l} \left[ 1 - \left(1 - S_l^{b_1}\right)^{\frac{1}{b_1}} \right]^2
+\end{equation}
+where $a_1$ and $b_1$ are material parameters. The effective hydraulic conductivity $K_{\mathrm{eff}}$ entering the flow matrix is:
+\begin{equation}
+    K_{\mathrm{eff}}(P_c) = \frac{k_{rl}(P_c)\,\rho_l\,K_0}{\mu_l}
+\end{equation}
+
+\subsection{Geometry, mesh, and material parameters}
+The modelled specimen is a $10 \times 10 \times 10$~cm cube. By exploiting symmetry, only 1/8 of the domain is meshed using 3D 8-node hexahedral elements (\texttt{CUB8}). The mesh is refined near the exposed surfaces, transitioning from a coarse element size of $10$~mm down to $2$~mm. The transient simulation spans $120$ days with a time step of $1$ day.
+
+The deterministic reference parameters fed into the model are summarised in \cref{tab:simplified-params}. For the stochastic analyses (C1, C2, C3), the intrinsic permeability $K_0$ is treated as a random variable or a spatial random field centered around the mean value of $1.0\times 10^{-20}~\mathrm{m^2}$.
+
+\begin{table}[htbp]
+\centering
+\caption{Reference parameters for the simplified isothermal poro-mechanical model.}
+\label{tab:simplified-params}
+\begin{tabular}{lllc}
+\toprule
+Parameter & Symbol & Value & Unit \\
+\midrule
+\multicolumn{4}{l}{\emph{Hygral properties}} \\
+Liquid water density & $\rho_l$ & $1000$ & $\mathrm{kg/m^3}$ \\
+Dynamic viscosity & $\mu_l$ & $1.0 \times 10^{-3}$ & $\mathrm{Pa \cdot s}$ \\
+Porosity & $\phi$ & $0.20$ & $-$ \\
+Mean intrinsic permeability & $K_0$ & $1.0 \times 10^{-20}$ & $\mathrm{m^2}$ \\
+van Genuchten parameter & $a_1$ & $20$ & $\mathrm{MPa}$ \\
+van Genuchten parameter & $b_1$ & $2.0$ & $-$ \\
+\addlinespace
+\multicolumn{4}{l}{\emph{Mechanical properties}} \\
+Young's modulus & $E$ & $30$ & $\mathrm{GPa}$ \\
+Poisson's ratio & $\nu$ & $0.20$ & $-$ \\
+Biot coefficient & $\alpha$ & $0.60$ & $-$ \\
+\addlinespace
+\multicolumn{4}{l}{\emph{Initial and boundary conditions}} \\
+Temperature & $T$ & $20$ & $^\circ\mathrm{C}$ \\
+Initial relative humidity & $\mathrm{RH}_{\mathrm{ini}}$ & $0.90$ & $-$ \\
+External relative humidity & $\mathrm{RH}_{\mathrm{ext}}$ & $0.50$ & $-$ \\
+\bottomrule
+\end{tabular}
+\end{table}

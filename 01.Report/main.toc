@@ -173,3 +173,6 @@
 \contentsline {section}{\numberline {B.6}Probability of failure and reliability index}{89}{section.B.6}%
 \contentsline {subsection}{\numberline {B.6.1}Limit state function}{89}{subsection.B.6.1}%
 \contentsline {subsection}{\numberline {B.6.2}Probability of failure and reliability index $\beta $}{89}{subsection.B.6.2}%
+\contentsline {section}{\numberline {B.7}Reference parameters for the simplified poro-mechanical model}{89}{section.B.7}%
+\contentsline {subsection}{\numberline {B.7.1}Constitutive relationships}{90}{subsection.B.7.1}%
+\contentsline {subsection}{\numberline {B.7.2}Geometry, mesh, and material parameters}{90}{subsection.B.7.2}%
