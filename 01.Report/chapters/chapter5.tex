@@ -252,17 +252,26 @@ However, for Analysis C3, because Cast3M lacks native support for exporting thes
 
 \begin{figure}[H]
   \centering
-  %\includegraphics[width=0.8\textwidth]{figures/chapter5/random-field-of-K-in-cube}
+  \includegraphics[width=0.8\textwidth]{figures/chapter5/random-field-of-K-in-cube}
   \caption{A single realization of the spatially heterogeneous intrinsic permeability field $K_0(\mathbf{x})$ generated on the 3D cube mesh using the Turning Bands Method ($L_c = 0.02$~m).}
   \label{fig:rf_k_cube}
 \end{figure}
 
 \begin{figure}[H]
   \centering
-  %\includegraphics[width=0.8\textwidth]{figures/chapter5/final-strain-of-cube}
+  \includegraphics[width=0.8\textwidth]{figures/chapter5/final-strain-of-cube}
   \caption{Resulting final shrinkage strain field of the concrete cube induced by capillary forces, highlighting the localized deformations driven by the heterogeneous permeability field.}
   \label{fig:strain_cube}
 \end{figure}
+
+\begin{figure}[htbp]
+    \centering
+    %\includegraphics[width=0.85\linewidth]{figures/chapter5/evret_C1_C2}
+    \caption{Mean longitudinal shrinkage strain history at the corner point for the two stochastic analyses, LHS (C1) and the spatial random field (C2). Faint lines show the individual realisations of each analysis.}
+    \label{fig:evret_c1c2}
+\end{figure}
+
+Figure~\ref{fig:evret_c1c2} compares the mean shrinkage history of the two analyses before each is examined in detail. The ALEA mean (C2) lies slightly below the LHS mean (C1) throughout the drying period, while its realisations are visibly less scattered. These two features pull in opposite directions: a lower mean points to a more severe average response, but a tighter spread limits how often large strains are reached. The mean curve alone therefore cannot identify the more critical analysis. This requires comparing the full distributions of the final strain, given by the probability density functions in \cref{fig:pdf_c1} and \cref{fig:pdf_c2}.
 
 \begin{figure}[htbp]
   \centering
@@ -280,7 +289,7 @@ However, for Analysis C3, because Cast3M lacks native support for exporting thes
 
 \begin{figure}[htbp]
   \centering
-  %\includegraphics[width=0.7\linewidth]{figures/chapter5/analysisC2/Reliability_Analysis_Shrinkage_Strain}
+  \includegraphics[width=0.7\linewidth]{figures/chapter5/analysisC2/Reliability_Analysis_Shrinkage_Strain}
   \caption{Analysis C2 (Cast3M \texttt{ALEA}): Probability Density Function (PDF) of the longitudinal shrinkage strain considering the spatial heterogeneity of the intrinsic permeability field.}
   \label{fig:C2_pdf}
 \end{figure}
