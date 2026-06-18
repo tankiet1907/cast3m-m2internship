@@ -55,15 +55,16 @@ Existing THM models present several limitations that this work seeks to address:
     \item The uncertainty in the material parameters is rarely assessed: properties are typically taken as homogeneous, deterministic values, so the influence of their variability on the predicted response is left unquantified.
 \end{itemize}
 
-\section{Objectives and outline of the report}
+\section{Objectives and scope of the report}
+This work aims to numerically investigate the behaviour of high-performance concrete exposed to high temperatures. While the full Thermo-Hydro-Mechanical (THM) phenomenon is explored theoretically to understand the root causes of spalling, the actual numerical implementation and validation performed in this internship are strictly limited to the Thermo-Hydro-Chemical (THC) scope. This limitation is due to the timeframe of the internship and the fact that the reference experimental data (Kalifa test) only provide temperature and gas pressure measurements, lacking mechanical counterparts (e.g., strains, damage) for validation.
 
-Main objectives of this internship are structured in the remainder of the report as follow:
+The remainder of the report is structured as follows:
 \begin{itemize}
-    \item \cref{chapter2} presents the coupled THM model of concrete at high temperature, from the governing equations and coupling mechanisms to the monolithic thermo-hydric matrix system and the staggered mechanical step, and details the hydration-degree reformulation following \cite{sciume2024} and extending the framework of \cite{dauti2018}.
-    \item \cref{chapter3} describes the reference experiment of \cite{kalifa2000} and its numerical implementation in \textsc{Cast3M} (geometry, mesh, material data, thermal loading and curing/drying conditions). 
-    \item \cref{chapter4} reports the calibration of the temperature and gas-pressure responses, validates the model against the experimental and numerical references, and discusses the limits of the gas-pressure calibration.
-    \item \cref{chapter5} performs a stochastic assessment of the calibrated model with \textsc{OpenTURNS}: propagating the uncertainty in the material parameters through random sampling to rank the influential parameters (Sobol sensitivity analysis); quantify the probability of failure and the risk of spalling through reliability analysis and with a complementary look at the effect of spatial heterogeneity.
-    \item \cref{chapter6} summarizes the main findings and outlines perspectives for future work.
+  \item \cref{chapter2} presents the theoretical framework of concrete at high temperature. It outlines the full THM coupling mechanisms conceptually, but details specifically the governing equations of the THC model, incorporating the hydration-degree formulation following \cite{sciume2024}.
+  \item \cref{chapter3} describes the reference experiment of \cite{kalifa2000} and its numerical setup in \textsc{Cast3M} using the THC model.
+  \item \cref{chapter4} reports the calibration of the temperature and gas-pressure responses, validates the model, and discusses the limits of the gas-pressure measurements.
+  \item \cref{chapter5} performs a stochastic assessment of the calibrated THC model with \textsc{OpenTURNS} (Sobol sensitivity analysis, reliability analysis, and spatial heterogeneity).
+  \item \cref{chapter6} summarizes the main findings and outlines perspectives for future fully-coupled THM developments.
 \end{itemize}
 
 \section{Research enviroment and Computational tools}

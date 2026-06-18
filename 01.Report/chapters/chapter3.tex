@@ -4,7 +4,6 @@
  
 % =====================================================================
 \section{The Kalifa experiment} \label{sec:kalifa}
-\review{This section is currently a draft version}
 
 \paragraph{Purpose.}
 The campaign of Kalifa et al.~\cite{kalifa2000} quantifies the \emph{thermo-hydral} process responsible for spalling. When concrete is heated on one face, free and chemically bound water are released as vapour; part migrates inward, recondenses in cooler regions and forms a quasi-saturated \emph{moisture clog} that blocks gas evacuation and triggers a sharp pore-pressure build-up behind the drying front. The test measures \emph{simultaneously and continuously} the temperature, the gas (pore) pressure at several depths, and the global mass loss, providing a quantitative dataset for validating coupled codes.
@@ -77,7 +76,8 @@ in \cref{sec:calibration}).
 % =====================================================================
 \section{Numerical model}
 \label{sec:num-model}
-\review{This section is currently a draft version. Need to modify the input.}
+\paragraph{Scope of the numerical simulation (THC model).} It is important to note that while the full Thermo-Hydro-Mechanical (THM) theoretical framework is derived in \cref{chapter2} and \cref{appendixA}, the numerical application in this chapter is restricted to the Thermo-Hydro-Chemical (THC) model. Because the reference Kalifa experiment only provides temperature and gas pressure data, there are no experimental mechanical counterparts (e.g., strain or damage measurements) available to validate the structural response. Consequently, the staggered mechanical module---though formulated as an easily pluggable component---is kept out of the current simulation scope.
+
 \paragraph{Geometry and mesh.}
 The test is reproduced by a two-dimensional plane model of the
 $120\times120~\si{\milli\meter\squared}$ cross-section
@@ -102,7 +102,12 @@ matching the gauge positions. A graded mesh refined toward the hot face
 \paragraph{Material parameters.} The reference parameters corresponding to the HPC M100 mix are summarised in Table~\ref{tab:params}. Instead of treating high-temperature concrete as a purely empirical material, the inputs feed directly into the THC constitutive laws:
 \begin{itemize}
     \item \textbf{Hydration kinetics ($A_i, A_p, \Gamma_p, \zeta$):} These parameters define the normalized chemical affinity $\mathcal{A}(\Gamma)$ which drives the hydration rate during the curing phase. The full equation governing this behavior is detailed in \cref{sec:affinity}.
-    \item \textbf{Permeability evolution ($A_\Gamma, B_K$):} Rather than applying a simple temperature-dependent multiplier, the intrinsic permeability $K$ is coupled to the effective hydration degree $\tilde{\Gamma}$. $A_\Gamma$ dictates the magnitude of permeability increase as C-S-H decomposes, while $B_K$ controls the curve shape. The full permeability evolution law is presented in \cref{sec:perm-law}.
+    \item \textbf{Permeability evolution ($K_0, A_\Gamma, B_K$):} Rather than applying an empirical temperature-dependent multiplier, the intrinsic permeability $K$ is explicitly coupled to the effective hydration degree $\tilde{\Gamma}$ via the relation:
+    \begin{equation}
+        K(\tilde{\Gamma}) = K_0 \cdot 10^{A_\Gamma (1 - \tilde{\Gamma})^{B_K}}
+        \label{eq:ch3-perm}
+    \end{equation}
+    where $K_0$ is the initial intrinsic permeability (often denoted $K_1$ in the numerical code). $A_\Gamma$ dictates the magnitude of permeability increase as C-S-H decomposes, while $B_K$ controls the curve shape. Further theoretical derivations are provided in \cref{sec:perm-law}.
 \end{itemize}
 The porosity, the water content at full hydration, and the initial hydration field are internally computed using Powers' stoichiometric model (\cref{appendixA}).
 
@@ -214,6 +219,6 @@ At high temperature, the THC system is \emph{strongly nonlinear}. The Newton ite
 
 \paragraph{Implementation in \textsc{Cast3M}.} The THC model is implemented in \textsc{Cast3M}. The coupled convective mass/heat boundary conditions are strongly nonlinear: the fluid densities entering the convective fluxes must be expressed in terms of the state variables $(p_c,p_g,T)$, which does not admit a closed algebraic form suitable for the standard discretisation. To handle these complex boundary mechanisms, the implementation relies on a \emph{custom build} of \textsc{Cast3M}~2024, or on the 2026 pre-release version developed by G.~Sciumè, S.~Dal~Pont and D.~Dauti, which provides the dedicated operators required by the THC formulation.
 
-\paragraph{Permeability evolution with $K_1$ and $A_\Gamma$.} \label{ssec:permeability} Intrinsic permeability most strongly governs the pressure amplitude. In the \texttt{BETON\_THM} model it is not made an explicit function of temperature or damage; instead it evolves with the effective hydration degree $\tilde{\Gamma}$, increasing as dehydration proceeds. Starting from the reference (dense) value $K_1$, the loss of C--S--H opens the porous network and transport accelerates near the hot face. Conceptually the evolution follows the chemo-physical law of the THC model \cite{sciume2024} detailed in \cref{sec:perm-law}, in which $K$ rises monotonically as $\tilde{\Gamma}$ decreases. In the present implementation this dependence is parametrised by the reference permeability $K_1$ and the coefficients $A_\Gamma, B_K$. The reference inputs $K_1=\SI{2e-19}{\meter\squared}$ and $A_\Gamma=3$ (Table~\ref{tab:params}) are the \emph{starting point} of the calibration of \cref{chapter4}, where $K_1$ and $A_\Gamma$ are the two parameters swept against the measured gas pressure. Driving transport through the same internal variable that controls porosity and sorption avoids a separate temperature- or damage-dependent multiplier; the residual post-peak decay attributable to \emph{mechanical} microcracking is governed by a damage-dependent law \cite{gawin1999} and left to the mechanical coupling of the following chapters.
+\paragraph{Permeability evolution with $K_1$ and $A_\Gamma$.} \label{ssec:permeability} Intrinsic permeability most strongly governs the pressure amplitude. As briefly introduced in \cref{eq:ch3-perm}, the permeability rises monotonically as $\tilde{\Gamma}$ decreases. The reference inputs $K_1=\SI{2e-19}{\meter\squared}$ (equivalent to $K_0$) and $A_\Gamma=3$ (Table~\ref{tab:params}) are the \emph{starting point} of the calibration of \cref{chapter4}, where $K_1$ and $A_\Gamma$ are the two parameters swept against the measured gas pressure. Driving transport through the same internal variable that controls porosity and sorption avoids a separate temperature-dependent multiplier. The residual post-peak pressure decay attributable to \emph{mechanical} microcracking is theoretically governed by a damage-dependent law \cite{gawin1999}; however, as the mechanical module is not engaged in this study, capturing this post-peak decay is left as a perspective for future fully-coupled THM developments.
 
 \paragraph{Summary.} The THC application is a chain of chemo-physical effects: the curing/heating history fixes $\Gamma$ and $F$, hence $\tilde{\Gamma}$, which controls the porosity, the saturation curve and the permeability law (\cref{sec:perm-law}); these properties determine the temperature, gas-pressure and mass-loss responses compared with the Kalifa data. Calibration and validation against the experiment are presented in the next chapter.

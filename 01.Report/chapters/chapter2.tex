@@ -40,7 +40,7 @@ where $\sigma_{thermal}$ is the thermal stress from differential dilation, $\sig
 \begin{figure}[ht]
   \centering
   \includegraphics[width=0.8\linewidth]{figures/chapter2/spalling-mechanisms}
-  \caption{Spalling combined mechanisms \cite{aldalaien2025}}
+  \caption{Spalling combined mechanisms \cite{al-dalaien2025}}
   \label{fig:exp-setup}
 \end{figure}
 
@@ -83,22 +83,11 @@ The complex mathematical derivation of the governing equations, based on Powers'
 where $a_\phi$ is the porosity evolution parameter, $c$ is the cement content, and $\xi_\infty$ is the maximum hydration fraction. 
 
 \section{Coupling to the mechanical field} \label{sec:mech}
-
-The mechanical response is driven by the converged TH/THC fields through a \emph{one-way} (staggered) coupling: at each time step the fields $(T,p_g,p_c)$ enter the mechanical problem as prescribed loading, and the resulting damage $\mathcal{D}$ feeds back weakly to the transport properties via Eq.~\eqref{eq:KF-chem} at the next step. The TH/THC fields act through two routes:
- 
+The mechanical response is driven by the converged TH/THC fields through a \emph{one-way} (staggered) coupling: at each time step the fields $(T,p_g,p_c)$ enter the mechanical problem as prescribed loading, and the resulting damage $\mathcal{D}$ feeds back weakly to the transport properties via permeability evolution at the next step. The TH/THC fields act through two routes:
 \begin{itemize}
-  \item \textbf{Free strains.} The total strain is decomposed as
-  $\bm{\varepsilon}=\bm{\varepsilon}_\sigma+\bm{\varepsilon}_{th}
-  +\bm{\varepsilon}_{sh}$, where $\bm{\varepsilon}_{th}$ is the thermal
-  dilation (driven by $T$) and $\bm{\varepsilon}_{sh}$ the capillary
-  shrinkage (driven by $p_c$). Creep is neglected, so
-  $\bm{\varepsilon}_\sigma=\bm{\varepsilon}_{el}$.
-  \item \textbf{Pore-pressure loading.} Through Bishop's effective stress
-  $\bm{\sigma}'=\bm{\sigma}^{Total}+\alpha\,p_s\,\mathbf{I}$, the average pore
-  pressure $p_s=p_g-S_l p_c$ enters the load vector as an external loading;
-  its build-up shifts $\bm{\sigma}'$ towards tension and promotes cracking
-  when $f_t(T)$ is exceeded.
+    \item \textbf{Free strains.} The total strain is decomposed as $\boldsymbol{\varepsilon}=\boldsymbol{\varepsilon}_\sigma+\boldsymbol{\varepsilon}_{th}+\boldsymbol{\varepsilon}_{sh}$, where $\boldsymbol{\varepsilon}_{th}$ is the thermal dilation (driven by $T$) and $\boldsymbol{\varepsilon}_{sh}$ the capillary shrinkage (driven by $p_c$). Creep is neglected, so $\boldsymbol{\varepsilon}_\sigma=\boldsymbol{\varepsilon}_{el}$.
+    \item \textbf{Pore-pressure loading.} Through Bishop's effective stress $\boldsymbol{\sigma}'=\boldsymbol{\sigma}^{Total}+\alpha\,p_s\,\mathbf{I}$, the average pore pressure $p_s=p_g-S_l p_c$ enters the load vector as an external loading; its build-up shifts $\boldsymbol{\sigma}'$ towards tension and promotes cracking when $f_t(T)$ is exceeded.
 \end{itemize}
- 
-Together with the spalling criterion~\eqref{eq:spalling}, this closes the physical loop between the transport and mechanical fields. The constitutive model (linear elasticity coupled with Mazars continuum damage \cite{mazars1986}), its fracture-energy regularisation \cite{hillerborg1976}, and the spatial/temporal discretisation of the coupled problem are reported in full in Appendix~\ref{app:mechanical}; only the elements needed to interpret the results of the following chapters are retained here.
+Together with the spalling criterion \eqref{eq:spalling}, this closes the physical loop between the transport and mechanical fields. The constitutive model, its fracture-energy regularisation, and the spatial/temporal discretisation of the coupled problem are reported in full in \cref{appendixA}. 
 
+\textbf{Note on the scope of the study:} Due to the limited timeframe of the internship and the fact that the experimental data used for validation (Kalifa test) solely provide temperature and gas pressure measurements, the mechanical module cannot be rigorously validated. Therefore, while this staggered mechanical coupling is mathematically formulated and designed as an easily pluggable module, the actual numerical simulations performed in the subsequent chapters are restricted to the TH(C) model.
