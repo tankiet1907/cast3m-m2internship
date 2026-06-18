@@ -127,10 +127,10 @@ MOD_DUMMY = MODE MAIL1 THERMIQUE ISOTROPE;
 *   session, so a plain re-run reproduces the identical field. We advance
 *   the PRNG by NBURN cheap ALEA draws (on a 1-element throwaway mesh)
 *   BEFORE the real draw. NBURN is injected per run by the Python wrapper
-*   (placeholder 30), so each run lands on a different RNG state ->
+*   (placeholder @NBURN@), so each run lands on a different RNG state ->
 *   a different K field every run.
-*   Standalone run: replace 30 by any integer by hand.
-NBURN = 30 ;
+*   Standalone run: replace @NBURN@ by any integer by hand.
+NBURN = @NBURN@ ;
 pBA  = 0. 0. 0. ;
 pBB  = 1. 0. 0. ;
 SEGD = DROI 1 pBA pBB ;
@@ -354,7 +354,7 @@ evret = EVOL 'BLAN' 'MANU' 'JOURS' temps 'MICRON/METER' ret;
 *=====================================================================
 * EXPORT DATA TO CSV FILE (semicolon-separated to match the Python reader)
 *=====================================================================
-OPTI 'SORT' 'D:\cast3m-m2internship\05.Stochastic\Stochastic_C2\CSV\u_results_no_30.csv' ;
+OPTI 'SORT' '@CSV_U@' ;
 SORT 'EXCE' evret;
 
 fin;
