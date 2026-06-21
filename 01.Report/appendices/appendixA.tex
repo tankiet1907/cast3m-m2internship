@@ -1,5 +1,21 @@
 \chapter{Thermo-Hydro-Mechanical behavior of Heated Concrete} \label{appendixA}
 \review{This chapter is under review}
+
+% =====================================================================
+\section{THM interactions and spalling mechanisms} \label{sec:THM_spalling_app}
+
+\subsection{Simultaneous THM behaviors and interactions}
+When concrete is heated rapidly, it does not merely experience a temperature rise; it undergoes a simultaneous interplay of thermal, hydric, and mechanical (THM) processes that strongly interact with each other. Heat is transmitted into the material essentially by conduction, while phase changes (evaporation of free water and dehydration of chemically bound water) consume energy and locally slow the temperature rise. The generated vapour is transported by pressure-driven Darcy flow and Fickian diffusion. Part of the vapour migrates inward, recondenses in cooler regions, and builds a quasi-saturated layer (the moisture clog) that blocks further gas transport. Mechanically, the concrete skeleton expands due to heat, shrinks due to capillary forces, and is subjected to internal loading from the trapped pressurized gas.
+
+\subsection{Spalling mechanisms}
+These coupled THM phenomena are the fundamental drivers of \emph{explosive spalling}. Explosive spalling generally results from the \emph{combined action} of pore pressure build-up and thermal stress. The specific mechanisms contributing to this failure are detailed below:
+\begin{itemize}
+    \item \textbf{Thermal-gradient mechanism:} Steep temperature gradients develop throughout the concrete's cross-section, causing differential thermal expansion. The surface layers attempt to expand but are restrained by the cooler interior, generating high compressive stresses at the heated surface and tensile stresses deeper inside.
+    \item \textbf{Moisture-clog mechanism (Pore pressure):} In low-permeability concretes such as high-performance concrete (HPC), the rapid generation of vapour from phase changes cannot escape fast enough. The formation of the moisture clog further seals the porous network, resulting in a dramatic pore pressure build-up behind the drying front.
+    \item \textbf{Mechanical fracture:} The combined effects of thermal stresses and pore pressure build-up on the solid skeleton stretch the material beyond its tensile capacity. High temperatures simultaneously degrade the tensile strength $f_t(T)$ of the concrete.
+\end{itemize}
+
+When the combined stress from the thermal gradient $\sigma_{thermal}$ and the pore pressure $\sigma_{pore}$ exceeds the degraded tensile strength of the concrete, cracks initiate parallel to the heated surface. The sudden release of accumulated elastic energy leads to the violent ejection of concrete fragments, characterizing the explosive spalling phenomenon.
 \section{Thermal behavior}
 
 \subsection{Conduction, convection and radiation}
@@ -72,6 +88,7 @@ To solve this equation, appropriate boundary conditions must be specified:
 
     \begin{equation}
         \vec{n} \cdot (\lambda \overrightarrow{\text{grad}}(T)) = \varphi_{imp} + h(T_f - T) + \varepsilon \sigma (T_\infty^4 - T^4)
+        \label{eq:thermal_bc}
     \end{equation}
     where $\varphi_{imp}$ is the prescribed heat flux, $h(T_f - T)$ represents the convection term, and $\varepsilon \sigma (T_\infty^4 - T^4)$ is the radiation term.
 \end{itemize}
@@ -144,7 +161,7 @@ By solving this linear system, we can determine the unknown temperatures $\{T\}$
 \subsection{Thermal gradient} \label{sec:thermal_gradient}
 
 Due to the low thermal conductivity of concrete, fire exposure produces steep temperature gradients near the heated surface. The hot surface layer tends to expand while the cooler interior restrains this deformation, generating compressive stresses at the surface and tensile stresses in the interior.
-Since concrete is inherently weak in tension, this stress state can initiate cracking parallel to the heated face. The role of thermal gradient in the spalling process is discussed further in \cref{sec:spalling} of \cref{chapter2}.
+Since concrete is inherently weak in tension, this stress state can initiate cracking parallel to the heated face. The role of thermal gradient in the spalling process is detailed in \cref{sec:THM_spalling_app}.
 
 \section{Hydric behavior}
 
@@ -419,7 +436,7 @@ where $\phi_0$ is the initial porosity and $A_\phi$ is a material constant.
 
 When concrete is heated, evaporation and dehydration produce vapor that raises the pore pressure. Part of this vapor migrates toward the cooler interior, where it recondenses and forms a quasi-saturated zone --- the \textit{moisture clog}. This layer blocks further gas transport, causing significant pressure build-up behind the drying front. In dense concretes such as HPC, the low intrinsic permeability $K_0$ further limits gas evacuation.
 
-When the pore pressure exceeds the tensile strength, it can trigger explosive spalling (\cref{sec:spalling}).
+When the pore pressure exceeds the tensile strength, it can trigger explosive spalling (\cref{sec:THM_spalling_app}).
 
 \section{Chemical behavior and Microstructural evolution} \label{sec:chemical_microstructure}
 
@@ -779,49 +796,7 @@ The effective stress $\boldsymbol{\sigma}'$ is the  stress that governs the mech
 \end{equation}
 where $\boldsymbol{\varepsilon}_{el} = \boldsymbol{\varepsilon} - \boldsymbol{\varepsilon}_{th} - \boldsymbol{\varepsilon}_{sh}$ (\cref{eq:eps_elastic}). This effective stress is the input to the Mazars damage criterion (\cref{sec:mazars}). In heated concrete, the build-up of gas pressure (\cref{sec:pore_pressure}) increases $p_s$ in the load vector, which shifts $\boldsymbol{\sigma}'$ toward tension and promotes damage when $f_t$ is exceeded.
 
-\section{THM interactions and spalling mechanisms} \label{sec:THM_spalling_app}
-%newly written (from chapter1 content)
-\subsection{Simultaneous THM behaviors and interactions}
-When concrete is heated rapidly, it does not merely experience a temperature rise; it undergoes a simultaneous interplay of thermal, hydric, and mechanical (THM) processes that strongly interact with each other. Heat is transmitted into the material essentially by conduction, while phase changes (evaporation of free water and dehydration of chemically bound water) consume energy and locally slow the temperature rise. The generated vapour is transported by pressure-driven Darcy flow and Fickian diffusion. Part of the vapour migrates inward, recondenses in cooler regions, and builds a quasi-saturated layer (the moisture clog) that blocks further gas transport. Mechanically, the concrete skeleton expands due to heat, shrinks due to capillary forces, and is subjected to internal loading from the trapped pressurized gas.
-
-\subsection{Spalling mechanisms}
-These coupled THM phenomena are the fundamental drivers of \emph{explosive spalling}. The specific mechanisms contributing to this failure are detailed below:
-\begin{itemize}
-    \item \textbf{Thermal:} Steep temperature gradients develop throughout the concrete's cross-section, causing differential thermal expansion. The surface layers attempt to expand but are restrained by the cooler interior, generating high compressive stresses at the heated surface and tensile stresses deeper inside.
-    \item \textbf{Hydric:} In low-permeability concretes such as high-performance concrete (HPC), the rapid generation of vapour from phase changes cannot escape fast enough. The formation of the moisture clog further seals the porous network, resulting in a dramatic pore pressure build-up behind the drying front.
-    \item \textbf{Mechanical:} The combined effects of thermal stresses and pore pressure build-up on the solid skeleton stretch the material beyond its tensile capacity. High temperatures simultaneously degrade the tensile strength $f_t(T)$ of the concrete.
-\end{itemize}
-
-When the combined stress from the thermal gradient $\sigma_{thermal}$ and the pore pressure $\sigma_{pore}$ exceeds the degraded tensile strength of the concrete, cracks initiate parallel to the heated surface. The sudden release of accumulated elastic energy leads to the violent ejection of concrete fragments, characterizing the explosive spalling phenomenon.
-
-\section{Thermal and hydric phenomena in heated concrete} \label{sec:phenomena}
-%moved from chapter2
-When one face of a concrete member is exposed to a rising temperature, a sequence of strongly interacting thermal and hydric processes develops through the thickness. Heat is transmitted into the material essentially by conduction, while phase changes (evaporation, dehydration) consume energy and locally slow the temperature rise. The generated vapour is transported by pressure-driven Darcy flow and Fickian diffusion. Part of the vapour migrates inward, recondenses in cooler regions, and builds a quasi-saturated layer (the moisture clog) that blocks further gas transport, causing a sharp pore-pressure build-up. The full mathematical derivation of these physical mechanisms, including fluxes and constitutive relations, is detailed in \cref{appendixA}.
-
-\section{Spalling mechanisms} \label{sec:spalling}
-%moved from chapter2
-Despite extensive experimental work, no single theory has reached consensus; the two most widely accepted mechanisms, and their combined action, are presented below.
-
-\subsection{Thermal-gradient mechanism}
-A steep temperature gradient through the thickness produces differential thermal dilation:
-\begin{enumerate}
-    \item \textbf{Compressive stresses in the heated cover}: the surface layers tend to expand but are restrained by the cooler interior, generating compressive stresses parallel to the heated face.
-    \item \textbf{Tensile stresses in the interior}: the restraint of the expanding surface induces tension in the deeper layers.
-    \item \textbf{Fracture and energy release}: when the tensile stress exceeds the tensile strength $f_t$, cracks form parallel to the surface; the sudden release of stored elastic energy can drive the explosive ejection of fragments.
-\end{enumerate}
-High-performance concrete (HPC) is particularly prone to this mechanism because its higher brittleness stores more elastic energy before failure, leading to a more violent release.
-
-\subsection{Pore-pressure mechanism (moisture clog)}
-The sequence of events is:
-\begin{enumerate}
-    \item \textbf{Dry zone}: near the heated face, free water evaporates and bound water is released by dehydration, forming a dry zone.
-    \item \textbf{Vapour migration}: part of the vapour escapes towards the heated face, part is driven inward.
-    \item \textbf{Condensation / moisture clog}: the inward vapour condenses where $T<T_{sat}$, forming a quasi-saturated, nearly impermeable barrier.
-    \item \textbf{Pressure build-up}: behind the clog, $p_g$ rises sharply as evaporation feeds a region from which vapour cannot escape; thermal dilation of liquid water in saturated pores adds to the build-up.
-    \item \textbf{Tensile failure}: when $p_g$ exceeds the tensile strength, cracks form parallel to the surface, potentially leading to explosive spalling.
-\end{enumerate}
-The governing parameters are the intrinsic permeability $K_0$ (low permeability hinders vapour evacuation) and the initial moisture content (more water to evaporate), both promoting higher pore pressures.
-
+% =====================================================================
 \section{THM governing formulation} \label{sec:THM_model}
 The state of concrete at high temperature is described by four primary variables \cite{dauti2018}:
 \begin{equation}
@@ -830,20 +805,9 @@ The state of concrete at high temperature is described by four primary variables
 \end{equation}
 where $p_g$ is the gas pressure, $p_c$ is the capillary pressure, $T$ is the temperature, and $\mathbf{u}$ is the displacement vector.
 
-The substitution of the constitutive laws and transport fluxes (detailed in the preceding sections) into the general mass, energy, and momentum balances yields the final coupled non-linear system. To avoid redundancy, the fully expanded partial differential equations for dry-air conservation, water-species conservation, and energy conservation are presented directly in \cref{sec:thcmodel} of \cref{chapter2}.
+The substitution of the constitutive laws and transport fluxes (detailed in the preceding sections) into the general mass, energy, and momentum balances yields the final coupled non-linear system. To avoid redundancy, the fully expanded partial differential equations for dry-air conservation, water-species conservation, and energy conservation are presented directly in \cref{chapter2}.
 
-By neglecting inertial forces, the momentum conservation reads:
-\begin{equation}
-    \nabla\cdot\boldsymbol{\sigma}^{Total} + \rho\,\mathbf{g} = \mathbf{0}
-    \label{eq:final_momentum}
-\end{equation}
-where $\mathbf{g}$ is the gravitational acceleration and the total density $\rho$ is:
-\begin{equation}
-    \rho = (1-\phi)\rho_s + \phi\left(S_l\rho_l + (1-S_l)\rho_g\right)
-    \label{eq:rho_total}
-\end{equation}
-The total stress $\boldsymbol{\sigma}^{Total}$ is related to the effective stress via Bishop's relation (\cref{eq:eff_stress}), which in turn depends on the primary variables $p_g$ and $p_c$. The discretisation of this equation into the global system $[\mathbf{K}_M]\{\mathbf{U}\} = \{\mathbf{F}\}$ is presented in \cref{sec:mechanical}.
-
+% =====================================================================
 \section{Discretization}\label{sec:discretization}
 
 \subsection{Spatial discretization} \label{sec:spatial_discret}

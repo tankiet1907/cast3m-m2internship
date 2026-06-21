@@ -1,6 +1,31 @@
 \chapter{Theory of Stochastic analysis} \label{appendixB}
 \review{This chapter is under review}
 
+% =====================================================================
+\section{Sources and classification of uncertainty} \label{sec:uncertainty-theory}
+
+\subsection{Motivation for probabilistic assessment}
+
+In civil engineering, a structure is considered safe when it remains fit for its intended use throughout its service life \cite{baroth2011}. Deterministic models have traditionally been used to evaluate structural safety. However, the gap between a real physical system and a simplified numerical model, along with the unforeseeable nature of future loads and environmental conditions, inherently leads to uncertainty \cite{baroth2023}.
+
+To manage these risks, modern engineering codes such as the Eurocodes adopt a probabilistic format \cite{baroth2011}. This allows the safety of a structure to be explicitly quantified through its probability of failure $P_f$ (\cref{sec:pf-beta}) and its reliability $R = 1 - P_f$. By introducing random variables into mechanical models and propagating them through structural analyses (\cref{sec:stochastic-framework}), objective decisions can be made based on both the probability of an event and the severity of its consequences \cite{baroth2023}.
+
+\subsection{Classification of uncertainties}
+
+According to reliability theory, uncertainties can be classified into two categories \cite{baroth2011,baroth2023}:
+
+\begin{itemize}
+    \item \textbf{Aleatoric uncertainties} arise from the natural randomness of the environment and the spatial or temporal variability of material properties. They cannot be reduced; they can only be quantified and accounted for in the design process \cite{baroth2023}.
+
+    \item \textbf{Epistemic uncertainties} stem from incomplete knowledge or insufficient data. They include \emph{model uncertainties} (discrepancy between mathematical models and actual physical processes) and \emph{statistical uncertainties} (limited or inaccurate data). Unlike aleatoric uncertainties, they can be reduced by improving models and gathering more data \cite{baroth2023}.
+\end{itemize}
+
+\subsection{Concrete heterogeneity and material variability}
+
+A critical source of aleatoric uncertainty is the inherent heterogeneity of concrete \cite{baroth2023,delarrard2010}. Its mechanical properties depend on the formation history, casting conditions, internal chemical reactions, and long-term degradation processes \cite{delarrard2010}.
+
+This variability manifests as \emph{continuous} spatial fluctuations (e.g.\ Young's modulus, permeability, porosity) and \emph{discrete} defects (e.g.\ micro-cracks, capillary networks) \cite{baroth2023}. Consequently, material parameters must be modelled as random variables or random fields rather than deterministic values (\cref{sec:stochastic-framework}).
+
 \section{Random variable (PDF, CDF, moments, CoV)} \label{sec:random-variables}
 
 \review{This section is currently under development and will be refined as the study progresses.}
@@ -89,6 +114,17 @@ The coefficient of variation quantifies the relative dispersion of $X$:
 \end{equation}
 
 It is a dimensionless measure that allows comparison of variability across parameters with different units and magnitudes. For concrete, typical values are $\mathrm{CoV}_E \approx 0.10$--$0.20$ for the Young's modulus \cite{delarrard2010} and $\mathrm{CoV}_K \approx 0.15$--$0.30$ for permeability \cite{baroth2023}.
+
+\subsection{Choice of probability distributions for concrete properties} \label{sec:distribution-justification}
+In the stochastic assessment of concrete structures (as performed in \cref{chapter5}), the choice of probability distributions must reflect the physical nature of the uncertainty. Three main distribution families are typically employed:
+
+\begin{description}
+    \item[Lognormal --- permeability $K_0$.] The intrinsic permeability is strictly positive and varies by multiplicative factors: it is known only to within an order of magnitude and its scatter is naturally expressed as a ratio, not an additive offset. A lognormal law guarantees $K_0>0$ for every sample and reproduces this multiplicative, positively skewed variability; it is the standard model for the permeability of concrete \cite{delarrard2010,sudret2000}. It is also consistent with the random-field generator of \cref{sec:spatial-effect}: the Cast3M \texttt{ALEA} operator produces a Gaussian field that is exponentiated into a lognormal one (\cref{sec:lognormal-transformation}), so the random-variable and random-field descriptions of $K_0$ share the same marginal.
+    
+    \item[Normal --- cement content $c$ and aggregate content $agg$.] The batched masses (in \si{\kilogram\per\cubic\meter}) are controlled by the mixing plant around a target value. Their variability is the accumulation of many small, independent dosing and weighing errors, which by the central-limit theorem tends to a Gaussian centred on the nominal dosage. The scatter is small relative to the mean ($\mathrm{CoV}\approx 4\%$ for $c$, $\approx 3\%$ for $agg$), so the symmetric Normal law describes the batch-to-batch dispersion faithfully and the probability of a physically meaningless (negative) sample is negligible.
+    
+    \item[Uniform --- ratios $w/c$ and $s/c$.] For the water/cement and silica/cement ratios, what is known is not a measured central tendency but an \emph{admissible design window}: an HPC of this type is specified to lie within $w/c\in[0.30,0.38]$ and $s/c\in[0.08,0.12]$. When only the bounds are known and there is no basis to prefer any value inside them, the maximum-entropy (least-informative) choice is the uniform distribution \cite{baroth2023}. It models the \emph{epistemic} imprecision of the as-specified mix rather than a measurement scatter, and it keeps every sample strictly within the physically admissible window, avoiding tails that would push Powers' model or the solver outside its valid range.
+\end{description}
 
 \section{Random fields} \label{sec:random-fields}
 

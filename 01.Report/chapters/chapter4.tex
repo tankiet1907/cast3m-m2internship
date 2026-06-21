@@ -45,16 +45,10 @@ In every stage, a wider range of each parameter is first explored to bracket the
 \section{Temperature calibration} \label{sec:cal-temp}
     
 \subsection{Surface temperature (00mm): boundary heat exchange coefficient} \label{sec:cal-surf}
- 
-The first quantity calibrated is the temperature of the heated face. In the experiment, heat is supplied by a radiant heater on the top-hot face, so the surface energy balance is mostly influneced by radiation and convection. See \cref{eq:convection} and \cref{eq:radiation}:
-\begin{equation}
-  q_{00\,\mathrm{mm}} = h^{\mathrm{hot}}\,(T_\infty - T_s)
-  + \varepsilon\,\sigma\,\bigl(T_{\mathrm{sur}}^{4} - T_s^{4}\bigr),
-  \label{eq:surf-bc}
-\end{equation}
-where $h^{\mathrm{hot}}$ is the convective heat-transfer coefficient at the top-hot surface, $\varepsilon$ the surface emissivity (radiative coefficient), $\sigma$ the Stefan--Boltzmann constant, $T_{sur}$ and  $T_\infty$ are the surrounding temperature provided by the radiant heat source and $T_s$ the surface temperature.
- 
-The two boundary coefficients $h^{\mathrm{hot}}$ and $\varepsilon$ are adjusted so that the computed $0~\mathrm{mm}$ history matches the measured near-surface ($2~\mathrm{mm}$) response. At this point the conduction parameters are held at their reference values; only the energy input at the surface is tuned.
+
+The first quantity calibrated is the temperature of the heated face. In the experiment, heat is supplied by a radiant heater on the top-hot face, so the surface energy balance is mostly influenced by radiation and convection. As defined in the boundary conditions (\cref{eq:heated-face} of \cref{chapter3}), the total heat flux $q_{\mathrm{hot}}$ depends directly on two boundary coefficients: the convective heat-transfer coefficient $h^{\mathrm{hot}}$ and the surface emissivity $\varepsilon$.
+
+These two parameters ($h^{\mathrm{hot}}$ and $\varepsilon$) are adjusted so that the computed $0~\mathrm{mm}$ history matches the measured near-surface ($2~\mathrm{mm}$) response. At this point the conduction parameters are held at their reference values; only the energy input at the surface is tuned.
 
 The surface response is calibrated over three values of $\varepsilon$ ($0.65$, $0.68$, $0.72$) and three of $h_c$ ($9$, $10$, $11~\mathrm{W\,m^{-2}K^{-1}}$). 
 
@@ -81,7 +75,7 @@ Because the resulting curves differ only slightly, the full $3\times 3$ grid is 
 
 Two distinct effects are concluded from \cref{fig:cal-surf-eps,fig:cal-surf-h}: 
 \begin{itemize}
-  \item The emissivity $\varepsilon$ is the most sensitive parameter (\cref{fig:cal-surf-eps}): because the radiative term acts in a strong non-linear way as $T^{4}$ in \cref{eq:surf-bc}, a small increase in $\varepsilon$ raises the surface temperature substantially, and mostly in the high-temperature part of the curve, where radiation dominates the heat input. 
+  \item The emissivity $\varepsilon$ is the most sensitive parameter (\cref{fig:cal-surf-eps}): because the radiative term acts in a strong non-linear way as $T_s^4$ (\cref{eq:heated-face}), a small increase in $\varepsilon$ raises the surface temperature substantially, and mostly in the high-temperature part of the curve, where radiation dominates the heat input.
 
   \item The convective coefficient $h^{\mathrm{hot}}$ acts more gently and mainly on the \emph{early} part of the curve (\cref{fig:cal-surf-h}): increasing $h^{\mathrm{hot}}$ raises the initial heating rate (the linear $h^{\mathrm{hot}}(T_\infty - T_s)$ term is largest while $T_s$ is still low), with only a slight additional rise in the tail. 
 \end{itemize}

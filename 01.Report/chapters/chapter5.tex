@@ -1,39 +1,17 @@
 %\cleardoublepage %already included in mainmatter 
 \chapter{Stochastic assessment of the model} \label{chapter5} %should be limited to 10 pages
-
-\section{Sources of uncertainty and concrete heterogeneity}
-
-\subsection{Motivation for probabilistic assessment}
-
-In civil engineering, a structure is considered safe when it remains fit for its intended use throughout its service life \cite{baroth2011}. Deterministic models have traditionally been used to evaluate structural safety. However, the gap between a real physical system and a simplified numerical model, along with the unforeseeable nature of future loads and environmental conditions, inherently leads to uncertainty \cite{baroth2023}.
-
-To manage these risks, modern engineering codes such as the Eurocodes adopt a probabilistic format \cite{baroth2011}. This allows the safety of a structure to be explicitly quantified through its probability of failure $P_f$ (\cref{sec:pf-beta}) and its reliability $R = 1 - P_f$. By introducing random variables into mechanical models and propagating them through structural analyses (\cref{sec:stochastic-framework}), objective decisions can be made based on both the probability of an event and the severity of its consequences \cite{baroth2023}.
-
-\subsection{Classification of uncertainties}
-
-According to reliability theory, uncertainties can be classified into two categories \cite{baroth2011,baroth2023}:
-
-\begin{itemize}
-    \item \textbf{Aleatoric uncertainties} arise from the natural randomness of the environment and the spatial or temporal variability of material properties. They cannot be reduced; they can only be quantified and accounted for in the design process \cite{baroth2023}.
-
-    \item \textbf{Epistemic uncertainties} stem from incomplete knowledge or insufficient data. They include \emph{model uncertainties} (discrepancy between mathematical models and actual physical processes) and \emph{statistical uncertainties} (limited or inaccurate data). Unlike aleatoric uncertainties, they can be reduced by improving models and gathering more data \cite{baroth2023}.
-\end{itemize}
-
-\subsection{Concrete heterogeneity and material variability}
-
-A critical source of aleatoric uncertainty is the inherent heterogeneity of concrete \cite{baroth2023,delarrard2010}. Its mechanical properties depend on the formation history, casting conditions, internal chemical reactions, and long-term degradation processes \cite{delarrard2010}.
-
-This variability manifests as \emph{continuous} spatial fluctuations (e.g.\ Young's modulus, permeability, porosity) and \emph{discrete} defects (e.g.\ micro-cracks, capillary networks) \cite{baroth2023}. Consequently, material parameters must be modelled as random variables or random fields rather than deterministic values (\cref{sec:stochastic-framework}).
+\review{This chapter is under review}
 
 \section{Stochastic finite element framework} \label{sec:stochastic-framework}
-In structural engineering, material properties such as the Young's modulus, permeability, or thermal conductivity are never perfectly known. As noted by \cite{delarrard2010}, even under strict quality control the compressive strength of high-performance concrete can range from 62 to~100~MPa. Two approaches exist to handle this uncertainty:
+\subsection{Motivation}
+In civil engineering, material properties such as permeability, thermal conductivity, or compressive strength are never perfectly known due to the inherent heterogeneity of concrete \cite{baroth2011,delarrard2010}. Evaluating structural safety using purely deterministic models---which assign a single fixed value to each parameter---is therefore often insufficient, as it cannot capture the realistic scatter of the structural response or quantify the likelihood of failure.
 
-\begin{enumerate}
-    \item A \emph{deterministic} analysis assigns a single fixed value to each parameter and produces a unique structural response; it cannot, by itself, quantify the likelihood that a design limit will be exceeded.
-    \item A \emph{stochastic} analysis, on the other hand, treats uncertain parameters as random quantities, propagates this uncertainty through the model, and delivers statistical information---mean, variance, probability of failure---about the structural response.
-\end{enumerate}
+This limitation is particularly critical for predicting explosive spalling, a highly localized failure driven by spatial fluctuations of material properties (e.g., micro-defects) and the unpredictable nature of extreme thermal loads. To explicitly quantify this risk, a \emph{stochastic} framework must be adopted, where material parameters are treated as random variables or spatial random fields. 
 
-To handle uncertainties in the finite element model, two levels of stochastic description are applied in this work. While various numerical tools are employed across the different analyses (e.g., LHS, Monte Carlo, PCE, KDE, Gaussian Quadrature), they all share a unified mathematical foundation rooted in the Probability Density Function (PDF) and the Cumulative Distribution Function (CDF). The full mathematical definitions linking these core probabilistic concepts to the utilized simulation methods are detailed in \cref{appendixB}.
+\textbf{The comprehensive theoretical background regarding the formal classification of uncertainties (aleatoric vs. epistemic), as well as the mathematical definitions linking these core probabilistic concepts to the utilized simulation methods, are deferred to \cref{appendixB}.}
+
+\subsection{Continuous stochastic workflow}
+To handle these uncertainties within the finite element model, various numerical tools are employed across the different analyses (e.g., LHS, Monte Carlo, PCE, KDE, Gaussian Quadrature). While diverse, they all share a unified mathematical foundation rooted in the Probability Density Function (PDF) and the Cumulative Distribution Function (CDF). 
 
 Specifically, the roles of the PDF and CDF form a continuous stochastic workflow throughout the analyses:
 \begin{itemize}
@@ -50,7 +28,6 @@ Within this general workflow, the spatial dimension of the uncertainty is treate
 \end{description}
 
 
-\review{The following sections are currently under review and need to be rewritten}
 % =====================================================================
 \section{Uncertain inputs and quantity of interest} \label{sec:uncertain-params}
  
@@ -66,15 +43,10 @@ The uncertainty is propagated through \emph{two independent studies} rather than
 The two are kept apart for two reasons. First, they are of different nature --- a material-property scatter on one side, an upstream design imprecision on the other --- and mixing them would blur the interpretation. Second, $K_0$ is known from \cref{chapter4} to dominate the pressure response; pooling it with the four mix proportions in a single variance decomposition would let its variance swamp the Sobol indices (\cref{sec:sobol}) and \emph{mask} the relative importance \emph{among} the mix proportions. Separating the analyses lets each source be characterised on its own terms.
  
 \subsection{Choice of probability distributions} \label{sec:distributions}
- 
-Three distribution families are used (\cref{tab:random-variables}), each chosen to reflect the \emph{nature} of the corresponding uncertainty rather than by convenience; the formal definitions are given in \cref{sec:random-variables}.
- 
-\begin{description}
-  \item[Lognormal --- permeability $K_0$.] The intrinsic permeability is strictly positive and varies by multiplicative factors: it is known only to within an order of magnitude and its scatter is naturally expressed as a ratio, not an additive offset. A lognormal law guarantees $K_0>0$ for every sample and reproduces this multiplicative, positively skewed variability; it is the standard model for the permeability of concrete \cite{delarrard2010,sudret2000}. It is also consistent with the random-field generator of \cref{sec:spatial-effect}: the Cast3M \texttt{ALEA} operator produces a Gaussian field that is exponentiated into a lognormal one (\cref{sec:lognormal-transformation}), so the random-variable and random-field descriptions of $K_0$ share the same marginal.
-  \item[Normal --- cement content $c$ and aggregate content $agg$.] The batched masses (in \si{\kilogram\per\cubic\meter}) are controlled by the mixing plant around a target value. Their variability is the accumulation of many small, independent dosing and weighing errors, which by the central-limit theorem tends to a Gaussian centred on the nominal dosage. The scatter is small relative to the mean ($\mathrm{CoV}\approx 4\%$ for $c$, $\approx 3\%$ for $agg$), so the symmetric Normal law describes the batch-to-batch dispersion faithfully and the probability of a physically meaningless (negative) sample is negligible.
-  \item[Uniform --- ratios $w/c$ and $s/c$.] For the water/cement and silica/cement ratios, what is known is not a measured central tendency but an \emph{admissible design window}: an HPC of this type is specified to lie within $w/c\in[0.30,0.38]$ and $s/c\in[0.08,0.12]$. When only the bounds are known and there is no basis to prefer any value inside them, the maximum-entropy (least-informative) choice is the uniform distribution \cite{baroth2023}. It models the \emph{epistemic} imprecision of the as-specified mix rather than a measurement scatter, and it keeps every sample strictly within the physically admissible window, avoiding tails that would push Powers' model or the solver outside its valid range.
-\end{description}
- 
+Three distribution families are used in this stochastic assessment, each chosen to reflect the \emph{nature} of the corresponding uncertainty rather than by convenience. The selected distributions and their parameters are summarised in \cref{tab:random-variables}. 
+
+\textbf{The detailed physical and mathematical justifications for selecting the Lognormal law for permeability, the Normal law for batching weights, and the Uniform law for design ratios are deferred to \cref{sec:distribution-justification} in \cref{appendixB}.}
+
 The four mix proportions are taken as mutually independent design choices; their physical coupling (a given $w/c$ and $s/c$ jointly set porosity and permeability) is produced \emph{inside} the model by Powers' stoichiometry, not imposed on the inputs. The \textsc{OpenTURNS} declaration is given in \cref{tab:random-variables}.
  
 \begin{table}[htbp]
@@ -143,16 +115,21 @@ The comprehensive theoretical background regarding the stochastic framework, pro
 
 \begin{figure}[htbp]
   \centering
-  \includegraphics[width=0.7\linewidth]{figures/chapter5/analysisA/Scatter_Plots_Pg_10_Max}
-  \caption{Analysis A--- correlation: Pearson and Spearman rank correlation of $K_0$ with the peak pressure $p_g^{10}$.}
-  \label{fig:sensA-corr}
-\end{figure}
-
-\begin{figure}[htbp]
-  \centering
-  \includegraphics[width=1\linewidth]{figures/chapter5/analysisA/Confidence_Intervals_GasPressure}
-  \caption{Analysis A --- bootstrap $95\%$ confidence-interval bands of the first- and total-order Sobol indices.}
-  \label{fig:sensA-ci}
+  \begin{subfigure}[b]{0.48\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{figures/chapter5/analysisA/Scatter_Plots_Pg_10_Max}
+    \caption{Correlation of $K_0$ with peak pressure $p_g^{10}$.}
+    \label{fig:sensA-corr}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[b]{0.48\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{figures/chapter5/analysisA/Confidence_Intervals_GasPressure}
+    \caption{Bootstrap $95\%$ confidence-interval bands.}
+    \label{fig:sensA-ci}
+  \end{subfigure}
+  \caption{Analysis A: Correlation and confidence intervals of the intrinsic permeability ($K_0$).}
+  \label{fig:cal-sensA-combined}
 \end{figure}
 
 \subsection{Analysis B --- mix composition} \label{sec:sens-mix}
@@ -168,26 +145,34 @@ In Analysis B, the four mix proportions are treated as random variables. To over
  
 \begin{figure}[htbp]
   \centering
-  \includegraphics[width=0.7\linewidth]{figures/chapter5/analysisB/Sobol_Sensitivity_Pg_10_Max}
-  \caption{Analysis B --- first- and total-order Sobol indices ($S_i$, $S_{T_i}$) of the mix proportions on $p_g^{10}$.}
-  \label{fig:sensB-sobol1}
+  \begin{subfigure}[b]{0.48\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{figures/chapter5/analysisB/Sobol_Sensitivity_Pg_10_Max}
+    \caption{First- and total-order Sobol indices.}
+    \label{fig:sensB-sobol1}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[b]{0.48\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{figures/chapter5/analysisB/Sobol_SecondOrder_Heatmap_Pg_10_Max}
+    \caption{Second-order Sobol indices.}
+    \label{fig:sensB-sobol2}
+  \end{subfigure}
+  \caption{Analysis B: Variance-based sensitivity (Sobol indices) of the mix proportions.}
+  \label{fig:cal-sensB-sobol}
 \end{figure}
+
  
 \begin{figure}[htbp]
   \centering
-  \includegraphics[width=0.7\linewidth]{figures/chapter5/analysisB/Sobol_SecondOrder_Heatmap_Pg_10_Max}
-  \caption{Analysis B --- second-order Sobol indices $S_{ij}$ of the mix-proportion pairs on $p_g^{10}$.}
-  \label{fig:sensB-sobol2}
-\end{figure}
- 
-\begin{figure}[htbp]
-  \centering
-  \includegraphics[width=1\linewidth]{figures/chapter5/analysisB/Confidence_Intervals_GasPressure}
+  \includegraphics[width=0.6\linewidth]{figures/chapter5/analysisB/Confidence_Intervals_GasPressure}
   \caption{Analysis B --- bootstrap $95\%$ confidence-interval bands of the first- and total-order Sobol indices.}
   \label{fig:sensB-ci}
 \end{figure}
 
-\textbf{Conclusion.} In Analysis~A \cref{fig:sensA-corr} the permeability shows a clear, almost deterministic dependence: $K_0$ is strongly and negatively correlated with $p_g^{10}$ (Pearson/Spearman $\approx -0.98$), the points falling on a tight monotone curve, which confirms permeability as the controlling input. In Analysis~B \cref{fig:sensB-corr} the picture is far more scattered: apart from $w/c$, which is strongly correlated with $p_g^{10}$ ($\approx 0.93$), only the cement content shows an appreciable correlation ($\approx 0.34$), while the aggregate content and $s/c$ are essentially uncorrelated ($-0.11$ and $0.24$). The variance-based ranking confirms and sharpens this: $w/c$ carries by far the largest Sobol index ($S_i\approx S_{T_i}\approx 0.58$), followed by the cement content ($\approx 0.25$) and the aggregate content ($\approx 0.15$), while $s/c$ is negligible ($<0.01$). The first- and total-order indices nearly coincide for every input, so the interactions are weak and the response is essentially additive, and the second-order indices (\cref{fig:sensB-sobol2}) are correspondingly small. Notably, the aggregate content is almost uncorrelated yet still carries a non-negligible total index, a contribution that the monotone correlation misses but the variance decomposition captures.
+\textbf{Conclusion.} In Analysis~A \cref{fig:sensA-corr} the permeability shows a clear, almost deterministic dependence: $K_0$ is strongly and negatively correlated with $p_g^{10}$ (Pearson/Spearman $\approx -0.98$), the points falling on a tight monotone curve, which confirms permeability as the controlling input. In Analysis~B \cref{fig:sensB-corr} the picture is far more scattered: apart from $w/c$, which is strongly correlated with $p_g^{10}$ ($\approx 0.93$), only the cement content shows an appreciable correlation ($\approx 0.34$), while the aggregate content and $s/c$ are essentially uncorrelated ($-0.11$ and $0.24$). 
+
+The variance-based ranking confirms and sharpens this: $w/c$ carries by far the largest Sobol index ($S_i\approx S_{T_i}\approx 0.58$), followed by the cement content ($\approx 0.25$) and the aggregate content ($\approx 0.15$), while $s/c$ is negligible ($<0.01$). The first- and total-order indices nearly coincide for every input, so the interactions are weak and the response is essentially additive, and the second-order indices (\cref{fig:sensB-sobol2}) are correspondingly small. Notably, the aggregate content is almost uncorrelated yet still carries a non-negligible total index, a contribution that the monotone correlation misses but the variance decomposition captures.
 
 The dominance of $w/c$ shows that the initial free-water content of the mix governs the peak pressure far more than any other proportion: a higher $w/c$ means both a more open pore structure and more capillary water available to vaporise, and both feed the gas pressure. This is fully consistent with \cref{sec:cal-secondary}, where a higher initial relative humidity was found to release more vapour and raise $p_g^{10}$. 
 
@@ -210,16 +195,21 @@ These reconstructed PDFs (\cref{fig:reliability-A,fig:reliability-B}) visually d
 
 \begin{figure}[htbp]
   \centering
-  \includegraphics[width=0.7\linewidth]{figures/chapter5/analysisA/Reliability_Analysis_Pg_10_Max}
-  \caption{Analysis A: PDF of the peak pressure $p_g^{10}$ under the permeability uncertainty ($K_0$), with the critical threshold $p_{\mathrm{crit}}$ (shaded tail $=P_f$) and the measured Kalifa $10~\mathrm{mm}$ peak.}
-  \label{fig:reliability-A}
-\end{figure}
-
-\begin{figure}[htbp]
-  \centering
-  \includegraphics[width=0.7\linewidth]{figures/chapter5/analysisB/Reliability_Analysis_Pg_10_Max}
-  \caption{Analysis B: PDF of the peak pressure $p_g^{10}$ under the mix-composition uncertainty $(c,agg,w/c,s/c)$, with the critical threshold $p_{\mathrm{crit}}$ (shaded tail $=P_f$) and the measured Kalifa $10~\mathrm{mm}$ peak.}
-  \label{fig:reliability-B}
+  \begin{subfigure}[b]{0.48\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{figures/chapter5/analysisA/Reliability_Analysis_Pg_10_Max}
+    \caption{Analysis A: Permeability uncertainty ($K_0$).}
+    \label{fig:reliability-A}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[b]{0.48\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{figures/chapter5/analysisB/Reliability_Analysis_Pg_10_Max}
+    \caption{Analysis B: Mix-composition uncertainty.}
+    \label{fig:reliability-B}
+  \end{subfigure}
+  \caption{Reliability Analysis: PDF of the peak pressure $p_g^{10}$ with the critical threshold $p_{\mathrm{crit}}$ (shaded tail $= P_f$) and the measured Kalifa $10~\mathrm{mm}$ peak.}
+  \label{fig:reliability-combined}
 \end{figure}
 
 \textbf{Conclusion.} With the critical threshold set at $p_{\mathrm{crit}}=2.5~\mathrm{MPa}$:
@@ -254,18 +244,23 @@ The theoretical background for the TBM and Gaussian Quadrature frameworks can be
 
 However, for Analysis C3, because Cast3M lacks native support for exporting these continuous PDF curves for high-quality visualization, statical moments calculation and the Pearson type III reconstruction based on the quadrature moments was re-implemented in Python. This ensures consistent plotting and comparison against the LHS and random field methods. Ultimately, this approach serves as a computationally inexpensive cross-check to validate the statistical moments obtained from the LHS baseline (C1).
 
-\begin{figure}[H]
+\begin{figure}[htbp]
   \centering
-  \includegraphics[width=0.6\textwidth]{figures/chapter5/random-field-of-K-in-cube}
-  \caption{A single realization of the spatially heterogeneous intrinsic permeability field $K_0(\mathbf{x})$ generated on the 3D cube mesh using the Turning Bands Method ($L_c = 0.02$~m).}
-  \label{fig:rf_k_cube}
-\end{figure}
-
-\begin{figure}[H]
-  \centering
-  \includegraphics[width=0.6\textwidth]{figures/chapter5/final-strain-of-cube}
-  \caption{Resulting final shrinkage strain field of the concrete cube induced by capillary forces, highlighting the localized deformations driven by the heterogeneous permeability field.}
-  \label{fig:strain_cube}
+  \begin{subfigure}[b]{0.48\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{figures/chapter5/random-field-of-K-in-cube}
+    \caption{Random field of $K_0(\mathbf{x})$ using TBM.}
+    \label{fig:rf_k_cube}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[b]{0.48\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{figures/chapter5/final-strain-of-cube}
+    \caption{Resulting final shrinkage strain field.}
+    \label{fig:strain_cube}
+  \end{subfigure}
+  \caption{Spatial heterogeneity: Intrinsic permeability field and induced localized deformations.}
+  \label{fig:rf-strain-combined}
 \end{figure}
 
 \begin{figure}[htbp]
@@ -281,32 +276,41 @@ The mean curve alone therefore cannot identify the more critical analysis. This 
 
 \begin{figure}[htbp]
   \centering
-  \includegraphics[width=0.7\linewidth]{figures/chapter5/analysisC1/Scatter_Plots_Shrinkage_Strain}
-  \caption{Analysis C1 (OpenTURNS + LHS): Pearson and Spearman rank correlation between the intrinsic permeability ($K_0$) and the resulting longitudinal shrinkage strain.}
-  \label{fig:C1_scatter}
+  \begin{subfigure}[b]{0.48\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{figures/chapter5/analysisC1/Scatter_Plots_Shrinkage_Strain}
+    \caption{Correlation of $K_0$ and shrinkage strain.}
+    \label{fig:C1_scatter}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[b]{0.48\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{figures/chapter5/analysisC1/Reliability_Analysis_Shrinkage_Strain}
+    \caption{Probability Density Function (PDF).}
+    \label{fig:C1_pdf}
+  \end{subfigure}
+  \caption{Analysis C1 (OpenTURNS + LHS): Correlation and PDF of the longitudinal shrinkage strain.}
+  \label{fig:c1-combined}
 \end{figure}
 
 \begin{figure}[htbp]
   \centering
-  \includegraphics[width=0.7\linewidth]{figures/chapter5/analysisC1/Reliability_Analysis_Shrinkage_Strain}
-  \caption{Analysis C1 (OpenTURNS + LHS): Probability Density Function (PDF) of the longitudinal shrinkage strain induced by the uncertainty of the intrinsic permeability ($K_0$).}
-  \label{fig:C1_pdf}
+  \begin{subfigure}[b]{0.48\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{figures/chapter5/analysisC2/Reliability_Analysis_Shrinkage_Strain}
+    \caption{Analysis C2 (Cast3M \texttt{ALEA}).}
+    \label{fig:C2_pdf}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[b]{0.48\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{figures/chapter5/analysisC3/Quadrature_PDF}
+    \caption{Analysis C3 (Gaussian Quadrature).}
+    \label{fig:C3_pdf}
+  \end{subfigure}
+  \caption{Probability Density Functions (PDF) of the longitudinal shrinkage strain for Analysis C2 and C3.}
+  \label{fig:c2c3-combined}
 \end{figure}
-
-\begin{figure}[htbp]
-  \centering
-  \includegraphics[width=0.7\linewidth]{figures/chapter5/analysisC2/Reliability_Analysis_Shrinkage_Strain}
-  \caption{Analysis C2 (Cast3M \texttt{ALEA}): Probability Density Function (PDF) of the longitudinal shrinkage strain considering the spatial heterogeneity of the intrinsic permeability field.}
-  \label{fig:C2_pdf}
-\end{figure}
-
-\begin{figure}[htbp]
-  \centering
-  \includegraphics[width=0.7\linewidth]{figures/chapter5/analysisC3/Quadrature_PDF}
-  \caption{Analysis C3 (Gaussian Quadrature): Probability Density Function (PDF) of the longitudinal shrinkage strain evaluated through the deterministic few-point integration scheme.}
-  \label{fig:C3_pdf}
-\end{figure}
-
 
 \textbf{Conclusion.} Two cross-checks and one primary physical observation are drawn from this comparative study. First, while both LHS (Analysis C1) and Gaussian quadrature (Analysis C3) treat the intrinsic permeability as a homogeneous random variable, their resulting probability distributions exhibit noticeable differences. Although the 7-point quadrature scheme provides a computationally inexpensive estimation, it yields a \emph{more critical} response profile for the capillary pressure $P_c$ and the longitudinal shrinkage strain compared to the 30-sample LHS baseline. 
 

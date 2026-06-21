@@ -5,9 +5,10 @@
 % =====================================================================
 \section{The Kalifa experiment} \label{sec:kalifa}
 
-\paragraph{Purpose.}
-The campaign of Kalifa et al.~\cite{kalifa2000} quantifies the \emph{thermo-hydral} process responsible for spalling. When concrete is heated on one face, free and chemically bound water are released as vapour; part migrates inward, recondenses in cooler regions and forms a quasi-saturated \emph{moisture clog} that blocks gas evacuation and triggers a sharp pore-pressure build-up behind the drying front. The test measures \emph{simultaneously and continuously} the temperature, the gas (pore) pressure at several depths, and the global mass loss, providing a quantitative dataset for validating coupled codes.
- 
+\paragraph{Purpose and selection rationale.} The campaign of Kalifa et al.~\cite{kalifa2000} is one of the first and most widely recognized small-scale tests designed to provide a comprehensive quantitative dataset for understanding concrete spalling. It continuously and \emph{simultaneously} measures the temperature, the gas (pore) pressure at several depths, and the global mass loss of a concrete specimen subjected to a severe one-dimensional thermal load. Consequently, it has become a highly popular experimental benchmark for validating coupled numerical codes.
+
+This specific experiment was deliberately chosen as the primary validation benchmark for two main reasons. First, it provides the essential macroscopic variables required to assess the pore-pressure build-up mechanism. Second, the Kalifa test was extensively analyzed and simulated in Dauti's thesis \cite{dauti2018} using a standard Thermo-Hydric (TH) model. By adopting the same reference experiment, the present study can rigorously verify the newly implemented Thermo-Hydro-Chemical (THC) model by comparing its predictions not only against the raw experimental measurements but also against the established TH coupled results from Dauti.
+
 \paragraph{Set-up and instrumentation.}
 A prismatic specimen of $30\times30\times12~\si{\centi\meter\cubed}$ is heated on one $30\times30~\si{\centi\meter\squared}$ face by a radiant heater (up to \SI{5}{\kilo\watt}, \SI{800}{\celsius}) placed \SI{3}{\centi\meter} above the surface. The lateral faces are insulated with porous ceramic blocks, so heat and mass transfer are essentially one-dimensional. The specimen rests on a balance recording its mass. Five gauges measure pressure and temperature at \SIlist{10;20;30;40;50}{\milli\meter} from the heated face, and a sixth tube measures the surface temperature at \SI{2}{\milli\meter} depth.
 
@@ -108,7 +109,7 @@ matching the gauge positions. A graded mesh refined toward the hot face
     \end{equation}
     where $K_0$ is the initial intrinsic permeability (often denoted $K_1$ in the numerical code). $A_\Gamma$ dictates the magnitude of permeability increase as C-S-H decomposes, while $B_K$ controls the curve shape. Further theoretical derivations are provided in \cref{sec:perm-law}.
 \end{itemize}
-The porosity, the water content at full hydration, and the initial hydration field are internally computed using Powers' stoichiometric model (\cref{sec:powers} in \cref{appendixA}).
+The porosity, the water content at full hydration, and the initial hydration field are internally computed using Powers' stoichiometric model in \cref{sec:powers}.
 
 \begin{table}[ht]
 \centering
@@ -145,12 +146,12 @@ Desorption curve       & $a_1$      & \SI{18.6}{\mega\pascal} \\
 \end{tabular}
 \end{table}
  
-\paragraph{Thermal input and boundary conditions.} The boundary set-up follows the modelling of Dauti~\cite{dauti2018} (Figure~\ref{fig:setup}). On the hot face a combined convection--radiation condition is imposed,
+\paragraph{Thermal input and boundary conditions.} The boundary set-up follows the modelling of Dauti~\cite{dauti2018} (\cref{fig:setup}). On the hot face a combined convection--radiation condition (See \cref{eq:thermal_bc}) is imposed:
 \begin{equation}
-    -\lambda \frac{\partial T}{\partial n}\Big|_{\mathrm{hot}} = h^{\mathrm{hot}}(T_\infty - T) + \epsilon \sigma \big(T_\infty^4 - T^4\big),
+    q_{\mathrm{hot}} = -\lambda \frac{\partial T}{\partial n}\Big|_{\mathrm{hot}} = h^{\mathrm{hot}}(T_\infty - T_s) + \varepsilon \sigma \big(T_\infty^4 - T_s^4\big),
     \label{eq:heated-face}
 \end{equation}
-with $h^{\mathrm{hot}}=\SI{8}{\watt\per\meter\squared\per\kelvin}$, emissivity $\epsilon=0.7$, and a prescribed radiator temperature $T_\infty(t)$ that rises to $\approx\SI{400}{\celsius}$ at the onset of the accident and then increases quasi-linearly to $\approx\SI{466}{\celsius}$ over the $\approx\SI{240}{\minute}$ accident (Figure~\ref{fig:setup}b); the radiator is switched off afterwards. The cold face exchanges heat by convection only ($h^{\mathrm{cold}}=\SI{8.3}{\watt\per\meter\squared\per\kelvin}$, $T_\infty=\SI{20}{\celsius}$). On both faces the gas pressure is fixed at atmospheric ($p_g=p_{atm}$) and a convective vapour flux $q_w=h_g(\rho_{v}^{s}-\rho_{v}^{\infty})$ is applied.
+with the initial reference values $h^{\mathrm{hot}}=\SI{8}{\watt\per\meter\squared\per\kelvin}$, emissivity $\varepsilon=0.7$, and a prescribed radiator temperature $T_\infty(t)$ that rises to $\approx\SI{400}{\celsius}$ at the onset of the accident and then increases quasi-linearly to $\approx\SI{466}{\celsius}$ over the $\approx\SI{240}{\minute}$ accident (\cref{fig:setup}b); the radiator is switched off afterwards. The cold face exchanges heat by convection only ($h^{\mathrm{cold}}=\SI{8.3}{\watt\per\meter\squared\per\kelvin}$, $T_\infty=\SI{20}{\celsius}$). On both faces the gas pressure is fixed at atmospheric ($p_g=p_{\mathrm{atm}}$) and a convective vapour flux $q_w=h_g(\rho_{v}^{s}-\rho_{v}^{\infty})$ is applied.
 
 The mass-transfer coefficient $h_g$ increasing from $0$ (sealed) to $\SI{2e-3}{}$ (drying) and $\SI{1.8e-2}{\meter\per\second}$ (accident). It is important to distinguish these transfer coefficients: while the convective heat transfer coefficients ($h^{\mathrm{hot}}, h^{\mathrm{cold}}$) govern the exchange of thermal energy across the boundary, the mass-transfer coefficient ($h_g$) specifically dictates the rate at which water vapour escapes from the porous network to the surrounding environment.
 
