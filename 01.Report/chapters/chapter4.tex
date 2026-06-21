@@ -60,18 +60,23 @@ The surface response is calibrated over three values of $\varepsilon$ ($0.65$, $
 
 Because the resulting curves differ only slightly, the full $3\times 3$ grid is not informative; instead the effect of each parameter is shown one at a time, varying it while the other is held at its retained value (\cref{fig:cal-surf-eps,fig:cal-surf-h}). The pair retained at this stage is $\varepsilon = 0.68$ and $h^{\mathrm{hot}} = 11~\mathrm{W\,m^{-2}K^{-1}}$.
 
-\begin{figure}[H]
+\begin{figure}[htbp]
   \centering
-  \includegraphics[width=0.75\textwidth]{figures/chapter4/surf_eps_sweep.png}
-  \caption{Surface ($0~\mathrm{mm}$) temperature: sensitivity to the emissivity $\varepsilon$ ($h_c = 11$ fixed), compared with the measured near-surface response.}
-  \label{fig:cal-surf-eps}
-\end{figure}
-
-\begin{figure}[H]
-  \centering
-  \includegraphics[width=0.75\textwidth]{figures/chapter4/surf_h_sweep.png}
-  \caption{Surface ($0~\mathrm{mm}$) temperature: sensitivity to the convective coefficient $h_c$ ($\varepsilon = 0.68$ fixed), compared with the measured near-surface response.}
-  \label{fig:cal-surf-h}
+  \begin{subfigure}[b]{0.48\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{figures/chapter4/surf_eps_sweep.png}
+    \caption{Sensitivity to the emissivity $\varepsilon$ ($h_c = 11$ fixed).}
+    \label{fig:cal-surf-eps}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[b]{0.48\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{figures/chapter4/surf_h_sweep.png}
+    \caption{Sensitivity to the convective coefficient $h_c$ ($\varepsilon = 0.68$ fixed).}
+    \label{fig:cal-surf-h}
+  \end{subfigure}
+  \caption{Surface ($0~\mathrm{mm}$) temperature calibration, compared with the measured near-surface response.}
+  \label{fig:cal-surf}
 \end{figure}
 
 Two distinct effects are concluded from \cref{fig:cal-surf-eps,fig:cal-surf-h}: 
@@ -107,47 +112,54 @@ Compared with the experiment and with the earlier results of Dauti (\cref{fig:ca
 \end{figure}
  
 \paragraph{Step 1 -- reducing the conductivity $\lambda_{d0}$ (\texttt{KS}).} The conductivity acts mostly on the layers \emph{closer to the heated face}. To bring down the over-predicted $10$ and $20~\mathrm{mm}$ curves, $\lambda_{d0}$ is reduced (\cref{fig:cal-depth-ks}). This indeed lowers those curves, but it has a side effect: by slowing the inward transfer, heat accumulates near the surface, so the surface temperature becomes too high in the tail of the curve and, for the lowest values, the computation eventually crashes.
- 
-\begin{figure}[H]
+
+\paragraph{Step 2 -- re-calibrating the emissivity $\varepsilon$.} The surface overheating introduced by the lower $\lambda_{d0}$ is corrected by re-calibrating the emissivity. Reducing $\varepsilon$ lowers the radiative input at the surface (\cref{fig:cal-depth-eps}) and restores the $0~\mathrm{mm}$ response, stabilising the run.
+
+\begin{figure}[htbp]
   \centering
-  \includegraphics[width=0.75\textwidth]{figures/chapter4/depth_KS_sweep.png}
-  \caption{Effect of decreasing the conductivity $\lambda_{d0}$ (\texttt{KS})}
-  \label{fig:cal-depth-ks}
+  \begin{subfigure}[b]{0.48\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{figures/chapter4/depth_KS_sweep}
+    \caption{Effect of decreasing conductivity $\lambda_{d0}$ (\texttt{KS}).}
+    \label{fig:cal-depth-ks}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[b]{0.48\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{figures/chapter4/depth_eps_recal}
+    \caption{Re-calibration of emissivity $\varepsilon$.}
+    \label{fig:cal-depth-eps}
+  \end{subfigure}
+  \caption{In-depth temperature calibration: Steps 1 and 2 to correct the outer layers and surface overheating.}
+  \label{fig:cal-step12}
 \end{figure}
+
  
-\paragraph{Step 2 -- re-calibrating the emissivity $\varepsilon$.}
-The surface overheating introduced by the lower $\lambda_{d0}$ is corrected by re-calibrating the emissivity. Reducing $\varepsilon$ lowers the radiative input at the surface (Fig.~\ref{fig:cal-depth-eps}) and restores the $0~\mathrm{mm}$ response,stabilising the run.
- 
-\begin{figure}[H]
-  \centering
-  \includegraphics[width=0.75\textwidth]{figures/chapter4/depth_eps_recal.png}
-  \caption{Re-calibration of the emissivity $\varepsilon$ after the conductivity was reduced}
-  \label{fig:cal-depth-eps}
-\end{figure}
- 
-\paragraph{Step 3 -- increasing the heat capacity $C_{ps}$ (\texttt{CS}).}
-The heat capacity governs the thermal inertia and is felt mostly at the \emph{deepest points}. To bring down the still over-predicted $30$, $40$ and $50~\mathrm{mm}$ curves, $C_{ps}$ is increased (Fig.~\ref{fig:cal-depth-cs}): a larger $C_{ps}$ stores more energy per unit temperature rise, so the same heat flux produces a smaller, more delayed temperature increase in the core, lowering the internal temperatures.
- 
-\begin{figure}[H]
-  \centering
-  \includegraphics[width=0.75\textwidth]{figures/chapter4/depth_CS_sweep.png}
-  \caption{Effect of increasing the heat capacity $C_{ps}$ (\texttt{CS}):}
-  \label{fig:cal-depth-cs}
-\end{figure}
- 
-\paragraph{Balancing $C_{ps}$ and $\lambda_{d0}$.}
-Increasing $C_{ps}$, however, cannot be pushed independently of $\lambda_{d0}$: the two parameters are coupled and must be balanced against each other. If $C_{ps}$ is raised while $\lambda_{d0}$ is kept low, the material both stores a large amount of energy and conducts it inward too slowly, so the incoming heat cannot diffuse away from the surface. This was observed directly for the combination $\varepsilon = 0.68$, $h^{\mathrm{hot}} = 11$, $C_{ps} = 960$, $\lambda_{d0} = 1.38$: the surface heat could not pass inward, the surface temperature rose abnormally, and the run crashed. The combination only becomes stable once the surface input is reduced -- by lowering the emissivity to $\varepsilon = 0.6$ (Step~2) -- so that a high $C_{ps}$ and a low $\lambda_{d0}$ can coexist. The calibration therefore consists of finding a balanced $(\lambda_{d0}, C_{ps})$ pair, together with the matching surface input, rather than tuning either conduction parameter on its own.
- 
+\paragraph{Step 3 -- increasing the heat capacity $C_{ps}$ (\texttt{CS}).} The heat capacity governs the thermal inertia and is felt mostly at the \emph{deepest points}. To bring down the still over-predicted $30$, $40$ and $50~\mathrm{mm}$ curves, $C_{ps}$ is increased (\cref{fig:cal-depth-cs}): a larger $C_{ps}$ stores more energy per unit temperature rise, so the same heat flux produces a smaller, more delayed temperature increase in the core, lowering the internal temperatures.
+
+\paragraph{Balancing $C_{ps}$ and $\lambda_{d0}$.} Increasing $C_{ps}$, however, cannot be pushed independently of $\lambda_{d0}$: the two parameters are coupled and must be balanced against each other. If $C_{ps}$ is raised while $\lambda_{d0}$ is kept low, the material both stores a large amount of energy and conducts it inward too slowly, so the incoming heat cannot diffuse away from the surface. This was observed directly for the combination $\varepsilon = 0.68$, $h^{\mathrm{hot}} = 11$, $C_{ps} = 960$, $\lambda_{d0} = 1.38$: the surface heat could not pass inward, the surface temperature rose abnormally, and the run crashed. The combination only becomes stable once the surface input is reduced -- by lowering the emissivity to $\varepsilon = 0.6$ (Step~2) -- so that a high $C_{ps}$ and a low $\lambda_{d0}$ can coexist. The calibration therefore consists of finding a balanced $(\lambda_{d0}, C_{ps})$ pair, together with the matching surface input, rather than tuning either conduction parameter on its own.
+
 At the end of this journey the temperature is reproduced consistently at all depths ($0$--$50~\mathrm{mm}$). The final comparison against the Dauti and experimental curves is shown in \cref{fig:cal-depth-final}, providing a reliable thermal loading for the gas-pressure calibration.
- 
-\begin{figure}[H]
+
+\begin{figure}[htbp]
   \centering
-  \includegraphics[width=0.8\textwidth]{figures/chapter4/Temp_compare_step3_CS.png}
-  \caption{Temperature with the calibrated set
-  ($\varepsilon=0.6$, $h_c=11$, $C_{ps}=960$, $\lambda_{d0}=1.38$): simulation
-  (solid) vs.\ Dauti (dashed) vs.\ experiment (dotted) at $00$--$50~\mathrm{mm}$.}
-  \label{fig:cal-depth-final}
+  \begin{subfigure}[b]{0.48\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{figures/chapter4/depth_CS_sweep}
+    \caption{Effect of increasing heat capacity $C_{ps}$ (\texttt{CS}).}
+    \label{fig:cal-depth-cs}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[b]{0.48\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{figures/chapter4/Temp_compare_step3_CS}
+    \caption{Final calibrated temperature field.}
+    \label{fig:cal-depth-final}
+  \end{subfigure}
+  \caption{In-depth temperature calibration: Step 3 and the final validation of the thermal model.}
+  \label{fig:cal-step3-final}
 \end{figure}
+
 
 % ---------------------------------------------------------------------------
 \section{Gas-pressure calibration} \label{sec:cal-pressure}
@@ -160,25 +172,29 @@ The intrinsic permeability $K_0$ (denoted \texttt{KINT}) and the permeability--h
  
 These two parameters must be strictly balanced. If the combination makes $K$ too low, vapour cannot escape and the trapped vapor generates extremely severe pressure gradients; if it makes $K$ too high, the vapor escapes too easily into the environment, resulting in flattened, underestimated pressure profiles. In both cases, the Newton-Raphson solver diverges (crashes), so $K_0$ and $A_\Gamma$ have to be calibrated carefully together. 
  
-\paragraph{Starting point -- $K_0 = 2\times10^{-19}~\mathrm{m^2}$.}
-The first sweep is performed at the initial reference permeability $K_0 = 2\times10^{-19}~\mathrm{m^2}$, varying $A_\Gamma$ over $3$, $4$ and $5$ (with $A_\Gamma = 3$ as the initial reference); the result is shown in \cref{fig:cal-pg-kint2e19}. Increasing $A_\Gamma$ raises the peaks, but this $K_0$ value is not physically representative of HPC, and the curves still do not fit the experimental pressures.
- 
-\begin{figure}[H]
+\paragraph{Starting point -- $K_0 = 2\times10^{-19}~\mathrm{m^2}$.} The first sweep is performed at the initial reference permeability $K_0 = 2\times10^{-19}~\mathrm{m^2}$, varying $A_\Gamma$ over $3$, $4$ and $5$ (with $A_\Gamma = 3$ as the initial reference); the result is shown in \cref{fig:cal-pg-kint2e19}. Increasing $A_\Gamma$ raises the peaks, but this $K_0$ value is not physically representative of HPC, and the curves still do not fit the experimental pressures.
+
+\paragraph{Reducing the permeability -- $K_0 = 8.5\times10^{-20}~\mathrm{m^2}$.} The permeability is therefore reduced to $K_0 = 8.5\times10^{-20}~\mathrm{m^2}$, which is more consistent with a dense HPC, and the $A_\Gamma$ sweep is repeated (\cref{fig:cal-pg-kint85e20}) to assess the effect of lowering $K_0$. Trapping the gas more effectively raises the peaks, and the pair $K_0 = 8.5\times10^{-20}~\mathrm{m^2}$, $A_\Gamma = 4$ is retained as the best compromise.
+
+\begin{figure}[htbp]
   \centering
-  \includegraphics[width=0.75\textwidth]{figures/chapter4/pg_AK_sweep_KINT_2e-19.png}
-  \caption{Effect of $A_\Gamma$ ($A_K = 3,4,5$) at the initial reference permeability $K_0 = 2\times10^{-19}~\mathrm{m^2}$}
-  \label{fig:cal-pg-kint2e19}
+  \begin{subfigure}[b]{0.48\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{figures/chapter4/pg_AK_sweep_KINT_2e-19.png}
+    \caption{$K_0 = 2\times10^{-19}~\mathrm{m^2}$ (initial reference).}
+    \label{fig:cal-pg-kint2e19}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[b]{0.48\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{figures/chapter4/pg_AK_sweep_KINT_8.5e-20.png}
+    \caption{$K_0 = 8.5\times10^{-20}~\mathrm{m^2}$ (reduced).}
+    \label{fig:cal-pg-kint85e20}
+  \end{subfigure}
+  \caption{Effect of permeability-hydration coefficient $A_\Gamma$ across different initial intrinsic permeabilities.}
+  \label{fig:cal-pg-sweeps}
 \end{figure}
- 
-\paragraph{Reducing the permeability -- $K_0 = 8.5\times10^{-20}~\mathrm{m^2}$.}
-The permeability is therefore reduced to $K_0 = 8.5\times10^{-20}~\mathrm{m^2}$,which is more consistent with a dense HPC, and the $A_\Gamma$ sweep is repeated \cref{fig:cal-pg-kint85e20}) to assess the effect of lowering $K_0$. Trapping the gas more effectively raises the peaks, and the pair $K_0 = 8.5\times10^{-20}~\mathrm{m^2}$, $A_\Gamma = 4$ is retained as the best compromise.
- 
-\begin{figure}[H]
-  \centering
-  \includegraphics[width=0.75\textwidth]{figures/chapter4/pg_AK_sweep_KINT_8.5e-20.png}
-  \caption{Effect of $A_\Gamma$ ($A_K = 3,4,5$) at the reduced permeability $K_0 = 8.5\times10^{-20}~\mathrm{m^2}$}
-  \label{fig:cal-pg-kint85e20}
-\end{figure}
+
 
 \paragraph{Comparison with the references.}
 The retained pair is compared against the Dauti and experimental curves in

@@ -3,46 +3,27 @@
 
 \review{The old content of this chapter is mostly moved to Appendix A. This chapter is a draft version and its outline is as follow.}
 
-\section{Thermal and hydric phenomena in heated concrete} \label{sec:phenomena}
-When one face of a concrete member is exposed to a rising temperature, a sequence of strongly interacting thermal and hydric processes develops through the thickness. Heat is transmitted into the material essentially by conduction, while phase changes (evaporation, dehydration) consume energy and locally slow the temperature rise. The generated vapour is transported by pressure-driven Darcy flow and Fickian diffusion. Part of the vapour migrates inward, recondenses in cooler regions, and builds a quasi-saturated layer (the moisture clog) that blocks further gas transport, causing a sharp pore-pressure build-up. The full mathematical derivation of these physical mechanisms, including fluxes and constitutive relations, is detailed in \cref{appendixA}.
 
-\section{Spalling mechanisms} \label{sec:spalling}
-Spalling is the violent or non-violent detachment of layers or pieces of concrete from the surface of a heated structural element. It can cause premature structural failure through reinforcement exposure and cross-section reduction, as illustrated by several catastrophic tunnel fires (Channel Tunnel 1996, Mont-Blanc 1999, St.\ Gotthard 2001) \cite{thmframework}. Despite extensive experimental work, no single theory has reached consensus; the two most widely accepted mechanisms, and their combined action, are presented below.
+% =====================================================================
+\section{Thermo-hydro-mechanical behavior and spalling mechanisms} \label{sec:phenomena-spalling}
 
-\subsection{Thermal-gradient mechanism}
-A steep temperature gradient through the thickness produces differential thermal dilation:
-\begin{enumerate}
-    \item \textbf{Compressive stresses in the heated cover}: the surface layers tend to expand but are restrained by the cooler interior, generating compressive stresses parallel to the heated face.
-    \item \textbf{Tensile stresses in the interior}: the restraint of the expanding surface induces tension in the deeper layers.
-    \item \textbf{Fracture and energy release}: when the tensile stress exceeds the tensile strength $f_t$, cracks form parallel to the surface; the sudden release of stored elastic energy can drive the explosive ejection of fragments.
-\end{enumerate}
-High-performance concrete (HPC) is particularly prone to this mechanism because its higher brittleness stores more elastic energy before failure, leading to a more violent release.
+When a concrete member is exposed to a rising temperature, a sequence of strongly interacting thermal, hydric, and mechanical processes develops through the thickness. Heat conduction triggers phase changes (evaporation, dehydration), generating vapour that is transported and recondenses to form a quasi-saturated moisture clog. Concurrently, thermal gradients and pore pressure build-up induce mechanical stresses. The full mathematical derivation of these THM behaviors is detailed in \cref{appendixA}.
 
-\subsection{Pore-pressure mechanism (moisture clog)}
-The sequence of events is:
-\begin{enumerate}
-    \item \textbf{Dry zone}: near the heated face, free water evaporates and bound water is released by dehydration, forming a dry zone.
-    \item \textbf{Vapour migration}: part of the vapour escapes towards the heated face, part is driven inward.
-    \item \textbf{Condensation / moisture clog}: the inward vapour condenses where $T<T_{sat}$, forming a quasi-saturated, nearly impermeable barrier.
-    \item \textbf{Pressure build-up}: behind the clog, $p_g$ rises sharply as evaporation feeds a region from which vapour cannot escape; thermal dilation of liquid water in saturated pores adds to the build-up.
-    \item \textbf{Tensile failure}: when $p_g$ exceeds the tensile strength, cracks form parallel to the surface, potentially leading to explosive spalling.
-\end{enumerate}
-The governing parameters are the intrinsic permeability $K_0$ (low permeability hinders vapour evacuation) and the initial moisture content (more water to evaporate), both promoting higher pore pressures.
+These interacting phenomena are the root cause of \emph{spalling}. Explosive spalling generally results from the \emph{combined action} of pore pressure build-up and thermal stress (\cref{fig:spalling-mechanisms}).
 
-\subsection{Combined mechanism}
-In practice, explosive spalling generally results from the \emph{combined action} of pore pressure and thermal stress. The spalling condition can be written schematically as
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.7\linewidth]{figures/chapter2/spalling-mechanisms}
+  \caption{Spalling combined mechanisms \cite{al-dalaien2025}}
+  \label{fig:spalling-mechanisms}
+\end{figure}
+
+The spalling condition can be written schematically as:
 \begin{equation}
     \sigma_{thermal}(T) + \sigma_{pore}(p_g,p_c,S_l) \ge f_t(T),
     \label{eq:spalling}
 \end{equation}
-where $\sigma_{thermal}$ is the thermal stress from differential dilation, $\sigma_{pore}$ the stress from pore-pressure loading (via the effective stress, \cref{sec:mech}), and $f_t(T)$ the temperature-degraded tensile strength. Equation~\eqref{eq:spalling} makes clear why a complete coupled model is needed: neither a purely thermal nor a purely hydric analysis can capture the full picture.
-    
-\begin{figure}[ht]
-  \centering
-  \includegraphics[width=0.8\linewidth]{figures/chapter2/spalling-mechanisms}
-  \caption{Spalling combined mechanisms \cite{al-dalaien2025}}
-  \label{fig:exp-setup}
-\end{figure}
+where $\sigma_{thermal}$ is the thermal stress from differential dilation, $\sigma_{pore}$ the stress from pore-pressure loading, and $f_t(T)$ the temperature-degraded tensile strength. A comprehensive breakdown of this combined spalling mechanism is provided in \cref{sec:THM_spalling_app} of \cref{appendixA}.
 
 
 \section{Improved thermo-hydro-chemical (THC) model} \label{sec:thcmodel}
