@@ -61,7 +61,7 @@ To couple these effects, the \textbf{effective hydration degree} $\tilde{\Gamma}
     \tilde{\Gamma} = (1 - F(T))\,\Gamma
     \label{eq:effective-hydration}
 \end{equation}
-The transport and mechanical properties, such as porosity $\phi(\tilde{\Gamma})$ and intrinsic permeability $K(\tilde{\Gamma})$, are explicitly updated as functions of this effective hydration state. The specific evolution laws for these properties are detailed in \cref{appendixA}.
+The transport and mechanical properties, such as porosity $\phi(\tilde{\Gamma})$ and intrinsic permeability $K(\tilde{\Gamma})$, are explicitly updated as functions of this effective hydration state. The specific evolution laws for these microstructural properties are detailed in \cref{sec:chemical_microstructure} of \cref{appendixA}.
 
 \subsection{Resulting coupled system}
 The complex mathematical derivation of the governing equations, based on Powers' stoichiometry and the averaging theory for multiphase porous media, is detailed in \cref{appendixA}. By incorporating the chemical couplings, the final system reduces to three highly non-linear conservation equations for the state variables $(p_g, p_c, T)$:
@@ -80,7 +80,7 @@ The complex mathematical derivation of the governing equations, based on Powers'
 \begin{equation}
     \overline{\rho C_p}\frac{\partial T}{\partial t} + \mathbf{J}_{energy}^{adv} - \nabla \cdot (\lambda \nabla T) = -H_{vap}\dot{m}_{vap} + \left(H_{vap} 0.228 c \xi_\infty + L_{hyd}\right) \frac{\partial \tilde{\Gamma}}{\partial t}
 \end{equation}
-where $a_\phi$ is the porosity evolution parameter, $c$ is the cement content, and $\xi_\infty$ is the maximum hydration fraction. 
+where $a_\phi$ is the porosity evolution parameter, $c$ is the cement content, and $\xi_\infty$ is the maximum hydration fraction. The explicit formulation of these stoichiometric constants (e.g., the bound water $0.228 c \xi_\infty$ and the latent heat $L_{hyd}$) as well as the thermal activation energy $E_a/R$ governing $\tilde{\Gamma}$ are detailed in \cref{sec:powers} and \cref{sec:affinity} of \cref{appendixA}.
 
 \section{Coupling to the mechanical field} \label{sec:mech}
 The mechanical response is driven by the converged TH/THC fields through a \emph{one-way} (staggered) coupling: at each time step the fields $(T,p_g,p_c)$ enter the mechanical problem as prescribed loading, and the resulting damage $\mathcal{D}$ feeds back weakly to the transport properties via permeability evolution at the next step. The TH/THC fields act through two routes:

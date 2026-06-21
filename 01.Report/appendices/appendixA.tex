@@ -421,24 +421,55 @@ When concrete is heated, evaporation and dehydration produce vapor that raises t
 
 When the pore pressure exceeds the tensile strength, it can trigger explosive spalling (\cref{sec:spalling}).
 
-\section{Chemical behavior}
+\section{Chemical behavior and Microstructural evolution} \label{sec:chemical_microstructure}
+
+\subsection{Powers' stoichiometric model and water content} \label{sec:powers}
+The initial hydro-chemical state of the concrete, including the maximum water content available for hydration and dehydration, is derived from its mix-design proportions ($c, w/c, s/c$) using Powers' stoichiometric model \cite{sciume2024}.
+The theoretical maximum hydrated cement fraction $\xi_\infty$ is computed by assuming no capillary water remains at the end of the reaction ($V_{cw} = 0$), yielding:
+\begin{equation}
+    \xi_\infty = \min \left\{ \frac{p}{k[1.32 + 1.57(s/c)](1-p)},\; 1 \right\}
+\end{equation}
+where $p$ is the initial volume fraction of water and $k$ is a density-dependent mix parameter. 
+The maximum chemically bound water at full hydration is then internally computed as:
+\begin{equation}
+    m_{hyd}^\infty = 0.228\, c\, \xi_\infty
+\end{equation}
+This stoichiometric quantity is fundamental, as it dictates the total amount of water that can be released during high-temperature dehydration. Furthermore, the latent heat of hydration $L_{hyd}$ (often denoted as $Q_{lat}$ in the numerical code), which acts as the heat source in the energy conservation equation, is directly linked to this bound water by:
+\begin{equation}
+    L_{hyd} = 0.228\, c\, \xi_\infty H_{hyd}
+\end{equation}
+where $H_{hyd}$ is the specific enthalpy of hydration.
+
 \subsection{Chemical kinetics and Affinity} \label{sec:affinity}
-The evolution of the hydration degree $\Gamma$ is governed by an Arrhenius-type equation:
+The evolution of the hydration degree $\Gamma$ is governed by an Arrhenius-type chemo-kinetic equation:
 \begin{equation}
     \frac{\mathrm{d}\Gamma}{\mathrm{d}t} = \mathcal{A}(\Gamma) \cdot \beta_{\mathrm{RH}} \cdot \exp\left( -\frac{E_a}{R T} \right)
 \end{equation}
-where $E_a$ is the activation energy, and $\beta_{\mathrm{RH}}$ accounts for the moisture effect. The macroscopic chemical affinity $\mathcal{A}(\Gamma)$ drives the reaction speed depending on the current hydration state \cite{sciume2024}:
+where $E_a/R$ (input parameter $EAR$) represents the activation energy scaled by the universal gas constant, dictating the sensitivity of the reaction rate to temperature. $\beta_{\mathrm{RH}}$ accounts for the deceleration of hydration at low moisture levels. 
+
+The macroscopic chemical affinity $\mathcal{A}(\Gamma)$ drives the reaction speed depending on the current hydration state \cite{sciume2024}:
 \begin{equation}
     \mathcal{A}(\Gamma) = \frac{A_i + (A_p - A_i)\sin\left[\frac{\pi}{2}\left(1 - \left\langle \frac{\Gamma_p - \Gamma}{\Gamma_p} \right\rangle_+\right)\right]}{\left[1 + \zeta \left\langle \frac{\Gamma - \Gamma_p}{1 - \Gamma_p} \right\rangle_+\right]} - \left(\frac{A_p}{1+\zeta}\right)\left\langle \frac{\Gamma - \Gamma_p}{1 - \Gamma_p} \right\rangle_+
 \end{equation}
-where $\langle \cdot \rangle_+$ is the positive part operator. The parameters $A_i, A_p$ regulate the initial and peak affinity, $\Gamma_p$ is the hydration degree at the peak, and $\zeta$ controls the deceleration phase.
+where $\langle \cdot \rangle_+$ is the positive part operator. The parameters $A_i, A_p$ regulate the initial and peak affinity, $\Gamma_p$ is the hydration degree at the peak, and $\zeta$ controls the spatial hindrance as hydrates precipitate.
+
+\subsection{Porosity evolution law} \label{sec:porosity-law}
+The porosity of the cement paste is dynamically altered by the hydration and dehydration processes. Based on Powers' volumetric model \cite{sciume2024}, the rate of change of porosity is directly proportional to the effective hydration degree:
+\begin{equation}
+    \frac{\partial \phi}{\partial t} = -a_\phi \Omega \frac{\partial \tilde{\Gamma}}{\partial t}
+\end{equation}
+where $a_\phi$ is a material parameter dictating the volume of hydrates formed or destroyed, and $\Omega$ is the volume fraction of the cement paste in the concrete mix. Integrating this rate yields the explicit dependence of porosity on the chemical state:
+\begin{equation}
+    \phi(\tilde{\Gamma}) = \phi_0 + a_\phi \Omega (1 - \tilde{\Gamma})
+\end{equation}
+where $\phi_0$ is the reference porosity at the fully hydrated baseline state ($\tilde{\Gamma} = 1$). 
 
 \subsection{Permeability evolution law} \label{sec:perm-law}
 The intrinsic permeability is heavily dependent on the degradation of the solid matrix. In the THC framework, it is explicitly coupled to the effective hydration degree $\tilde{\Gamma}$ \cite{sciume2024}:
 \begin{equation}
     K(\tilde{\Gamma}) = K_0 \cdot 10^{A_\Gamma (1 - \tilde{\Gamma})^{B_K}}
 \end{equation}
-where $K_0$ is the initial intrinsic permeability, $A_\Gamma$ is a coefficient defining the maximum increase in permeability upon total dehydration, and $B_K$ modifies the shape of the permeability gain. This formulation elegantly replaces direct temperature- or damage-dependent multipliers by relying strictly on the microstructural state.
+where $K_0$ is the initial intrinsic permeability, $A_\Gamma$ is a coefficient defining the maximum increase in permeability upon total dehydration, and $B_K$ modifies the shape of the permeability gain.
 
 \section{Mechanical behavior} \label{sec:mechanical}
 
@@ -777,41 +808,26 @@ The total stress $\boldsymbol{\sigma}^{Total}$ is related to the effective stres
 \section{Discretization}\label{sec:discretization}
 
 \subsection{Spatial discretization} \label{sec:spatial_discret}
-
-\begin{reviewblock}
-The specific coupling method mentioned in \cref{sec:mechanical} between the TH and mechanical solvers has not yet been finalized and will be updated in \cref{chapter2} and \cref{chapter3} as the study progresses.
-\end{reviewblock}
-
-Applying the standard Galerkin finite element method to the three TH conservation equations (\cref{eq:final_air,eq:final_water,eq:final_energy}) yields the semi-discrete system \cite{dauti2018}:
+Applying the standard Galerkin finite element method to the three conservation equations (\cref{eq:final_air,eq:final_water,eq:final_energy} in \cref{chapter2}) yields the semi-discrete system \cite{dauti2018}:
 \begin{equation}
     \mathbf{C}\,\dot{\mathbf{Y}} + \mathbf{K}\,\mathbf{Y} = \mathbf{f}
     \label{eq:TH_matrix}
 \end{equation}
-where $\mathbf{Y} = \{\bar{p}_g,\, \bar{p}_c,\, \bar{T}\}$ is the vector of nodal TH unknowns. The operators $\mathbf{C}$ (capacity), $\mathbf{K}$(conductivity), and $\mathbf{f}$ (forcing) are $3\times3$ block matrices:
+where $\mathbf{Y} = \{\bar{p}_g,\, \bar{p}_c,\, \bar{T}\}$ is the vector of nodal unknowns. The operators $\mathbf{C}$ (capacity), $\mathbf{K}$ (conductivity), and $\mathbf{f}$ (forcing) are $3\times3$ block matrices solved simultaneously in a \textbf{monolithic} manner for the Thermo-Hydric (TH) subsystem:
 \begin{equation}
-    \mathbf{K} = \begin{pmatrix}
-    K_{gg} & K_{gc} & K_{gt} \\
-    K_{cg} & K_{cc} & K_{ct} \\
-    K_{tg} & K_{tc} & K_{tt}
-    \end{pmatrix}, \quad
-    \mathbf{C} = \begin{pmatrix}
-    C_{gg} & C_{gc} & C_{gt} \\
-    0      & C_{cc} & C_{ct} \\
-    0      & C_{tc} & C_{tt}
-    \end{pmatrix}, \quad
-    \mathbf{f} = \begin{pmatrix}
-    f_g \\ f_c \\ f_t
-    \end{pmatrix}
+    \mathbf{K} = \begin{pmatrix} K_{gg} & K_{gc} & K_{gt} \\ K_{cg} & K_{cc} & K_{ct} \\ K_{tg} & K_{tc} & K_{tt} \end{pmatrix}, \quad 
+    \mathbf{C} = \begin{pmatrix} C_{gg} & C_{gc} & C_{gt} \\ 0      & C_{cc} & C_{ct} \\ 0      & C_{tc} & C_{tt} \end{pmatrix}, \quad 
+    \mathbf{f} = \begin{pmatrix} f_g \\ f_c \\ f_t \end{pmatrix}
     \label{eq:TH_blocks}
 \end{equation}
-The off-diagonal entries $K_{ij}$, $C_{ij}$ ($i\neq j$) encode the coupling between the thermal and hydric fields. Detailed expressions of each block are given in \cite{dauti2018}, Appendix~A.
+The off-diagonal entries $K_{ij}$, $C_{ij}$ ($i\neq j$) encode the strong coupling between the thermal and hydric fields. Detailed expressions of each block are given in \cite{dauti2018}, Appendix~A.
 
-The mechanical problem (\cref{eq:final_momentum}) is solved in a staggered manner: at each time step, the converged TH fields $\bar{T}$, $\bar{p}_g$, $\bar{p}_c$ enter as prescribed loading. The discrete equilibrium (\cref{eq:KMU_F}) reads:
+The mechanical problem (\cref{eq:final_momentum}) is solved in a \textbf{staggered} manner: at each time step, the converged TH fields $\bar{T}$, $\bar{p}_g$, $\bar{p}_c$ enter as prescribed loading. The discrete equilibrium (\cref{eq:KMU_F}) reads:
 \begin{equation}
-    [\mathbf{K}_M]\{\mathbf{U}\} = \{\mathbf{F}\}
+    [\mathbf{K}_M]{\mathbf{U}} = {\mathbf{F}}
     \label{eq:mech_matrix}
 \end{equation}
-where $\mathbf{K}_M$ (\cref{eq:KM_effective}) contains the damaged stiffness $(1-\mathcal{D})\,\mathbb{C}$ --- the displacement-dependent part that remains on the left-hand side --- and $\mathbf{F}$ (\cref{eq:F_full}) collects the TH-prescribed loads ($\boldsymbol{\varepsilon}^{th}$, $\boldsymbol{\varepsilon}^{sh}$, $\alpha\,p_s$) that do not depend on $\mathbf{U}$.
+where $\mathbf{K}_M$ (\cref{eq:KM_effective}) contains the damaged stiffness $(1-\mathcal{D})\,\mathbb{C}$ --- the displacement-dependent part that remains on the left-hand side --- and $\mathbf{F}$ (\cref{eq:F_full}) collects the TH-prescribed loads ($\boldsymbol{\varepsilon}^{th}$, $\boldsymbol{\varepsilon}^{sh}$, $\alpha\,p_s$) that do not depend on the displacement vector $\mathbf{U}$.
 
 \subsection{Temporal discretization (The $\theta$-method)} \label{sec:temporal_discret}
 The time integration of the nonlinear semi-discrete system $\mathbf{C} \dot{\mathbf{Y}} + \mathbf{K} \mathbf{Y} = \mathbf{f}$ is carried out using the Wilson-$\theta$ method \cite{lewis1998}. The governing equations are evaluated at an intermediate time step $t_{n+\theta} = t_n + \theta\,\Delta t$. This yields a fully discrete algebraic system:
@@ -822,7 +838,7 @@ where the effective stiffness matrix $\tilde{\mathbf{K}}$ is defined as:
 \begin{equation}
     \tilde{\mathbf{K}} = \frac{\mathbf{C}}{\Delta t} + \theta \mathbf{K}
 \end{equation}
-The relaxation parameter $\theta \in [1]$ dictates the stability and accuracy of the scheme:
+The relaxation parameter $\theta \in [5]$ dictates the stability and accuracy of the scheme:
 \begin{itemize}
     \item $\theta = 0$: Explicit forward Euler method (conditionally stable).
     \item $\theta = 0.5$: Crank-Nicolson scheme (unconditionally stable, second-order accurate but prone to numerical oscillations).

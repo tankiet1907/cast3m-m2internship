@@ -86,7 +86,7 @@
       \verb 10.1002/9781118601099
       \endverb
       \verb{file}
-      \verb C:\Users\thong\Zotero\storage\2ICLRYZQ\Baroth et al. - 2011 - Construction Reliability - Safety, Variability and Sustainability.pdf
+      \verb /home/kay/Zotero/storage/2ICLRYZQ/Baroth et al. - 2011 - Construction Reliability - Safety, Variability and Sustainability.pdf
       \endverb
     \endentry
     \entry{bergman2017}{incollection}{}
@@ -124,7 +124,7 @@
       \field{pages}{1\bibrangedash 45}
       \range{pages}{45}
       \verb{file}
-      \verb C:\Users\thong\Zotero\storage\JEEHEQGK\Bergman and Lavine - 2017 - Introduction.pdf
+      \verb /home/kay/Zotero/storage/JEEHEQGK/Bergman and Lavine - 2017 - Introduction.pdf
       \endverb
     \endentry
     \entry{dalpont2020}{book}{}
@@ -195,7 +195,7 @@
       \verb 10.1007/s43939-025-00379-4
       \endverb
       \verb{file}
-      \verb C:\Users\thong\Zotero\storage\34YD4SLP\Al-Dala'ien et al. - 2025 - State-of-the-art review on high-temperature performance of plant-based fiber reinforced concrete.pdf
+      \verb /home/kay/Zotero/storage/34YD4SLP/Al-Dala'ien et al. - 2025 - State-of-the-art review on high-temperature performance of plant-based fiber reinforced concrete.pdf
       \endverb
     \endentry
     \entry{dauti2018}{thesis}{}
@@ -226,9 +226,9 @@
       \field{year}{2018}
       \field{dateera}{ce}
       \verb{file}
-      \verb C:\Users\thong\Zotero\storage\8KJCWUA4\Dauti - 2018 - A combined experimental and numerical approach to spalling of high-performance concrete due to fire.pdf
+      \verb /home/kay/Zotero/storage/8KJCWUA4/Dauti - 2018 - A combined experimental and numerical approach to spalling of high-performance concrete due to fire.pdf
       \endverb
-      \keyw{Ecaillage,Fire spalling,Haute temperature,High temperature,Mesoscale modeling,Modele Thermo-Hydro-Mecanique,Modelisation mesoscopique,Neutron tomography,Thermo-Hydro-Mechanical model,Tomographie neutron}
+      \keyw{Écaillage,Fire spalling,Haute température,High temperature,Mesoscale modeling,Modèle Thermo-Hydro-Mecanique,Modélisation mésoscopique,Neutron tomography,Thermo-Hydro-Mechanical model,Tomographie neutron}
     \endentry
     \entry{delarrard2010}{article}{}
       \name{author}{5}{}{%
@@ -270,7 +270,7 @@
       \field{sortinithash}{6f385f66841fb5e82009dc833c761848}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
-      \field{abstract}{Abstract This study aims at investigating the influence of the Young modulus variability on the mechanical behaviour of a nuclear containment vessel in case of a loss of cooling agent accident and under the assumption of an elastic behaviour. To achieve this investigation, the Monte-Carlo Method is carried out thanks to a middleware which encapsulates the different components (random field generation, FE simulations) and enables calculations parallelisation. The main goal is to quantify the uncertainty propagation by comparing the maximal values of outputs of interest (orthoradial stress and Mazars equivalent strain) for each realisation of the considered random field with the ones obtained from a reference calculation taking into account uniform field (equal to the expected value of the random field). The Young modulus is supposed to be accurately represented by a weakly homogeneous random field and realisations are provided through its truncated Karhunen--Loève expansion. This study reveals that the expected value for the maximal equivalent strain in the structure is more important when considering the Young modulus spatial variability than the value obtained from a deterministic approach with a uniform Young modulus field. The influence of the correlation length is investigated too. Finally it is shown that there is no correlation between the maximal values location of equivalent strain and the ones where the Young modulus extreme values are observed for each realisation.}
+      \field{abstract}{Abstract This study aims at investigating the influence of the Young modulus variability on the mechanical behaviour of a nuclear containment vessel in case of a loss of cooling agent accident and under the assumption of an elastic behaviour. To achieve this investigation, the Monte-Carlo Method is carried out thanks to a middleware which encapsulates the different components (random field generation, FE simulations) and enables calculations parallelisation. The main goal is to quantify the uncertainty propagation by comparing the maximal values of outputs of interest (orthoradial stress and Mazars equivalent strain) for each realisation of the considered random field with the ones obtained from a reference calculation taking into account uniform field (equal to the expected value of the random field). The Young modulus is supposed to be accurately represented by a weakly homogeneous random field and realisations are provided through its truncated Karhunen–Loève expansion. This study reveals that the expected value for the maximal equivalent strain in the structure is more important when considering the Young modulus spatial variability than the value obtained from a deterministic approach with a uniform Young modulus field. The influence of the correlation length is investigated too. Finally it is shown that there is no correlation between the maximal values location of equivalent strain and the ones where the Young modulus extreme values are observed for each realisation.}
       \field{issn}{0029-5493}
       \field{journaltitle}{Nuclear Engineering and Design}
       \field{number}{12}
@@ -284,7 +284,7 @@
       \verb 10.1016/j.nucengdes.2010.09.031
       \endverb
       \verb{file}
-      \verb C:\Users\thong\Zotero\storage\2BKVL92V\de Larrard et al. - 2010 - Effect of the Young modulus variability on the mechanical behaviour of a nuclear containment vessel.pdf
+      \verb /home/kay/Zotero/storage/2BKVL92V/de Larrard et al. - 2010 - Effect of the Young modulus variability on the mechanical behaviour of a nuclear containment vessel.pdf
       \endverb
       \verb{urlraw}
       \verb https://www.sciencedirect.com/science/article/pii/S002954931000628X
@@ -317,7 +317,7 @@
       \field{year}{2023}
       \field{dateera}{ce}
       \verb{file}
-      \verb C:\Users\thong\Zotero\storage\E8K6SVLP\Di Paola - 2023 - Starting with Cast3m Thermomechanical calculations.pdf
+      \verb /home/kay/Zotero/storage/E8K6SVLP/Di Paola - 2023 - Starting with Cast3m Thermomechanical calculations.pdf
       \endverb
       \verb{urlraw}
       \verb https://www-cast3m.cea.fr/index.php?xml=maj2011
@@ -348,7 +348,7 @@
       \field{year}{2014}
       \field{dateera}{ce}
       \verb{file}
-      \verb C:\Users\thong\Zotero\storage\LGIMK3SC\Fenton - 2014 - Basics of Simulation and RFEM in Stochastic Analysis and Inverse Modelling.pdf
+      \verb /home/kay/Zotero/storage/LGIMK3SC/Fenton - 2014 - Basics of Simulation and RFEM in Stochastic Analysis and Inverse Modelling.pdf
       \endverb
     \endentry
     \entry{hamon2013}{report}{}
@@ -379,7 +379,7 @@
       \field{year}{2013}
       \field{dateera}{ce}
       \verb{file}
-      \verb C:\Users\thong\Zotero\storage\GRDNYWFY\Hamon - 2013 - Model of damage of MAZARS.pdf
+      \verb /home/kay/Zotero/storage/GRDNYWFY/Hamon - 2013 - Model of damage of MAZARS.pdf
       \endverb
     \endentry
     \entry{kalifa2000}{article}{}
@@ -422,7 +422,7 @@
       \verb 10.1016/S0008-8846(00)00384-7
       \endverb
       \verb{file}
-      \verb C:\Users\thong\Zotero\storage\BZH2H5AK\Kalifa et al. - 2000 - Spalling and pore pressure in HPC at high temperatures.pdf
+      \verb /home/kay/Zotero/storage/BZH2H5AK/Kalifa et al. - 2000 - Spalling and pore pressure in HPC at high temperatures.pdf
       \endverb
     \endentry
     \entry{matheron1973}{article}{}
@@ -457,7 +457,7 @@
       \field{pages}{439\bibrangedash 468}
       \range{pages}{30}
       \verb{file}
-      \verb C:\Users\thong\Zotero\storage\ZPEZUUW4\Matheron - 1973 - The intrinsic random functions and their applications.pdf
+      \verb /home/kay/Zotero/storage/ZPEZUUW4/Matheron - 1973 - The intrinsic random functions and their applications.pdf
       \endverb
     \endentry
     \entry{mclaughlin2023}{article}{}
@@ -525,7 +525,7 @@
       \field{labeltitlesource}{title}
       \field{journaltitle}{Materials and Structures}
       \field{month}{9}
-      \field{title}{Thermo-hygro-chemical Model of Concrete: From Curing to High Temperature Behavior}
+      \field{title}{Thermo‐hygro‐chemical Model of Concrete: From Curing to High Temperature Behavior}
       \field{volume}{57}
       \field{year}{2024}
       \field{dateera}{ce}
@@ -533,7 +533,7 @@
       \verb 10.1617/s11527-024-02454-3
       \endverb
       \verb{file}
-      \verb C:\Users\thong\Zotero\storage\UYVQ4TCR\Sciumè et al. - 2024 - Thermo‐hygro‐chemical model of concrete from curing to high temperature behavior.pdf
+      \verb /home/kay/Zotero/storage/UYVQ4TCR/Sciumè et al. - 2024 - Thermo‐hygro‐chemical model of concrete from curing to high temperature behavior.pdf
       \endverb
     \endentry
     \entry{sudret2003}{inproceedings}{}
@@ -564,7 +564,7 @@
       \field{year}{2003}
       \field{dateera}{ce}
       \verb{file}
-      \verb C:\Users\thong\Zotero\storage\IV76GACU\Sudret and Cherradi - 2003 - Quadrature method for finite element reliability analysis.pdf
+      \verb /home/kay/Zotero/storage/IV76GACU/Sudret and Cherradi - 2003 - Quadrature method for finite element reliability analysis.pdf
       \endverb
     \endentry
     \entry{sudret2000}{article}{}
@@ -595,7 +595,7 @@
       \field{year}{2000}
       \field{dateera}{ce}
       \verb{file}
-      \verb C:\Users\thong\Zotero\storage\2QNZUR74\Sudret and Kiureghian - 2000 - Stochastic finite elements and reliability - a state-of-the-art report.pdf
+      \verb /home/kay/Zotero/storage/2QNZUR74/Sudret and Kiureghian - 2000 - Stochastic finite elements and reliability - a state-of-the-art report.pdf
       \endverb
     \endentry
   \enddatalist

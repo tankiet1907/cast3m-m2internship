@@ -33,8 +33,17 @@ In structural engineering, material properties such as the Young's modulus, perm
     \item A \emph{stochastic} analysis, on the other hand, treats uncertain parameters as random quantities, propagates this uncertainty through the model, and delivers statistical information---mean, variance, probability of failure---about the structural response.
 \end{enumerate}
 
-To handle uncertainties in the finite element model, two levels of stochastic description are applied in this work. The full mathematical definitions and simulation methods are detailed in \cref{appendixB}.
- 
+To handle uncertainties in the finite element model, two levels of stochastic description are applied in this work. While various numerical tools are employed across the different analyses (e.g., LHS, Monte Carlo, PCE, KDE, Gaussian Quadrature), they all share a unified mathematical foundation rooted in the Probability Density Function (PDF) and the Cumulative Distribution Function (CDF). The full mathematical definitions linking these core probabilistic concepts to the utilized simulation methods are detailed in \cref{appendixB}.
+
+Specifically, the roles of the PDF and CDF form a continuous stochastic workflow throughout the analyses:
+\begin{itemize}
+    \item \textbf{Input:} The uncertainty of every material parameter (e.g., permeability, $w/c$) is initially defined by a prescribed PDF, indicating the most probable physical values.
+    \item \textbf{Sampling (LHS \& MC):} To perform probabilistic simulations, discrete values must be drawn from these distributions. While Monte Carlo (MC) draws randomly, Latin Hypercube Sampling (LHS) uses the CDF to divide the probability space into $N$ equiprobable intervals, ensuring a space-filling design without clustering.
+    \item \textbf{Propagation (PCE):} Since running thousands of non-linear FEM simulations is computationally prohibitive, Polynomial Chaos Expansion (PCE) acts as a mathematical filter, directly and rapidly transforming the input PDFs into the output PDF.
+    \item \textbf{Output and Risk (KDE \& Quadrature):} Once the structural responses are obtained, the probability of failure ($P_f$) must be evaluated. Kernel Density Estimation (KDE) smoothes the discrete sampled data into a continuous response PDF. Alternatively, the Gaussian Quadrature method computes the statistical moments to analytically reconstruct the response PDF. Finally, the probability of failure is evaluated directly by integrating the tail of this PDF over the failure domain (i.e., the shaded area beyond the critical threshold).
+\end{itemize}
+
+Within this general workflow, the spatial dimension of the uncertainty is treated at two levels:
 \begin{description}
     \item[Random Variable (RV).] Each uncertain property is described by a single probability distribution applied uniformly over the whole specimen. This approach is used for the sensitivity (\cref{sec:sensitivity}) and reliability (\cref{sec:reliability}) analyses.
     \item[Random Field (RF).] The property varies spatially across the domain, subject to a correlation structure. This level is used for the spatial heterogeneity study in \cref{sec:spatial-effect}.
@@ -54,7 +63,7 @@ The uncertainty is propagated through \emph{two independent studies} rather than
   \item[Analysis~B --- mix composition.] An \emph{upstream} uncertainty on the mix-design proportions, introduced at its physical source and propagated through Powers' model (\cref{chapter2}, \cref{appendixA}), which converts the proportions into porosity, hydration degree, sorption and the resulting transport properties.
 \end{description}
  
-The two are kept apart for two reasons. First, they are of different nature --- a material-property scatter on one side, an upstream design imprecision on the other --- and mixing them would blur the interpretation. Second, $K_0$ is known from \cref{chapter4} to dominate the pressure response; pooling it with the four mix proportions in a single variance decomposition would let its variance swamp the Sobol indices and \emph{mask} the relative importance \emph{among} the mix proportions. Separating the analyses lets each source be characterised on its own terms.
+The two are kept apart for two reasons. First, they are of different nature --- a material-property scatter on one side, an upstream design imprecision on the other --- and mixing them would blur the interpretation. Second, $K_0$ is known from \cref{chapter4} to dominate the pressure response; pooling it with the four mix proportions in a single variance decomposition would let its variance swamp the Sobol indices (\cref{sec:sobol}) and \emph{mask} the relative importance \emph{among} the mix proportions. Separating the analyses lets each source be characterised on its own terms.
  
 \subsection{Choice of probability distributions} \label{sec:distributions}
  
@@ -122,7 +131,15 @@ To reduce computational cost compared to standard Monte Carlo, Latin Hypercube S
 \section{Sensitivity analysis} \label{sec:sensitivity}
 
 \subsection{Analysis A --- permeability $K_0$} \label{sec:sens-K0}
-With $A_\Gamma$ held constant to isolate the magnitude-driving uncertainty, Analysis A evaluates how $p_g^{10}$ responds to $K_0$. Since there is only one random variable, a Sobol decomposition is not meaningful ($S_1=S_{T}=1$). The results highlight a strongly negative correlation: lower permeability traps more vapour, which results in a higher pressure peak (\cref{fig:sensA-corr,fig:sensA-ci}).
+With $A_\Gamma$ held constant to isolate the magnitude-driving uncertainty, Analysis A evaluates how $p_g^{10}$ responds to $K_0$. Since there is only one random variable, a Sobol decomposition is not meaningful ($S_1=S_{T}=1$). The results highlight a strongly negative correlation: lower permeability traps more vapour, which results in a higher pressure peak (\cref{fig:sensA-corr,fig:sensA-ci}). 
+
+For the interpretation of the transient response plots and sensitivity bar charts in this chapter, it is important to clarify the terminology and statistical metrics used:
+\begin{itemize}
+    \item \textbf{Sim vs. Baseline:} In the legends, \textbf{Sim} (or Sim Mean) represents the mean of all stochastic simulations evaluated with \textsc{OpenTURNS} (reflecting the full propagated probability distribution), whereas the \textbf{Baseline} corresponds to the single deterministic simulation utilizing the optimal parameter set already calibrated in \cref{chapter4}.
+    \item \textbf{95\% Confidence Interval (CI) Bands:} The shaded areas around the transient curves and the error bars on the Sobol indices represent the $95\%$ confidence intervals. For the pressure histories, this band illustrates the physical dispersion, indicating a $95\%$ probability that the pressure response falls within this zone under the given input uncertainties. For the Sobol indices, it represents the statistical bootstrap estimation error due to a finite sample size.
+\end{itemize}
+The comprehensive theoretical background regarding the stochastic framework, probability density functions, and the required number of evaluations for reaching a $95\%$ confidence level is detailed in \cref{sec:mc-lhs}.
+
 
 \begin{figure}[htbp]
   \centering
@@ -180,36 +197,34 @@ Finally, the mix-induced scatter is small in absolute terms (mean $p_g^{10}=2.11
 % =====================================================================
 \section{Reliability analysis} \label{sec:reliability}
 
-The propagated samples yield a discrete set of structural responses. Using the continuous Probability Density Function (PDF) reconstruction methods available in \textsc{OpenTURNS}, we can quantify the spalling risk. Based on the definitions in \cref{sec:pf-beta}, the probability of failure $P_f$ and the reliability index $\beta$ are evaluated.
+The propagated samples yield a discrete set of structural responses. Using the continuous Probability Density Function (PDF) reconstruction methods available in \textsc{OpenTURNS}, we can quantify the spalling risk. Based on the definitions in \cref{sec:pf-beta}, the probability of failure $P_f$ is evaluated.
 
 Depending on the stochastic method employed, two distinct numerical strategies are utilized to reconstruct the distributions and evaluate the failure probability:
 
 \begin{description}
-    \item[Kernel Density Estimation (Analyses A, C1, and C2):] For analyses where the input uncertainty is limited to a single random variable (e.g., global $K_0$) or governed by a spatial random field (\texttt{ALEA}), building a multidimensional metamodel is either mathematically unnecessary or algorithmically incompatible. Instead, the continuous PDF is reconstructed directly from the raw, macroscopic Cast3M outputs using non-parametric Kernel Density Estimation (KDE). The probability of failure is then directly estimated by integrating the tail of this smoothed empirical distribution.
-    
-    \item[Monte Carlo on PCE Metamodel (Analysis B):] In the multivariable mix-composition study, evaluating the failure probability directly from the limited 30-sample LHS design would yield highly inaccurate tail estimations. Instead, a massive Monte Carlo simulation ($10^5$ realizations) is executed exclusively on the Polynomial Chaos Expansion (PCE) surrogate model---which was previously constructed for the sensitivity analysis (\cref{sec:sens-mix}). This allows for a highly accurate and computationally inexpensive evaluation of $P_f$ without requiring additional Cast3M runs.
+    \item[Kernel Density Estimation (Analyses A, C1, and C2):] For analyses where the input uncertainty is limited to a single random variable (e.g., global $K_0$) or governed by a spatial random field (\texttt{ALEA}), building a multidimensional metamodel is either mathematically unnecessary or algorithmically incompatible. Instead, the continuous PDF is reconstructed directly from the raw, macroscopic \textsc{Cast3M} outputs using non-parametric Kernel Density Estimation (KDE). The probability of failure is then directly estimated by integrating the tail of this smoothed empirical distribution.
+    \item[Monte Carlo on PCE Metamodel (Analysis B):] In the multivariable mix-composition study, evaluating the failure probability directly from the limited 30-sample LHS design would yield highly inaccurate tail estimations. Instead, a massive Monte Carlo simulation ($10^5$ realizations) is executed exclusively on the Polynomial Chaos Expansion (PCE) surrogate model---which was previously constructed for the sensitivity analysis (\cref{sec:sens-mix}). This allows for a highly accurate and computationally inexpensive evaluation of $P_f$ without requiring additional \textsc{Cast3M} runs.
 \end{description}
 
 These reconstructed PDFs (\cref{fig:reliability-A,fig:reliability-B}) visually demonstrate how the input uncertainties propagate towards the critical threshold.
- 
+
 \begin{figure}[htbp]
   \centering
   \includegraphics[width=0.7\linewidth]{figures/chapter5/analysisA/Reliability_Analysis_Pg_10_Max}
   \caption{Analysis A: PDF of the peak pressure $p_g^{10}$ under the permeability uncertainty ($K_0$), with the critical threshold $p_{\mathrm{crit}}$ (shaded tail $=P_f$) and the measured Kalifa $10~\mathrm{mm}$ peak.}
   \label{fig:reliability-A}
 \end{figure}
- 
+
 \begin{figure}[htbp]
   \centering
   \includegraphics[width=0.7\linewidth]{figures/chapter5/analysisB/Reliability_Analysis_Pg_10_Max}
   \caption{Analysis B: PDF of the peak pressure $p_g^{10}$ under the mix-composition uncertainty $(c,agg,w/c,s/c)$, with the critical threshold $p_{\mathrm{crit}}$ (shaded tail $=P_f$) and the measured Kalifa $10~\mathrm{mm}$ peak.}
   \label{fig:reliability-B}
 \end{figure}
- 
-\textbf{Conclusion.} 
-With the critical threshold set at $p_{\mathrm{crit}}=2.5~\mathrm{MPa}$:
+
+\textbf{Conclusion.} With the critical threshold set at $p_{\mathrm{crit}}=2.5~\mathrm{MPa}$:
 \begin{itemize}
-    \item \textbf{Analysis A (\cref{fig:reliability-A}):} The peak pressure spreads widely, and its upper tail crosses the threshold, giving a failure probability $P_f = 6.59\%$ and a reliability index $\beta \approx 1.51$.
+    \item \textbf{Analysis A (\cref{fig:reliability-A}):} The peak pressure spreads widely, and its upper tail crosses the threshold, giving a failure probability $P_f = 6.59\%$.
     \item \textbf{Analysis B (\cref{fig:reliability-B}):} The distribution is narrower (confined between $1.8$ and $2.4~\mathrm{MPa}$), meaning no sampled realisation reaches $p_{\mathrm{crit}}$ ($P_f \approx 0$).
 \end{itemize}
 This confirms that the intrinsic permeability $K_0$ is by far the dominant source of spalling risk.
@@ -224,7 +239,7 @@ Propagating a spatially heterogeneous random field through the fully coupled, hi
 
 By holding the temperature constant at room conditions ($T=20^\circ\mathrm{C}$), the complex thermo-chemical constitutive evolution is frozen. In this test case, the specimen is subjected to convective drying, where the internal relative humidity drops from an initial state of $90\%$ to an environmental humidity of $50\%$ at the exposed surfaces. 
 
-The intrinsic permeability $K_0$ is designated as the spatially variable input. The primary outputs of interest are the local capillary pressure $P_c$ and the resulting \emph{longitudinal shrinkage strain} induced strictly by capillary forces ($p_s = -S_l(P_c) P_c$). To avoid cluttering the main text, the detailed constitutive equations, mesh properties, and deterministic material parameters (e.g., Young's modulus, van Genuchten coefficients) of this simplified model are thoroughly documented in \cref{sec:simplified-model-inputs}.
+The intrinsic permeability $K_0$ is designated as the spatially variable input. The primary output of interest is the resulting \emph{longitudinal shrinkage strain} induced strictly by capillary forces ($p_s = -S_l(P_c) P_c$). To avoid cluttering the main text, the detailed constitutive equations, mesh properties, and deterministic material parameters (e.g., Young's modulus, van Genuchten coefficients) of this simplified model are thoroughly documented in \cref{sec:simplified-model-inputs}.
 
 \subsection{Stochastic propagation methods} \label{sec:spatial-methods}
  

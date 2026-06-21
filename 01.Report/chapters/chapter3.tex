@@ -74,9 +74,8 @@ response, they are reported alongside the numerical results in the calibration
 in \cref{sec:calibration}).
 
 % =====================================================================
-\section{Numerical model}
-\label{sec:num-model}
-\paragraph{Scope of the numerical simulation (THC model).} It is important to note that while the full Thermo-Hydro-Mechanical (THM) theoretical framework is derived in \cref{chapter2} and \cref{appendixA}, the numerical application in this chapter is restricted to the Thermo-Hydro-Chemical (THC) model. Because the reference Kalifa experiment only provides temperature and gas pressure data, there are no experimental mechanical counterparts (e.g., strain or damage measurements) available to validate the structural response. Consequently, the staggered mechanical module---though formulated as an easily pluggable component---is kept out of the current simulation scope.
+\section{Numerical model} \label{sec:num-model}
+\paragraph{Scope of the numerical simulation (THC model).} It is important to note that while the full Thermo-Hydro-Mechanical (THM) theoretical framework is derived in \cref{chapter2} and \cref{appendixA}, the numerical application in this chapter is restricted to the Thermo-Hydro-Chemical (THC) model. Because the reference Kalifa experiment only provides temperature and gas pressure data, there are no experimental mechanical counterparts (e.g., strain or damage measurements) available to validate the structural response. Consequently, the staggered mechanical module---though formulated as an easily pluggable component---is kept out of the current internship scope.
 
 \paragraph{Geometry and mesh.}
 The test is reproduced by a two-dimensional plane model of the
@@ -101,7 +100,7 @@ matching the gauge positions. A graded mesh refined toward the hot face
  
 \paragraph{Material parameters.} The reference parameters corresponding to the HPC M100 mix are summarised in Table~\ref{tab:params}. Instead of treating high-temperature concrete as a purely empirical material, the inputs feed directly into the THC constitutive laws:
 \begin{itemize}
-    \item \textbf{Hydration kinetics ($A_i, A_p, \Gamma_p, \zeta$):} These parameters define the normalized chemical affinity $\mathcal{A}(\Gamma)$ which drives the hydration rate during the curing phase. The full equation governing this behavior is detailed in \cref{sec:affinity}.
+    \item \textbf{Hydration kinetics ($A_i, A_p, \Gamma_p, \zeta, E_a/R, L_{hyd}$):} These parameters define the normalized chemical affinity $\mathcal{A}(\Gamma)$ and the thermal activation $E_a/R$ (input as $EAR$) which drive the hydration rate during the curing phase. The latent heat $L_{hyd}$ (input as $Q_{lat}$) defines the thermal energy released. The full physical meanings of these terms are detailed in \cref{sec:affinity}.
     \item \textbf{Permeability evolution ($K_0, A_\Gamma, B_K$):} Rather than applying an empirical temperature-dependent multiplier, the intrinsic permeability $K$ is explicitly coupled to the effective hydration degree $\tilde{\Gamma}$ via the relation:
     \begin{equation}
         K(\tilde{\Gamma}) = K_0 \cdot 10^{A_\Gamma (1 - \tilde{\Gamma})^{B_K}}
@@ -109,116 +108,81 @@ matching the gauge positions. A graded mesh refined toward the hot face
     \end{equation}
     where $K_0$ is the initial intrinsic permeability (often denoted $K_1$ in the numerical code). $A_\Gamma$ dictates the magnitude of permeability increase as C-S-H decomposes, while $B_K$ controls the curve shape. Further theoretical derivations are provided in \cref{sec:perm-law}.
 \end{itemize}
-The porosity, the water content at full hydration, and the initial hydration field are internally computed using Powers' stoichiometric model (\cref{appendixA}).
+The porosity, the water content at full hydration, and the initial hydration field are internally computed using Powers' stoichiometric model (\cref{sec:powers} in \cref{appendixA}).
 
 \begin{table}[ht]
-  \centering
-  \caption{Reference parameters of the THC model (HPC~M100).}
-  \label{tab:params}
-  \begin{tabular}{llc}
-    \toprule
-    Parameter & Symbol & Value \\
-    \midrule
-    \multicolumn{3}{l}{\emph{Mix}}\\
-    Cement content        & $c$        & \SI{377}{\kilo\gram\per\meter\cubed} \\
-    Aggregate content     & $a$        & \SI{1920}{\kilo\gram\per\meter\cubed} \\
-    Water/cement ratio    & $w/c$      & 0.34 \\
-    Silica/cement ratio   & $s/c$      & 0.108 \\
-    Solid density         & $\rho_s$   & \SI{2625.8}{\kilo\gram\per\meter\cubed} \\
-    \addlinespace
-    \multicolumn{3}{l}{\emph{Hydration / affinity}}\\
-    Affinity parameters   & $A_i,A_p$  & 6,\; 1250 \\
-                          & $\Gamma_p,\zeta$ & 0.24,\; 48 \\
-    Activation $E_a/R$    & EAR        & \SI{5369}{\kelvin} \\
-    Hydration heat        & $Q_{lat}$  & \SI{114.3}{\mega\joule\per\meter\cubed} \\
-    \addlinespace
-    \multicolumn{3}{l}{\emph{Thermal}}\\
-    Solid heat capacity   & $C_s$      & \SI{948}{\joule\per\kilo\gram\per\kelvin} \\
-    Solid conductivity    & $K_s$      & \SI{1.67}{\watt\per\meter\per\kelvin} \\
-    \addlinespace
-    \multicolumn{3}{l}{\emph{Transport / retention}}\\
-    Reference permeability & $K_1$     & \SI{2e-19}{\meter\squared} \\
-    Permeability coeff.    & $A_\Gamma,B_K$ & 3,\; 1 \\
-    Liquid permeability    & $K_{li}$  & \num{20000} \\
-    Desorption curve       & $a_1$     & \SI{18.6}{\mega\pascal} \\
-                           & $b_1,c_1$ & 2.27,\; 1.5 \\
-    \bottomrule
-  \end{tabular}
+\centering
+\caption{Reference parameters of the THC model (HPC~M100).}
+\label{tab:params}
+\begin{tabular}{llc}
+\toprule
+Parameter & Symbol & Value \\
+\midrule
+\multicolumn{3}{l}{\emph{Mix}}\\
+Cement content        & $c$         & \SI{377}{\kilo\gram\per\meter\cubed} \\
+Aggregate content     & $a$         & \SI{1920}{\kilo\gram\per\meter\cubed} \\
+Water/cement ratio    & $w/c$       & 0.34 \\
+Silica/cement ratio   & $s/c$       & 0.1 \\
+Solid density         & $\rho_s$    & \SI{2625.8}{\kilo\gram\per\meter\cubed} \\
+\addlinespace
+\multicolumn{3}{l}{\emph{Hydration / affinity}}\\
+Affinity parameters   & $A_i,A_p$   & 6,\; 1250 \\
+                      & $\Gamma_p,\zeta$  & 0.24,\; 48 \\
+Activation            & $E_a/R$ ($EAR$) & \SI{5369}{\kelvin} \\
+Hydration heat        & $L_{hyd}$ ($Q_{lat}$) & \SI{114.3}{\mega\joule\per\meter\cubed} \\
+\addlinespace
+\multicolumn{3}{l}{\emph{Thermal}}\\
+Solid heat capacity   & $C_{ps}$ ($CS$) & \SI{948}{\joule\per\kilo\gram\per\kelvin} \\
+Solid conductivity    & $\lambda_{d0}$ ($KS$) & \SI{1.67}{\watt\per\meter\per\kelvin} \\
+\addlinespace
+\multicolumn{3}{l}{\emph{Transport / retention}}\\
+Reference permeability & $K_0$ ($K_1$) & \SI{2e-19}{\meter\squared} \\
+Permeability coeff.    & $A_\Gamma,B_K$  & 3,\; 1 \\
+Liquid permeability    & $K_{li}$   & \num{20000} \\
+Desorption curve       & $a_1$      & \SI{18.6}{\mega\pascal} \\
+                       & $b_1,c_1$  & 2.27,\; 1.5 \\
+\bottomrule
+\end{tabular}
 \end{table}
  
-\paragraph{Thermal input and boundary conditions.}
-The boundary set-up follows the modelling of Dauti~\cite{dauti2018}
-(Figure~\ref{fig:setup}). On the hot face a combined convection--radiation
-condition is imposed,
+\paragraph{Thermal input and boundary conditions.} The boundary set-up follows the modelling of Dauti~\cite{dauti2018} (Figure~\ref{fig:setup}). On the hot face a combined convection--radiation condition is imposed,
 \begin{equation}
-  -\,\lambda\,\frac{\partial T}{\partial n}\Big|_{hot}
-  = h^{\mathrm{hot}}\,(T_\infty - T) + \epsilon\,\sigma\,\big(T_\infty^4 - T^4\big),
-  \label{eq:heated-face}
+    -\lambda \frac{\partial T}{\partial n}\Big|_{\mathrm{hot}} = h^{\mathrm{hot}}(T_\infty - T) + \epsilon \sigma \big(T_\infty^4 - T^4\big),
+    \label{eq:heated-face}
 \end{equation}
-with $h^{\mathrm{hot}}=\SI{8}{\watt\per\meter\squared\per\kelvin}$, emissivity
-$\epsilon=0.7$, and a prescribed radiator temperature $T_\infty(t)$ that rises
-to $\approx\SI{400}{\celsius}$ at the onset of the accident and then increases
-quasi-linearly to $\approx\SI{466}{\celsius}$ over the $\approx\SI{240}{\minute}$
-accident (Figure~\ref{fig:setup}b); the radiator is switched off afterwards.
-The cold face exchanges heat by convection only
-($h^{\mathrm{cold}}=\SI{8.3}{\watt\per\meter\squared\per\kelvin}$,
-$T_\infty=\SI{20}{\celsius}$). On both faces the gas pressure is fixed at
-atmospheric ($p_g=p_{atm}$) and a convective vapour flux
-$q_w=h_g(\rho_{gw}^{s}-\rho_{gw}^{ext})$ is applied, the mass-transfer
-coefficient $h_m$ increasing from $0$ (sealed) to
-$\SI{2e-3}{}$ (drying) and $\SI{1.8e-2}{\meter\per\second}$ (accident).
+with $h^{\mathrm{hot}}=\SI{8}{\watt\per\meter\squared\per\kelvin}$, emissivity $\epsilon=0.7$, and a prescribed radiator temperature $T_\infty(t)$ that rises to $\approx\SI{400}{\celsius}$ at the onset of the accident and then increases quasi-linearly to $\approx\SI{466}{\celsius}$ over the $\approx\SI{240}{\minute}$ accident (Figure~\ref{fig:setup}b); the radiator is switched off afterwards. The cold face exchanges heat by convection only ($h^{\mathrm{cold}}=\SI{8.3}{\watt\per\meter\squared\per\kelvin}$, $T_\infty=\SI{20}{\celsius}$). On both faces the gas pressure is fixed at atmospheric ($p_g=p_{atm}$) and a convective vapour flux $q_w=h_g(\rho_{v}^{s}-\rho_{v}^{\infty})$ is applied.
 
-The radiator history is adapted from Dauti~\cite{dauti2018}: rather than a raw
-furnace curve, it is shaped so that the resulting \emph{outer-surface}
-temperature of the specimen reproduces a physically reasonable response; the
-ramp parameters are subsequently re-calibrated against the temperature
-measurements in Chapter~4 (\cref{sec:cal-temp}).
+The mass-transfer coefficient $h_g$ increasing from $0$ (sealed) to $\SI{2e-3}{}$ (drying) and $\SI{1.8e-2}{\meter\per\second}$ (accident). It is important to distinguish these transfer coefficients: while the convective heat transfer coefficients ($h^{\mathrm{hot}}, h^{\mathrm{cold}}$) govern the exchange of thermal energy across the boundary, the mass-transfer coefficient ($h_g$) specifically dictates the rate at which water vapour escapes from the porous network to the surrounding environment.
 
-\paragraph{Curing, drying and initial conditions.}
-A key feature of the THC framework~\cite{sciume2024} is that the hygro-chemical
-state preceding the accident is obtained from a preliminary \emph{curing}
-simulation rather than prescribed arbitrarily. The computation starts from
-\begin{equation}
-  T_0=\SI{20}{\celsius},\quad p_{g,0}=\SI{101325}{\pascal},\quad
-  \mathrm{RH}_0=0.5,\quad \Gamma_0=0,
-  \label{eq:initial-conditions}
-\end{equation}
-the initial liquid saturation following from the desorption isotherm and
-Kelvin's law. Hydration then develops over the curing period, building
-self-consistent profiles of hydration degree $\Gamma$, saturation $S_l$ and
-relative humidity that are carried over as initial fields for the heating
-(drying) stage. The full history is run in three staged \texttt{PASAPAS}
-computations: (i) \emph{early age} (0--3~d, sealed, adiabatic); (ii)
-\emph{aging} (3~d--1~yr, heat and moisture convection, external humidity reduced
-from $0.95$ to $0.50$); and (iii) \emph{accident} ($+\SI{240}{\minute}$,
-hot-face convection and radiation). The aging stage fixes the hydro-chemical
-state ($\Gamma$, $S_l$, RH) just before the accident, so that the initial water
-content and hydration state — which strongly govern the pressure amplitude — are
-consistent with the specimen history.
-
-\textbf{Noted}: The value $\mathrm{RH}_0=0.5$ imposed during early age is physically
-unrealistic for a sealed fresh specimen, but it is retained because higher
-values cause the early-age solution to diverge. Reverting it to
-$\mathrm{RH}_0=0.98$ was tested in an attempt to improve the gas-pressure
-prediction; the result confirms that this initial value brings no useful
-improvement at the calibration stage (\cref{sec:cal-pressure}).
- 
-\paragraph{Solution strategy and numerical robustness.}
-\label{sec:robustness}
-At high temperature, the THC system is \emph{strongly nonlinear}. The Newton iterations of the nonlinear \texttt{PASAPAS} integrator may therefore \emph{diverge}. Three measures are investigated to restore convergence:
-\begin{itemize}
-  \item \textbf{Increasing the relaxation parameter $\theta$} toward a fully implicit time integration ($\theta=1$, used here). This scheme efficiently damps the oscillations of the nonlinear coefficients. The mathematical formulation of this $\theta$-method is detailed in \cref{sec:temporal_discret}.
-  \item \textbf{Reducing the time step $\Delta t$}: from \SI{600}{\second} during aging down to \SIlist{5;15}{\second} across the thermal ramp. Furthermore, $\Delta t$ is strictly reduced to \SI{1}{\second} during the first and last minutes of the thermal ramp where temperature gradients are extremely high, thereby enlarging the convergence radius (see calibration in \cref{sec:cal-temp}).
-  \item \textbf{Refining the mesh} toward the hot face (graded mesh, $\sim\SI{1}{\milli\meter}$), which limits the inter-element jumps of variables.
-  \item \textbf{Tuning the thermal radiation}: the thermal radiation input (emissivity) at the heated boundary is deliberately adjusted  and reduced to prevent excessive surface overheating. $\epsilon=0.85$ in \cite{dauti2018} is reduced to $\epsilon=0.7$. This keeps the resulting temperatures within a tractable range and ensures stable code execution (for full calibration details, see \cref{sec:cal-temp}).
-\end{itemize}
+The radiator history is adapted from Dauti~\cite{dauti2018}: rather than a raw furnace curve, it is shaped so that the resulting \emph{outer-surface} temperature of the specimen reproduces a physically reasonable response; the thermal boundary and bulk conduction parameters (emissivity, convective heat-transfer coefficient, solid thermal conductivity, and solid heat capacity) are subsequently re-calibrated against the temperature measurements in \cref{chapter4} (\cref{sec:cal-temp}).
 
  
 % =====================================================================
 \section{Application of the THC model} \label{sec:thc-application}
 
-\paragraph{Implementation in \textsc{Cast3M}.} The THC model is implemented in \textsc{Cast3M}. The coupled convective mass/heat boundary conditions are strongly nonlinear: the fluid densities entering the convective fluxes must be expressed in terms of the state variables $(p_c,p_g,T)$, which does not admit a closed algebraic form suitable for the standard discretisation. To handle these complex boundary mechanisms, the implementation relies on a \emph{custom build} of \textsc{Cast3M}~2024, or on the 2026 pre-release version developed by G.~Sciumè, S.~Dal~Pont and D.~Dauti, which provides the dedicated operators required by the THC formulation.
+\subsection{Implementation in \textsc{Cast3M}} \label{sec:implementation}
+The THC model is implemented and solved within the open-source finite element code \textsc{Cast3M}. The coupled convective mass and heat boundary conditions are strongly nonlinear: the fluid densities entering the convective fluxes must be expressed in terms of the state variables $(p_c, p_g, T)$. Because this does not admit a closed algebraic form suitable for standard discretisation, the implementation relies on a custom pre-release build of \textsc{Cast3M} (developed by G.~Sciumè, S.~Dal~Pont, and D.~Dauti), which provides the dedicated operators required to resolve the highly coupled THC formulation efficiently.
 
-\paragraph{Permeability evolution with $K_1$ and $A_\Gamma$.} \label{ssec:permeability} Intrinsic permeability most strongly governs the pressure amplitude. As briefly introduced in \cref{eq:ch3-perm}, the permeability rises monotonically as $\tilde{\Gamma}$ decreases. The reference inputs $K_1=\SI{2e-19}{\meter\squared}$ (equivalent to $K_0$) and $A_\Gamma=3$ (Table~\ref{tab:params}) are the \emph{starting point} of the calibration of \cref{chapter4}, where $K_1$ and $A_\Gamma$ are the two parameters swept against the measured gas pressure. Driving transport through the same internal variable that controls porosity and sorption avoids a separate temperature-dependent multiplier. The residual post-peak pressure decay attributable to \emph{mechanical} microcracking is theoretically governed by a damage-dependent law \cite{gawin1999}; however, as the mechanical module is not engaged in this study, capturing this post-peak decay is left as a perspective for future fully-coupled THM developments.
+\subsection{Solution strategy and numerical robustness} \label{sec:robustness} 
+At high temperature, the THC system is \emph{strongly nonlinear}. The Newton iterations of the nonlinear \texttt{PASAPAS} integrator may therefore \emph{diverge}. To restore convergence and ensure numerical stability, the following measures are implemented:
+\begin{itemize}
+  \item \textbf{Increasing the relaxation parameter $\theta$} toward a fully implicit time integration ($\theta=1$, used here). While a fully implicit scheme slightly reduces the temporal accuracy compared to the Crank-Nicolson method ($\theta=0.5$), it efficiently damps the oscillations of the nonlinear coefficients and strongly favors convergence. The mathematical formulation of this $\theta$-method is detailed in \cref{sec:temporal_discret}.
+  \item \textbf{Reducing the time step $\Delta t$}: To compensate for the loss of accuracy caused by setting $\theta=1$, and to further enlarge the convergence radius, $\Delta t$ is drastically reduced: from \SI{600}{\second} during aging down to \SIlist{5;15}{\second} across the thermal ramp. Furthermore, $\Delta t$ is strictly reduced to \SI{1}{\second} during the first and last minutes of the thermal ramp where temperature gradients are extremely high. This simultaneous reduction ensures both numerical accuracy and optimal convergence (see calibration in \cref{sec:cal-temp}).
+  \item \textbf{Retaining linear elements (\texttt{QUA4} over \texttt{QUA8}):} In standard finite element modeling, upgrading to higher-order elements (such as 8-node quadrilaterals) is often a tempting strategy to improve spatial accuracy. However, in highly non-linear multiphase flows, these higher-order elements are highly susceptible to spatial numerical oscillations, which can unphysically drive the gas pressure to negative values and cause the computation to crash. Following expert discussions with Prof.~Stefano Dal Pont during the troubleshooting phase, the default 4-node linear quadrilateral elements (\texttt{QUA4}) from the original sample code were deliberately retained. \texttt{QUA4} elements inherently suppress these numerical artifacts, ensuring a physically valid and strictly positive pressure field throughout the severe thermal gradients.
+  \item \textbf{Mesh density considerations:} Although localized mesh refinement toward the hot face (e.g., a graded mesh down to $\sim\SI{1}{\milli\meter}$) is theoretically known to limit inter-element jumps of variables and improve stability, it was ultimately \emph{not applied} in the final actual code. The mesh was deliberately kept at a regular, unrefined $24 \times 24$ grid. Simplifying the spatial discretization and falling back to the original stable mesh was a necessary step to isolate physical instabilities from meshing-induced errors, ensuring the model runs successfully until the end.
+  \item \textbf{Imposing an artificially low initial relative humidity ($\mathrm{RH}_0$):} For the early-age (sealed) curing phase, setting a physically realistic initial relative humidity (e.g., $\mathrm{RH}_0 = 0.98$) causes the non-linear solver to diverge immediately due to severe capillary pressure gradients. To bypass this, $\mathrm{RH}_0$ is deliberately lowered to $0.5$. While physically unrealistic for a fresh concrete specimen, this numerical relaxation is strictly required to initialize the computation and, importantly, it does not negatively impact the final gas-pressure calibration during the high-temperature accident phase.
+  \item \textbf{Tuning the thermal radiation}: The thermal radiation input (emissivity) at the heated boundary is deliberately adjusted and reduced to prevent excessive surface overheating. $\epsilon=0.85$ in \cite{dauti2018} is reduced to $\epsilon=0.7$. This keeps the resulting temperatures within a tractable range.
+  \item \textbf{Balancing permeability parameters ($K_0$ and $A_\Gamma$):} The coefficient $A_\Gamma$ drastically affects the permeability evolution. A high value triggers severe pressure gradients and numerical singularities. As will be detailed in the gas pressure calibration (\cref{sec:cal-K0-AK}), to ensure initial numerical stability, the starting point was deliberately set with a relatively high initial permeability $K_0 = 2\times 10^{-19}~\mathrm{m^2}$ and a lower coefficient $A_\Gamma = 3$.
+\end{itemize}
 
-\paragraph{Summary.} The THC application is a chain of chemo-physical effects: the curing/heating history fixes $\Gamma$ and $F$, hence $\tilde{\Gamma}$, which controls the porosity, the saturation curve and the permeability law (\cref{sec:perm-law}); these properties determine the temperature, gas-pressure and mass-loss responses compared with the Kalifa data. Calibration and validation against the experiment are presented in the next chapter.
+All these robustness measures and numerical stabilization strategies were thoroughly investigated and implemented by the author, requiring a substantial investment of time and effort to successfully debug and execute the highly non-linear THC simulations without divergence.
+
+\subsection{Simulation timeline and phases} \label{sec:simulation-phases}
+A key feature of the THC application is the chain of chemo-physical effects: the hygro-chemical state preceding the accident is not prescribed arbitrarily but is obtained from preliminary simulations. The curing and aging history fixes the hydration state $\tilde{\Gamma}$, which in turn controls the porosity, the saturation curve, and the intrinsic permeability. The full simulated history is structured into three consecutive phases, executed via staged \texttt{PASAPAS} computations in \textsc{Cast3M}:
+\begin{enumerate}
+    \item \textbf{Early age (0--3 days):} The concrete is assumed to be sealed and hydrating under adiabatic conditions. The computation starts from $T_0=\SI{20}{\celsius}$, $p_{g,0}=\SI{101325}{\pascal}$, $\Gamma_0=0$, and an artificially lowered relative humidity $\mathrm{RH}_0=0.5$ (see \cref{sec:robustness} for the numerical justification of this value).
+    \item \textbf{Aging and drying (3 days--1 year):} The specimen is exposed to heat and moisture convection, with the external humidity progressively reduced down to $0.50$. This stage establishes the self-consistent profiles of hydration degree, liquid saturation $S_l$, and internal relative humidity just before the fire event.
+    \item \textbf{Accident phase (0--240 mins):} The heating ramp is applied to the hot face (convection and radiation). The temperature rises sharply, triggering the dehydration of C-S-H and the subsequent pore-pressure build-up. This phase represents the core of the TH analysis.
+\end{enumerate}
+
+\textbf{Cooling phase omission:} Although the Kalifa experimental campaign continued to record temperature and gas-pressure data during the cooling phase (from $240$ up to $600~\mathrm{minutes}$), this final phase is \emph{not} modeled in the present work. Since the primary objective of this study is to investigate the mechanisms triggering explosive spalling---which intrinsically occurs during the aggressive heating and peak-pressure phase---the numerical simulation is deliberately stopped at $t=\SI{240}{\minute}$. Consequently, the experimental cooling data is excluded from the comparative plots in the calibration phase (\cref{chapter4}).

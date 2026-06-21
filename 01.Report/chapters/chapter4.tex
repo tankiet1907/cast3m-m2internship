@@ -11,7 +11,7 @@ Many critical properties at high-temperature such as the evolution of intrinsic 
 A pre-determined parameter set therefore cannot be expected to reproduce the experiment. Consequently, a calibration procedure for the numerical models is strictly required to identify, within physically admissible ranges, the parameter set that makes the model reproduce the measured temperature and gas-pressure histories. Only once this reference case is calibrated and validated can the model be trusted for uncertainty studies in \cref{chapter5}.
 
 \subsection{Calibration strategy} \label{sec:cal-strategy}
-At the first approximation, the thermal problem is weakly coupled to the hydric one: the temperatur field drives evaporation, dehydration and the gas-pressure build-up, while the effect of the hydric state on the temperature field is relatively small within the experimental range. This hierachy promotes a two-stage calibration process:
+At the first approximation, the thermal problem is weakly coupled to the hydric one: the temperature field drives evaporation, dehydration and the gas-pressure build-up, while the effect of the hydric state on the temperature field is relatively small within the experimental range. This hierachy promotes a two-stage calibration process:
 
 \begin{enumerate}
   \item \textbf{Stage~1 -- Temperature.} The temperature evolution is calibrated independently of the pressure field. In this stage, the \emph{surface} (boundary) parameters should be calibrated first, then the \emph{bulk} conduction parameters.
@@ -58,30 +58,27 @@ The two boundary coefficients $h^{\mathrm{hot}}$ and $\varepsilon$ are adjusted 
 
 The surface response is calibrated over three values of $\varepsilon$ ($0.65$, $0.68$, $0.72$) and three of $h_c$ ($9$, $10$, $11~\mathrm{W\,m^{-2}K^{-1}}$). 
 
-Because the resulting curves differ only slightly, the full $3\times 3$ grid is not informative; instead the effect of each parameter is shown one at a time, varying it while the other is held at its retained value (Fig.~\ref{fig:cal-surface}). The pair retained at this stage is $\varepsilon = 0.68$ and $h^{\mathrm{hot}} = 11~\mathrm{W\,m^{-2}K^{-1}}$.
- 
+Because the resulting curves differ only slightly, the full $3\times 3$ grid is not informative; instead the effect of each parameter is shown one at a time, varying it while the other is held at its retained value (\cref{fig:cal-surf-eps,fig:cal-surf-h}). The pair retained at this stage is $\varepsilon = 0.68$ and $h^{\mathrm{hot}} = 11~\mathrm{W\,m^{-2}K^{-1}}$.
+
 \begin{figure}[H]
   \centering
-  \begin{subfigure}{0.48\textwidth}
-    \includegraphics[width=\linewidth]{figures/chapter4/surf_eps_sweep.png}
-    \caption{Effect of $\varepsilon$ ($h_c = 11$ fixed).}
-    \label{fig:cal-surf-eps}
-  \end{subfigure}\hfill
-  \begin{subfigure}{0.48\textwidth}
-    \includegraphics[width=\linewidth]{figures/chapter4/surf_h_sweep.png}
-    \caption{Effect of $h_c$ ($\varepsilon = 0.68$ fixed).}
-    \label{fig:cal-surf-h}
-  \end{subfigure}
-  \caption{Surface ($0~\mathrm{mm}$) temperature: sensitivity to the emissivity
-  $\varepsilon$ (a) and to the convective coefficient $h_c$ (b), compared with the measured near-surface response.}
-  \label{fig:cal-surface}
+  \includegraphics[width=0.75\textwidth]{figures/chapter4/surf_eps_sweep.png}
+  \caption{Surface ($0~\mathrm{mm}$) temperature: sensitivity to the emissivity $\varepsilon$ ($h_c = 11$ fixed), compared with the measured near-surface response.}
+  \label{fig:cal-surf-eps}
 \end{figure}
 
-Two distinct effects are concluded from \cref{fig:cal-surface}. 
-\begin{itemize}
-  \item The emissivity $\varepsilon$ is the most sensitive parameter: because the radiative term acts in a strong non-linear way as $T^{4}$ in \cref{eq:surf-bc}, a small increase in $\varepsilon$ raises the surface temperature substantially, and mostly in the high-temperature part of the curve, where radiation dominates the heat input. 
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.75\textwidth]{figures/chapter4/surf_h_sweep.png}
+  \caption{Surface ($0~\mathrm{mm}$) temperature: sensitivity to the convective coefficient $h_c$ ($\varepsilon = 0.68$ fixed), compared with the measured near-surface response.}
+  \label{fig:cal-surf-h}
+\end{figure}
 
-  \item The convective coefficient $h^{\mathrm{hot}}$ acts more gently and mainly on the \emph{early} part of the curve: increasing $h^{\mathrm{hot}}$ raises the initial heating rate (the linear $h^{\mathrm{hot}}(T_\infty - T_s)$ term is largest while $T_s$ is still low), with only a slight additional rise in the tail. 
+Two distinct effects are concluded from \cref{fig:cal-surf-eps,fig:cal-surf-h}: 
+\begin{itemize}
+  \item The emissivity $\varepsilon$ is the most sensitive parameter (\cref{fig:cal-surf-eps}): because the radiative term acts in a strong non-linear way as $T^{4}$ in \cref{eq:surf-bc}, a small increase in $\varepsilon$ raises the surface temperature substantially, and mostly in the high-temperature part of the curve, where radiation dominates the heat input. 
+
+  \item The convective coefficient $h^{\mathrm{hot}}$ acts more gently and mainly on the \emph{early} part of the curve (\cref{fig:cal-surf-h}): increasing $h^{\mathrm{hot}}$ raises the initial heating rate (the linear $h^{\mathrm{hot}}(T_\infty - T_s)$ term is largest while $T_s$ is still low), with only a slight additional rise in the tail. 
 \end{itemize}
 
 In brief, $\varepsilon$ sets the level of the high-temperature plateau while $h^{\mathrm{hot}}$ controls the initial ramp; tuning the two together reproduces the measured surface temperature evolution.
@@ -148,7 +145,7 @@ At the end of this journey the temperature is reproduced consistently at all dep
   \includegraphics[width=0.8\textwidth]{figures/chapter4/Temp_compare_step3_CS.png}
   \caption{Temperature with the calibrated set
   ($\varepsilon=0.6$, $h_c=11$, $C_{ps}=960$, $\lambda_{d0}=1.38$): simulation
-  (solid) vs.\ Dauti (dashed) vs.\ experiment (dotted) at $10$--$50~\mathrm{mm}$.}
+  (solid) vs.\ Dauti (dashed) vs.\ experiment (dotted) at $00$--$50~\mathrm{mm}$.}
   \label{fig:cal-depth-final}
 \end{figure}
 

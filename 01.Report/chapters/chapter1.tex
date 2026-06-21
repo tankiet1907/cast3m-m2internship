@@ -6,7 +6,7 @@ Concrete structures exposed to extreme heat undergo a complex interpaly of therm
 
 This phenomenon has been a critical concern for civil infrastructure such as nuclear containment buildings and tunnels, where the consequences of spalling as the loss of cover and cross-section can damage the load-bearing capacity and functions of the structure. 
 
-Recently, its catastrophic consequences are also relevent in aerospace engineering. In 2023, a SpaceX rocket test has failed due to the destructive power of concrete spalling \cite{mclaughlin2023}. As the rocket ignited on its concrete launch pad, the immense heat generated triggered explosive spalling. The debris seen flying around the launch site consisted of sharp concrete flakes. These flakes shot upwards, severely damaged the test field and the rocket itself, ultimately causing the rocket test launch to fail.
+Recently, its catastrophic consequences are also relevant in aerospace engineering. In 2023, a SpaceX rocket test has failed due to the destructive power of concrete spalling \cite{mclaughlin2023}. As the rocket ignited on its concrete launch pad, the immense heat generated triggered explosive spalling. The debris seen flying around the launch site consisted of sharp concrete flakes. These flakes shot upwards, severely damaged the test field and the rocket itself, ultimately causing the rocket test launch to fail.
 
 \begin{figure}[H]
     \centering
@@ -67,12 +67,12 @@ The remainder of the report is structured as follows:
   \item \cref{chapter6} summarizes the main findings and outlines perspectives for future fully-coupled THM developments.
 \end{itemize}
 
-\section{Research enviroment and Computational tools}
+\section{Research environment and Computational tools}
 
 This work was carried out at the \emph{Laboratoire Sols, Solides, Structures -- Risques} (3SR), Universit\'e Grenoble Alpes, which provided the scientific environment and the expertise in multiphysics modelling and risk analysis.
  
-The coupled THM model is implemented in Cast3M, an open-source finite-element code developed at CEA. Compared with closed multiphysics platforms, COMSOL Multiphysics, Cast3M offers greater transparency and control for implemnting tightly coupled THM while COMSOL offers a more user-friendly GUI. 
+The coupled THM model is implemented in Cast3M (or Castem), an open-source finite-element code developed at CEA. Compared with closed multiphysics platforms, COMSOL Multiphysics, Cast3M offers greater transparency and control for implemnting tightly coupled THM, while COMSOL offers a more user-friendly GUI. 
 
-The uncertainty quantification relies on OpenTURNS, an open-source library based on Python used to generate the random samples, propagate them through the model and compute the Sobol indices and reliability. 
+The probabilistic uncertainty quantification relies primarily on OpenTURNS, an open-source library based on Python used to generate the random samples, propagate them through the model, and compute the Sobol indices and reliability. Alternatively, uncertainty quantification can also be operated directly using Cast3M; while Cast3M is less powerful regarding advanced sensitivity and reliability analyses, it provides the essential capability of representing spatial material heterogeneity using random fields \cref{sec:spatial-methods}.
 
 Finally, Python (in Visual Studio Code) is also used to automate the calibration workflow and post-process the results, and LaTeX to typeset this report.

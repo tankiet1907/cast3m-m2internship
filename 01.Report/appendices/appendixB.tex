@@ -9,17 +9,21 @@ A \textbf{random variable} $X$ is a quantity whose value is not fixed but descri
 Instead of saying ``$E = 30$~GPa'', one writes $E \sim \mathcal{N}(30,\,3^2)$~GPa, meaning that the Young's modulus follows a normal (Gaussian) distribution with mean $\mu = 30$~GPa and standard deviation $\sigma = 3$~GPa.
 
 \subsection{PDF and CDF}
+The Probability Density Function (\textbf{PDF}) $f_X(x)$ describes the relative likelihood of $X$ taking a given value. It is always non-negative and integrates to one over the entire domain.
 
-The Probability Density Function (\textbf{PDF}) $f_X(x)$ describes the relative likelihood of $X$ taking a given value. It is always non-negative and integrates to one over the entire domain. 
-
-The Cumulative Distribution Function (\textbf{CDF})$F_X(x) = P(X \leq x)$ gives the probability that $X$ does not
-exceed a threshold $x$:
-
+The Cumulative Distribution Function (\textbf{CDF}) $F_X(x) = P(X \leq x)$ gives the probability that $X$ does not exceed a threshold $x$:
 \begin{equation}
     F_X(x) \;=\; \int_{-\infty}^{x} f_X(t)\,\mathrm{d}t.
     \label{eq:cdf-def}
 \end{equation}
 
+\textbf{Link to stochastic numerical methods:} The concepts of PDF and CDF are the mathematical foundations for all uncertainty propagation and reliability methods used in this work:
+\begin{itemize}
+    \item \textbf{Monte Carlo (MC) and Latin Hypercube Sampling (LHS):} Rely on drawing samples from the input PDFs. Specifically, the CDF is the core concept behind the LHS variance-reduction technique (\cref{sec:lhs-theory}).
+    \item \textbf{Kernel Density Estimation (KDE):} Is a non-parametric method used to reconstruct the continuous empirical PDF of the response from discrete simulated samples.
+    \item \textbf{Polynomial Chaos Expansion (PCE):} Acts as a surrogate model to rapidly propagate the input PDFs into an output PDF without running thousands of expensive finite element simulations.
+    \item \textbf{Gaussian Quadrature (\texttt{PROBDENS}):} Analytically reconstructs the response CDF from its statistical moments to compute the failure probability (\cref{sec:quad-pdf}).
+\end{itemize}
 In reliability analysis, the CDF is used directly to evaluate the probability of exceeding a critical value: $P(X > x_{\mathrm{cr}}) = 1 - F_X(x_{\mathrm{cr}})$ \cite{baroth2011}.
 
 Two distributions are used in this work:
@@ -239,7 +243,7 @@ This pointwise transformation is exact: the autocorrelation structure of the und
 Monte Carlo simulation (MCS) estimates the effect of uncertain inputs by running the deterministic model multiple times, each time with a different random sample drawn from the input distributions \cite{fenton2014}. However, standard MCS converges only as $1/\sqrt{N}$, necessitating a vast number of computationally expensive finite element runs.
 
 \subsection{Latin Hypercube Sampling (LHS)} \label{sec:lhs-theory}
-To reduce the computational cost and accelerate statistical convergence, \textbf{Latin Hypercube Sampling (LHS)} is utilized as a variance-reduced alternative \cite{mckay1979,baudin2017}. In LHS, the cumulative distribution function (CDF) of each random variable is divided into $N$ equiprobable strata. Exactly one sample is drawn from each stratum, guaranteeing that the input space is covered evenly across the entire range of the probability distributions. This ensures the output statistics stabilize with markedly fewer evaluations compared to standard Monte Carlo.
+To reduce the computational cost and accelerate statistical convergence, \textbf{Latin Hypercube Sampling (LHS)} is utilized as a variance-reduced alternative \cite{mckay1979,baudin2017}. As previously introduced, the concept of the Cumulative Distribution Function (CDF) is fundamental to explaining how LHS works. In LHS, the CDF of each random variable is divided into $N$ equiprobable strata (intervals of equal probability). Exactly one sample is drawn from each stratum by inverting the CDF, guaranteeing that the input space is covered evenly across the entire range of the probability distributions. This ensures the output statistics stabilize with markedly fewer evaluations compared to standard Monte Carlo.
 
 \subsection{Convergence}
 
@@ -308,24 +312,19 @@ requiring $K^N$ model evaluations in total. For example, with $N = 2$ variables 
 
 \texttt{PARASTAT} collects these evaluations and returns the first four moments: mean $\mu$, standard deviation $\sigma$, skewness $\delta_3 = \mu_3/\sigma^3$, and kurtosis $\delta_4 = \mu_4/\sigma^4$.
 
-\subsection{Step 3: PDF reconstruction and reliability (\texttt{PROBDENS})}
-\label{sec:quad-pdf}
-
+\subsection{Step 3: PDF reconstruction and reliability (\texttt{PROBDENS})} \label{sec:quad-pdf}
 Once the four moments are known, \texttt{PROBDENS} reconstructs the PDF using \emph{three independent methods simultaneously} \cite{sudret2003}:
-
 \begin{itemize}
     \item \textbf{Winterstein approximation:} expresses $G$ as a Hermite polynomial transformation of a standard normal variable. Simplest but least accurate of the three methods.
     \item \textbf{Pearson's method:} selects the best-fit distribution family (normal, beta, gamma, etc.) from the moment values. Most accurate, but does not always provide a result.
-    \item \textbf{Exponential of polynomials ($n = 4$):} models the PDF as $\tilde{f}_G = c\,\exp(Q)$ where $Q$ is a polynomial fitted to the moments. Always provides accurate results.
+    \item \textbf{Exponential of polynomials ($n=4$):} models the PDF as $\tilde{f}_G = c\,\exp(Q)$ where $Q$ is a polynomial fitted to the moments. Always provides accurate results.
 \end{itemize}
 
-Each method independently yields a probability of failure, obtained from the reconstructed CDF $\tilde{F}_G$ as
-
+The reconstructed Cumulative Distribution Function (CDF) serves as the fundamental basis for calculating the probability of failure $P_f$. Each method independently yields a probability of failure, obtained directly from the reconstructed CDF $\tilde{F}_G$ as:
 \begin{equation}
     P_f \;=\; \tilde{F}_G(0),
     \label{eq:pf-quad}
 \end{equation}
-
 from which the reliability index follows through the general definition (\cref{eq:beta-generalized}). When the three reconstructions are consistent, the result can be accepted with confidence; the method is accurate for $\beta \lesssim 5$ \cite{sudret2003}.
 
 \subsection{Computational cost} \label{sec:quad-cost}
@@ -440,6 +439,9 @@ The \textbf{probability of failure} is the integral of the joint probability den
     P_f = \mathrm{Prob}\bigl[G(\mathbf{X}) \leq 0\bigr] = \int_{G(\mathbf{X}) \leq 0} f_{\mathbf{X}}(\mathbf{x}) \,\mathrm{d}\mathbf{x}.
     \label{eq:pf}
 \end{equation}
+
+However, when dealing with complex non-linear finite element models, this multidimensional integral cannot be solved analytically and must be estimated through numerical approximation methods such as Monte Carlo simulation or Kernel Density Estimation (KDE).
+
 In modern engineering codes, $P_f$ is frequently mapped to the \textbf{generalized reliability index} $\beta$ via the inverse of the standard normal cumulative distribution function $\Phi^{-1}$:
 \begin{equation}
     \beta = -\Phi^{-1}(P_f).
