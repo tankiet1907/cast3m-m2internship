@@ -132,7 +132,9 @@ def plot_confidence_intervals(time_array, data_matrix_dict, baseline_file, colum
     else:
         plt.yticks(fontsize=10)
         
-    plt.legend(loc='center left', bbox_to_anchor=(1.02, 0.5), fontsize=9, ncol=2)
+    # SỬA LẠI VỊ TRÍ LEGEND Ở ĐÂY
+    # loc='upper right' đưa chú thích vào góc trên bên phải bên trong đồ thị
+    plt.legend(loc='upper right', fontsize=9, ncol=2)
     plt.grid(True, linestyle='--', alpha=0.6)
     
     save_path = os.path.join(output_dir, save_name)
