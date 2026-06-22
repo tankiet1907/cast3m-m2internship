@@ -1,18 +1,18 @@
-[0] Config.pm:307> INFO - This is Biber 2.19
-[0] Config.pm:310> INFO - Logfile is 'main.blg'
-[120] biber:340> INFO - === Mon Jun 22, 2026, 12:40:08
-[135] Biber.pm:419> INFO - Reading 'main.bcf'
-[199] Biber.pm:979> INFO - Found 18 citekeys in bib section 0
-[211] Biber.pm:4419> INFO - Processing section 0
-[223] Biber.pm:4610> INFO - Looking for bibtex file 'bibliography/zotero-m2internship.bib' for section 0
-[225] bibtex.pm:1713> INFO - LaTeX decoding ...
-[238] bibtex.pm:1519> INFO - Found BibTeX data source 'bibliography/zotero-m2internship.bib'
-[364] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'normalization = NFD' with 'normalization = prenormalized'
-[364] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'variable = shifted' with 'variable = non-ignorable'
-[364] Biber.pm:4239> INFO - Sorting list 'nty/global//global/global' of type 'entry' with template 'nty' and locale 'en-US'
-[364] Biber.pm:4245> INFO - No sort tailoring available for locale 'en-US'
-[389] bbl.pm:660> INFO - Writing 'main.bbl' with encoding 'UTF-8'
-[396] bbl.pm:763> INFO - Output to main.bbl
-[396] Biber.pm:131> WARN - I didn't find a database entry for 'pesavento2000' (section 0)
-[396] Biber.pm:131> WARN - I didn't find a database entry for 'lewis1998' (section 0)
-[397] Biber.pm:133> INFO - WARNINGS: 2
+[0] Config.pm:328> INFO - This is Biber 2.21
+[0] Config.pm:331> INFO - Logfile is 'main.blg'
+[127] biber-MSWIN64:342> INFO - === 
+[168] Biber.pm:421> INFO - Reading 'main.bcf'
+[304] Biber.pm:1002> INFO - Found 18 citekeys in bib section 0
+[320] Biber.pm:4487> INFO - Processing section 0
+[331] Biber.pm:4678> INFO - Looking for bibtex file 'bibliography/zotero-m2internship.bib' for section 0
+[483] bibtex.pm:1713> INFO - LaTeX decoding ...
+[568] bibtex.pm:1519> INFO - Found BibTeX data source 'bibliography/zotero-m2internship.bib'
+[722] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'normalization = NFD' with 'normalization = prenormalized'
+[722] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'variable = shifted' with 'variable = non-ignorable'
+[723] Biber.pm:4307> INFO - Sorting list 'nty/global//global/global/global' of type 'entry' with template 'nty' and locale 'en-US'
+[723] Biber.pm:4313> INFO - No sort tailoring available for locale 'en-US'
+[753] bbl.pm:676> INFO - Writing 'main.bbl' with encoding 'UTF-8'
+[764] bbl.pm:779> INFO - Output to main.bbl
+[764] Biber.pm:132> WARN - I didn't find a database entry for 'pesavento2000' (section 0)
+[764] Biber.pm:132> WARN - I didn't find a database entry for 'lewis1998' (section 0)
+[764] Biber.pm:134> INFO - WARNINGS: 2
