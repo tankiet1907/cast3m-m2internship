@@ -1,0 +1,177 @@
+\contentsline {chapter}{Acknowledgment}{i}{chapter*.1}%
+\contentsline {chapter}{Declaration on the Use of AI-Assisted Technologies}{ii}{chapter*.2}%
+\contentsline {chapter}{Abstract}{iii}{chapter*.3}%
+\contentsline {chapter}{List of Figures}{vi}{section*.5}%
+\contentsline {chapter}{List of Tables}{viii}{section*.7}%
+\contentsline {chapter}{\numberline {1}Introduction}{1}{chapter.1}%
+\contentsline {section}{\numberline {1.1}Context and problem statement}{1}{section.1.1}%
+\contentsline {section}{\numberline {1.2}Numerical modeling approaches}{2}{section.1.2}%
+\contentsline {subsection}{\numberline {1.2.1}From TH to the recent THC formulation}{3}{subsection.1.2.1}%
+\contentsline {subsection}{\numberline {1.2.2}The need for stochastic assessment}{3}{subsection.1.2.2}%
+\contentsline {section}{\numberline {1.3}Objectives and scope of the report}{3}{section.1.3}%
+\contentsline {section}{\numberline {1.4}Research environment and Computational tools}{4}{section.1.4}%
+\contentsline {chapter}{\numberline {2}Theoretical framework}{5}{chapter.2}%
+\contentsline {section}{\numberline {2.1}THM behaviors and spalling mechanisms}{5}{section.2.1}%
+\contentsline {section}{\numberline {2.2}Improved thermo-hydro-chemical (THC) model}{6}{section.2.2}%
+\contentsline {subsection}{\numberline {2.2.1}Motivation}{6}{subsection.2.2.1}%
+\contentsline {subsection}{\numberline {2.2.2}Chemical state variables}{6}{subsection.2.2.2}%
+\contentsline {subsection}{\numberline {2.2.3}Resulting coupled system}{7}{subsection.2.2.3}%
+\contentsline {paragraph}{1. Dry-air conservation:}{7}{section*.11}%
+\contentsline {paragraph}{2. Total water-species conservation:}{7}{section*.12}%
+\contentsline {paragraph}{3. Energy conservation:}{7}{section*.13}%
+\contentsline {section}{\numberline {2.3}Coupling to the mechanical field}{8}{section.2.3}%
+\contentsline {chapter}{\numberline {3}Experimental Reference and Numerical Model}{9}{chapter.3}%
+\contentsline {section}{\numberline {3.1}The Kalifa experiment}{9}{section.3.1}%
+\contentsline {paragraph}{Purpose and selection rationale.}{9}{section*.14}%
+\contentsline {paragraph}{Set-up and instrumentation.}{9}{section*.15}%
+\contentsline {paragraph}{Concrete mix.}{10}{section*.17}%
+\contentsline {paragraph}{Heating scenario and measured data.}{10}{section*.18}%
+\contentsline {section}{\numberline {3.2}Numerical model}{10}{section.3.2}%
+\contentsline {paragraph}{Scope of the numerical simulation.}{10}{section*.19}%
+\contentsline {paragraph}{Geometry and mesh.}{11}{section*.20}%
+\contentsline {paragraph}{Material parameters.}{11}{section*.22}%
+\contentsline {paragraph}{Thermal input and boundary conditions.}{11}{section*.24}%
+\contentsline {section}{\numberline {3.3}Application of the THC model}{13}{section.3.3}%
+\contentsline {subsection}{\numberline {3.3.1}Numerical implementation and robustness}{13}{subsection.3.3.1}%
+\contentsline {subsection}{\numberline {3.3.2}Simulation timeline and phases}{14}{subsection.3.3.2}%
+\contentsline {chapter}{\numberline {4}Model Calibration and Validation}{15}{chapter.4}%
+\contentsline {section}{\numberline {4.1}Model calibration}{15}{section.4.1}%
+\contentsline {subsection}{\numberline {4.1.1}Calibration strategy}{15}{subsection.4.1.1}%
+\contentsline {subsection}{\numberline {4.1.2}Automated parameter sweep}{16}{subsection.4.1.2}%
+\contentsline {section}{\numberline {4.2}Temperature calibration}{17}{section.4.2}%
+\contentsline {subsection}{\numberline {4.2.1}Surface temperature (00mm): boundary heat exchange coefficient}{17}{subsection.4.2.1}%
+\contentsline {subsection}{\numberline {4.2.2}In-depth temperature: thermal conductivity and heat capacity}{18}{subsection.4.2.2}%
+\contentsline {paragraph}{Starting point.}{18}{section*.26}%
+\contentsline {paragraph}{Step 1 -- reducing the conductivity $\lambda _{d0}$ (\texttt {KS}).}{19}{section*.28}%
+\contentsline {paragraph}{Step 2 -- re-calibrating the emissivity $\varepsilon $.}{19}{section*.29}%
+\contentsline {paragraph}{Step 3 -- increasing the heat capacity $C_{ps}$ (\texttt {CS}).}{19}{section*.31}%
+\contentsline {paragraph}{Balancing $C_{ps}$ and $\lambda _{d0}$.}{19}{section*.32}%
+\contentsline {section}{\numberline {4.3}Gas-pressure calibration}{21}{section.4.3}%
+\contentsline {subsection}{\numberline {4.3.1}Primary parameters: $K_0$ and $A_\Gamma $}{21}{subsection.4.3.1}%
+\contentsline {paragraph}{Starting point -- $K_0 = 2\times 10^{-19}~\mathrm {m^2}$.}{21}{section*.34}%
+\contentsline {paragraph}{Reducing the permeability -- $K_0 = 8.5\times 10^{-20}~\mathrm {m^2}$.}{21}{section*.35}%
+\contentsline {paragraph}{Comparison with the references.}{21}{section*.37}%
+\contentsline {subsection}{\numberline {4.3.2}Secondary adjustments investigated}{23}{subsection.4.3.2}%
+\contentsline {section}{\numberline {4.4}Validation and discussion}{24}{section.4.4}%
+\contentsline {subsection}{\numberline {4.4.1}Temperature}{24}{subsection.4.4.1}%
+\contentsline {subsection}{\numberline {4.4.2}Gas pressure}{24}{subsection.4.4.2}%
+\contentsline {subsection}{\numberline {4.4.3}Dicussions}{25}{subsection.4.4.3}%
+\contentsline {chapter}{\numberline {5}Stochastic assessment of the model}{26}{chapter.5}%
+\contentsline {section}{\numberline {5.1}Stochastic finite element framework}{26}{section.5.1}%
+\contentsline {subsection}{\numberline {5.1.1}Motivation}{26}{subsection.5.1.1}%
+\contentsline {subsection}{\numberline {5.1.2}Continuous stochastic workflow}{26}{subsection.5.1.2}%
+\contentsline {section}{\numberline {5.2}Uncertain inputs and quantity of interest}{27}{section.5.2}%
+\contentsline {subsection}{\numberline {5.2.1}Two separate analyses}{27}{subsection.5.2.1}%
+\contentsline {subsection}{\numberline {5.2.2}Quantity of interest and limit state}{28}{subsection.5.2.2}%
+\contentsline {section}{\numberline {5.3}Uncertainty propagation with \textsc {OpenTURNS}}{29}{section.5.3}%
+\contentsline {section}{\numberline {5.4}Sensitivity analysis}{29}{section.5.4}%
+\contentsline {subsection}{\numberline {5.4.1}Analysis A --- permeability $K_0$}{29}{subsection.5.4.1}%
+\contentsline {subsection}{\numberline {5.4.2}Analysis B --- mix composition}{30}{subsection.5.4.2}%
+\contentsline {section}{\numberline {5.5}Reliability analysis}{32}{section.5.5}%
+\contentsline {section}{\numberline {5.6}Effect of spatial heterogeneity on structural safety}{33}{section.5.6}%
+\contentsline {subsection}{\numberline {5.6.1}A simplified isothermal poro-mechanical model}{33}{subsection.5.6.1}%
+\contentsline {subsection}{\numberline {5.6.2}Stochastic propagation methods}{34}{subsection.5.6.2}%
+\contentsline {chapter}{\numberline {6}Conclusions and Perspectives}{38}{chapter.6}%
+\contentsline {section}{\numberline {6.1}Main findings}{38}{section.6.1}%
+\contentsline {section}{\numberline {6.2}Model limitations}{39}{section.6.2}%
+\contentsline {section}{\numberline {6.3}Perspectives for future research}{39}{section.6.3}%
+\contentsline {chapter}{Bibliography}{41}{chapter*.52}%
+\value {tocdepth}=0
+\contentsline {chapter}{\numberline {A}Mathematical formulation and constitutive laws of the THM model}{43}{appendix.A}%
+\contentsline {section}{\numberline {A.1}THM interactions and spalling mechanisms}{43}{section.A.1}%
+\contentsline {subsection}{\numberline {A.1.1}Simultaneous THM behaviors and interactions}{43}{subsection.A.1.1}%
+\contentsline {subsection}{\numberline {A.1.2}Spalling mechanisms}{43}{subsection.A.1.2}%
+\contentsline {section}{\numberline {A.2}Thermal behavior}{44}{section.A.2}%
+\contentsline {subsection}{\numberline {A.2.1}Conduction, convection and radiation}{44}{subsection.A.2.1}%
+\contentsline {subsubsection}{Conduction}{44}{section*.53}%
+\contentsline {subsubsection}{Convection}{45}{section*.54}%
+\contentsline {subsubsection}{Radiation}{45}{section*.55}%
+\contentsline {subsection}{\numberline {A.2.2}Heat transfer}{45}{subsection.A.2.2}%
+\contentsline {subsubsection}{Heat Equation}{45}{section*.56}%
+\contentsline {subsubsection}{Thermal properties}{46}{section*.57}%
+\contentsline {subsubsection}{Discretization}{47}{section*.58}%
+\contentsline {subsection}{\numberline {A.2.3}Thermal gradient}{48}{subsection.A.2.3}%
+\contentsline {section}{\numberline {A.3}Hydric behavior}{48}{section.A.3}%
+\contentsline {subsection}{\numberline {A.3.1}Types of water in concrete}{48}{subsection.A.3.1}%
+\contentsline {subsection}{\numberline {A.3.2}Evaporation and dehydration}{49}{subsection.A.3.2}%
+\contentsline {subsubsection}{Dehydration kinetics}{49}{section*.59}%
+\contentsline {subsubsection}{Enthalpy of evaporation}{50}{section*.60}%
+\contentsline {subsection}{\numberline {A.3.3}Moisture transport equation}{50}{subsection.A.3.3}%
+\contentsline {subsubsection}{Transport mechanisms}{50}{section*.61}%
+\contentsline {subsubsection}{Mass conservation equations}{51}{section*.62}%
+\contentsline {subsubsection}{Constitutive relations for the gas phase}{52}{section*.63}%
+\contentsline {subsubsection}{Sorption isotherms}{52}{section*.64}%
+\contentsline {subsubsection}{Intrinsic permeability}{53}{section*.66}%
+\contentsline {subsubsection}{Relative permeability}{53}{section*.67}%
+\contentsline {subsubsection}{Effective diffusivity}{54}{section*.68}%
+\contentsline {subsubsection}{Fluid viscosities}{54}{section*.69}%
+\contentsline {subsubsection}{Porosity evolution}{54}{section*.70}%
+\contentsline {subsection}{\numberline {A.3.4}Pore pressure build-up}{54}{subsection.A.3.4}%
+\contentsline {section}{\numberline {A.4}Chemical behavior and Microstructural evolution}{55}{section.A.4}%
+\contentsline {subsection}{\numberline {A.4.1}Powers' stoichiometric model and water content}{55}{subsection.A.4.1}%
+\contentsline {subsection}{\numberline {A.4.2}Chemical kinetics and Affinity}{55}{subsection.A.4.2}%
+\contentsline {subsection}{\numberline {A.4.3}Porosity evolution law}{56}{subsection.A.4.3}%
+\contentsline {subsection}{\numberline {A.4.4}Permeability evolution law}{56}{subsection.A.4.4}%
+\contentsline {section}{\numberline {A.5}Mechanical behavior}{57}{section.A.5}%
+\contentsline {subsection}{\numberline {A.5.1}Linear elastic model}{57}{subsection.A.5.1}%
+\contentsline {subsubsection}{Linear finite element formulation}{57}{section*.71}%
+\contentsline {subsection}{\numberline {A.5.2}Mazars damage model}{58}{subsection.A.5.2}%
+\contentsline {subsubsection}{Damage parameter and equivalent strain}{58}{section*.72}%
+\contentsline {subsubsection}{Damage evolution laws for tension and compression}{59}{section*.73}%
+\contentsline {subsubsection}{Non-linear equilibrium and iterative solution}{60}{section*.74}%
+\contentsline {subsection}{\numberline {A.5.3}Mesh dependency and fracture energy regularization}{60}{subsection.A.5.3}%
+\contentsline {subsubsection}{Principle of fracture energy regularization}{61}{section*.75}%
+\contentsline {subsubsection}{Elastic energy ($G_{elastic}$)}{61}{section*.76}%
+\contentsline {subsubsection}{Regularization of $B_t$}{61}{section*.77}%
+\contentsline {section}{\numberline {A.6}Coupling mechanisms}{62}{section.A.6}%
+\contentsline {subsection}{\numberline {A.6.1}Thermo-Hydric (TH) coupling mechanisms}{62}{subsection.A.6.1}%
+\contentsline {subsubsection}{Temperature as a driver of hydric phenomena}{62}{section*.78}%
+\contentsline {subsubsection}{Energy conservation equation}{62}{section*.79}%
+\contentsline {subsection}{\numberline {A.6.2}Thermo-hydric input to the mechanical field}{63}{subsection.A.6.2}%
+\contentsline {subsubsection}{Strain decomposition}{64}{section*.80}%
+\contentsline {subsubsection}{Thermal dilation}{64}{section*.81}%
+\contentsline {subsubsection}{Capillary shrinkage}{64}{section*.82}%
+\contentsline {subsubsection}{Effective stress and pore pressure loading}{65}{section*.83}%
+\contentsline {section}{\numberline {A.7}THM governing formulation}{65}{section.A.7}%
+\contentsline {section}{\numberline {A.8}Discretization}{66}{section.A.8}%
+\contentsline {subsection}{\numberline {A.8.1}Spatial discretization}{66}{subsection.A.8.1}%
+\contentsline {subsection}{\numberline {A.8.2}Temporal discretization (The $\theta $-method)}{66}{subsection.A.8.2}%
+\contentsline {chapter}{\numberline {B}Stochastic framework and Uncertainty Quantification}{68}{appendix.B}%
+\contentsline {section}{\numberline {B.1}Sources and classification of uncertainty}{68}{section.B.1}%
+\contentsline {subsection}{\numberline {B.1.1}Motivation for probabilistic assessment}{68}{subsection.B.1.1}%
+\contentsline {subsection}{\numberline {B.1.2}Classification of uncertainties}{68}{subsection.B.1.2}%
+\contentsline {subsection}{\numberline {B.1.3}Concrete heterogeneity and material variability}{69}{subsection.B.1.3}%
+\contentsline {section}{\numberline {B.2}Random variable (PDF, CDF, moments, CoV)}{69}{section.B.2}%
+\contentsline {subsection}{\numberline {B.2.1}PDF and CDF}{69}{subsection.B.2.1}%
+\contentsline {subsection}{\numberline {B.2.2}Statistical moments}{70}{subsection.B.2.2}%
+\contentsline {paragraph}{Input moments.}{71}{section*.84}%
+\contentsline {paragraph}{Output moments.}{71}{section*.85}%
+\contentsline {subsection}{\numberline {B.2.3}Coefficient of Variation (CoV)}{71}{subsection.B.2.3}%
+\contentsline {subsection}{\numberline {B.2.4}Choice of probability distributions for concrete properties}{71}{subsection.B.2.4}%
+\contentsline {section}{\numberline {B.3}Random fields}{72}{section.B.3}%
+\contentsline {subsection}{\numberline {B.3.1}Correlation function and correlation length}{73}{subsection.B.3.1}%
+\contentsline {paragraph}{Remark:}{73}{section*.86}%
+\contentsline {subsection}{\numberline {B.3.2}Random field simulation}{74}{subsection.B.3.2}%
+\contentsline {subsection}{\numberline {B.3.3}Turning Bands Method (\texttt {ALEA})}{74}{subsection.B.3.3}%
+\contentsline {paragraph}{Principle}{74}{section*.87}%
+\contentsline {paragraph}{Implementation in Cast3M}{75}{section*.88}%
+\contentsline {subsection}{\numberline {B.3.4}Transformation of Lognormal to Gaussian distribution}{75}{subsection.B.3.4}%
+\contentsline {section}{\numberline {B.4}Monte Carlo simulation and LHS framework}{76}{section.B.4}%
+\contentsline {subsection}{\numberline {B.4.1}Monte Carlo Principle}{76}{subsection.B.4.1}%
+\contentsline {subsection}{\numberline {B.4.2}Latin Hypercube Sampling (LHS)}{76}{subsection.B.4.2}%
+\contentsline {subsection}{\numberline {B.4.3}Convergence}{77}{subsection.B.4.3}%
+\contentsline {section}{\numberline {B.5}Gaussian Quadrature framework}{77}{section.B.5}%
+\contentsline {subsection}{\numberline {B.5.1}Step 1: Quadrature points and weights (\texttt {QUADRATU})}{77}{subsection.B.5.1}%
+\contentsline {subsection}{\numberline {B.5.2}Step 2: Statistical moments (\texttt {PARASTAT})}{78}{subsection.B.5.2}%
+\contentsline {subsection}{\numberline {B.5.3}Step 3: PDF reconstruction and reliability (\texttt {PROBDENS})}{78}{subsection.B.5.3}%
+\contentsline {subsection}{\numberline {B.5.4}Computational cost}{79}{subsection.B.5.4}%
+\contentsline {section}{\numberline {B.6}Sensitivity indicators and ranking methods}{79}{section.B.6}%
+\contentsline {subsection}{\numberline {B.6.1}Variance decomposition}{79}{subsection.B.6.1}%
+\contentsline {subsection}{\numberline {B.6.2}Variance-based sensitivity: Sobol indices}{80}{subsection.B.6.2}%
+\contentsline {subsection}{\numberline {B.6.3}Practical sensitivity approximation}{80}{subsection.B.6.3}%
+\contentsline {section}{\numberline {B.7}Probability of failure and reliability index}{81}{section.B.7}%
+\contentsline {subsection}{\numberline {B.7.1}Limit state function}{81}{subsection.B.7.1}%
+\contentsline {subsection}{\numberline {B.7.2}Probability of failure and reliability index $\beta $}{81}{subsection.B.7.2}%
+\contentsline {section}{\numberline {B.8}Reference parameters for the simplified poro-mechanical model}{82}{section.B.8}%
+\contentsline {subsection}{\numberline {B.8.1}Constitutive relationships}{82}{subsection.B.8.1}%
+\contentsline {subsection}{\numberline {B.8.2}Geometry, mesh, and material parameters}{82}{subsection.B.8.2}%
