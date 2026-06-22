@@ -1,6 +1,5 @@
 %\cleardoublepage %already included in mainmatter 
 \chapter{Stochastic assessment of the model} \label{chapter5} %should be limited to 10 pages
-\review{This chapter is under review}
 
 \section{Stochastic finite element framework} \label{sec:stochastic-framework}
 \subsection{Motivation}
@@ -8,17 +7,16 @@ In civil engineering, material properties such as permeability, thermal conducti
 
 This limitation is particularly critical for predicting explosive spalling, a highly localized failure driven by spatial fluctuations of material properties (e.g., micro-defects) and the unpredictable nature of extreme thermal loads. To explicitly quantify this risk, a \emph{stochastic} framework must be adopted, where material parameters are treated as random variables or spatial random fields. 
 
-\textbf{The comprehensive theoretical background regarding the formal classification of uncertainties (aleatoric vs. epistemic), as well as the mathematical definitions linking these core probabilistic concepts to the utilized simulation methods, are deferred to \cref{appendixB}.}
+\textbf{The comprehensive theoretical background regarding the formal classification of uncertainties (aleatoric vs. epistemic), as well as the mathematical definitions linking these core probabilistic concepts to the utilized simulation methods, are deferred to \cref{sec:uncertainty-theory}.}
 
 \subsection{Continuous stochastic workflow}
-To handle these uncertainties within the finite element model, various numerical tools are employed across the different analyses (e.g., LHS, Monte Carlo, PCE, KDE, Gaussian Quadrature). While diverse, they all share a unified mathematical foundation rooted in the Probability Density Function (PDF) and the Cumulative Distribution Function (CDF). 
+To handle uncertainties, several numerical tools (e.g., LHS, Monte Carlo, PCE, KDE, Gaussian Quadrature) are employed in a continuous workflow based on the Probability Density Function (PDF) and Cumulative Distribution Function (CDF):
 
-Specifically, the roles of the PDF and CDF form a continuous stochastic workflow throughout the analyses:
 \begin{itemize}
-    \item \textbf{Input:} The uncertainty of every material parameter (e.g., permeability, $w/c$) is initially defined by a prescribed PDF, indicating the most probable physical values.
-    \item \textbf{Sampling (LHS \& MC):} To perform probabilistic simulations, discrete values must be drawn from these distributions. While Monte Carlo (MC) draws randomly, Latin Hypercube Sampling (LHS) uses the CDF to divide the probability space into $N$ equiprobable intervals, ensuring a space-filling design without clustering.
-    \item \textbf{Propagation (PCE):} Since running thousands of non-linear FEM simulations is computationally prohibitive, Polynomial Chaos Expansion (PCE) acts as a mathematical filter, directly and rapidly transforming the input PDFs into the output PDF.
-    \item \textbf{Output and Risk (KDE \& Quadrature):} Once the structural responses are obtained, the probability of failure ($P_f$) must be evaluated. Kernel Density Estimation (KDE) smoothes the discrete sampled data into a continuous response PDF. Alternatively, the Gaussian Quadrature method computes the statistical moments to analytically reconstruct the response PDF. Finally, the probability of failure is evaluated directly by integrating the tail of this PDF over the failure domain (i.e., the shaded area beyond the critical threshold).
+    \item \textbf{Input:} Each uncertain parameter (e.g., permeability, $w/c$) is defined by a prescribed PDF.
+    \item \textbf{Sampling (LHS \& MC):} Discrete values are drawn from these distributions. While Monte Carlo (MC) samples randomly, Latin Hypercube Sampling (LHS) uses the CDF to ensure an even, space-filling sampling.
+    \item \textbf{Propagation (PCE):} To avoid thousands of expensive FEM simulations, Polynomial Chaos Expansion (PCE) acts as a surrogate model to rapidly transform the input PDFs into the output PDF.
+    \item \textbf{Output and Risk (KDE \& Quadrature):} The response PDF is reconstructed using either Kernel Density Estimation (KDE) from sampled data or Gaussian Quadrature via statistical moments. The probability of failure ($P_f$) is then evaluated directly by integrating the tail of this PDF beyond a critical threshold.
 \end{itemize}
 
 Within this general workflow, the spatial dimension of the uncertainty is treated at two levels:
@@ -41,11 +39,8 @@ The uncertainty is propagated through \emph{two independent studies} rather than
 \end{description}
  
 The two are kept apart for two reasons. First, they are of different nature --- a material-property scatter on one side, an upstream design imprecision on the other --- and mixing them would blur the interpretation. Second, $K_0$ is known from \cref{chapter4} to dominate the pressure response; pooling it with the four mix proportions in a single variance decomposition would let its variance swamp the Sobol indices (\cref{sec:sobol}) and \emph{mask} the relative importance \emph{among} the mix proportions. Separating the analyses lets each source be characterised on its own terms.
- 
-\subsection{Choice of probability distributions} \label{sec:distributions}
-Three distribution families are used in this stochastic assessment, each chosen to reflect the \emph{nature} of the corresponding uncertainty rather than by convenience. The selected distributions and their parameters are summarised in \cref{tab:random-variables}. 
 
-\textbf{The detailed physical and mathematical justifications for selecting the Lognormal law for permeability, the Normal law for batching weights, and the Uniform law for design ratios are deferred to \cref{sec:distribution-justification} in \cref{appendixB}.}
+\textbf{The detailed physical and mathematical justifications for selecting the Lognormal law for permeability, the Normal law for batching weights, and the Uniform law for design ratios are deferred to \cref{sec:distribution-justification}.}
 
 The four mix proportions are taken as mutually independent design choices; their physical coupling (a given $w/c$ and $s/c$ jointly set porosity and permeability) is produced \emph{inside} the model by Powers' stoichiometry, not imposed on the inputs. The \textsc{OpenTURNS} declaration is given in \cref{tab:random-variables}.
  
@@ -87,12 +82,12 @@ where $\mathbf{X}$ is the input vector of the analysis considered and $p_{\mathr
 % =====================================================================
 \section{Uncertainty propagation with \texorpdfstring{\textsc{OpenTURNS}}{OpenTURNS}} \label{sec:propagation}
  
-Uncertainty quantification is carried out with the \textsc{OpenTURNS} library \cite{baudin2017}, reusing the Python automation layer built for the calibration sweeps of \cref{sec:cal-automation}. There, \texttt{itertools.product} is also reused for a probabilistic design.
+Uncertainty quantification is carried out with the \textsc{OpenTURNS} library, reusing the Python automation layer built for the calibration sweeps of \cref{sec:cal-automation}. There, \texttt{itertools.product} is also reused for a probabilistic design.
 
 Besides, extra steps is required for the automated stochastic analyses:
 \begin{enumerate}
   \item Define the distribution(\cref{tab:random-variables}), using \texttt{ComposedDistribution}.
-  \item Generate an LHS design of $N$ samples (\cref{sec:lhs}).
+  \item Generate an LHS design of $N$ samples (\cref{sec:lhs-theory}).
   \item Python script for post-process and ploting: correlation, Sobol indices, response PDF.
 \end{enumerate}
  
@@ -105,12 +100,12 @@ To reduce computational cost compared to standard Monte Carlo, Latin Hypercube S
 \subsection{Analysis A --- permeability $K_0$} \label{sec:sens-K0}
 With $A_\Gamma$ held constant to isolate the magnitude-driving uncertainty, Analysis A evaluates how $p_g^{10}$ responds to $K_0$. Since there is only one random variable, a Sobol decomposition is not meaningful ($S_1=S_{T}=1$). The results highlight a strongly negative correlation: lower permeability traps more vapour, which results in a higher pressure peak (\cref{fig:sensA-corr,fig:sensA-ci}). 
 
-For the interpretation of the transient response plots and sensitivity bar charts in this chapter, it is important to clarify the terminology and statistical metrics used:
+To interpret the plots and charts in this chapter, the following terminology is used:
 \begin{itemize}
-    \item \textbf{Sim vs. Baseline:} In the legends, \textbf{Sim} (or Sim Mean) represents the mean of all stochastic simulations evaluated with \textsc{OpenTURNS} (reflecting the full propagated probability distribution), whereas the \textbf{Baseline} corresponds to the single deterministic simulation utilizing the optimal parameter set already calibrated in \cref{chapter4}.
-    \item \textbf{95\% Confidence Interval (CI) Bands:} The shaded areas around the transient curves and the error bars on the Sobol indices represent the $95\%$ confidence intervals. For the pressure histories, this band illustrates the physical dispersion, indicating a $95\%$ probability that the pressure response falls within this zone under the given input uncertainties. For the Sobol indices, it represents the statistical bootstrap estimation error due to a finite sample size.
+    \item \textbf{Baseline vs. Sim:} \textbf{Baseline} is the single deterministic run using the calibrated parameters from \cref{chapter4}. \textbf{Sim} (or Sim Mean) is the average response of all stochastic simulations from \textsc{OpenTURNS}.
+    \item \textbf{95\% Confidence Intervals (CI):} On the transient curves, the shaded bands represent the physical dispersion ($95\%$ probability zone). On the Sobol indices, the error bars indicate the statistical estimation error (bootstrap).
 \end{itemize}
-The comprehensive theoretical background regarding the stochastic framework, probability density functions, and the required number of evaluations for reaching a $95\%$ confidence level is detailed in \cref{sec:mc-lhs}.
+The theoretical background on these stochastic methods and confidence levels is detailed in \cref{sec:mc-lhs}.
 
 
 \begin{figure}[htbp]
@@ -170,28 +165,26 @@ In Analysis B, the four mix proportions are treated as random variables. To over
   \label{fig:sensB-ci}
 \end{figure}
 
-\textbf{Conclusion.} In Analysis~A \cref{fig:sensA-corr} the permeability shows a clear, almost deterministic dependence: $K_0$ is strongly and negatively correlated with $p_g^{10}$ (Pearson/Spearman $\approx -0.98$), the points falling on a tight monotone curve, which confirms permeability as the controlling input. In Analysis~B \cref{fig:sensB-corr} the picture is far more scattered: apart from $w/c$, which is strongly correlated with $p_g^{10}$ ($\approx 0.93$), only the cement content shows an appreciable correlation ($\approx 0.34$), while the aggregate content and $s/c$ are essentially uncorrelated ($-0.11$ and $0.24$). 
-
-The variance-based ranking confirms and sharpens this: $w/c$ carries by far the largest Sobol index ($S_i\approx S_{T_i}\approx 0.58$), followed by the cement content ($\approx 0.25$) and the aggregate content ($\approx 0.15$), while $s/c$ is negligible ($<0.01$). The first- and total-order indices nearly coincide for every input, so the interactions are weak and the response is essentially additive, and the second-order indices (\cref{fig:sensB-sobol2}) are correspondingly small. Notably, the aggregate content is almost uncorrelated yet still carries a non-negligible total index, a contribution that the monotone correlation misses but the variance decomposition captures.
-
-The dominance of $w/c$ shows that the initial free-water content of the mix governs the peak pressure far more than any other proportion: a higher $w/c$ means both a more open pore structure and more capillary water available to vaporise, and both feed the gas pressure. This is fully consistent with \cref{sec:cal-secondary}, where a higher initial relative humidity was found to release more vapour and raise $p_g^{10}$. 
-
-Finally, the mix-induced scatter is small in absolute terms (mean $p_g^{10}=2.11~\mathrm{MPa}$, standard deviation $0.074~\mathrm{MPa}$), which is why Analysis~B yields a negligible failure probability in \cref{sec:reliability}; the proportions with a negligible total index, $s/c$ in particular, can be fixed at their mean there.
+\textbf{Conclusions.} The sensitivity analyses yield the following key insights:
+\begin{itemize}
+    \item \textbf{Permeability ($K_0$) is the absolute dominant factor (Analysis A):} As shown in \cref{fig:sensA-corr}, $K_0$ exhibits a nearly deterministic, negative correlation with the peak pressure (Pearson/Spearman $\approx -0.98$), confirming it as the primary controlling input.
+    \item \textbf{Water/cement ratio ($w/c$) governs the mix composition (Analysis B):} Both correlation (\cref{fig:sensB-corr}, $\approx 0.93$) and Sobol indices (\cref{fig:sensB-sobol1}, $S_{T} \approx 0.58$) identify $w/c$ as the most influential mix parameter. Physically, a higher $w/c$ provides more free water to vaporise and an opener pore structure, which directly raises $p_g^{10}$ (consistent with \cref{sec:cal-secondary}).
+    \item \textbf{Secondary mix parameters and weak interactions:} Cement ($S_{T} \approx 0.25$) and aggregate ($S_{T} \approx 0.15$) have moderate effects, while $s/c$ is entirely negligible ($<0.01$). Because first- and total-order Sobol indices nearly coincide, parameter interactions are weak (\cref{fig:sensB-sobol2}), meaning the response is essentially additive.
+    \item \textbf{Low risk from mix uncertainty:} Overall, the mix-induced scatter is remarkably small (mean approximately $p_g^{10}=2.1~\mathrm{MPa}$). Consequently, Analysis B yields a negligible failure probability in \cref{sec:reliability}, and non-influential parameters like $s/c$ can safely be fixed at their mean values.
+\end{itemize}
 
  
 % =====================================================================
 \section{Reliability analysis} \label{sec:reliability}
 
-The propagated samples yield a discrete set of structural responses. Using the continuous Probability Density Function (PDF) reconstruction methods available in \textsc{OpenTURNS}, we can quantify the spalling risk. Based on the definitions in \cref{sec:pf-beta}, the probability of failure $P_f$ is evaluated.
+To quantify the spalling risk, the discrete structural responses are transformed into continuous Probability Density Functions (PDFs) using \textsc{OpenTURNS}. The probability of failure ($P_f$) is then evaluated using two distinct strategies depending on the analysis type:
 
-Depending on the stochastic method employed, two distinct numerical strategies are utilized to reconstruct the distributions and evaluate the failure probability:
+\begin{itemize}
+    \item \textbf{Kernel Density Estimation (Analyses A, C1, C2):} For single random variables or spatial random fields, KDE is used to directly smooth the raw \textsc{Cast3M} outputs into a continuous PDF. 
+    \item \textbf{Monte Carlo on PCE (Analysis B):} For the multivariable mix study, relying on only 30 LHS samples yields inaccurate tail estimations. Instead, a massive Monte Carlo simulation ($10^5$ realizations) is executed on the computationally inexpensive Polynomial Chaos Expansion (PCE) surrogate model to evaluate $P_f$ accurately.
+\end{itemize}
 
-\begin{description}
-    \item[Kernel Density Estimation (Analyses A, C1, and C2):] For analyses where the input uncertainty is limited to a single random variable (e.g., global $K_0$) or governed by a spatial random field (\texttt{ALEA}), building a multidimensional metamodel is either mathematically unnecessary or algorithmically incompatible. Instead, the continuous PDF is reconstructed directly from the raw, macroscopic \textsc{Cast3M} outputs using non-parametric Kernel Density Estimation (KDE). The probability of failure is then directly estimated by integrating the tail of this smoothed empirical distribution.
-    \item[Monte Carlo on PCE Metamodel (Analysis B):] In the multivariable mix-composition study, evaluating the failure probability directly from the limited 30-sample LHS design would yield highly inaccurate tail estimations. Instead, a massive Monte Carlo simulation ($10^5$ realizations) is executed exclusively on the Polynomial Chaos Expansion (PCE) surrogate model---which was previously constructed for the sensitivity analysis (\cref{sec:sens-mix}). This allows for a highly accurate and computationally inexpensive evaluation of $P_f$ without requiring additional \textsc{Cast3M} runs.
-\end{description}
-
-These reconstructed PDFs (\cref{fig:reliability-A,fig:reliability-B}) visually demonstrate how the input uncertainties propagate towards the critical threshold.
+\textbf{Critical threshold definition:} It is important to note that there is currently no universally accepted, specific gas-pressure threshold that dictates explosive spalling. In this study, the critical threshold at the $10~\mathrm{mm}$ depth is arbitrarily set to $p_{\mathrm{crit}} = 2.5~\mathrm{MPa}$. The primary objective of this section is not to establish an absolute safety criterion, but rather to demonstrate the stochastic methodology---specifically, how input uncertainties propagate into the reconstructed PDFs (\cref{fig:reliability-A,fig:reliability-B}) to evaluate structural reliability.
 
 \begin{figure}[htbp]
   \centering
@@ -225,11 +218,11 @@ This confirms that the intrinsic permeability $K_0$ is by far the dominant sourc
 The analyses above treat the permeability as a single random variable, constant over the specimen in a given realisation. Real concrete varies from point to point, and local weak zones --- not average properties --- govern failure. The intrinsic permeability $K_{int}$, the most spatially variable and most influential property (\cref{sec:sens-K0}), is therefore additionally described as a \emph{random field} and compared with the homogeneous description. The same lognormal marginal as in Analysis~A is used (mean $=K_0^{\mathrm{cal}}=8.5\times10^{-20}~\si{\square\meter}$, $\mathrm{CoV}=0.30$, calibrated in \cref{chapter4}).
  
 \subsection{A simplified isothermal poro-mechanical model} \label{sec:spatial-model}
-Propagating a spatially heterogeneous random field through the fully coupled, highly non-linear Thermo-Hygro-Chemical (THC) model presents severe computational challenges. To obtain a controlled and tractable comparison of the stochastic methods, a \emph{simplified isothermal poro-mechanical model} applied to a $10 \times 10 \times 10$~cm concrete cube is adopted instead. By exploiting symmetry, only 1/8 of the domain is modelled. 
+Propagating a spatially heterogeneous random field through the fully coupled, highly non-linear Thermo-Hygro-Chemical (THC) model presents severe computational challenges. Instead, a \emph{weakly coupled isothermal poro-mechanical model} is adopted to compare the stochastic methods efficiently. 
 
-By holding the temperature constant at room conditions ($T=20^\circ\mathrm{C}$), the complex thermo-chemical constitutive evolution is frozen. In this test case, the specimen is subjected to convective drying, where the internal relative humidity drops from an initial state of $90\%$ to an environmental humidity of $50\%$ at the exposed surfaces. 
+The test case simulates the convective drying of a $10 \times 10 \times 10$~\text{cm} concrete cube (1/8 modelled by symmetry) at a constant room temperature ($T=20^\circ\mathrm{C}$). By holding the temperature constant at room conditions ($T=20^\circ\mathrm{C}$), this weak coupling isolates the purely hydromechanical response as the relative humidity drops from $90\%$ to $50\%$.
 
-The intrinsic permeability $K_0$ is designated as the spatially variable input. The primary output of interest is the resulting \emph{longitudinal shrinkage strain} induced strictly by capillary forces ($p_s = -S_l(P_c) P_c$). To avoid cluttering the main text, the detailed constitutive equations, mesh properties, and deterministic material parameters (e.g., Young's modulus, van Genuchten coefficients) of this simplified model are thoroughly documented in \cref{sec:simplified-model-inputs}.
+The intrinsic permeability $K_0$ is treated as the spatially variable input. The primary output of interest is the \emph{longitudinal shrinkage strain} induced strictly by capillary forces ($p_s = -S_l(P_c) P_c$). Detailed constitutive equations, mesh properties, and deterministic parameters are documented in \cref{sec:simplified-model-inputs}.
 
 \subsection{Stochastic propagation methods} \label{sec:spatial-methods}
  
@@ -237,12 +230,13 @@ The uncertainty of the intrinsic permeability ($K_0$) is propagated using three 
  
 \begin{description}
     \item[Analysis C1 (OpenTURNS + LHS):] Homogeneous RV baseline (30 samples).
-    \item[Analysis C2 (Cast3M \texttt{ALEA}):] Heterogeneous Random Field using the Turning Bands Method with a spatial correlation length $L_c = 0.02$ m (30 samples).
-    \item[Analysis C3 (Gaussian Quadrature):] Homogeneous deterministic integration using \texttt{QUADRATU} (7 points).
+    \item[Analysis C2 (Cast3M \texttt{ALEA}):] Heterogeneous Random Field using the Turning Bands Method (\cref{sec:tbm}) with a spatial correlation length $L_c = 0.02$ m (30 samples).
+    \item[Analysis C3 (Gaussian Quadrature):] Homogeneous deterministic integration using \texttt{QUADRATU} (7 points) (\cref{sec:quadrature}).
 \end{description}
-The theoretical background for the TBM and Gaussian Quadrature frameworks can be found in \cref{sec:tbm} and \cref{sec:quadrature}, respectively.
 
-However, for Analysis C3, because Cast3M lacks native support for exporting these continuous PDF curves for high-quality visualization, statical moments calculation and the Pearson type III reconstruction based on the quadrature moments was re-implemented in Python. This ensures consistent plotting and comparison against the LHS and random field methods. Ultimately, this approach serves as a computationally inexpensive cross-check to validate the statistical moments obtained from the LHS baseline (C1).
+In Analysis C2, because standard \textsc{Cast3M} functions cannot automatically assemble matrices with continuously varying properties across elements, a \emph{multizone approach} is utilized: the local matrix $\mathbf{K}_i$ is constructed individually for each element $i$ and then explicitly assembled into the global matrix.
+
+In Analysis C3, while \textsc{Cast3M} natively provides \texttt{PARASTAT} to automatically compute statistical moments and \texttt{PROBDENS} to output PDF/CDF curves, the Pearson type III PDF reconstruction was ultimately re-implemented in Python. This choice bypasses \textsc{Cast3M}'s limited visualization capabilities, ensuring high-quality plots and a consistent graphical comparison against the LHS and random field methods.
 
 \begin{figure}[htbp]
   \centering
@@ -312,10 +306,12 @@ The mean curve alone therefore cannot identify the more critical analysis. This 
   \label{fig:c2c3-combined}
 \end{figure}
 
-\textbf{Conclusion.} Two cross-checks and one primary physical observation are drawn from this comparative study. First, while both LHS (Analysis C1) and Gaussian quadrature (Analysis C3) treat the intrinsic permeability as a homogeneous random variable, their resulting probability distributions exhibit noticeable differences. Although the 7-point quadrature scheme provides a computationally inexpensive estimation, it yields a \emph{more critical} response profile for the capillary pressure $P_c$ and the longitudinal shrinkage strain compared to the 30-sample LHS baseline. 
-
-Second, and most importantly, the spatially heterogeneous random-field approach (Analysis C2) produces the \emph{most critical} structural response. Physically, local low-permeability zones restrict moisture transport and amplify local capillary forces, which severely concentrates the deformation. This mechanism generates significantly higher peak shrinkage strains and a wider probability tail than both homogeneous cases (C1 and C3), because the highly stressed local weak zones cannot be entirely compensated by the surrounding material. 
-
-The 30-realisation ensemble used for the Monte Carlo/LHS and random field analyses is a pragmatic estimate given the computational cost of each non-linear run; its scatter indicates the residual statistical uncertainty. Ultimately, the significant gap between the homogeneous and heterogeneous results quantitatively highlights how a simple random-variable assumption dangerously underestimates the structural risk. The full Turning Bands / \texttt{ALEA} construction, the quadrature operators, and the Monte Carlo convergence details are collected in \cref{appendixB}.
+\textbf{Conclusions.} The comparative study yields three main insights:
+\begin{itemize}
+    \item \textbf{Quadrature vs. LHS (Homogeneous):} Although computationally cheaper, the 7-point Gaussian quadrature (C3) predicts a more critical shrinkage response than the 30-sample LHS baseline (C1), despite both assuming a uniform permeability.
+    \item \textbf{Random Field is the most critical (Heterogeneous):} Analysis C2 produces the highest peak shrinkage strains and the widest probability tail. Physically, local low-permeability zones restrict moisture transport and severely concentrate capillary deformations.
+    \item \textbf{Risk underestimation:} While 30 samples is a pragmatic choice due to high computational costs, the significant gap between heterogeneous (C2) and homogeneous (C1, C3) results clearly proves that a simple uniform random-variable assumption dangerously underestimates the structural risk.
+\end{itemize}
+Theoretical details regarding the \texttt{ALEA} construction, quadrature operators, and convergence are provided in \cref{appendixB}.
 
     

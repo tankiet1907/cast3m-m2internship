@@ -1,13 +1,10 @@
 %\cleardoublepage %already included in mainmatter 
 \chapter{Theoretical framework} \label{chapter2} %should be limited to 8 pages
 
-\review{The old content of this chapter is mostly moved to Appendix A. This chapter is a draft version and its outline is as follow.}
-
-
 % =====================================================================
-\section{Thermo-hydro-mechanical behavior and spalling mechanisms} \label{sec:phenomena-spalling}
+\section{THM behaviors and spalling mechanisms} \label{sec:phenomena-spalling}
 
-When a concrete member is exposed to a rising temperature, a sequence of strongly interacting thermal, hydric, and mechanical processes develops through the thickness. Heat conduction triggers phase changes (evaporation, dehydration), generating vapour that is transported and recondenses to form a quasi-saturated moisture clog. Concurrently, thermal gradients and pore pressure build-up induce mechanical stresses. The full mathematical derivation of these THM behaviors is detailed in \cref{appendixA}.
+As heat rises within concrete, it undergoes a sequence of strongly interacting thermal, hydric, and mechanical processes. Heat causes the free and bound water inside the concrete to vaporize. Part of this vapour migrates inward and condenses in cooler regions, forming a quasi-saturated barrier known as a \emph{moisture clog}. This clog acts as an impermeable seal that prevents the remaining gas from escaping, which directly causes a severe pore-pressure build-up behind the drying front. Simultaneously, temperature gradients induce thermal stresses within the material. The full mathematical derivation of these THM behaviors is detailed in \cref{appendixA}.
 
 These interacting phenomena are the root cause of \emph{spalling}. Explosive spalling generally results from the \emph{combined action} of pore pressure build-up and thermal stress (\cref{fig:spalling-mechanisms}).
 
@@ -23,13 +20,21 @@ The spalling condition can be written schematically as:
     \sigma_{thermal}(T) + \sigma_{pore}(p_g,p_c,S_l) \ge f_t(T),
     \label{eq:spalling}
 \end{equation}
-where $\sigma_{thermal}$ is the thermal stress from differential dilation, $\sigma_{pore}$ the stress from pore-pressure loading, and $f_t(T)$ the temperature-degraded tensile strength. A comprehensive breakdown of this combined spalling mechanism is provided in \cref{sec:THM_spalling_app} of \cref{appendixA}.
-
+where $\sigma_{thermal}$ is the thermal stress from differential dilation, $\sigma_{pore}$ the stress from pore-pressure loading, and $f_t(T)$ the temperature-degraded tensile strength. A comprehensive breakdown of this combined spalling mechanism is provided in \cref{sec:THM_spalling_app}.
 
 \section{Improved thermo-hydro-chemical (THC) model} \label{sec:thcmodel}
 
 \subsection{Motivation}
-In standard Thermo-Hydric (TH) models, dehydration typically enters only as a prescribed temperature-dependent source term $\dot m_{dehyd}(T)$ and the porosity follows a simple linear law (as detailed in \cref{appendixA}). This treatment ignores three facts that strongly influence spalling: (i) the \emph{chemical state} of the cement paste before the accident depends on its hydration/curing history; (ii) the release of chemically bound water from the C--S--H is the chemical process that controls porosity, permeability and strength at high temperature; and (iii) chemical damage is essentially \emph{irreversible}. The improved Thermo-Hydro-Chemical (THC) model adopted here, following Scium\`e, Moreira and Dal~Pont \cite{sciume2024}, resolves the chemical field explicitly and couples it strictly to the thermal and hydric fields.
+In standard Thermo-Hydric (TH) models, dehydration is treated through a fixed function of temperature alone - $\dot m_{dehyd}(T)$ and the porosity follows a simple linear law (as detailed in \cref{appendixA}). These simplifications overlook three facts that strongly affecting spalling:
+
+\begin{enumerate}
+
+\item The \emph{chemical state} of the cement paste before the accident depends on its hydration/curing history; 
+\item The release of chemically bound water from the C--S--H is the chemical process that controls porosity, permeability and strength at high temperature; 
+\item The chemical damage is essentially \emph{irreversible}. 
+
+\end{enumerate} 
+The improved Thermo-Hydro-Chemical (THC) model adopted here, following Scium\`e, Moreira and Dal~Pont \cite{sciume2024}, resolves the chemical field explicitly and couples it strictly to the thermal and hydric fields.
 
 \subsection{Chemical state variables}
 Unlike standard TH models, the THC framework explicitly resolves the chemical state of the cement paste. The evolution of the microstructure depends on two main processes \cite{sciume2024}:
@@ -42,7 +47,7 @@ To couple these effects, the \textbf{effective hydration degree} $\tilde{\Gamma}
     \tilde{\Gamma} = (1 - F(T))\,\Gamma
     \label{eq:effective-hydration}
 \end{equation}
-The transport and mechanical properties, such as porosity $\phi(\tilde{\Gamma})$ and intrinsic permeability $K(\tilde{\Gamma})$, are explicitly updated as functions of this effective hydration state. The specific evolution laws for these microstructural properties are detailed in \cref{sec:chemical_microstructure} of \cref{appendixA}.
+The transport and mechanical properties, such as porosity $\phi(\tilde{\Gamma})$ and intrinsic permeability $K(\tilde{\Gamma})$, are explicitly updated as functions of this effective hydration state. The specific evolution laws for these microstructural properties are detailed in \cref{sec:chemical_microstructure}.
 
 \subsection{Resulting coupled system}
 The complex mathematical derivation of the governing equations, based on Powers' stoichiometry and the averaging theory for multiphase porous media, is detailed in \cref{appendixA}. By incorporating the chemical couplings, the final system reduces to three highly non-linear conservation equations for the state variables $(p_g, p_c, T)$:
@@ -64,7 +69,7 @@ The complex mathematical derivation of the governing equations, based on Powers'
 where $a_\phi$ is the porosity evolution parameter, $c$ is the cement content, and $\xi_\infty$ is the maximum hydration fraction. The explicit formulation of these stoichiometric constants (e.g., the bound water $0.228 c \xi_\infty$ and the latent heat $L_{hyd}$) as well as the thermal activation energy $E_a/R$ governing $\tilde{\Gamma}$ are detailed in \cref{sec:powers} and \cref{sec:affinity} of \cref{appendixA}.
 
 \section{Coupling to the mechanical field} \label{sec:mech}
-The mechanical response is driven by the converged TH/THC fields through a \emph{one-way} (staggered) coupling: at each time step the fields $(T,p_g,p_c)$ enter the mechanical problem as prescribed loading, and the resulting damage $\mathcal{D}$ feeds back weakly to the transport properties via permeability evolution at the next step. The TH/THC fields act through two routes:
+The mechanical response is driven by the converged TH/THC fields through a \emph{one-way} (staggered) coupling: at each time step, the fields $(T,p_g,p_c)$ enter the mechanical problem as prescribed loading, and the resulting damage $\mathcal{D}$ feeds back weakly to the transport properties via permeability evolution at the next step. The TH/THC fields act through two routes:
 \begin{itemize}
     \item \textbf{Free strains.} The total strain is decomposed as $\boldsymbol{\varepsilon}=\boldsymbol{\varepsilon}_\sigma+\boldsymbol{\varepsilon}_{th}+\boldsymbol{\varepsilon}_{sh}$, where $\boldsymbol{\varepsilon}_{th}$ is the thermal dilation (driven by $T$) and $\boldsymbol{\varepsilon}_{sh}$ the capillary shrinkage (driven by $p_c$). Creep is neglected, so $\boldsymbol{\varepsilon}_\sigma=\boldsymbol{\varepsilon}_{el}$.
     \item \textbf{Pore-pressure loading.} Through Bishop's effective stress $\boldsymbol{\sigma}'=\boldsymbol{\sigma}^{Total}+\alpha\,p_s\,\mathbf{I}$, the average pore pressure $p_s=p_g-S_l p_c$ enters the load vector as an external loading; its build-up shifts $\boldsymbol{\sigma}'$ towards tension and promotes cracking when $f_t(T)$ is exceeded.
