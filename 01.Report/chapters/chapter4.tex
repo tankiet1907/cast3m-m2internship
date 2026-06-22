@@ -11,11 +11,11 @@ Many critical properties at high-temperature such as the evolution of intrinsic 
 A pre-determined parameter set therefore cannot be expected to reproduce the experiment. Consequently, a calibration procedure for the numerical models is strictly required to identify, within physically admissible ranges, the parameter set that makes the model reproduce the measured temperature and gas-pressure histories. Only once this reference case is calibrated and validated can the model be trusted for uncertainty studies in \cref{chapter5}.
 
 \subsection{Calibration strategy} \label{sec:cal-strategy}
-At the first approximation, the thermal problem is weakly coupled to the hydric one: the temperature field drives evaporation, dehydration and the gas-pressure build-up, while the effect of the hydric state on the temperature field is relatively small within the experimental range. This hierachy promotes a two-stage calibration process:
+At the first approximation, the thermal problem is weakly coupled to the hydric one: the temperature field drives evaporation, dehydration and the gas-pressure build-up, while the effect of the hydric state on the temperature field is relatively small within the experimental range. This hierarchy promotes a two-stage calibration process:
 
 \begin{enumerate}
   \item \textbf{Stage~1 -- Temperature.} The temperature evolution is calibrated independently of the pressure field. In this stage, the \emph{surface} (boundary) parameters should be calibrated first, then the \emph{bulk} conduction parameters.
-  \item \textbf{Stage~2 -- Gas pressure.} With the reliably calibrated temperature field as a fixed thermal loading, the hydric parameters gorvening the gas-pressure evolution are adjusted, from the most influential to the secondary ones.
+  \item \textbf{Stage~2 -- Gas pressure.} With the reliably calibrated temperature field as a fixed thermal loading, the hydric parameters governing the gas-pressure evolution are adjusted, from the most influential to the secondary ones.
 \end{enumerate}
 
 The calibration targets are the temperature and gas-pressure histories measured at $10$, $20$, $30$, $40$ and $50~\mathrm{mm}$ from the heated face, together with the near-surface temperature recorded at $2~\mathrm{mm}$ (denoted the $0~\mathrm{mm}$ measurement).
@@ -26,7 +26,7 @@ The sweeps are driven by a Python script that launches Cast3M repeatedly, one ru
 This automation relies on two supporting pieces of code. 
 \begin{itemize}
  \item First, the Cast3M input code itself exports the results of each run to a \texttt{.csv} file -- the temperature and gas-pressure histories at the measurement points.
- \item Second, a separate Python post-processing script reads these \texttt{.csv} files and plots the computed histories against the experimental measurements \cite{kalifa2000} and also against the results from Dorjan Dauti's thesis \cite{dauti2018}. All combinations then can be visually compared, and the best-fit set is selected by the author based on this comparison.
+ \item Second, a separate Python post-processing script reads these \texttt{.csv} files and plots the computed histories against the experimental measurements \cite{kalifa2000} and also against the results from Dorjan Dauti's thesis \cite{dauti2018}. All combinations can then be visually compared, and the best-fit set is selected by the author based on this comparison.
 \end{itemize}
  
 For example, in the gas-pressure calibration stage, the two parameters swept are the intrinsic permeability $K_0$ (denoted \texttt{KINT}) and the permeability--hydration coefficient $A_\Gamma$ (denoted \texttt{AK}), with the trial values:
@@ -40,7 +40,6 @@ These two lists give $6\times 6 = 36$ parameter pairs, i.e.\ $36$ Cast3M runs. T
 
 In every stage, a wider range of each parameter is first explored to bracket the admissible values; the search is then narrowed to the few representative values reported in the following sections, which are the ones shown in the figures.
 
-\review{The following sections are currently under review and need to be rewritten}
 % ---------------------------------------------------------------------------
 \section{Temperature calibration} \label{sec:cal-temp}
     
@@ -80,7 +79,7 @@ Two distinct effects are concluded from \cref{fig:cal-surf-eps,fig:cal-surf-h}:
   \item The convective coefficient $h^{\mathrm{hot}}$ acts more gently and mainly on the \emph{early} part of the curve (\cref{fig:cal-surf-h}): increasing $h^{\mathrm{hot}}$ raises the initial heating rate (the linear $h^{\mathrm{hot}}(T_\infty - T_s)$ term is largest while $T_s$ is still low), with only a slight additional rise in the tail. 
 \end{itemize}
 
-In brief, $\varepsilon$ sets the level of the high-temperature plateau while $h^{\mathrm{hot}}$ controls the initial ramp; tuning the two together reproduces the measured surface temperature evolution.
+In short, $\varepsilon$ sets the level of the high-temperature plateau while $h^{\mathrm{hot}}$ controls the initial ramp; tuning the two together reproduces the measured surface temperature evolution.
  
 \subsection{In-depth temperature: thermal conductivity and heat capacity} \label{sec:cal-depth}
  
@@ -100,7 +99,7 @@ Compared with the experiment and with the earlier results of Dauti (\cref{fig:ca
  
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.75\textwidth]{figures/chapter4/Temp_compare_epsilon_0.68_h-hot_11.png}
+  \includegraphics[width=0.6\textwidth]{figures/chapter4/Temp_compare_epsilon_0.68_h-hot_11}
   \caption{Temperature with the reference set ($\varepsilon=0.68$, $h_c=11$, $C_{ps}=948$, $\lambda_{d0}=1.67$), compared with the experiment and with Dauti's results.}
   \label{fig:cal-depth-ref}
 \end{figure}
@@ -158,11 +157,11 @@ At the end of this journey the temperature is reproduced consistently at all dep
 % ---------------------------------------------------------------------------
 \section{Gas-pressure calibration} \label{sec:cal-pressure}
 
-With the temperature field fixed, the calibration of the gas-pressure evolution is addressed. The pressure build-up is governed primarily by how easily vapor can escape the heated region (permeability) and the amount of water available for vaporization. 
+With the temperature field fixed, the calibration of the gas-pressure evolution is addressed. The pressure build-up is governed primarily by three factors: the amount of water available for vaporisation (the internal source), how easily the vapour travels through the porous network (the intrinsic permeability $K$), and how easily it escapes from the heated surface into the environment (the convective mass-transfer coefficient $h_g$).
  
 \subsection{Primary parameters: \texorpdfstring{$K_0$}{K0} and \texorpdfstring{$A_\Gamma$}{A_Gamma}} \label{sec:cal-K0-AK}
  
-The intrinsic permeability $K_0$ (denoted \texttt{KINT}) and the permeability--hydration coefficient $A_\Gamma$ (denoted \texttt{AK}) are the two most influential parameters dictating the magnitude and acceleration of the gas transport. In the newly implemented THC model, the evolution of permeability is highly sensitive to the degradation of the effective hydration degree $\tilde{\Gamma}$ \cref{eq:permeability}. 
+The intrinsic permeability $K_0$ (denoted \texttt{KINT}) and the permeability--hydration coefficient $A_\Gamma$ (denoted \texttt{AK}) are the two most influential parameters dictating the magnitude and acceleration of the gas transport. In the newly implemented THC model, the evolution of permeability is highly sensitive to the degradation of the effective hydration degree $\tilde{\Gamma}$ \cref{eq:ch3-perm}. 
  
 These two parameters must be strictly balanced. If the combination makes $K$ too low, vapour cannot escape and the trapped vapor generates extremely severe pressure gradients; if it makes $K$ too high, the vapor escapes too easily into the environment, resulting in flattened, underestimated pressure profiles. In both cases, the Newton-Raphson solver diverges (crashes), so $K_0$ and $A_\Gamma$ have to be calibrated carefully together. 
  
@@ -174,14 +173,14 @@ These two parameters must be strictly balanced. If the combination makes $K$ too
   \centering
   \begin{subfigure}[b]{0.48\textwidth}
     \centering
-    \includegraphics[width=\textwidth]{figures/chapter4/pg_AK_sweep_KINT_2e-19.png}
+    \includegraphics[width=\textwidth]{figures/chapter4/pg_AK_sweep_KINT_2e-19}
     \caption{$K_0 = 2\times10^{-19}~\mathrm{m^2}$ (initial reference).}
     \label{fig:cal-pg-kint2e19}
   \end{subfigure}
   \hfill
   \begin{subfigure}[b]{0.48\textwidth}
     \centering
-    \includegraphics[width=\textwidth]{figures/chapter4/pg_AK_sweep_KINT_8.5e-20.png}
+    \includegraphics[width=\textwidth]{figures/chapter4/pg_AK_sweep_KINT_8.5e-20}
     \caption{$K_0 = 8.5\times10^{-20}~\mathrm{m^2}$ (reduced).}
     \label{fig:cal-pg-kint85e20}
   \end{subfigure}
@@ -191,40 +190,38 @@ These two parameters must be strictly balanced. If the combination makes $K$ too
 
 
 \paragraph{Comparison with the references.}
-The retained pair is compared against the Dauti and experimental curves in
-\cref{fig:cal-pg-compare}. The agreement is reasonable in the outer layer of 10 mm, but a structural difficulty appears with depth, as discussed below.
+The retained pair is compared against the Dauti and experimental curves in \cref{fig:cal-pg-compare}. The agreement is reasonable in the outer layer of 10 mm, but a structural difficulty appears with depth, as discussed below.
  
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.8\textwidth]{figures/chapter4/Pg_compare_KINT_8.5e-20_AK_4.png}
+  \includegraphics[width=0.6\textwidth]{figures/chapter4/Pg_compare_KINT_8.5e-20_AK_4}
   \caption{Gas pressure with the retained pair ($K_0 = 8.5\times10^{-20}~\mathrm{m^2}$, $A_\Gamma = 4$): simulation (solid) vs. Dauti (dashed) vs. experiment (dotted)}
   \label{fig:cal-pg-compare}
 \end{figure}
 
-\textbf{The Main Issue:} The sweep over $(K_0, A_\Gamma)$ reveals the central difficulty of this stage: the gas pressure can be adjusted significantly only in the \emph{outer layers} ($10$ and $20~\mathrm{mm}$). As one moves deeper into the specimen ($30, 40, 50~\mathrm{mm}$), the simulated peak pressure \emph{decreases}. This contradicts the experimental observations of Kalifa et al. \cite{kalifa2000}, where deeper zones exhibited progressively higher peak pressures. 
+\textbf{The Main Issue:} The parameter sweep reveals a structural limitation: while gas pressure matches experiments in the outer layers ($10$ and $20~\mathrm{mm}$), the simulated peak pressure \emph{decreases} at greater depths ($30$--$50~\mathrm{mm}$), contradicting Kalifa et al.~\cite{kalifa2000}.
 
-Physically, this discrepancy suggests that the high-gas-pressure region generated by the simulation is spatially smaller than it should be. The pressure build-up and the formation of the ``moisture clog'' remain concentrated too close to the exposed surface, failing to propagate massive condensation and pressurization into the deeper layers of the concrete core.
+Physically, this discrepancy suggests that the simulatated high-gas-pressure region is spatially smaller than it should be. The pressure build-up and the formation of the ``moisture clog'' remain concentrated too close to the exposed surface, failing to propagate massive condensation and pressurization into the deeper layers of the concrete core.
 
 \subsection{Secondary adjustments investigated} \label{sec:cal-secondary}
  
-To address this depth-dependent pressure decay and force the moisture clog deeper into the material, several secondary parameters were investigated:
+To address this depth-dependent pressure decrease and force the moisture clog deeper into the material, several secondary parameters were investigated:
 
 \begin{itemize}
-    \item \textbf{Initial Relative Humidity ($RH_0$):} While intuitively a higher initial saturation provides a larger water reservoir for vaporization, increasing $RH_0$ towards full saturation (e.g., $>0.99$) induces severe numerical singularities in the capillary pressure gradients, systematically causing the code to crash.
-    \item \textbf{Desorption Isotherm ($a$):} Adopting a stiffer desorption curve (higher $a$ parameter, which is physically more appropriate for HPC to retain water at higher capillary pressures) successfully yielded a slight increase in the peak pressure at $20~\mathrm{mm}$, but failed to propagate this increment to the $30-50~\mathrm{mm}$ depths.
-    \item \textbf{Aging / Curing time:} Modifying the hydration history significantly alters the initial state. Decreasing the aging time reduces the overall gas pressure and critically compromises the code's stability. On the other hand, increasing the aging time excessively subjects the HPC to severe self-desiccation, rendering the internal core unrealistically dry prior to heating.
-    \item \textbf{Vapor mass-transfer coefficient ($h_g$):} In an attempt to artificially trap the gas, the convective exchange coefficient at the heated face was reduced to a minimum. While this approach successfully forced vapor inward and increased $p_g$ in the deeper zones, it could only maintain numerical stability if compensated by an artificially large intrinsic permeability ($K_0$). However, imposing a large $K_0$ fundamentally contradicts the extremely dense, low-permeability nature of HPC containing silica fume.
+    \item \textbf{Initial relative humidity ($RH_0$):} Imposing full saturation ($RH_0 > 0.98$) to increase the vaporization source systematically crashes the solver due to severe capillary pressure gradients (\cref{sec:robustness})
+    \item \textbf{Desorption isotherm ($a$):} Adopting a stiffer desorption curve of HPC (\cref{tab:VG}) slightly raises the peak pressure at $20~\mathrm{mm}$ but has no effect on deeper zones.
+    \item \textbf{Aging time:} Shorter curing (6 months) compromises numerical stability, while excessive aging unrealistically dries out the core prior to heating via self-desiccation.
+    \item \textbf{Vapor mass-transfer coefficient ($h_g$):} In an attempt to artificially trap the gas, the convective exchange coefficient at the heated face was reduced to a minimum. While this approach successfully forced vapor inward and increased $p_g$ in the deeper zones, it requires an artificially large intrinsic permeability ($K_0$) to maintain stability, which contradicts the dense nature of HPC.
 \end{itemize}
 
-The outcome of the last attempt is shown in \cref{fig:cal-hg-result}: with $h_g = 0.001$ and a large $K_0 = 2\times10^{-18}~\mathrm{m^2}$, increasing $A_\Gamma$ ($1$ to $4$) does raise the deeper-zone pressures, but the overall pressure level is depressed because such an abnormally large $K_0$ lets the gas escape too easily.
+The outcome of the last attempt is shown in \cref{fig:cal-hg-result}: with $h_g = 0.001$ and a large $K_0 = 2\times10^{-18}~\mathrm{m^2}$, increasing $A_\Gamma$ ($1$ to $4$) does raise the deeper-zone pressures. However, the abnormally high $K_0$ lets gas escape too easily, depressing the overall pressure magnitude.
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.8\textwidth]{figures/chapter4/pg_test10_AK_sweep_hg0.001.png}
+  \includegraphics[width=0.6\textwidth]{figures/chapter4/pg_test10_AK_sweep_hg0.001.png}
   \caption{Gas-pressure histories at $10$--$50~\mathrm{mm}$ for a minimal vapour transfer coefficient $h_g = 0.001$ and a large $K_0 = 2\times10^{-18}~\mathrm{m^2}$, sweeping $A_\Gamma$ from $1$ to $4$.}
   \label{fig:cal-hg-result}
 \end{figure}
-
  
 In summary, none of these secondary adjustments -- alone or in combination with $K_0$ and $A_\Gamma$ -- could perfectly reproduce the deep pressure peaks without violating either the physical constraints of the material or the mathematical stability of the solver.
 
@@ -270,7 +267,7 @@ Two complementary explanations are proposed for this discrepancy.
 
   \item The first concerns the experiment itself. Measuring pore pressure requires inserting a gauge into the concrete, which inevitably creates a local discontinuity -- a small cavity surrounded by an already porous and heterogeneous material. It is therefore not certain that these gauges record the true gas pressure of the intact porous network; part of what they measure may reflect the local conditions of the cavity and the surrounding damaged zone rather than the field the model computes. This raises a genuine question about what the deep-zone gauges are actually measuring, and hence about the reference against which the model is being judged.
  
-  \item The second concerns the model. The formulation used here is the recent THC model, which is still being developed; its saturation, permeability and dehydration laws have not yet been fully tuned to the high-temperature behaviour of HPC. The fact that the deeper-zone pressures could be raised only through physically unreasonable parameter values (very high $K_0$, minimal $h_g$) suggests that the model is missing a mechanism that redistributes the pressure build-up further inward, and that further refinement of the THC formulation is required before a quantitative validation of the gas pressure can be expected.
+  \item The second concerns the model's formulation and its current scope. The formulation used here is the recent THC model, which is still being developed; its saturation, permeability, and dehydration laws have not yet been fully tuned to the high-temperature behaviour of HPC. Furthermore, while it accounts for microstructural evolution via chemical dehydration (the effective hydration degree $\tilde{\Gamma}$), it inherently excludes mechanical damage (thermally and hydrally induced micro-cracking). In reality, cracking drastically alters the local intrinsic permeability (M~$\rightarrow$~H coupling) and dictates how and when gas pressure is relieved. The fact that the deeper-zone pressures could be raised only through physically unreasonable parameter values (very high $K_0$, minimal $h_g$) suggests that the model is missing a mechanism that redistributes the pressure build-up further inward. Therefore, both a refinement of the THC formulation and the integration of mechanical damage are required before a fully quantitative validation of the gas pressure can be expected.
 \end{itemize}
 
 Given the inherent uncertainties in both the non-linear material parameters and the ambiguous experimental gas-pressure data, relying solely on deterministic calibration is insufficient. This robustly justifies the necessity of shifting toward a probabilistic framework, utilizing uncertainty quantification to assess the spalling risk, which will be the core focus of \cref{chapter5}.

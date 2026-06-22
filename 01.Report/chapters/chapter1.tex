@@ -2,9 +2,9 @@
 \chapter{Introduction} \label{chapter1} %should be limited to 4 pages
 \section{Context and problem statement}
 
-Concrete structures exposed to extreme heat undergo a complex interpaly of thermal, hyric, and mechanical phenomena that con lead to progressive degradation, and in most severe cases, to \textit{spalling}, the sudden, explosive detachment of concrete layers from the exposed surface.
+Concrete structures exposed to extreme heat undergo a complex interpaly of thermal, hyric, and mechanical phenomena that can lead to progressive degradation, and in most severe cases, to \textit{spalling}, the sudden, explosive detachment of concrete layers from the exposed surface.
 
-This phenomenon has been a critical concern for civil infrastructure such as nuclear containment buildings and tunnels, where the consequences of spalling as the loss of cover and cross-section can damage the load-bearing capacity and functions of the structure. 
+This phenomenon has been a critical concern for civil infrastructure such as nuclear containment buildings and tunnels, where the consequences of spalling, such as the loss of cover and cross-section can damage the load-bearing capacity and functions of the structure. 
 
 Recently, its catastrophic consequences are also relevant in aerospace engineering. In 2023, a SpaceX rocket test has failed due to the destructive power of concrete spalling \cite{mclaughlin2023}. As the rocket ignited on its concrete launch pad, the immense heat generated triggered explosive spalling. The debris seen flying around the launch site consisted of sharp concrete flakes. These flakes shot upwards, severely damaged the test field and the rocket itself, ultimately causing the rocket test launch to fail.
 
@@ -28,42 +28,41 @@ Recently, its catastrophic consequences are also relevant in aerospace engineeri
     \label{fig:spacex_incident}
 \end{figure}
 
-\subsection{Concrete behaviour under high temperature} \label{sec:behavior-ch1}
-When concrete is heated rapidly, several coupled physical processes occur simultaneously
+When concrete is heated rapidly, several coupled physical processes occur simultaneously:
 
 \begin{itemize}
-    \item \textbf{Thermal:} Steep temperature gradients develop throughout the concrete's cross-section, causing differential thermal expansion and generating compressive stresses at the heated surface.
+    \item \textbf{Thermal:} Steep temperature gradients develop throughout the concrete's cross-section, causing differential thermal dilation and generating compressive stresses at the heated surface.
     
-    \item \textbf{Hydric:} Both free and chemically bound water evaporate and move through the pore network. In low-permeability concretes such as high-performance concrete (HPC), vapor cannot escape fast enough, resulting in  pore pressure build-up behind a quasi-saturated \textit{moisture clog}.
+    \item \textbf{Hydric:} Both free and chemically bound water evaporate and move inward through the pore network. In low-permeability concretes such as high-performance concrete (HPC), vapor cannot escape fast enough, resulting in pore pressure build-up behind a quasi-saturated \textit{moisture clog}.
     
-    \item \textbf{Mechanical:} The combined effects of thermal stresses and pore pressure build-up on the solid skeleton can exceed the tensile strength, which is degraded by temperature. This initiate cracks parallel to the heated surface and potentially lead to explosive spalling.
+    \item \textbf{Mechanical:} The combined effects of thermal stresses and pore pressure build-up on the solid skeleton can exceed the tensile strength of the cross-section. This initiate cracks parallel to the heated surface and potentially lead to explosive spalling.
 \end{itemize}
 
-These three fields are not independent: they interact through a network of coupling mechanisms that any predictive model must reproduce. Despite extensive experimental work, the mechanisms governing spalling are still incompletely understood and no single, universally accepted theory has emerged \cite{dauti2018}.
+These three fields are not independent: they are highly coupled and mutually interacting, predicting spalling requires robust computational tools. Despite extensive experimental work, the mechanisms governing spalling are still incompletely understood and no single, universally accepted theory has emerged \cite{dauti2018}. The detailed description of these THM behaviors and their complex interactions is deferred to \cref{appendixA}.
 
-Because neither a purely thermal nor a purely hydric analysis can capture this full picture, a fully coupled THM model is strictly required to understand the material's response and assess structural safety. The detailed description of these THM behaviors and their complex interactions is deferred to \cref{appendixA}.
-
-
-\subsection{The initial hydro-chemical state of concrete}
- 
-The response of concrete to fire does not depend only on the heat: it also depends strongly on the state of the material \emph{before} heating. The calcium--silicate--hydrates (C--S--H) formed during cement hydration control the strength, the porosity and the amount of chemically bound water that can later be released by dehydration. 
-
-The degree to which hydration has progressed, together with the residual moisture content inherited from curing and drying, therefore conditions the transport and storage properties that govern pore pressure build-up. Accounting for this initial hydro-chemical state is the key idea behind recent thermo-hygro-chemical (THC) models \cite{sciume2024}, and it motivates the formulation adopted in this work.
-
-\subsection{Limitations of existing models}
-
-Existing THM models present several limitations that this work seeks to address:
+\section{Numerical modeling approaches}
+To assess the fire spalling risk, numerical models generally fall into two categories based on their coupling strategy:
 \begin{itemize}
-    \item The initial hydro-chemical state is often treated implicitly, through empirical functions of temperature only, rather than through an explicit hydration-degree description;
-    \item The uncertainty in the material parameters is rarely assessed: properties are typically taken as homogeneous, deterministic values, so the influence of their variability on the predicted response is left unquantified.
+    \item \textbf{Weak coupling (Sequential models):} Solves physical fields one by one (e.g., thermal then hydric). While efficient, it inherently ignores critical dynamic feedback, such as moisture evaporation locally cooling the material.
+    \item \textbf{Strong coupling (Multiphase models):} Solves the highly non-linear THM equations simultaneously. Though computationally demanding, it is strictly required to capture the mutually interacting phenomena triggering spalling.
 \end{itemize}
+
+\subsection{From TH to the recent THC formulation}
+Within the strongly coupled framework, advanced multiphase models have continuously evolved:
+\begin{itemize}
+    \item \textbf{Standard TH/THM models \cite{dauti2018}:} Successfully capture pore-pressure build-up in a multiphase medium. However, chemical changes (e.g., dehydration, porosity) are treated \emph{implicitly} via empirical temperature-dependent functions. They ignore the curing history, assuming a virgin material at the start of the fire.
+    \item \textbf{The novel THC model \cite{sciume2024}:} Introduces the \textbf{Chemical (C)} field via the effective hydration degree ($\tilde{\Gamma}$) to explicitly simulate the entire concrete life cycle (from curing to the fire accident). By adopting Powers' stoichiometry, empirical functions are eliminated, and transport properties are strictly tied to the actual chemical state.
+\end{itemize}
+
+\subsection{The need for stochastic assessment}
+Furthermore, in almost all existing TH/THC models, the uncertainty in the material parameters is rarely assessed. Concrete is an inherently heterogeneous material, yet properties are typically taken as homogeneous, deterministic values, leaving the influence of their inherent variability on the predicted structural reliability and spalling risk unquantified.
 
 \section{Objectives and scope of the report}
 This work aims to numerically investigate the behaviour of high-performance concrete exposed to high temperatures. While the full Thermo-Hydro-Mechanical (THM) phenomenon is explored theoretically to understand the root causes of spalling, the actual numerical implementation and validation performed in this internship are strictly limited to the Thermo-Hydro-Chemical (THC) scope. This limitation is due to the timeframe of the internship and the fact that the reference experimental data (Kalifa test) only provide temperature and gas pressure measurements, lacking mechanical counterparts (e.g., strains, damage) for validation.
 
 The remainder of the report is structured as follows:
 \begin{itemize}
-  \item \cref{chapter2} presents the theoretical framework of concrete at high temperature. It outlines the full THM coupling mechanisms conceptually, but details specifically the governing equations of the THC model, incorporating the hydration-degree formulation following \cite{sciume2024}.
+  \item \cref{chapter2} focuses specifically on the theoretical framework of the improved thermo-hydro-chemical (THC) model with the effective hydration-degree formulation following \cite{sciume2024}. While the detailed description of the fully coupled THM mechanisms and spalling is deferred to \cref{appendixA}.
   \item \cref{chapter3} describes the reference experiment of \cite{kalifa2000} and its numerical setup in \textsc{Cast3M} using the THC model.
   \item \cref{chapter4} reports the calibration of the temperature and gas-pressure responses, validates the model, and discusses the limits of the gas-pressure measurements.
   \item \cref{chapter5} performs a stochastic assessment of the calibrated THC model with \textsc{OpenTURNS} (Sobol sensitivity analysis, reliability analysis, and spatial heterogeneity).

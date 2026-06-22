@@ -1,6 +1,5 @@
 %\cleardoublepage %already included in mainmatter 
 \chapter{Conclusions and Perspectives} \label{chapter6} %should be limited to 2 pages.
-\review{This chapter is under review}
 
 % =====================================================================
 \section{Main findings}
@@ -8,9 +7,9 @@ The research conducted in this study has led to several key findings regarding t
 
 \begin{enumerate}
     \item \textbf{Implementation of the THC model:} The improved Thermo-Hydro-Chemical (THC) model, which explicitly incorporates the effective hydration degree $\tilde{\Gamma}$ as an internal state variable, was successfully implemented and executed in \textsc{Cast3M}. This approach elegantly replaced empirical temperature-dependent multipliers with a strictly chemo-physical description of porosity and permeability evolution.
-    \item \textbf{Temperature calibration:} The automated calibration workflow successfully reproduced the temperature field. The simulated thermal profiles match the experimental data from the Kalifa test with high accuracy across all depths.
-    \item \textbf{Gas pressure calibration and its limits:} While the gas pressure could be calibrated reasonably well in the outer layers ($10$ and $20~\mathrm{mm}$), the model failed to capture the pressure distribution in the deeper zones regardless of the parameter adjustments (e.g., $K_0$, $A_\Gamma$, $h_g$). This discrepancy raises fundamental questions about both the completeness of the purely THC mathematical formulation and the intrusive nature of the experimental gauges.
-    \item \textbf{Sensitivity and dominant parameters:} A comprehensive stochastic assessment using \textsc{OpenTURNS} allowed for the variance-based sensitivity analysis of the model. The extraction of first- and second-order Sobol indices identified the intrinsic permeability $K_0$ as the absolute dominant parameter governing the magnitude of the pore pressure, while mix-composition uncertainties presented negligible interaction effects on the pressure peaks.
+    \item \textbf{Temperature calibration:} The automated calibration workflow successfully and accurately reproduced the temperature profiles of the Kalifa experiment at all depths.
+    \item \textbf{Gas pressure calibration and its limits:} The model matched the pressure in the outer layers ($10$ and $20~\mathrm{mm}$) but failed in deeper zones. This highlights the limits of both the current THC formulation and the experimental sensors themselves.
+    \item \textbf{Sensitivity and dominant parameters:} The stochastic sensitivity analysis revealed that intrinsic permeability $K_0$ dictates the pore pressure magnitude. In contrast, mix-composition uncertainties have almost no effect on the pressure peaks.
     \item \textbf{Reliability and spalling risk:} By propagating the material uncertainties, the reliability analysis successfully reconstructed the Probability Density Functions (PDFs) of the structural response. It quantified the probability of failure ($P_f$) and the risk of spalling based on a critical pressure threshold at the $10~\mathrm{mm}$ layer, confirming that deterministic approaches alone are insufficient for structural safety assessment.
     \item \textbf{Impact of spatial heterogeneity:} Using a simplified isothermal poro-mechanical model, the investigation into the spatial variability of permeability using random fields (\texttt{ALEA}) revealed that assuming a homogeneous material property dangerously underestimates the structural risk. Localized weak zones trigger more severe capillary shrinkage and pressure localizations compared to the averaged homogeneous baseline.
 \end{enumerate}
@@ -30,9 +29,9 @@ While the presented framework provides a deep insight into concrete behavior at 
 Building upon the limitations and findings of this work, several avenues for future research are identified:
 
 \begin{itemize}
-    \item \textbf{Fully coupled THM formulation with micro-cracking feedback (M $\rightarrow$ H):} To resolve the gas pressure discrepancies at deep zones, the mechanical module must be fully integrated. By explicitly modelling \emph{micro-cracking} (e.g., via the Mazars damage model) and its direct feedback on the intrinsic permeability, the simulation could capture the drastic transport acceleration that relieves internal pressures, providing a complete picture of the spalling mechanism.
+    \item \textbf{Fully coupled THM (M~$\rightarrow$~H):} Integrate a mechanical damage model (e.g., Mazars) to simulate micro-cracking. This will capture the drastic transport acceleration that relieves internal pressures, providing a complete picture of spalling.
     \item \textbf{Advanced surrogate modelling:} To make the stochastic propagation of random fields computationally tractable for the full highly non-linear THC solver, advanced metamodels (e.g., Polynomial Chaos Expansions or Artificial Neural Networks) should be developed. This would allow replacing the expensive Monte Carlo simulations with rapid analytical evaluations.
     \item \textbf{Non-intrusive experimental measurements:} To resolve the ambiguity of the gas-pressure measurements, future experimental campaigns should rely on non-intrusive techniques, such as in-situ neutron tomography, to observe the actual moisture migration and pressure redistribution without disturbing the concrete matrix.
-    \item \textbf{Full service-life simulation:} Following the complete vision of modern frameworks, the THC formulation should be expanded to simulate the entire lifespan of the structure continuously---from early-age curing, through long-term aging and self-desiccation, up to the accidental fire scenario.
-    \item \textbf{Broader verification:} Finally, the robustness of the model should be verified against a wider range of concrete mixtures (e.g., ordinary concrete, fiber-reinforced concrete) and under more severe heating scenarios, such as the ISO 834 or hydrocarbon fire curves.
+    \item \textbf{Full service-life simulation:} Expand the formulation to simulate the concrete continuously: from early-age curing, through long-term drying, up to the fire event.
+    \item \textbf{Broader verification:} Finally, the robustness of the model should be verified against a wider range of concrete mixtures (e.g., ordinary concrete, fiber-reinforced concrete) and under more severe heating scenarios.
 \end{itemize}
