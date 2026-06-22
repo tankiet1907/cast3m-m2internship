@@ -50,21 +50,23 @@ To couple these effects, the \textbf{effective hydration degree} $\tilde{\Gamma}
 The transport and mechanical properties, such as porosity $\phi(\tilde{\Gamma})$ and intrinsic permeability $K(\tilde{\Gamma})$, are explicitly updated as functions of this effective hydration state. The specific evolution laws for these microstructural properties are detailed in \cref{sec:chemical_microstructure}.
 
 \subsection{Resulting coupled system}
-The complex mathematical derivation of the governing equations, based on Powers' stoichiometry and the averaging theory for multiphase porous media, is detailed in \cref{appendixA}. By incorporating the chemical couplings, the final system reduces to three highly non-linear conservation equations for the state variables $(p_g, p_c, T)$:
+The standard Thermo-Hydric (TH) conservation equations for dry air, water species, and energy are detailed in \cref{eq:dry_air,eq:water_species,eq:energy_TH} of \cref{appendixA}. In these conventional formulations, the microstructural and chemical changes (e.g., the dehydration mass source $\dot{m}_{dehyd}$ and the porosity evolution) are treated implicitly via empirical functions of temperature alone.
+
+By incorporating Powers' stoichiometry and the chemical couplings through the effective hydration degree $\tilde{\Gamma}$, the original system is profoundly transformed. The empirical functions are completely replaced by explicit chemo-physical interactions, reducing the final system to three highly non-linear conservation equations for the state variables $(p_g, p_c, T)$:
 
 \paragraph{1. Dry-air conservation:}
 \begin{equation}
-    \frac{\partial}{\partial t}\big(\phi(1-S_l)\rho_a\big) + \nabla \cdot (\mathbf{J}_a) = (1 - S_l)\rho_a \left(a_\phi \Omega \frac{\partial \tilde{\Gamma}}{\partial t}\right)
+    \underbrace{\frac{\partial}{\partial t}\big(\phi(1-S_l)\rho_a\big)}_{\text{Storage}} + \underbrace{\nabla \cdot (\mathbf{J}_a)}_{\text{Advection \& Diffusion}} = \underbrace{(1 - S_l)\rho_a \left(a_\phi \Omega \frac{\partial \tilde{\Gamma}}{\partial t}\right)}_{\text{Chemical coupling (porosity evolution)}}
 \end{equation}
 
 \paragraph{2. Total water-species conservation:}
 \begin{equation}
-    \frac{\partial}{\partial t}\big(\phi S_l \rho_l + \phi(1-S_l)\rho_v\big) + \nabla \cdot (\mathbf{J}_l + \mathbf{J}_v) = \left[ S_l\rho_l + (1-S_l)\rho_v \right] \left( a_\phi \Omega \frac{\partial \tilde{\Gamma}}{\partial t} \right) - 0.228 c \xi_\infty \frac{\partial \tilde{\Gamma}}{\partial t}
+    \underbrace{\frac{\partial}{\partial t}\big(\phi S_l \rho_l + \phi(1-S_l)\rho_v\big)}_{\text{Storage (Liquid + Vapor)}} + \underbrace{\nabla \cdot (\mathbf{J}_l + \mathbf{J}_v)}_{\text{Advection \& Diffusion}} = \underbrace{\left[ S_l\rho_l + (1-S_l)\rho_v \right] \left( a_\phi \Omega \frac{\partial \tilde{\Gamma}}{\partial t} \right)}_{\text{Porosity evolution}} - \underbrace{0.228 c \xi_\infty \frac{\partial \tilde{\Gamma}}{\partial t}}_{\text{De/hydration water source}}
 \end{equation}
 
 \paragraph{3. Energy conservation:}
 \begin{equation}
-    \overline{\rho C_p}\frac{\partial T}{\partial t} + \mathbf{J}_{energy}^{adv} - \nabla \cdot (\lambda \nabla T) = -H_{vap}\dot{m}_{vap} + \left(H_{vap} 0.228 c \xi_\infty + L_{hyd}\right) \frac{\partial \tilde{\Gamma}}{\partial t}
+    \underbrace{\overline{\rho C_p}\frac{\partial T}{\partial t}}_{\text{Heat storage}} + \underbrace{\mathbf{J}_{energy}^{adv}}_{\text{Advective heat flux}} - \underbrace{\nabla \cdot (\lambda \nabla T)}_{\text{Conduction}} = \underbrace{-H_{vap}\dot{m}_{vap}}_{\text{Phase change (Evaporation)}} + \underbrace{\left(H_{vap} 0.228 c \xi_\infty + L_{hyd}\right) \frac{\partial \tilde{\Gamma}}{\partial t}}_{\text{De/hydration latent heat}}
 \end{equation}
 where $a_\phi$ is the porosity evolution parameter, $c$ is the cement content, and $\xi_\infty$ is the maximum hydration fraction. The explicit formulation of these stoichiometric constants (e.g., the bound water $0.228 c \xi_\infty$ and the latent heat $L_{hyd}$) as well as the thermal activation energy $E_a/R$ governing $\tilde{\Gamma}$ are detailed in \cref{sec:powers} and \cref{sec:affinity} of \cref{appendixA}.
 
@@ -74,6 +76,6 @@ The mechanical response is driven by the converged TH/THC fields through a \emph
     \item \textbf{Free strains.} The total strain is decomposed as $\boldsymbol{\varepsilon}=\boldsymbol{\varepsilon}_\sigma+\boldsymbol{\varepsilon}_{th}+\boldsymbol{\varepsilon}_{sh}$, where $\boldsymbol{\varepsilon}_{th}$ is the thermal dilation (driven by $T$) and $\boldsymbol{\varepsilon}_{sh}$ the capillary shrinkage (driven by $p_c$). Creep is neglected, so $\boldsymbol{\varepsilon}_\sigma=\boldsymbol{\varepsilon}_{el}$.
     \item \textbf{Pore-pressure loading.} Through Bishop's effective stress $\boldsymbol{\sigma}'=\boldsymbol{\sigma}^{Total}+\alpha\,p_s\,\mathbf{I}$, the average pore pressure $p_s=p_g-S_l p_c$ enters the load vector as an external loading; its build-up shifts $\boldsymbol{\sigma}'$ towards tension and promotes cracking when $f_t(T)$ is exceeded.
 \end{itemize}
-Together with the spalling criterion \eqref{eq:spalling}, this closes the physical loop between the transport and mechanical fields. The mechanical constitutive model, its fracture-energy regularisation, and the spatial/temporal discretisation of the coupled problem are reported in full in Appendix~\ref{appendixA}. 
+Together with the spalling criterion \eqref{eq:spalling}, this closes the physical loop between the transport and mechanical fields. The mechanical constitutive model, its fracture-energy regularisation, and the spatial/temporal discretisation of the coupled problem are reported in full in \cref{appendixA}. 
 
 \textbf{Note on the scope of the study:} Due to the limited timeframe of the internship and the fact that the experimental data used for validation (Kalifa test) solely provide temperature and gas pressure measurements, the mechanical module cannot be rigorously validated. Therefore, while this staggered mechanical coupling is mathematically formulated and designed as an easily pluggable module, the actual numerical simulations performed in the subsequent chapters are restricted to the TH(C) model.
