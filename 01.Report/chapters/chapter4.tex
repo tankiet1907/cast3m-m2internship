@@ -57,14 +57,14 @@ Because the resulting curves differ only slightly, the full $3\times 3$ grid is 
   \centering
   \begin{subfigure}[b]{0.48\textwidth}
     \centering
-    \includegraphics[width=\textwidth]{figures/chapter4/surf_eps_sweep.png}
+    \includegraphics[width=\textwidth]{figures/chapter4/surf_eps_sweep}
     \caption{Sensitivity to the emissivity $\varepsilon$ ($h_c = 11$ fixed).}
     \label{fig:cal-surf-eps}
   \end{subfigure}
   \hfill
   \begin{subfigure}[b]{0.48\textwidth}
     \centering
-    \includegraphics[width=\textwidth]{figures/chapter4/surf_h_sweep.png}
+    \includegraphics[width=\textwidth]{figures/chapter4/surf_h_sweep}
     \caption{Sensitivity to the convective coefficient $h_c$ ($\varepsilon = 0.68$ fixed).}
     \label{fig:cal-surf-h}
   \end{subfigure}
@@ -199,7 +199,7 @@ The retained pair is compared against the Dauti and experimental curves in \cref
   \label{fig:cal-pg-compare}
 \end{figure}
 
-\textbf{The Main Issue:} The parameter sweep reveals a structural limitation: while gas pressure matches experiments in the outer layers ($10$ and $20~\mathrm{mm}$), the simulated peak pressure \emph{decreases} at greater depths ($30$--$50~\mathrm{mm}$), contradicting Kalifa et al.~\cite{kalifa2000}.
+\textbf{The Main Issue:} The parameter sweep reveals a structural limitation: while gas pressure matches experiments in the outer layer ($10~\mathrm{mm}$), the simulated peak pressure \emph{decreases} at greater depths ($20$--$50~\mathrm{mm}$), which is inconsistent with the experimental measurements reported by Kalifa et al.~\cite{kalifa2000}.
 
 Physically, this discrepancy suggests that the simulatated high-gas-pressure region is spatially smaller than it should be. The pressure build-up and the formation of the ``moisture clog'' remain concentrated too close to the exposed surface, failing to propagate massive condensation and pressurization into the deeper layers of the concrete core.
 
@@ -267,7 +267,7 @@ Two complementary explanations are proposed for this discrepancy.
 
   \item The first concerns the experiment itself. Measuring pore pressure requires inserting a gauge into the concrete, which inevitably creates a local discontinuity -- a small cavity surrounded by an already porous and heterogeneous material. It is therefore not certain that these gauges record the true gas pressure of the intact porous network; part of what they measure may reflect the local conditions of the cavity and the surrounding damaged zone rather than the field the model computes. This raises a genuine question about what the deep-zone gauges are actually measuring, and hence about the reference against which the model is being judged.
  
-  \item The second concerns the model's formulation and its current scope. The formulation used here is the recent THC model, which is still being developed; its saturation, permeability, and dehydration laws have not yet been fully tuned to the high-temperature behaviour of HPC. Furthermore, while it accounts for microstructural evolution via chemical dehydration (the effective hydration degree $\tilde{\Gamma}$), it inherently excludes mechanical damage (thermally and hydrally induced micro-cracking). In reality, cracking drastically alters the local intrinsic permeability (M~$\rightarrow$~H coupling) and dictates how and when gas pressure is relieved. The fact that the deeper-zone pressures could be raised only through physically unreasonable parameter values (very high $K_0$, minimal $h_g$) suggests that the model is missing a mechanism that redistributes the pressure build-up further inward. Therefore, both a refinement of the THC formulation and the integration of mechanical damage are required before a fully quantitative validation of the gas pressure can be expected.
+  \item The second concerns the model's formulation and its current scope. The formulation used here is the recent THC model, which is still being developed; its saturation, permeability, and dehydration laws have not yet been fully tuned to the high-temperature behavior of HPC. Furthermore, while it accounts for microstructural evolution via chemical dehydration (the effective hydration degree $\tilde{\Gamma}$), it inherently excludes mechanical damage (thermally and hydrally induced micro-cracking). In reality, cracking drastically alters the local intrinsic permeability (M~$\rightarrow$~H coupling) and dictates how and when gas pressure is relieved. The fact that the deeper-zone pressures could be raised only through physically unreasonable parameter values (very high $K_0$, minimal $h_g$) suggests that the model is missing a mechanism that redistributes the pressure build-up further inward. Therefore, both a refinement of the THC formulation and the integration of mechanical damage are required before a fully quantitative validation of the gas pressure can be expected.
 \end{itemize}
 
 Given the inherent uncertainties in both the non-linear material parameters and the ambiguous experimental gas-pressure data, relying solely on deterministic calibration is insufficient. This robustly justifies the necessity of shifting toward a probabilistic framework, utilizing uncertainty quantification to assess the spalling risk, which will be the core focus of \cref{chapter5}.

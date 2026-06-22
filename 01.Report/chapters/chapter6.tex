@@ -3,7 +3,7 @@
 
 % =====================================================================
 \section{Main findings}
-The research conducted in this study has led to several key findings regarding the numerical modelling and stochastic assessment of high-performance concrete under severe accident conditions:
+The research conducted in this study has led to several key findings regarding the numerical modeling and stochastic assessment of high-performance concrete under severe accident conditions:
 
 \begin{enumerate}
     \item \textbf{Implementation of the THC model:} The improved Thermo-Hydro-Chemical (THC) model, which explicitly incorporates the effective hydration degree $\tilde{\Gamma}$ as an internal state variable, was successfully implemented and executed in \textsc{Cast3M}. This approach elegantly replaced empirical temperature-dependent multipliers with a strictly chemo-physical description of porosity and permeability evolution.
@@ -30,7 +30,7 @@ Building upon the limitations and findings of this work, several avenues for fut
 
 \begin{itemize}
     \item \textbf{Fully coupled THM (M~$\rightarrow$~H):} Integrate a mechanical damage model (e.g., Mazars) to simulate micro-cracking. This will capture the drastic transport acceleration that relieves internal pressures, providing a complete picture of spalling.
-    \item \textbf{Advanced surrogate modelling:} To make the stochastic propagation of random fields computationally tractable for the full highly non-linear THC solver, advanced metamodels (e.g., Polynomial Chaos Expansions or Artificial Neural Networks) should be developed. This would allow replacing the expensive Monte Carlo simulations with rapid analytical evaluations.
+    \item \textbf{Advanced surrogate modeling:} To make the stochastic propagation of random fields computationally tractable for the full highly non-linear THC solver, advanced metamodels (e.g., Polynomial Chaos Expansions or Artificial Neural Networks) should be developed. This would allow replacing the expensive Monte Carlo simulations with rapid analytical evaluations.
     \item \textbf{Non-intrusive experimental measurements:} To resolve the ambiguity of the gas-pressure measurements, future experimental campaigns should rely on non-intrusive techniques, such as in-situ neutron tomography, to observe the actual moisture migration and pressure redistribution without disturbing the concrete matrix.
     \item \textbf{Full service-life simulation:} Expand the formulation to simulate the concrete continuously: from early-age curing, through long-term drying, up to the fire event.
     \item \textbf{Broader verification:} Finally, the robustness of the model should be verified against a wider range of concrete mixtures (e.g., ordinary concrete, fiber-reinforced concrete) and under more severe heating scenarios.

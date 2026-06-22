@@ -1,67 +1,54 @@
 \chapter{Mathematical formulation and constitutive laws of the THM model} \label{appendixA}
-\review{This chapter is under review}
+\textit{Note: The theoretical Thermo-Hydro-Mechanical (THM) framework, the multiphase transport mechanisms, the constitutive empirical laws, and the mechanical damage formulation presented in this appendix are comprehensively synthesised from the foundational works of Dauti~\cite{dauti2018}, Sciumè et al.~\cite{sciume2024}, and Dal Pont~\cite{dalpont2020}.}
 
 % =====================================================================
 \section{THM interactions and spalling mechanisms} \label{sec:THM_spalling_app}
 
 \subsection{Simultaneous THM behaviors and interactions}
-When concrete is heated rapidly, it does not merely experience a temperature rise; it undergoes a simultaneous interplay of thermal, hydric, and mechanical (THM) processes that strongly interact with each other. Heat is transmitted into the material essentially by conduction, while phase changes (evaporation of free water and dehydration of chemically bound water) consume energy and locally slow the temperature rise. The generated vapour is transported by pressure-driven Darcy flow and Fickian diffusion. Part of the vapour migrates inward, recondenses in cooler regions, and builds a quasi-saturated layer (the moisture clog) that blocks further gas transport. Mechanically, the concrete skeleton expands due to heat, shrinks due to capillary forces, and is subjected to internal loading from the trapped pressurized gas.
+When concrete is heated rapidly, it does not merely experience a temperature rise; it undergoes a simultaneous interplay of thermal, hydric, and mechanical (THM) processes that strongly interact with each other. Heat is transmitted into the material essentially by conduction, while phase changes (evaporation of free water and dehydration of chemically bound water) consume energy and locally slow the temperature rise. The generated vapor is transported by pressure-driven Darcy flow and Fickian diffusion. Part of the vapor migrates inward, recondenses in cooler regions, and builds a quasi-saturated layer (the moisture clog) that blocks further gas transport. Mechanically, the concrete skeleton expands due to heat, shrinks due to capillary forces, and is subjected to internal loading from the trapped pressurized gas.
 
 \subsection{Spalling mechanisms}
 These coupled THM phenomena are the fundamental drivers of \emph{explosive spalling}. Explosive spalling generally results from the \emph{combined action} of pore pressure build-up and thermal stress. The specific mechanisms contributing to this failure are detailed below:
 \begin{itemize}
     \item \textbf{Thermal-gradient mechanism:} Steep temperature gradients develop throughout the concrete's cross-section, causing differential thermal expansion. The surface layers attempt to expand but are restrained by the cooler interior, generating high compressive stresses at the heated surface and tensile stresses deeper inside.
-    \item \textbf{Moisture-clog mechanism (Pore pressure):} In low-permeability concretes such as high-performance concrete (HPC), the rapid generation of vapour from phase changes cannot escape fast enough. The formation of the moisture clog further seals the porous network, resulting in a dramatic pore pressure build-up behind the drying front.
+    \item \textbf{Moisture-clog mechanism (Pore pressure):} In low-permeability concretes such as high-performance concrete (HPC), the rapid generation of vapor from phase changes cannot escape fast enough. The formation of the moisture clog further seals the porous network, resulting in a dramatic pore pressure build-up behind the drying front.
     \item \textbf{Mechanical fracture:} The combined effects of thermal stresses and pore pressure build-up on the solid skeleton stretch the material beyond its tensile capacity. High temperatures simultaneously degrade the tensile strength $f_t(T)$ of the concrete.
 \end{itemize}
 
 When the combined stress from the thermal gradient $\sigma_{thermal}$ and the pore pressure $\sigma_{pore}$ exceeds the degraded tensile strength of the concrete, cracks initiate parallel to the heated surface. The sudden release of accumulated elastic energy leads to the violent ejection of concrete fragments, characterizing the explosive spalling phenomenon.
+
 \section{Thermal behavior}
 
 \subsection{Conduction, convection and radiation}
 Heat transfer is the transport of thermal energy driven by a temperature difference. The following definitions of heat transfer modes are summarized from standard references \cite{bergman2017}.
 
 \subsubsection{Conduction}
-Conduction is the transfer of energy from the more energetic to the less energetic particles of a substance \draft{due to interactions between the particles.}
-\begin{itemize}
-    \item \textbf{Physical Mechanism:} \draft{In a gas, conduction is associated with the net transfer of energy by random molecular motion, often referred to as a diffusion of energy. In a solid, conduction may be attributed to atomic activity in the form of lattice vibrations, and in a conductor, it is also due to the translational motion of the free electrons.}
-    \item \textbf{Rate Equation (Fourier's Law):} For a one-dimensional plane wall having a temperature distribution $T(x)$, the rate equation is expressed as Fourier's law:
+Conduction is the transfer of energy from the more energetic to the less energetic particles of a substance.
+    \textbf{Rate Equation (Fourier's Law):} For a one-dimensional plane wall having a temperature distribution $T(x)$, the rate equation is expressed as Fourier's law:
     \begin{equation}
         q''_{cond} = -\lambda \frac{dT}{dx}
     \end{equation}
     Where $q''_{cond}$ is the heat flux ($W/m^2$), $\lambda$ is the thermal conductivity ($W/m \cdot K$), and the minus sign indicates that heat is transferred in the direction of decreasing temperature.
-\end{itemize}
 
 \subsubsection{Convection}
-The convection heat transfer mode is \draft{comprised of two mechanisms: energy transfer due to random molecular motion (diffusion) and energy transfer by the bulk, or macroscopic, motion of the fluid.}
-\begin{itemize}
-    \item \textbf{Physical Mechanism:} Convection heat transfer occurs between a fluid in motion and a bounding surface when the two are at different temperatures \draft{, which leads to the development of a hydrodynamic (velocity) boundary layer and a thermal boundary layer.}
-    \draft{\item \textbf{Classification:} Convection is classified as forced convection when the flow is caused by external means (like a fan or pump), or free (natural) convection when the flow is induced by buoyancy forces due to density differences. There are also convection processes accompanied by latent heat exchange, such as boiling and condensation.}
-    \item \textbf{Rate Equation (Newton's Law of Cooling):} Regardless of the nature of the convection process, the appropriate rate equation is:
+The convection heat transfer occurs between a fluid in motion and a bounding surface when the two are at different temperatures
+    \textbf{Rate Equation (Newton's Law of Cooling):} Regardless of the nature of the convection process, the appropriate rate equation is:
     \begin{equation}
         q''_{conv} = h (T_s - T_\infty)
         \label{eq:convection}
     \end{equation}
     Where $q''$ is the convective heat flux ($W/m^2$), $h$ is the convection heat transfer coefficient ($W/m^2 \cdot K$), $T_s$ is the surface temperature, and $T_\infty$ is the fluid temperature.
-\end{itemize}
+
 
 \subsubsection{Radiation}
-Thermal radiation is energy emitted by matter that is at a nonzero temperature, and unlike conduction and convection, it does not require the presence of a material medium.
-\begin{itemize}
-    \item \textbf{Physical Mechanism:} The energy of the radiation field is transported by electromagnetic waves (or photons) \draft{and may be attributed to changes in the electron configurations of the constituent atoms or molecules.}
-    \item \textbf{Emissive Power (Stefan-Boltzmann law):} The upper limit to the emissive power (rate of energy released per unit area) for an ideal radiator or blackbody is given:
-    \begin{equation}
-        E_b = \sigma T_s^4
-    \end{equation}
-    The heat flux emitted by a real surface is given by $E = \varepsilon \sigma T_s^4$, where $\sigma$ is the Stefan-Boltzmann constant and $\varepsilon$ is the emissivity.
-    \draft{\item \textbf{Irradiation and Absorption:} The rate at which radiation is incident on a unit area of the surface from its surroundings is called irradiation, $G$. The rate at which radiant energy is absorbed is given by $G_{abs} = \alpha G$, where $\alpha$ is the absorptivity.}
-    \item \textbf{Net Radiation Exchange:} For a gray surface \draft{($\alpha = \varepsilon$)} at $T_s$ completely surrounded by a much larger isothermal surface at $T_{sur}$, the net rate of radiation heat transfer per unit area is:
+Thermal radiation is energy emitted by matter that is at a nonzero temperature and transported by electromagnetic waves (or photons), unlike conduction and convection, it does not require the presence of a material medium.
+    \textbf{Net Radiation Exchange:} For a gray surface at $T_s$ completely surrounded by a much larger isothermal surface at $T_{sur}$, the net rate of radiation heat transfer per unit area is:
     \begin{equation}
         q''_{rad} = \varepsilon \sigma (T_s^4 - T_{sur}^4)
         \label{eq:radiation}
     \end{equation}
-    \draft{For many applications, this can also be expressed using a linearized radiation heat transfer coefficient $h_r$ as $q_{rad} = h_r A (T_s - T_{sur})$.}
-\end{itemize}
+    where $\sigma$ is the Stefan-Boltzmann constant and $\varepsilon$ is the emissivity.
+
 
 \subsection{Heat transfer}
 
@@ -83,8 +70,8 @@ Where:
 
 To solve this equation, appropriate boundary conditions must be specified:
 \begin{itemize}
-    \item \textbf{Prescribed temperatures \draft{(Dirichlet condition)}:} The temperature is specified as $T = T_{imp}$ on the boundary surface $\partial V^T$.
-    \item \textbf{Prescribed surface heat flux \draft{(Neumann / Mixed condition)}:} The total heat flux due to conduction, convection, and radiation on the boundary surface $\partial V^\varphi$ is given by:
+    \item \textbf{Prescribed temperatures :} The temperature is specified as $T = T_{imp}$ on the boundary surface $\partial V^T$.
+    \item \textbf{Prescribed surface heat flux :} The total heat flux due to conduction, convection, and radiation on the boundary surface $\partial V^\varphi$ is given by:
 
     \begin{equation}
         \vec{n} \cdot (\lambda \overrightarrow{\text{grad}}(T)) = \varphi_{imp} + h(T_f - T) + \varepsilon \sigma (T_\infty^4 - T^4)
@@ -94,14 +81,13 @@ To solve this equation, appropriate boundary conditions must be specified:
 \end{itemize}
 
 \subsubsection{Thermal properties} \label{sec:thermal_properties}
-The liquid water density evolves with temperature according to a polynomial fit \cite{furbish1997}:
+The liquid water density evolves with temperature according to a polynomial fit \cite{dauti2018}:
 \begin{equation}
     \rho_l(T) = \sum_{i=0}^{5} a_i\,T^i
     \label{eq:rho_l}
 \end{equation}
-with coefficients $a_i$ given in Table~\ref{tab:rho_coeff}.
 
-The solid thermal capacity theoretically evolves linearly with temperature \cite{harmathy1973}:
+The solid thermal capacity theoretically evolves linearly with temperature \cite{dauti2018}:
 \begin{equation}
     C_{ps}(T) = C_{ps0}[1 + A_c(T - T_0)]
     \label{eq:rhoCp}
@@ -110,12 +96,12 @@ with $C_{ps0} = 940$~\si{\joule\per\kilogram\per\kelvin} and $A_c$ is a material
 
 \textbf{Note on numerical implementation:} Although the theoretical framework accounts for a temperature-dependent solid heat capacity, in the current THC numerical code implementation, this parameter is maintained as a constant ($C_{ps} = C_{ps0}$). This assumption is made to ensure numerical robustness and simplify the resolution of the highly non-linear energy conservation system at extreme temperatures without significantly affecting the overall thermal diffusion profile.
 
-The thermal conductivity depends on saturation, porosity, and temperature \cite{baggio1993}:
+The thermal conductivity depends on saturation, porosity, and temperature \cite{dauti2018}:
 \begin{equation}
     \lambda = \lambda_d \left(1 + 4\,\frac{S_l\,\phi\,\rho_l}{(1-\phi)\,\rho_s}\right)
     \label{eq:lambda}
 \end{equation}
-with \cite{harmathy1973}:
+with \cite{dauti2018}:
 \begin{equation}
     \lambda_d = \lambda_{d0}\left[1 + A_\lambda\,(T-T_0)\right]
     \label{eq:lambda_d}
@@ -124,7 +110,6 @@ with \cite{harmathy1973}:
 As drying progresses ($S_l \to 0$), both $\rho C_p$ and $\lambda$ decrease, which accelerates the penetration of the thermal front into the material. These dependencies highlight the influence of the hydric state on the thermal field, which is further discussed in \cref{sec:TH_coupling}.
 
 \subsubsection{Discretization}
-\draft{In many practical cases, analytical solutions to the heat equation are impossible to obtain due to complex geometries or boundary conditions. Instead, the problem is approximated using numerical methods, such as the Finite Element (FE) method.}
 
 Using the FE discretization, the temperature and temperature gradient in the spatial domain are expressed in matrix form as:
 \begin{equation}
@@ -153,7 +138,7 @@ Where the matrices are defined as follows:
     \end{equation}
 \end{itemize}
 
-For steady-state thermal analysis, the temperature is time-independent ($\{\dot{T}\} = 0$)\draft{. Thus, the system simplifies into a linear algebraic equation} (assuming constant material properties and neglecting radiation):
+For steady-state thermal analysis, the temperature is time-independent ($\{\dot{T}\} = 0$) (assuming constant material properties and neglecting radiation):
 \begin{equation}
     [K]\{T\} = \{F\}
 \end{equation}
@@ -166,9 +151,7 @@ Since concrete is inherently weak in tension, this stress state can initiate cra
 
 \section{Hydric behavior}
 
-\begin{reviewblock}
 When concrete is exposed to high temperatures, the behavior of water within the porous network plays a central role in the thermo-hydro-mechanical response of the material. This section presents the classification of water in concrete, the phase-change mechanisms, the governing equation for moisture transport, and the constitutive laws required to close the system.
-\end{reviewblock}
 
 \subsection{Types of water in concrete}
 
@@ -207,7 +190,7 @@ Two distinct phase-change mechanisms govern the release of water in heated concr
 Both evaporation and dehydration act as vapor sources that increase gas pressure within the pore network. They also consume latent energy, affecting the temperature field (see \cref{sec:coupling}).
 
 \subsubsection{Dehydration kinetics}
-The cumulative dehydrated water mass is described by the following phenomenological relationship \cite{pesavento2000}:
+The cumulative dehydrated water mass is described by the following phenomenological relationship \cite{dauti2018}:
 \begin{equation}
     \Delta m_{dehyd} = f_s \cdot f_m \cdot f_c \cdot f(T) \label{eq:dehyd}
 \end{equation}
@@ -221,7 +204,7 @@ where $f_s$ is a stoichiometric factor, $f_m$ accounts for the concrete's age, $
 \end{equation}
 
 \subsubsection{Enthalpy of evaporation}
-The enthalpy of evaporation is temperature-dependent and is approximated by the Watson formula \cite{reid1987}:
+The enthalpy of evaporation is temperature-dependent and is approximated by the Watson formula \cite{dauti2018}:
 \begin{equation}
     \Delta H_{vap}(T) = \Delta H_{vap,0}
     \left(\frac{T_{crit} - T}{T_{crit} - T_0}
@@ -330,7 +313,7 @@ The gaseous phase (dry air + water vapor) is governed by the following relations
     \begin{equation}
         p_v = p_{vs}(T)\,\exp\left(\frac{M_v}{\rho_l R T} (p_g - p_c - p_{vs})\right) \label{eq:kelvin}
     \end{equation}
-    where $p_{vs}(T)$ is the saturation vapor pressure, approximated by the Hyland-Wexler relationship \cite{ashrae2001}:
+    where $p_{vs}(T)$ is the saturation vapor pressure, approximated by the Hyland-Wexler relationship \cite{dauti2018}:
     \begin{equation}
         p_{vs}(T) = \exp\left[\frac{C_1}{T} + C_2 + C_3 T + C_4 T^2 + C_5 T^3 + C_6 \ln(T)\right] \label{eq:pvs}
     \end{equation}
@@ -338,8 +321,7 @@ The gaseous phase (dry air + water vapor) is governed by the following relations
 
 \subsubsection{Sorption isotherms}
 
-The relationship between capillary pressure and liquid saturation is described by the Van Genuchten model \cite{vangenuchten1980, baroghel1999}:
-\begin{equation}
+The relationship between capillary pressure and liquid saturation is described by the Van Genuchten model \begin{equation}
     p_c = a\left(S_l^{-b} - 1\right)^{1-1/b} \label{eq:VG}
 \end{equation}
 where $a$ and $b$ are material parameters determined experimentally. Representative values at ambient temperature are given in \cref{tab:VG}.
@@ -367,14 +349,14 @@ where $E(T)$ accounts for the surface tension evolution and $a(T)$ accounts for 
 
 \subsubsection{Intrinsic permeability}
 
-Permeability is a key parameter governing moisture transport. For a thermo-hydral problem, the following relationship is adopted \cite{gawin1999}:
+Permeability is a key parameter governing moisture transport. For a thermo-hydral problem, the following relationship is adopted \cite{dauti2018}:
 \begin{equation}
     K = K_0 \cdot 10^{A_T(T-T_0)} \left(\frac{p_g}{p_{atm}}\right)^{A_p}
     \label{eq:perm}
 \end{equation}
 where $K_0$ is the intrinsic permeability at reference conditions, $A_T = 0.005$ and $A_p = 0.368$.
 
-When mechanical damage is considered, the permeability increases significantly \cite{gawin2002}:
+When mechanical damage is considered, the permeability increases significantly \cite{dauti2018}:
 \begin{equation}
     K = K_0 \cdot 10^{A_T(T-T_0)} \left(\frac{p_g}{p_{atm}}\right)^{A_p} \cdot 10^{A_D\, \mathcal{D}}
     \label{eq:perm_damage}
@@ -384,7 +366,7 @@ where $\mathcal{D}$ is the damage parameter and $A_D$ is a material constant. Th
 
 \subsubsection{Relative permeability}
 
-The relative permeabilities of liquid and gas are described by the Van Genuchten relationships \cite{vangenuchten1980}:
+The relative permeabilities of liquid and gas are described by the Van Genuchten relationships \cite{dauti2018}:
 \begin{align}
     k_{rl} &= \sqrt{S_l}\left(
     1 - \left(1 - S_l^{1/A_S}\right)^{A_S}
@@ -398,7 +380,7 @@ where $A_S = 0.6$.
 
 \subsubsection{Effective diffusivity}
 
-The diffusivity of vapor in air at a given temperature and pressure is \cite{perre1990}:
+The diffusivity of vapor in air at a given temperature and pressure is \cite{dauti2018}:
 \begin{equation}
     D_{va}(T, p_g) = D_{v0} \left(\frac{T}{T_0}\right)^{B_v} \frac{p_{g0}}{p_g}
     \label{eq:Dva}
@@ -413,12 +395,12 @@ with the tortuosity:
 \end{equation}
 
 \subsubsection{Fluid viscosities}
-The dynamic viscosities are temperature-dependent \cite{ashrae2001}. The gas viscosity is a concentration-weighted average:
+The dynamic viscosities are temperature-dependent \cite{dauti2018}. The gas viscosity is a concentration-weighted average:
 \begin{equation}
     \mu_g = \frac{p_v}{p_g}\mu_v + 
     \frac{p_a}{p_g}\mu_a
 \end{equation}
-where $\mu_v$ and $\mu_a$ are linear functions of temperature. The liquid water viscosity decreases strongly with temperature \cite{thomas1995}:
+where $\mu_v$ and $\mu_a$ are linear functions of temperature. The liquid water viscosity decreases strongly with temperature \cite{dauti2018}:
 \begin{equation}
     \mu_l = \mu_{l0}\exp
     \left(\frac{-\alpha_l(T-T_0)}{T}\right)
@@ -427,7 +409,7 @@ with $\mu_{l0} = 1.002 \times 10^{-3}$ Pa$\cdot$s and $\alpha_l = 0.6612$.
 
 \subsubsection{Porosity evolution}
 
-The porosity increases with temperature due to microstructural changes \cite{schneider1989}:
+The porosity increases with temperature due to microstructural changes \cite{dauti2018}:
 \begin{equation}
     \phi = \phi_0 + A_\phi\,(T - T_0) \label{eq:porosity}
 \end{equation}
@@ -491,13 +473,17 @@ where $K_0$ is the initial intrinsic permeability, $A_\Gamma$ is a coefficient d
 
 \section{Mechanical behavior} \label{sec:mechanical}
 
-\begin{reviewblock}
-The mechanical behaviour is modelled by coupling linear elasticity with continuum damage mechanics (Mazars model), described in the following subsections.
+The mechanical behavior is modeled by coupling linear elasticity with continuum damage mechanics (Mazars model), described in the following subsections.
 
 The TH and mechanical problems are solved with a staggered (sequential) solution strategy: the TH subsystem is solved first to obtain $p_g$, $p_c$, $T$, which are then passed as known loading to the mechanical step. 
 
-The specific coupling method between the TH and mechanical solvers has not yet been finalized and will be detailed and modified in \cref{chapter2} and \cref{chapter3} as the study progresses.
-\end{reviewblock}
+\subsection{Momentum conservation}
+Assuming quasi-static conditions, the mechanical equilibrium of the structure is governed by the momentum conservation equation:
+\begin{equation}
+    \nabla \cdot \boldsymbol{\sigma} + \mathbf{b} = \mathbf{0}
+    \label{eq:final_momentum}
+\end{equation}
+where $\boldsymbol{\sigma}$ is the total stress tensor and $\mathbf{b}$ represents the volumetric body forces.
 
 \subsection{Linear elastic model}
 
@@ -554,25 +540,23 @@ In Cast3M, this system is assembled using the \texttt{RIGI} and \texttt{RESO} op
 
 \subsection{Mazars damage model}
 
-Concrete cracks when tensile strains become too large. In this work, this behaviour is represented with the Mazars damage model \cite{mazars1986, hamon2013}. 
+Concrete cracks when tensile strains become too large. In this work, this behavior is represented with the Mazars damage model \cite{hamon2013}. 
 
 \subsubsection{Damage parameter and equivalent strain}
 
-The model introduces a single scalar damage variable $\mathcal{D} \in [0,1]$ \cite{mazars1986}. The effective stress in the damaged material is:
+The model introduces a single scalar damage variable $\mathcal{D} \in [0,1]$. The effective stress in the damaged material is:
 \begin{equation}
     \boldsymbol{\sigma}' = (1-\mathcal{D})\,
     \mathbb{C}\,\boldsymbol{\varepsilon}_{el}
     \label{eq:damage_stress}
 \end{equation}
-When $\mathcal{D}=0$, this reduces to Hooke's law  (\cref{eq:hooke}). The damage variable is driven by the equivalent strain, computed from the positive principal elastic strains:
+When $\mathcal{D}=0$, this reduces to Hooke's law  (\cref{eq:hooke}) \cite{hamon2013}. The damage variable is driven by the equivalent strain, computed from the positive principal elastic strains:
 
-\begin{reviewblock}
 Because concrete cracking is primarily governed by tensile extensions, Mazars introduced an \textit{equivalent strain} ($\varepsilon_{eq}$) to translate any 3D multiaxial strain state into a scalar uniaxial indicator. In the case of a thermo-mechanical loading, it is important to note that only the elastic strain tensor $\boldsymbol{\varepsilon}_e$ contributes to the evolution of damage. The equivalent strain is calculated solely from the positive principal elastic strains $\varepsilon_i$:
 \begin{equation}
     \varepsilon_{eq} = \sqrt{ \langle \boldsymbol{\varepsilon}_e \rangle_+ : \langle \boldsymbol{\varepsilon}_e \rangle_+} = \sqrt{ \sum_{i=1}^{3} \langle \varepsilon_i \rangle_+^2 }
 \end{equation}
 where the Macaulay brackets $\langle x \rangle_+$ denote the positive part of $x$ (i.e., $\langle x \rangle_+ = x$ if $x \ge 0$, and $0$ if $x < 0$). 
-\end{reviewblock}
 
 Damage initiates when the equivalent strain exceeds the initial damage threshold, denoted as $\varepsilon_{d0}$.
 \begin{equation}
@@ -589,7 +573,7 @@ Damage initiates when the equivalent strain exceeds the initial damage threshold
 \noindent In this simplified interpretation, $f_t$ denotes the uniaxial tensile strength of the concrete and $E$ is Young's modulus.
 
 \subsubsection{Damage evolution laws for tension and compression}
-\draft{Concrete exhibits highly asymmetric behavior, characterized by brittle failure in tension and strain-hardening followed by softening in compression.} To accurately represent concrete behavior, the total damage $D$ is formulated as a combination of two independent damage variables: $D_t$ for tension and $D_c$ for compression. 
+To accurately represent concrete behavior, the total damage $D$ is formulated as a combination of two independent damage variables: $D_t$ for tension and $D_c$ for compression. 
 
 When the damage threshold is exceeded ($\varepsilon_{eq} > \varepsilon_{d0}$), the evolution of these two modes is explicitly governed by exponential laws:
 \begin{align}
@@ -632,18 +616,18 @@ The displacements and damage are updated until convergence: $\|\{\mathbf{F}\} - 
 
 \subsection{Mesh dependency and fracture energy regularization}
 
-A well-known drawback of local softening models such as Mazars' is the pathological mesh dependency: softening causes strain localization in a band whose width depends on the element size, leading to vanishing energy dissipation upon mesh refinement \cite{bazant1976}.
+A well-known drawback of local softening models such as Mazars' is the pathological mesh dependency: softening causes strain localization in a band whose width depends on the element size, leading to vanishing energy dissipation upon mesh refinement.
 
 Two main families of regularization exist in the literature:
 \begin{itemize}
-    \item \textbf{Nonlocal averaging:} the local equivalent strain $\varepsilon_{eq}$ is replaced by a weighted spatial average $\bar{\varepsilon}_{eq}$ over a characteristic volume controlled by an internal length $l_c$ \cite{pijaudier1987,giry2011}. This is the approach adopted by \cite{dauti2018}.
+    \item \textbf{Nonlocal averaging:} the local equivalent strain $\varepsilon_{eq}$ is replaced by a weighted spatial average $\bar{\varepsilon}_{eq}$ over a characteristic volume controlled by an internal length $l_c$. This is the approach adopted by \cite{dauti2018}.
     
-    \item \textbf{Fracture energy regularization (Hillerborg):} the softening law parameters are adjusted element-by-element so that each element dissipates the same fracture energy $G_f$ per unit crack area, regardless of its size \cite{hillerborg1976}. This is the approach adopted in the present work, as it is simpler to implement in Cast3M and does not require additional nonlocal operators.
+    \item \textbf{Fracture energy regularization (Hillerborg):} the softening law parameters are adjusted element-by-element so that each element dissipates the same fracture energy $G_f$ per unit crack area, regardless of its size. This is the approach adopted in the present work, as it is simpler to implement in Cast3M and does not require additional nonlocal operators.
 \end{itemize}
 
 \subsubsection{Principle of fracture energy regularization}
 
-Physically, the fracture energy $G_f$ \cite{hillerborg1976} represents the energy per unit area required to propagate a crack. In the continuum damage framework, cracking is smeared over the element volume. A characteristic length $L_e$ bridges the two descriptions: in Cast3M (using \texttt{@LONGEF}), $L_e = V^{1/D}$ where $D$ is the spatial dimension.
+Physically, the fracture energy $G_f$ represents the energy per unit area required to propagate a crack. In the continuum damage framework, cracking is smeared over the element volume. A characteristic length $L_e$ bridges the two descriptions: in Cast3M (using \texttt{@LONGEF}), $L_e = V^{1/D}$ where $D$ is the spatial dimension.
 
 The total dissipated energy per unit crack area is:
 \begin{equation}
@@ -721,7 +705,7 @@ Thus, the thermal and hydric fields are \textit{strongly coupled}: temperature m
 
 \subsection{Thermo-hydric input to the mechanical field} \label{sec:THM_coupling}
 
-The mechanical behaviour of heated concrete is driven by the thermal and hydric fields. The coupling is \textit{one-way}: the converged TH fields ($T$, $p_g$, $p_c$) serve as prescribed loading to the mechanical problem at each time step. The feedback from mechanics to TH through damage-enhanced permeability is discussed in \cref{sec:THM_model}.
+The mechanical behavior of heated concrete is driven by the thermal and hydric fields. The coupling is \textit{one-way}: the converged TH fields ($T$, $p_g$, $p_c$) serve as prescribed loading to the mechanical problem at each time step. The feedback from mechanics to TH through damage-enhanced permeability is discussed in \cref{sec:THM_model}.
 
 The TH fields enter the mechanical problem through two mechanisms: free strains and pore pressure loading, detailed in the following subsections.
 
@@ -781,7 +765,7 @@ This expression represents the saturation-weighted average of the gas and liquid
 
 \subsubsection{Effective stress and pore pressure loading}
 
-For a porous medium saturated by multiple fluids, the total stress is decomposed into the part carried  by the solid skeleton and the part carried by the pore fluids. Following \cite{lewis1998,dauti2018}, the effective stress is defined as:
+For a porous medium saturated by multiple fluids, the total stress is decomposed into the part carried  by the solid skeleton and the part carried by the pore fluids. Following \cite{dauti2018}, the effective stress is defined as:
 \begin{equation}
     \boldsymbol{\sigma}' = \boldsymbol{\sigma}^{Total} 
     + \alpha\,p_s\,\mathbf{I}
@@ -789,13 +773,13 @@ For a porous medium saturated by multiple fluids, the total stress is decomposed
 \end{equation}
 where $\boldsymbol{\sigma}^{Total}$ is the total  stress tensor, $\alpha$ is Biot's coefficient, and  $p_s$ is the average pore pressure (\cref{eq:ps_shrinkage}).
 
-The effective stress $\boldsymbol{\sigma}'$ is the  stress that governs the mechanical behaviour of the  skeleton. In the finite element implementation, this relation is not applied directly; instead, the pore  pressure term $\alpha\,p_s$ enters the load vector as an external loading (\cref{eq:F_full}), and the effective stress is recovered from the elastic strain after solving for displacements:
+The effective stress $\boldsymbol{\sigma}'$ is the  stress that governs the mechanical behavior of the  skeleton. In the finite element implementation, this relation is not applied directly; instead, the pore  pressure term $\alpha\,p_s$ enters the load vector as an external loading (\cref{eq:F_full}), and the effective stress is recovered from the elastic strain after solving for displacements:
 \begin{equation}
     \boldsymbol{\sigma}' = (1-\mathcal{D})\,
     \mathbb{C}\,\boldsymbol{\varepsilon}_{el}
     \label{eq:sigma_eff_FE}
 \end{equation}
-where $\boldsymbol{\varepsilon}_{el} = \boldsymbol{\varepsilon} - \boldsymbol{\varepsilon}_{th} - \boldsymbol{\varepsilon}_{sh}$ (\cref{eq:eps_elastic}). This effective stress is the input to the Mazars damage criterion (\cref{sec:mazars}). In heated concrete, the build-up of gas pressure (\cref{sec:pore_pressure}) increases $p_s$ in the load vector, which shifts $\boldsymbol{\sigma}'$ toward tension and promotes damage when $f_t$ is exceeded.
+where $\boldsymbol{\varepsilon}_{el} = \boldsymbol{\varepsilon} - \boldsymbol{\varepsilon}_{th} - \boldsymbol{\varepsilon}_{sh}$ (\cref{eq:eps_elastic}). This effective stress is the input to the Mazars damage criterion (\cref{sec:mazars}). In heated concrete, the build-up of gas pressure increases $p_s$ in the load vector, which shifts $\boldsymbol{\sigma}'$ toward tension and promotes damage when $f_t$ is exceeded.
 
 % =====================================================================
 \section{THM governing formulation} \label{sec:THM_model}

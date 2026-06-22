@@ -98,7 +98,7 @@ To reduce computational cost compared to standard Monte Carlo, Latin Hypercube S
 \section{Sensitivity analysis} \label{sec:sensitivity}
 
 \subsection{Analysis A --- permeability $K_0$} \label{sec:sens-K0}
-With $A_\Gamma$ held constant to isolate the magnitude-driving uncertainty, Analysis A evaluates how $p_g^{10}$ responds to $K_0$. Since there is only one random variable, a Sobol decomposition is not meaningful ($S_1=S_{T}=1$). The results highlight a strongly negative correlation: lower permeability traps more vapour, which results in a higher pressure peak (\cref{fig:sensA-corr,fig:sensA-ci}). 
+With $A_\Gamma$ held constant to isolate the magnitude-driving uncertainty, Analysis A evaluates how $p_g^{10}$ responds to $K_0$. Since there is only one random variable, a Sobol decomposition is not meaningful ($S_1=S_{T}=1$). The results highlight a strongly negative correlation: lower permeability traps more vapor, which results in a higher pressure peak (\cref{fig:sensA-corr,fig:sensA-ci}). 
 
 To interpret the plots and charts in this chapter, the following terminology is used:
 \begin{itemize}
@@ -208,14 +208,14 @@ To quantify the spalling risk, the discrete structural responses are transformed
 \textbf{Conclusion.} With the critical threshold set at $p_{\mathrm{crit}}=2.5~\mathrm{MPa}$:
 \begin{itemize}
     \item \textbf{Analysis A (\cref{fig:reliability-A}):} The peak pressure spreads widely, and its upper tail crosses the threshold, giving a failure probability $P_f = 6.59\%$.
-    \item \textbf{Analysis B (\cref{fig:reliability-B}):} The distribution is narrower (confined between $1.8$ and $2.4~\mathrm{MPa}$), meaning no sampled realisation reaches $p_{\mathrm{crit}}$ ($P_f \approx 0$).
+    \item \textbf{Analysis B (\cref{fig:reliability-B}):} The distribution is narrower (confined between $1.8$ and $2.4~\mathrm{MPa}$), meaning no sampled realization reaches $p_{\mathrm{crit}}$ ($P_f \approx 0$).
 \end{itemize}
 This confirms that the intrinsic permeability $K_0$ is by far the dominant source of spalling risk.
  
 % =====================================================================
 \section{Effect of spatial heterogeneity on structural safety} \label{sec:spatial-effect}
  
-The analyses above treat the permeability as a single random variable, constant over the specimen in a given realisation. Real concrete varies from point to point, and local weak zones --- not average properties --- govern failure. The intrinsic permeability $K_{int}$, the most spatially variable and most influential property (\cref{sec:sens-K0}), is therefore additionally described as a \emph{random field} and compared with the homogeneous description. The same lognormal marginal as in Analysis~A is used (mean $=K_0^{\mathrm{cal}}=8.5\times10^{-20}~\si{\square\meter}$, $\mathrm{CoV}=0.30$, calibrated in \cref{chapter4}).
+The analyses above treat the permeability as a single random variable, constant over the specimen in a given realization. Real concrete varies from point to point, and local weak zones --- not average properties --- govern failure. The intrinsic permeability $K_{int}$, the most spatially variable and most influential property (\cref{sec:sens-K0}), is therefore additionally described as a \emph{random field} and compared with the homogeneous description. The same lognormal marginal as in Analysis~A is used (mean $=K_0^{\mathrm{cal}}=8.5\times10^{-20}~\si{\square\meter}$, $\mathrm{CoV}=0.30$, calibrated in \cref{chapter4}).
  
 \subsection{A simplified isothermal poro-mechanical model} \label{sec:spatial-model}
 Propagating a spatially heterogeneous random field through the fully coupled, highly non-linear Thermo-Hygro-Chemical (THC) model presents severe computational challenges. Instead, a \emph{weakly coupled isothermal poro-mechanical model} is adopted to compare the stochastic methods efficiently. 
@@ -260,11 +260,11 @@ In Analysis C3, while \textsc{Cast3M} natively provides \texttt{PARASTAT} to aut
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.85\linewidth]{figures/chapter5/analysisC2/evret_C1_C2}
-    \caption{Mean longitudinal shrinkage strain history at the corner point for the two stochastic analyses, LHS (C1) and the spatial random field (C2). Faint lines show the individual realisations of each analysis.}
+    \caption{Mean longitudinal shrinkage strain history at the corner point for the two stochastic analyses, LHS (C1) and the spatial random field (C2). Faint lines show the individual realizations of each analysis.}
     \label{fig:evret_c1c2}
 \end{figure}
 
-The Figure~\ref{fig:evret_c1c2} compares the mean shrinkage history of the two analyses before each is examined in detail. The ALEA mean (C2) lies slightly below the LHS mean (C1) throughout the drying period, while its realisations are visibly less scattered. These two features pull in opposite directions: a lower mean points to a more severe average response, but a tighter spread limits how often large strains are reached. 
+The Figure~\ref{fig:evret_c1c2} compares the mean shrinkage history of the two analyses before each is examined in detail. The ALEA mean (C2) lies slightly below the LHS mean (C1) throughout the drying period, while its realizations are visibly less scattered. These two features pull in opposite directions: a lower mean points to a more severe average response, but a tighter spread limits how often large strains are reached. 
 
 The mean curve alone therefore cannot identify the more critical analysis. This requires comparing the full distributions of the final strain, given by the probability density functions in \cref{fig:C1_pdf} and \cref{fig:C2_pdf}. As illustrated in these figures, the significant gap between the homogeneous and heterogeneous results quantitatively highlights how a simple random-variable assumption dangerously underestimates the structural risk.
 

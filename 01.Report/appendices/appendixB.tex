@@ -1,5 +1,5 @@
 \chapter{Stochastic framework and Uncertainty Quantification} \label{appendixB}
-\review{This chapter is under review}
+\textit{Note: The theoretical stochastic framework, reliability concepts, and numerical uncertainty quantification methods (including Gaussian Quadrature, Random Fields, and Sobol sensitivity) presented in this appendix are comprehensively synthesised from the foundational works of Baroth et al.~\cite{baroth2011, baroth2023} and Sudret et al.~\cite{sudret2000, sudret2003}.}
 
 % =====================================================================
 \section{Sources and classification of uncertainty} \label{sec:uncertainty-theory}
@@ -26,96 +26,12 @@ A critical source of aleatoric uncertainty is the inherent heterogeneity of conc
 
 This variability manifests as \emph{continuous} spatial fluctuations (e.g.\ Young's modulus, permeability, porosity) and \emph{discrete} defects (e.g.\ micro-cracks, capillary networks) \cite{baroth2023}. Consequently, material parameters must be modelled as random variables or random fields rather than deterministic values (\cref{sec:stochastic-framework}).
 
-\section{Random variable (PDF, CDF, moments, CoV)} \label{sec:random-variables}
+\section{Random variables and distributions} \label{sec:random-variables}
+In this stochastic framework, material properties are modelled as random variables characterized by their Probability Density Functions (PDF) and Cumulative Distribution Functions (CDF). The distributions are defined by their statistical moments (mean $\mu$, variance $\sigma^2$, skewness, and kurtosis) and the dimensionless Coefficient of Variation ($\mathrm{CoV} = \sigma/\mu$).
 
-\review{This section is currently under development and will be refined as the study progresses.}
+The concepts of PDF and CDF form the mathematical foundation for the uncertainty propagation methods used in this work: Latin Hypercube Sampling (LHS) relies on inverting the CDF for variance-reduced sampling, while Gaussian Quadrature analytically reconstructs the response PDF from its statistical moments to evaluate the probability of failure.
 
-A \textbf{random variable} $X$ is a quantity whose value is not fixed but described by a probability law.
-Instead of saying ``$E = 30$~GPa'', one writes $E \sim \mathcal{N}(30,\,3^2)$~GPa, meaning that the Young's modulus follows a normal (Gaussian) distribution with mean $\mu = 30$~GPa and standard deviation $\sigma = 3$~GPa.
-
-\subsection{PDF and CDF}
-The Probability Density Function (\textbf{PDF}) $f_X(x)$ describes the relative likelihood of $X$ taking a given value. It is always non-negative and integrates to one over the entire domain.
-
-The Cumulative Distribution Function (\textbf{CDF}) $F_X(x) = P(X \leq x)$ gives the probability that $X$ does not exceed a threshold $x$:
-\begin{equation}
-    F_X(x) \;=\; \int_{-\infty}^{x} f_X(t)\,\mathrm{d}t.
-    \label{eq:cdf-def}
-\end{equation}
-
-\textbf{Link to stochastic numerical methods:} The concepts of PDF and CDF are the mathematical foundations for all uncertainty propagation and reliability methods used in this work:
-\begin{itemize}
-    \item \textbf{Monte Carlo (MC) and Latin Hypercube Sampling (LHS):} Rely on drawing samples from the input PDFs. Specifically, the CDF is the core concept behind the LHS variance-reduction technique (\cref{sec:lhs-theory}).
-    \item \textbf{Kernel Density Estimation (KDE):} Is a non-parametric method used to reconstruct the continuous empirical PDF of the response from discrete simulated samples.
-    \item \textbf{Polynomial Chaos Expansion (PCE):} Acts as a surrogate model to rapidly propagate the input PDFs into an output PDF without running thousands of expensive finite element simulations.
-    \item \textbf{Gaussian Quadrature (\texttt{PROBDENS}):} Analytically reconstructs the response CDF from its statistical moments to compute the failure probability (\cref{sec:quad-pdf}).
-\end{itemize}
-In reliability analysis, the CDF is used directly to evaluate the probability of exceeding a critical value: $P(X > x_{\mathrm{cr}}) = 1 - F_X(x_{\mathrm{cr}})$ \cite{baroth2011}.
-
-Two distributions are used in this work:
-
-\begin{itemize}
-    \item \textbf{Normal} (Gaussian) distribution $\mathcal{N}(\mu,\sigma^2)$:
-    
-    \begin{equation}
-        f_X(x) \;=\; \frac{1}{\sigma\sqrt{2\pi}}\,
-        \exp\!\left[-\frac{(x-\mu)^2}{2\sigma^2}\right].
-        \label{eq:pdf-normal}
-    \end{equation}
-
-    \item \textbf{Lognormal} distribution $\mathrm{LN}(\mu_{\ln},\sigma_{\ln}^2)$, where $\ln X$ is normally distributed, ensuring $X > 0$:
-    
-    \begin{equation}
-        f_X(x) \;=\;
-        \frac{1}{x\,\sigma_{\ln}\sqrt{2\pi}}\,
-        \exp\!\left[
-            -\frac{(\ln x - \mu_{\ln})^2}{2\sigma_{\ln}^2}
-        \right],
-        \qquad x > 0.
-        \label{eq:pdf-lognormal}
-    \end{equation}
-\end{itemize}
-
-The lognormal distribution is particularly relevant for material properties such as the Young modulus or permeability, which must remain strictly positive \cite{delarrard2010, sudret2000, baroth2023}.
-
-\subsection{Statistical moments}
-
-The distribution of $X$ can be summarised by its \textbf{statistical moments} \cite{baroth2011}, which quantify location, spread, asymmetry, and tail heaviness. In this work, the first two moments are prescribed as \emph{input} to the stochastic analysis, while the higher moments are \emph{computed as output} by the quadrature method (\cref{sec:quadrature}).
-
-\paragraph{Input moments.}
-The \textbf{mean} $\mu_X$ and \textbf{variance} $\sigma_X^2$ (or equivalently the standard deviation $\sigma_X = \sqrt{\mathrm{Var}[X]}$) define the centre and spread of the distribution:
-
-\begin{equation}
-    \mu_X = \int_{-\infty}^{+\infty} x\, f_X(x)\,\mathrm{d}x,
-    \qquad
-    \sigma_X^2 = \int_{-\infty}^{+\infty}
-    (x - \mu_X)^2\, f_X(x)\,\mathrm{d}x.
-    \label{eq:mean-var}
-\end{equation}
-
-\paragraph{Output moments.}
-The \textbf{skewness} $\delta_3$ and \textbf{kurtosis} $\delta_4$ measure the asymmetry and tail heaviness of the response distribution:
-
-\begin{equation}
-    \delta_3 = \frac{E\!\left[(X-\mu_X)^3\right]}{\sigma_X^3},
-    \qquad
-    \delta_4 = \frac{E\!\left[(X-\mu_X)^4\right]}{\sigma_X^4}.
-    \label{eq:skew-kurt}
-\end{equation}
-
-These four moments play a central role in the Gaussian Quadrature method (\cref{sec:quadrature}), where the response PDF is reconstructed from the computed moments using Winterstein or Pearson approximations \cite{sudret2003}.
-
-\subsection{Coefficient of Variation (CoV)}
-
-The coefficient of variation quantifies the relative dispersion of $X$:
-
-\begin{equation}
-    \mathrm{CoV}_X = \frac{\sigma_X}{\mu_X}.
-    \label{eq:cov}
-\end{equation}
-
-It is a dimensionless measure that allows comparison of variability across parameters with different units and magnitudes. For concrete, typical values are $\mathrm{CoV}_E \approx 0.10$--$0.20$ for the Young's modulus \cite{delarrard2010} and $\mathrm{CoV}_K \approx 0.15$--$0.30$ for permeability \cite{baroth2023}.
-
-\subsection{Choice of probability distributions for concrete properties} \label{sec:distribution-justification}
+\textbf{Choice of probability distributions for concrete properties} \label{sec:distribution-justification}
 In the stochastic assessment of concrete structures (as performed in \cref{chapter5}), the choice of probability distributions must reflect the physical nature of the uncertainty. Three main distribution families are typically employed:
 
 \begin{description}
@@ -127,9 +43,6 @@ In the stochastic assessment of concrete structures (as performed in \cref{chapt
 \end{description}
 
 \section{Random fields} \label{sec:random-fields}
-
-\review{This section is currently under development and will be refined as the study progresses.}
-
 
 A random variable assigns a \emph{single} uncertain value to a material property for the entire structure. In reality, concrete properties vary spatially due to heterogeneous microstructure, local variations in the water-to-cement ratio, and non-uniform compaction during casting \cite{delarrard2010}. A \textbf{random field} captures this spatial variability: it assigns an uncertain value to \emph{every point} $\mathbf{x}$ in the domain, not just one value for the whole structure.
 
@@ -184,39 +97,22 @@ The rate at which $\rho$ decays is controlled by the \textbf{correlation length}
     \label{eq:corr-models}
 \end{equation}
 
-Physically, $L_c$ represents the distance beyond which material properties become essentially independent. A small $L_c$ means the material varies rapidly in space (highly heterogeneous); a large $L_c$ means properties change slowly (nearly uniform). This effect is illustrated in \cref{fig:correlation-length-effect}.
+Physically, $L_c$ represents the distance beyond which material properties become essentially independent. A small $L_c$ means the material varies rapidly in space (highly heterogeneous); a large $L_c$ means properties change slowly (nearly uniform).
 
-\paragraph{Remark:} In this work, $L_c$ is not treated as a parameter to be varied. A single representative value is adopted from experimental data \cite{delarrard2010} to account for spatial heterogeneity in the Monte Carlo simulations (\cref{sec:mc-framework}). The objective is not to study the effect of $L_c$ itself, but to compare the structural response \emph{with} and \emph{without} spatial variability.
+\paragraph{Remark:} In this work, $L_c$ is not treated as a parameter to be varied. A single representative value is adopted from experimental data \cite{delarrard2010} to account for spatial heterogeneity in the Monte Carlo simulations. The objective is not to study the effect of $L_c$ itself, but to compare the structural response \emph{with} and \emph{without} spatial variability.
 
 \subsection{Random field simulation} \label{sec:rf-methods}
-To use a random field in a finite element model, one must \emph{generate} realisations that respect the prescribed covariance structure, then \emph{assign} the values to elements or integration points. Several families of methods exist \cite{fenton2014}:
+To incorporate a random field into a finite element model, one must generate realisations that respect the prescribed covariance structure. While several approaches exist \cite{fenton2014}, methods like Cholesky decomposition or Karhunen--Loève (KL) expansion scale poorly and become computationally prohibitive for large meshes. Conversely, efficient alternatives like FFT-based methods or Local Average Subdivision (LAS) are typically restricted to regular rectangular grids.
 
-\begin{itemize}
-    \item \textbf{Matrix decomposition (Cholesky).}
-          The covariance matrix $\mathbf{C}$ is factorised as $\mathbf{C} = \mathbf{L}\mathbf{L}^T$ and a correlated realisation is obtained as $\mathbf{h} = \mathbf{L}\mathbf{z}$, where $\mathbf{z}$ is a vector of independent standard normal variates \cite{fenton2014}. The method is exact but scales as $\mathcal{O}(n^3)$ in the number of nodes $n$, making it prohibitive for large meshes.
+To overcome these limitations, this work adopts the \textbf{Turning Bands Method (TBM)} \cite{matheron1973, fenton2014}. The TBM simplifies the generation process by reducing the $d$-dimensional spatial simulation to a set of independent one-dimensional stationary processes along random lines (bands) passing through the domain. Because it requires neither a global matrix factorisation nor an eigenvalue solve, the TBM is computationally highly efficient and operates directly on any complex mesh geometry.
 
-    \item \textbf{Spectral methods (FFT-based).}
-          Realisations are generated by filtering white noise in the frequency domain using the spectral density corresponding to the target covariance \cite{fenton2014}. FFT algorithms are computationally efficient on regular grids, but the method is limited to stationary fields on rectangular domains with periodic boundary conditions.
-
-    \item \textbf{Local Average Subdivision (LAS).}
-          LAS generates the random field by successively subdividing the domain and assigning local averages consistent with the target covariance at each level of refinement \cite{fenton2014}. The method is computationally efficient and naturally produces spatially averaged values over elements, making it well-suited for direct use in finite element models. However, it is primarily designed for regular rectangular grids.
-
-    \item \textbf{Series expansion methods.}
-          Methods such as the Karhunen--Loève (KL) expansion parametrise the random field as a finite series of deterministic spatial functions multiplied by independent random variables \cite{sudret2000, delarrard2010}. They provide a compact representation of the spatial variability but require solving a global eigenvalue problem on the finite element mesh, whose cost increases with mesh size and targeted accuracy.
-
-    \item \textbf{Turning Bands Method (TBM).}
-          The TBM reduces the $d$-dimensional simulation to a set of one-dimensional stationary processes along random lines (bands) passing through the domain \cite{matheron1973, fenton2014}. It requires neither a global matrix factorisation nor an eigenvalue solve, and operates directly on any mesh geometry.
-
-\end{itemize}
-
-In this work, the TBM method, described in detail in \cref{sec:tbm}, is adopted because it is the method implemented in the Cast3M \texttt{ALEA} operator.
 
 \subsection{Turning Bands Method (\texttt{ALEA})} \label{sec:tbm}
 \paragraph{Principle}
 
 The Turning Bands Method (TBM), introduced by \cite{matheron1973}, simplifies the generation of a 2-D or 3-D random field by reducing it to a set of 1-D problems.
 
-The idea (\cref{fig:tbm}): draw $L$ lines through the domain in different directions. Along each line, simulate an independent 1-D random process. To obtain the field value at any point $\mathbf{x}$, project it onto each line and average the results:
+The idea: draw $L$ lines through the domain in different directions. Along each line, simulate an independent 1-D random process. To obtain the field value at any point $\mathbf{x}$, project it onto each line and average the results:
 
 \begin{equation}
     Z(\mathbf{x}) \;=\; \frac{1}{\sqrt{L}}
@@ -279,7 +175,7 @@ This pointwise transformation is exact: the autocorrelation structure of the und
 Monte Carlo simulation (MCS) estimates the effect of uncertain inputs by running the deterministic model multiple times, each time with a different random sample drawn from the input distributions \cite{fenton2014}. However, standard MCS converges only as $1/\sqrt{N}$, necessitating a vast number of computationally expensive finite element runs.
 
 \subsection{Latin Hypercube Sampling (LHS)} \label{sec:lhs-theory}
-To reduce the computational cost and accelerate statistical convergence, \textbf{Latin Hypercube Sampling (LHS)} is utilized as a variance-reduced alternative \cite{mckay1979,baudin2017}. As previously introduced, the concept of the Cumulative Distribution Function (CDF) is fundamental to explaining how LHS works. In LHS, the CDF of each random variable is divided into $N$ equiprobable strata (intervals of equal probability). Exactly one sample is drawn from each stratum by inverting the CDF, guaranteeing that the input space is covered evenly across the entire range of the probability distributions. This ensures the output statistics stabilize with markedly fewer evaluations compared to standard Monte Carlo.
+To reduce the computational cost and accelerate statistical convergence, \textbf{Latin Hypercube Sampling (LHS)} is utilized as a variance-reduced alternative. In LHS, the CDF of each random variable is divided into $N$ equiprobable strata (intervals of equal probability). Exactly one sample is drawn from each stratum by inverting the CDF, guaranteeing that the input space is covered evenly across the entire range of the probability distributions. This ensures the output statistics stabilize with markedly fewer evaluations compared to standard Monte Carlo.
 
 \subsection{Convergence}
 
@@ -304,7 +200,7 @@ where $e$ is the acceptable absolute error. For a small failure probability ($p_
 
 \section{Gaussian Quadrature framework} \label{sec:quadrature}
 
-Unlike Monte Carlo, which runs thousands of simulations, Gaussian Quadrature evaluates the model at a small number of strategically chosen points and reconstructs the output statistics from a weighted sum \cite{baldeweck1999, sudret2003}. The method has three steps, corresponding to three Cast3M operators:
+Unlike Monte Carlo, which runs thousands of simulations, Gaussian Quadrature evaluates the model at a small number of strategically chosen points and reconstructs the output statistics from a weighted sum \cite{sudret2003}. The method has three steps, corresponding to three Cast3M operators:
 
 \begin{enumerate}
     \item \textbf{\texttt{QUADRATU}}: compute the evaluation points and weights for each random variable.
@@ -321,7 +217,7 @@ Computing any statistical moment of the output $G = g(\mathbf{X})$ requires eval
     \label{eq:quad-integral}
 \end{equation}
 
-where $W(x) = f_X(x)$ is the PDF of the input variable. Gaussian quadrature approximates this by a weighted sum over $K$ evaluation points \cite{baldeweck1999}:
+where $W(x) = f_X(x)$ is the PDF of the input variable. Gaussian quadrature approximates this by a weighted sum over $K$ evaluation points:
 
 \begin{equation}
     I \;\approx\; \sum_{k=1}^{K} w_k\, g(x_k),
@@ -370,7 +266,7 @@ The total number of model evaluations is $K^N$, which grows exponentially with $
 \section{Sensitivity indicators and ranking methods} \label{sec:sensitivity-indicators}
 \subsection{Variance decomposition} \label{sec:var-decomp}
 
-For a model $G = g(X_1, \ldots, X_N)$ with $N$ independent random inputs, Hoeffding's decomposition \cite{sobol1993} expresses $G$ as a sum of functions of increasing dimension:
+For a model $G = g(X_1, \ldots, X_N)$ with $N$ independent random inputs, Hoeffding's decomposition expresses $G$ as a sum of functions of increasing dimension:
 
 \begin{equation}
     G \;=\; g_0
@@ -396,7 +292,7 @@ where $V_i = \mathrm{Var}[g_i(X_i)]$ is the first-order variance (effect of $X_i
 
 \subsection{Variance-based sensitivity: Sobol indices} \label{sec:sobol}
 
-Dividing each term in \cref{eq:var-decomp} by the total variance defines the \emph{Sobol indices} \cite{sobol1993}:
+Dividing each term in \cref{eq:var-decomp} by the total variance defines the \emph{Sobol indices}:
 
 \begin{equation}
     S_i \;=\; \frac{V_i}{\mathrm{Var}(G)},
@@ -437,29 +333,6 @@ where $X_{\sim i}$ denotes all variables except $X_i$. Intuitively, $\mathbb{E}(
 
 A variable with a large $S_i$ (or $S_{T_i}$) is a \emph{dominant parameter}: it drives most of the output uncertainty and should be characterised with care. A variable with a small index could be treated as deterministic without significant loss of accuracy.
 
-\subsection{Practical sensitivity approximation}
-
-Computing exact Sobol indices requires a large number of model evaluations. A simpler approach, used by the the expansion of Englishquadrature method (\cref{sec:quadrature}), estimates the contribution of each variable one at a time:
-
-\begin{enumerate}
-    \item Fix all variables at their mean except $X_i$.
-    \item Run the model at each quadrature point of $X_i$ to obtain the marginal variance $\hat{\sigma}_i^2$.
-    \item Repeat for every variable.
-\end{enumerate}
-
-The \textbf{contribution} of $X_i$ to the total output variability is then:
-
-\begin{equation}
-    C_i \;=\;
-    \frac{\hat{\sigma}_i^2}{\displaystyle\sum_{j=1}^{N}
-    \hat{\sigma}_j^2} \times 100\,\%
-    \;\approx\; S_i
-    \quad \text{when } S_{ij} \approx 0.
-    \label{eq:contribution-approx}
-\end{equation}
-
-A variable with $C_i \approx 0\,\%$ has negligible influence and could be treated as deterministic. This approximation is valid when variables are uncorrelated and interaction effects are small. The detailed results are presented in \cref{sec:dominant-params}.
-
 \section{Probability of failure and reliability index} \label{sec:pf-beta}
 \subsection{Limit state function} \label{sec:limit-state}
 In structural reliability, a \textbf{performance function} (or limit-state function) $G(\mathbf{X})$ explicitly separates the structural state into two domains:
@@ -488,7 +361,7 @@ In modern engineering codes, $P_f$ is frequently mapped to the \textbf{generaliz
 To evaluate the effect of spatial heterogeneity in \cref{chapter5}, a simplified isothermal poro-mechanical model is implemented in \textsc{Cast3M}. This section details the specific constitutive laws and material parameters used for that test case.
 
 \subsection{Constitutive relationships}
-The hygral behaviour is governed by the van Genuchten model \cite{vangenuchten1980}. The degree of saturation $S_l$ and the liquid relative permeability $k_{rl}$ are functions of the capillary pressure $P_c$:
+The hygral behaviour is governed by the van Genuchten model. The degree of saturation $S_l$ and the liquid relative permeability $k_{rl}$ are functions of the capillary pressure $P_c$:
 \begin{equation}
     S_l(P_c) = \left[ 1 + \left(\frac{P_c}{a_1}\right)^{\frac{b_1}{b_1-1}} \right]^{-\frac{1}{b_1}}
 \end{equation}

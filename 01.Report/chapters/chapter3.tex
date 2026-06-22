@@ -19,9 +19,9 @@ A prismatic specimen of $30\times30\times12~\si{\centi\meter\cubed}$ is heated o
 \end{figure}
  
 \paragraph{Concrete mix.}
-Only the high-performance concrete (HPC, mix~M100-C) is retained for the modelling: it exhibits the most pronounced thermo-hydral response (measured gas-pressure peak $\approx\SI{40}{\bar}$) and an initial liquid saturation $S_{l,0}\approx0.77$. It uses a CEM\,I 52.5 cement blended with silica fume at a low water/binder ratio, giving the high compactness and low permeability responsible for the strong pressurisation. The detailed mixture proportions, after Kalifa et al.~\cite{kalifa2000}, are deferred to \cref{appendixA}, while the lumped quantities fed to Powers' model ($c$, aggregate, $w/c$, $s/c$) are directly listed in \cref{tab:params}.
+Only the high-performance concrete (HPC, mix~M100-C) is retained for the modeling: it exhibits the most pronounced thermo-hydral response (measured gas-pressure peak $\approx\SI{40}{\bar}$) and an initial liquid saturation $S_{l,0}\approx0.77$. It uses a CEM\,I 52.5 cement blended with silica fume at a low water/binder ratio, giving the high compactness and low permeability responsible for the strong pressurization. The detailed mixture proportions, after Kalifa et al.~\cite{kalifa2000}, are deferred to \cref{appendixA}, while the lumped quantities fed to Powers' model ($c$, aggregate, $w/c$, $s/c$) are directly listed in \cref{tab:params}.
 
-\paragraph{Heating scenario and measured data.} In the experiment the specimen is heated on one face by a radiant heater applied as a step signal, the heater temperature being set to one of \SIlist{450;600;800}{\celsius}. The \SI{600}{\celsius} test is retained as the reference loading, since it preserves the quasi-1-D transfer condition while developing a complete pressurisation and relief cycle. 
+\paragraph{Heating scenario and measured data.} In the experiment the specimen is heated on one face by a radiant heater applied as a step signal, the heater temperature being set to one of \SIlist{450;600;800}{\celsius}. The \SI{600}{\celsius} test is retained as the reference loading, since it preserves the quasi-1-D transfer condition while developing a complete pressurization and relief cycle. 
 
 The three measured quantities — temperature, gas pressure at various depths, and global mass loss — serve as the validation targets for this work. They are not plotted here: to keep the experimental curves together with the simulated response, they are reported directly alongside the numerical results during the calibration phase (\cref{chapter4}).
 
@@ -29,13 +29,13 @@ The three measured quantities — temperature, gas pressure at various depths, a
 \section{Numerical model} \label{sec:num-model}
 \paragraph{Scope of the numerical simulation.} While the theoretical THM framework is detailed in \cref{appendixA}, this numerical application is restricted to the Thermo-Hydro-Chemical (THC) model. The mechanical module is deliberately excluded because the Kalifa experiment provides only temperature and gas-pressure data, lacking the mechanical measurements (e.g., strains or damage) required for validation.
 
-\paragraph{Geometry and mesh.} The test is modelled in 2D using a $120\times120~\mathrm{mm^2}$ cross-section (\cref{fig:setup}). The top face is heated, the bottom face is cooled, and the lateral faces are fully insulated to reproduce a quasi-1D transfer. The domain is meshed with $24\times24$ four-node quadrilateral (\texttt{QUA4}) elements. The field variables are extracted along the vertical centerline at depths corresponding to the experimental gauges ($0, 10, 20, 30, 40, \text{ and } 50~\mathrm{mm}$).
+\paragraph{Geometry and mesh.} The test is modeled in 2D using a $120\times120~\mathrm{mm^2}$ cross-section (\cref{fig:setup}). The top face is heated, the bottom face is cooled, and the lateral faces are fully insulated to reproduce a quasi-1D transfer. The domain is meshed with $24\times24$ four-node quadrilateral (\texttt{QUA4}) elements. The field variables are extracted along the vertical centerline at depths corresponding to the experimental gauges ($0, 10, 20, 30, 40, \text{ and } 50~\mathrm{mm}$).
  
 \begin{figure}[ht]
   \centering
   \includegraphics[width=\textwidth]{figures/chapter3/model_setup}
   \caption{(a) Model set-up and boundary conditions and (b) radiator
-           temperature used in the modelling, after Dauti~\cite{dauti2018}.}
+           temperature used in the modeling, after Dauti~\cite{dauti2018}.}
   \label{fig:setup}
 \end{figure}
  
@@ -85,20 +85,20 @@ Desorption curve       & $a_1$      & \SI{18.6}{\mega\pascal} \\
 \end{tabular}
 \end{table}
  
-\paragraph{Thermal input and boundary conditions.} The boundary set-up and the radiator temperature histories follow the modelling of Dauti~\cite{dauti2018} (\cref{fig:setup}). On the hot face a combined convection--radiation condition (See \cref{eq:thermal_bc}) is imposed:
+\paragraph{Thermal input and boundary conditions.} The boundary set-up and the radiator temperature histories follow the modeling of Dauti~\cite{dauti2018} (\cref{fig:setup}). On the hot face a combined convection--radiation condition (See \cref{eq:thermal_bc}) is imposed:
 \begin{equation}
     q_{\mathrm{hot}} = -\lambda \frac{\partial T}{\partial n}\Big|_{\mathrm{hot}} = h^{\mathrm{hot}}(T_\infty - T_s) + \varepsilon \sigma \big(T_\infty^4 - T_s^4\big),
     \label{eq:heated-face}
 \end{equation}
-with the initial reference values $h^{\mathrm{hot}}=\SI{8}{\watt\per\meter\squared\per\kelvin}$, emissivity $\varepsilon=0.7$, and a prescribed radiator temperature $T_\infty(t)$ that rises to $\approx\SI{400}{\celsius}$ at the onset of the accident and then increases quasi-linearly to $\approx\SI{466}{\celsius}$ over the $\approx\SI{240}{\minute}$ accident (\cref{fig:setup}b); the radiator is switched off afterwards. The cold face exchanges heat by convection only ($h^{\mathrm{cold}}=\SI{8.3}{\watt\per\meter\squared\per\kelvin}$, $T_\infty=\SI{20}{\celsius}$). On both faces the gas pressure is fixed at atmospheric ($p_g=p_{\mathrm{atm}}$) and a convective vapour flux $q_w=h_g(\rho_{v}^{s}-\rho_{v}^{\infty})$ is applied.
+with the initial reference values $h^{\mathrm{hot}}=\SI{8}{\watt\per\meter\squared\per\kelvin}$, emissivity $\varepsilon=0.7$, and a prescribed radiator temperature $T_\infty(t)$ that rises to $\approx\SI{400}{\celsius}$ at the onset of the accident and then increases quasi-linearly to $\approx\SI{466}{\celsius}$ over the $\approx\SI{240}{\minute}$ accident (\cref{fig:setup}b); the radiator is switched off afterwards. The cold face exchanges heat by convection only ($h^{\mathrm{cold}}=\SI{8.3}{\watt\per\meter\squared\per\kelvin}$, $T_\infty=\SI{20}{\celsius}$). On both faces the gas pressure is fixed at atmospheric ($p_g=p_{\mathrm{atm}}$) and a convective vapor flux $q_w=h_g(\rho_{v}^{s}-\rho_{v}^{\infty})$ is applied.
 
-The mass-transfer coefficient $h_g$ increasing from $0$ (sealed) to $\SI{2e-3}{}$ (drying) and $\SI{1.8e-2}{\meter\per\second}$ (accident). It is important to distinguish these transfer coefficients: while the convective heat transfer coefficients ($h^{\mathrm{hot}}, h^{\mathrm{cold}}$) govern the exchange of thermal energy across the boundary, the mass-transfer coefficient ($h_g$) specifically dictates the rate at which water vapour escapes from the porous network to the surrounding environment.
+The mass-transfer coefficient $h_g$ increasing from $0$ (sealed) to $\SI{2e-3}{}$ (drying) and $\SI{1.8e-2}{\meter\per\second}$ (accident). It is important to distinguish these transfer coefficients: while the convective heat transfer coefficients ($h^{\mathrm{hot}}, h^{\mathrm{cold}}$) govern the exchange of thermal energy across the boundary, the mass-transfer coefficient ($h_g$) specifically dictates the rate at which water vapor escapes from the porous network to the surrounding environment.
  
 % =====================================================================
 \section{Application of the THC model} \label{sec:thc-application}
 
 \subsection{Numerical implementation and robustness} \label{sec:robustness}
-The THC model is implemented within the open-source finite element code \textsc{Cast3M}. However, standard \textsc{Cast3M} procedures do not natively support the complex constitutive evolution laws and the highly coupled convective mass flux boundary conditions required for modelling concrete at high temperatures. To overcome these limitations, the implementation relies on custom dedicated operators and modified source files (developed by G.~Sciumè and S.~Dal~Pont). 
+The THC model is implemented within the open-source finite element code \textsc{Cast3M}. However, standard \textsc{Cast3M} procedures do not natively support the complex constitutive evolution laws and the highly coupled convective mass flux boundary conditions required for modeling concrete at high temperatures. To overcome these limitations, the implementation relies on custom dedicated operators and modified source files (developed by G.~Sciumè and S.~Dal~Pont). 
 
 Furthermore, the strongly non-linear nature of the problem frequently causes the Newton-Raphson solver (the \texttt{PASAPAS} integrator) to diverge at extreme temperatures. To restore convergence and ensure numerical stability, the following measures are investigated and implemented:
 
@@ -123,4 +123,4 @@ A key feature of this THC application is that the hygro-chemical state preceding
     \item \textbf{Accident phase (0--240 mins):} The heating ramp is applied to the hot face (convection and radiation). The temperature rises immediately, triggering the dehydration of C-S-H and the subsequent critical pore-pressure build-up.
 \end{enumerate}
 
-\textbf{Cooling phase omission:} Although the Kalifa experimental campaign continued to record temperature and gas-pressure data during the cooling phase (from $240$ up to $600~\mathrm{minutes}$), this final phase is \emph{not} modelled in the present work. Since the primary objective of this study is to investigate the mechanisms triggering explosive spalling, which inherently occur during the severe heating phase. The numerical simulation is deliberately stopped at $t=\SI{240}{\minute}$. Consequently, the experimental cooling data is excluded from the comparative plots in the calibration phase (\cref{chapter4}).
+\textbf{Cooling phase omission:} Although the Kalifa experimental campaign continued to record temperature and gas-pressure data during the cooling phase (from $240$ up to $600~\mathrm{minutes}$), this final phase is \emph{not} modeled in the present work. Since the primary objective of this study is to investigate the mechanisms triggering explosive spalling, which inherently occur during the severe heating phase. The numerical simulation is deliberately stopped at $t=\SI{240}{\minute}$. Consequently, the experimental cooling data is excluded from the comparative plots in the calibration phase (\cref{chapter4}).
