@@ -1,65 +1,64 @@
-# Thermo–Hydro–Mechanical Modelling of Concrete  
-## M2 Internship Research Project  
+# Thermo-Hydro-Chemical (THC) & Stochastic Modelling of Concrete at High Temperatures
+## M2 Internship Research Project – 3SR Laboratory, Université Grenoble Alpes
 
-This repository contains the research work developed during my Master 2 internship, implemented and validated using `Cast3M 2025`.
+This repository contains the numerical models, calibration scripts, and stochastic analysis frameworks developed during my Master 2 internship. The simulations are implemented using **Cast3M** and **OpenTURNS**, coupled with **Python** for automation.
 
 ---
 
 ## 1. Research Objective
 
-The primary objective of this project is the development and numerical implementation of a fully coupled **Thermo–Hydro–Mechanical (THM)** model for concrete.
+Concrete structures exposed to extreme heat (e.g., fire accidents, nuclear containment) can suffer from *explosive spalling*—a violent failure driven by severe pore-pressure build-up and thermal stresses. 
 
-The work focuses on multi-physics interactions between:
-
-- Heat transfer  
-- Moisture transport  
-- Mechanical equilibrium  
-
-Particular emphasis is placed on the influence of thermal and hydraulic fields on stress development, deformation, and long-term material behavior.
+While the theoretical framework covers fully coupled Thermo-Hydro-Mechanical (THM) behaviors, the primary numerical objective of this project is the implementation and stochastic assessment of a novel **Thermo-Hydro-Chemical (THC)** model. By utilizing the *effective hydration degree* ($\tilde{\Gamma}$), the model explicitly simulates the concrete's entire life cycle (from curing to the accident phase) and physically links the microstructural degradation (porosity, permeability) to the chemical dehydration of the cement paste.
 
 ---
 
 ## 2. Scientific Scope
 
-The project also includes the following key aspects:
+The project encompasses the following key computational and analytical aspects:
 
-- Coupled THM formulation and numerical implementation  
-- Drying and shrinkage mechanisms  
-- Hygro-thermal induced stress evolution  
-- Mazars damage model for concrete degradation  
-- Representation of concrete heterogeneity  
-- Probabilistic analysis of material parameters  
-
-The integration of damage mechanics within a coupled THM framework enables the study of stiffness degradation and crack initiation under multi-physical loading conditions.
+- **THC Multiphase Formulation:** Implementation of strongly coupled thermal and hydric conservation equations with explicit chemical kinetics in Cast3M.
+- **Automated Calibration:** Python-driven parameter sweeps to identify critical thermal ($C_p, \lambda$) and transport ($K_0, A_\Gamma$) parameters.
+- **Experimental Validation:** Benchmarking numerical results against the reference **Kalifa et al. (2000)** high-temperature experiment.
+- **Uncertainty Quantification (OpenTURNS):** 
+  - Variance-based sensitivity analysis (Sobol indices) using Polynomial Chaos Expansion (PCE).
+  - Reliability analysis and Probability of Failure ($P_f$) estimation using LHS and Kernel Density Estimation (KDE).
+- **Spatial Heterogeneity:** Implementing spatial Random Fields for intrinsic permeability using the Turning Bands Method (`ALEA` operator) to capture localized deformation and pressure concentrations.
 
 ---
 
 ## 3. Repository Structure
-example_codes/  
-stationary_thermic/  
-elastic_mechanics/  
-mazars_model/  
-drying_and_shrinkage/  
-th_model/  
-thm_model/  
-thm_final_model/
 
+The repository is organized to reflect the progression of the research, from deterministic simulation to stochastic assessment:
 
-Each directory contains Cast3M scripts and numerical studies corresponding to a specific physical model or coupling level.
+* `report/`  
+  Contains the LaTeX source code, figures, and the final compiled PDF of the Master thesis.
+* `simulation/`  
+  Contains the core Cast3M (`.dgibi`) scripts for the THC multiphase model, explicitly simulating the three consecutive phases: early-age hydration, long-term drying, and the high-temperature accident.
+* `calibration/`  
+  Python automation scripts to perform parameter sweeps. It couples Python with Cast3M to iteratively run models and evaluate the most influential parameters (e.g., intrinsic permeability $K_0$, convective exchange coefficients).
+* `validation/`  
+  Post-processing scripts and experimental datasets. It extracts the calibrated Cast3M results and plots them against the Kalifa experimental data (temperature and gas-pressure histories at various depths) and previous TH models.
+* `stochastic/`  
+  Scripts for the probabilistic framework, combining Cast3M and OpenTURNS:
+  - **Sensitivity & Reliability:** Python scripts using LHS, PCE, and KDE to compute Sobol indices and PDFs.
+  - **Random Fields:** Cast3M models generating lognormal spatial random fields via the Turning Bands Method (TBM) to assess the impact of spatial heterogeneity on structural safety.
 
 ---
 
 ## 4. Software Environment
 
-All simulations are developed and tested using:
+All simulations and post-processing routines are developed and tested using:
 
-`Cast3M 2025`
-
----
-
-## 5. Research Context
-
-This work contributes to the understanding of multi-physical behavior of concrete, with particular attention to durability, long-term performance, and coupled damage processes in heterogeneous materials.Each directory contains Cast3M scripts and numerical studies corresponding to a specific physical model or coupling level.
+- **Cast3M** (Finite Element Analysis solver)
+- **OpenTURNS** (Probabilistic and Uncertainty Quantification library)
+- **Python 3** (Automation, Surrogate modeling, and Data visualization)
+- **LaTeX** (Report typesetting)
 
 ---
 
+## 5. Author
+
+**Tan Kiet HONG**  
+*M2 Geomechanics, Civil Engineering and Risks*  
+*Université Grenoble Alpes*
