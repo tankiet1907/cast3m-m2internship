@@ -135,7 +135,7 @@ def plot_comparison(csv_file):
     plt.gca().add_artist(leg1)
     plt.legend(handles=src_handles, loc="upper right", fontsize=10, title="Source")
 
-    save_name = f"Pg_compare_KINT_{SELECTED_KINT:.1e}_AK_{SELECTED_AK:g}.png"
+    save_name = f"Pg_compare_KINT_{SELECTED_KINT:.1e}_AK_{SELECTED_AK:g}_blur.png"
     save_path = os.path.join(output_dir, save_name)
     plt.savefig(save_path, dpi=150, bbox_inches='tight')
     plt.close()
